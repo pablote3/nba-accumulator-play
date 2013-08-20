@@ -1,0 +1,31 @@
+@(id: Long, teamForm: Form[Team])
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap/bootstrap.min.css")" />
+
+@import helper._
+
+@main("TeamSchedule") {
+    <h1>Team Schedule</h1>
+
+    @form(routes.Application.edit(id)) {
+        <fieldset>        
+            @inputText(teamForm("fullName"), '_label -> "Team name")
+            @inputText(teamForm("abbr"), '_label -> "Abbr")
+            @inputText(teamForm("division"), '_label -> "Division")
+            @inputText(teamForm("conference"), '_label -> "Conference")
+        </fieldset>
+        
+        <fieldset>
+            @select(
+                teamForm("boxScore.id"), 
+                options(BoxScore.options), 
+                '_label -> "Box Score", '_default -> "-- Choose a box score --",
+                '_showConstraints -> false
+            )
+        </fieldset>
+        
+        <div class="actions">
+            <a href="@routes.Application.listTeams()" class="btn">Cancel</a> 
+        </div>        
+    }
+
+}

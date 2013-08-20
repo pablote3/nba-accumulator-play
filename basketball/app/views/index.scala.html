@@ -1,0 +1,17 @@
+@(teams: List[Team], teamForm: Form[Team])
+
+@import helper._
+
+@main("Team Entry") {
+    
+    <h1>@teams.size() team(s)</h1>
+    
+    <ul>
+        @for(team <- teams) {
+            <li>
+                @team.toString()
+            </li>
+        }
+    </ul>
+    
+}

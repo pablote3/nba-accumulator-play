@@ -1,0 +1,17 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                       controllers.Application.index()
+
+# Teams list
+GET     /teams		            controllers.Application.listTeams(p:Int ?= 0, s ?= "fullName", o ?= "asc", f ?= "")
+
+# Edit existing team
+GET     /teams/:id              controllers.Application.edit(id:Long)
+#POST    /teams/:id              controllers.Application.update(id:Long)
+
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file           controllers.Assets.at(path="/public", file)

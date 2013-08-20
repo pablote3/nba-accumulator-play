@@ -1,0 +1,184 @@
+@(currentPage: com.avaje.ebean.Page[Team], currentSortBy: String, currentOrder: String, currentFilter: String)
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap/bootstrap.min.css")" />
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Bootstrap</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/docs.css" rel="stylesheet">
+    <link href="js/google-code-prettify/prettify.css" rel="stylesheet">
+  </head>
+  
+  <body data-spy="scroll" data-target=".bs-docs-sidebar">
+
+	@****************************************
+	* Helper generating navigation links    *
+	****************************************@
+	@link(newPage:Int, newSortBy:String) = @{    
+	    var sortBy = currentSortBy
+	    var order = currentOrder
+	    
+	    if(newSortBy != null) {
+	        sortBy = newSortBy
+	        if(currentSortBy == newSortBy) {
+	            if(currentOrder == "asc") {
+	                order = "desc"
+	            } else {
+	                order = "asc"
+	            }
+	        } else {
+	            order = "asc"
+	        }
+	    }
+	    
+	    // Generate the link
+	    routes.Application.listTeams(newPage, sortBy, order, currentFilter)    
+	}
+
+	@**********************************
+	* Helper generating table headers *
+	***********************************@
+	@header(key:String, title:String) = {
+	    <th class="@key.replace(".","_") header @if(currentSortBy == key) @{if(currentOrder == "asc") "headerSortDown" else "headerSortUp"}">
+	        <a href="@link(0, key)">@title</a>
+	    </th>
+	}
+
+	@main("Team Search") {  
+    <h1>Team Search</h1>
+
+    <div id="actions">        
+        <form action="@link(0, "fullName")" method="GET">        
+       <!-- input text box
+   		================================================== -->     
+            <input type="search" id="searchbox" fullName="f" value="@currentFilter" placeholder="Filter by Conference...">
+            <input type="submit" id="searchsubmit" value="Filter by team name" class="btn primary">
+        </form>
+    </div>
+    
+    @if(currentPage.getTotalRowCount == 0) {       
+        <div class="well">
+            <em>Nothing to display</em>
+        </div>
+    } else {        
+        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed" id="teamgrid">
+            <thead>
+                <tr>
+                	<th class="span10">Team</th>
+                	<th class="span2">Abbr</th>
+					<th class="span2">Division</th>
+					<th class="span2">Conference</th>
+                </tr>
+            </thead>
+                       
+            <tbody>
+                @for(team <- currentPage.getList) {
+                    <tr>
+                        <td>
+                        	<a href="@routes.Application.edit(team.getId())">@team.getFullName()</a>
+                        </td>
+                        <td>
+                            @if(team.getAbbr() == null) {
+                                <em>-</em>
+                            } else {
+                                @team.getAbbr()
+                            }
+                        </td>
+                        <td>
+                            @if(team.getDivision() == null) {
+                                <em>-</em>
+                            } else {
+                                @team.getDivision()
+                            }
+                        </td>
+                        <td>
+                            @if(team.getConference() == null) {
+                                <em>-</em>
+                            } else {
+                                @team.getConference()
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div id="pagination" class="pagination pagination-centered">
+            <ul>
+                @if(currentPage.hasPrev) {
+                    <li class="prev">
+                        <a href="@link(currentPage.getPageIndex - 1, null)">&larr; Previous</a>
+                    </li>
+                } else {
+                    <li class="prev disabled">
+                        <a>&larr; Previous</a>
+                    </li>
+                }
+                <li class="current">
+                    <a>Displaying @currentPage.getDisplayXtoYofZ(" to "," of ")</a>
+                </li>
+                @if(currentPage.hasNext) {
+                    <li class="next">
+                        <a href="@link(currentPage.getPageIndex + 1, null)">Next &rarr;</a>
+                    </li>
+                } else {
+                    <li class="next disabled">
+                        <a>Next &rarr;</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+    	
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap-transition.js"></script>
+    <script src="js/bootstrap-alert.js"></script>
+    <script src="js/bootstrap-modal.js"></script>
+    <script src="js/bootstrap-dropdown.js"></script>
+    <script src="js/bootstrap-scrollspy.js"></script>
+    <script src="js/bootstrap-tab.js"></script>
+    <script src="js/bootstrap-tooltip.js"></script>
+    <script src="js/bootstrap-popover.js"></script>
+    <script src="js/bootstrap-button.js"></script>
+    <script src="js/bootstrap-collapse.js"></script>
+    <script src="js/bootstrap-carousel.js"></script>
+    <script src="js/bootstrap-typeahead.js"></script>
+    <script src="js/bootstrap-affix.js"></script>
+    <script src="js/holder/holder.js"></script>
+    <script src="js/google-code-prettify/prettify.js"></script>
+    <script src="js/application.js"></script>
+
+  </body>
+  
+  	<!-- Footer
+    ================================================== -->
+    <footer class="footer">
+      <div class="container">
+        <p>Designed and built with all the love in the world by pabote.</p>
+        <p>Code licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License v2.0</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+        <p><a href="http://glyphicons.com">Glyphicons Free</a> licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+        <ul class="footer-links">
+          <li><a href="http://blog.getbootstrap.com">Blog</a></li>
+          <li class="muted">&middot;</li>
+          <li><a href="https://github.com/twitter/bootstrap/issues?state=open">Issues</a></li>
+          <li class="muted">&middot;</li>
+          <li><a href="https://github.com/twitter/bootstrap/blob/master/CHANGELOG.md">Changelog</a></li>
+        </ul>
+      </div>
+    </footer>
+</html>
+
+       
+}
