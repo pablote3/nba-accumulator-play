@@ -24,7 +24,6 @@ public class GameJsonUrl {
     static final String USER_AGENT = "User-agent";
     static final String ACCEPT_ENCODING = "Accept-encoding";
     static final String GZIP = "gzip";
-    static final String TIME_ZONE = "America/Pacific";
     static final String ISO_8601_FMT = "yyyy-MM-dd'T'HH:mm:ssXXX";
     static final SimpleDateFormat XMLSTATS_DATE = new SimpleDateFormat(ISO_8601_FMT);
     
