@@ -1,8 +1,6 @@
 package models;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -92,14 +90,6 @@ public class Official extends Model {
 	public static void delete(Long id) {
 	  	find.ref(id).delete();
 	}
-	
-    public static Map<String,String> options() {
-        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
-        for(Official bs: Official.find.orderBy("site").findList()) {
-            options.put(bs.id.toString(), bs.id.toString());
-        }
-        return options;
-    }
 
 	public String toString() {
 		return (new StringBuffer())

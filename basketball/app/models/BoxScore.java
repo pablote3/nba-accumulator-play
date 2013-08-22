@@ -264,7 +264,7 @@ public class BoxScore extends Model {
 	
     public static Map<String,String> options() {
         LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
-        for(BoxScore bs: BoxScore.find.orderBy("site").findList()) {
+        for(BoxScore bs: BoxScore.find.orderBy("location").findList()) {
             options.put(bs.id.toString(), bs.id.toString());
         }
         return options;
