@@ -151,8 +151,12 @@ public class Team extends Model {
 	
 	public static Finder<Long,Team> find = new Finder<Long, Team>(Long.class, Team.class);
 	  
-	public static List<Team> all() {
+	public static List<Team> findAll() {
 	    return find.all();
+	}
+	
+	public static List<Team> findActive(boolean active) {
+		return find.where().eq("active", active).findList();
 	}
 	  
 	public static void create(Team team) {
@@ -163,21 +167,11 @@ public class Team extends Model {
 	  	find.ref(id).delete();
 	}
 	
-    /**
-     * Return a page of team
-     *
-     * @param page Page to display
-     * @param pageSize Number of teams per page
-     * @param sortBy team property used for sorting
-     * @param order Sort order (either or asc or desc)
-     * @param filter Filter applied on the name column
-     */
     public static Page<Team> page(int page, int pageSize, String sortBy, String order, String filter) {
         return 
             find.where()
                 .ilike("fullName", "%" + filter + "%")
-//                .orderBy(sortBy + " " + order)
-//                .fetch("boxScore")
+                .orderBy(sortBy + " " + order)
                 .findPagingList(pageSize)
                 .getPage(page);
     }
