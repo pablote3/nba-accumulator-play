@@ -22,13 +22,6 @@ import play.data.Form;
 import play.mvc.Content;
 import play.test.Helpers;
 
-
-/**
-*
-* Simple (JUnit) tests that can call all parts of a play app.
-* If you are interested in mocking a whole application, see the wiki for more details.
-*
-*/
 public class ApplicationTest {
 	static Form<Team> teamForm = Form.form(Team.class);
 	
@@ -72,8 +65,9 @@ public class ApplicationTest {
         int a = 1 + 1;
         assertThat(a).isEqualTo(2);
     }
+    
     @Test
-    public void save() {
+    public void saveTeam() {
     	Team team = new Team();
         team.setKey("seattle-supersonics");
         team.setAbbr("SEA");
@@ -83,18 +77,21 @@ public class ApplicationTest {
         team.setSiteName("Microsoft Stadium");
         team.setCity("Seattle");
         team.setState("WA");
+        team.setActive(true);
         team.save();
         assertThat(team.getId()).isNotNull();
     }
+    
     @Test
     public void getAllTeams() {
-    	List<Team> teamList = Team.all();
-    	System.out.println(teamList.toString());
+    	List<Team> teamList = Team.findAll();
+     	assertThat(teamList.size()).isEqualTo(31);
     }
+
     @Test
     public void renderTemplate() {
-        Content html = views.html.index.render(Team.all(), teamForm);
+        Content html = views.html.index.render(Team.findAll(), teamForm);
         assertThat(contentType(html)).isEqualTo("text/html");
-        assertThat(contentAsString(html)).contains("Your new application is ready.");
+        assertThat(contentAsString(html)).contains("Team Entry");
     }
 }

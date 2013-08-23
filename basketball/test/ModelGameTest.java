@@ -14,42 +14,16 @@ import models.Game;
 import models.Game.SeasonType;
 import models.Game.Status;
 import models.Team;
-import models.Team.Conference;
-import models.Team.Division;
 
 import org.junit.Test;
 
 import com.avaje.ebean.Ebean;
-import com.avaje.ebean.Page;
 import com.avaje.ebean.Query;
 import com.avaje.ebean.RawSql;
 import com.avaje.ebean.RawSqlBuilder;
 
-public class ModelTest {    
-    @Test
-    public void createTeam() {
-        running(fakeApplication(), new Runnable() {
-          public void run() {
-              Team team = new Team();
-              team.setKey("seattle-supersonics");
-              team.setFullName("Seattle Supersonics");
-              team.setAbbr("SEA");
-              team.setConference(Conference.West);
-              team.setDivision(Division.Pacific);
-              team.setSiteName("Key Arena");
-              team.setCity("Seattle");
-              team.setState("WA");
-              
-              Team.create(team);
-              
-              Team createTeam = Team.find.where().eq("key", "seattle-supersonics").findUnique();
-              assertThat(createTeam.getFullName()).isEqualTo("Seattle Supersonics");
-              assertThat(createTeam.getAbbr()).isEqualTo("SEA");
-              Team.delete(createTeam.getId());
-          }
-        });
-    }
-    
+public class ModelGameTest {    
+
     @Test
     public void createGameScheduled() {
         running(fakeApplication(), new Runnable() {
@@ -57,7 +31,7 @@ public class ModelTest {
               Game game = new Game();
               Date date = null;
               try {
-            	  date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2012-12-05");
+            	  date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2012-07-05");
               } catch (ParseException e) {
             	  e.printStackTrace();
               }
@@ -126,17 +100,6 @@ public class ModelTest {
               List<Game> games = query.findList();
               assertThat(games.size() == 82);
           }
-        });
-    }
-    
-    @Test
-    public void paginationTeam() {
-        running(fakeApplication(), new Runnable() {
-           public void run() {
-               Page<Team> teams = Team.page(1, 20, "fullName", "ASC", "");
-               assertThat(teams.getTotalRowCount()).isEqualTo(30);
-               assertThat(teams.getList().size()).isEqualTo(10);
-           }
         });
     }
 }
