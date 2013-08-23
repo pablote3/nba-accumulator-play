@@ -83,7 +83,7 @@
                 @for(team <- currentPage.getList) {
                     <tr>
                         <td>
-                        	<a href="@routes.Application.edit(team.getId())">@team.getFullName()</a>
+                        	<a href="@routes.Application.editTeam(team.getId())">@team.getFullName()</a>
                         </td>
                         <td>
                             @if(team.getAbbr() == null) {

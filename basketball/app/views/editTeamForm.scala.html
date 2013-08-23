@@ -6,7 +6,7 @@
 @main("TeamSchedule") {
     <h1>Team Schedule</h1>
 
-    @form(routes.Application.edit(id)) {
+    @form(routes.Application.editTeam(id)) {
         <fieldset>        
             @inputText(teamForm("fullName"), '_label -> "Team name")
             @inputText(teamForm("abbr"), '_label -> "Abbr")
