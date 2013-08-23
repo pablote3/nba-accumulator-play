@@ -45,7 +45,7 @@ public class Application extends Controller {
      *
      * @param id Id of the team to edit
      */
-    public static Result edit(Long id) {
+    public static Result editTeam(Long id) {
         Form<Team> teamForm = form(Team.class).fill(
             Team.find.byId(id)
         );
@@ -54,18 +54,18 @@ public class Application extends Controller {
         );
     }
     
-//    /**
-//     * Handle (POST) the 'edit form' submission 
-//     *
-//     * @param id Id of the team to edit
-//     */
-//    public static Result update(Long id) {
-//        Form<Team> teamForm = form(Team.class).bindFromRequest();
-//        if(teamForm.hasErrors()) {
-//            return badRequest(editTeamForm.render(id, teamForm));
-//        }
-//        teamForm.get().update(id);
-//        flash("success", "Team " + teamForm.get().getName() + " has been updated");
-//        return GO_HOME;
-//    }
+    /**
+     * Handle (POST) the 'edit form' submission 
+     *
+     * @param id Id of the team to edit
+     */
+    public static Result updateTeam(Long id) {
+        Form<Team> teamForm = form(Team.class).bindFromRequest();
+        if(teamForm.hasErrors()) {
+            return badRequest(editTeamForm.render(id, teamForm));
+        }
+        teamForm.get().update(id);
+        flash("success", "Team " + teamForm.get().getFullName() + " has been updated");
+        return GO_HOME;
+    }
 }
