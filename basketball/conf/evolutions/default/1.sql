@@ -4,7 +4,7 @@
 # --- !Ups
 
 create table box_score (
-  id                        bigint not null,
+  id                        bigint auto_increment not null,
   team_id                   bigint,
   game_id                   bigint,
   location                  varchar(5) not null,
@@ -32,8 +32,8 @@ create table box_score (
 ;
 
 create table game (
-  id                        bigint not null,
-  date                      timestamp not null,
+  id                        bigint auto_increment not null,
+  date                      datetime not null,
   status                    varchar(9) not null,
   seasonType                varchar(7) not null,
   constraint ck_game_status check (status in ('Scheduled','Cancelled','Postponed','Suspended','Completed')),
@@ -42,7 +42,7 @@ create table game (
 ;
 
 create table official (
-  id                        bigint not null,
+  id                        bigint auto_increment not null,
   game_id                   bigint,
   position                  varchar(5) not null,
   lastName                  varchar(35) not null,
@@ -52,7 +52,7 @@ create table official (
 ;
 
 create table period_score (
-  id                        bigint not null,
+  id                        bigint auto_increment not null,
   boxscore_id               bigint,
   quarter                   smallint not null,
   score                     smallint not null,
@@ -60,11 +60,11 @@ create table period_score (
 ;
 
 create table team (
-  id                        bigint not null,
+  id                        bigint auto_increment not null,
   team_key                  varchar(35) not null,
   full_name                 varchar(35) not null,
   abbr                      varchar(5) not null,
-  active                    boolean not null,
+  active                    tinyint(1) default 0 not null,
   conference                varchar(4) not null,
   division                  varchar(9) not null,
   site_name                 varchar(30) not null,
@@ -74,16 +74,6 @@ create table team (
   constraint ck_team_division check (division in ('Central','Atlantic','Northwest','Pacific','Southeast','Southwest')),
   constraint pk_team primary key (id))
 ;
-
-create sequence box_score_seq;
-
-create sequence game_seq;
-
-create sequence official_seq;
-
-create sequence period_score_seq;
-
-create sequence team_seq;
 
 alter table box_score add constraint fk_box_score_team_1 foreign key (team_id) references team (id) on delete restrict on update restrict;
 create index ix_box_score_team_1 on box_score (team_id);
@@ -98,27 +88,17 @@ create index ix_period_score_boxScore_4 on period_score (boxscore_id);
 
 # --- !Downs
 
-SET REFERENTIAL_INTEGRITY FALSE;
+SET FOREIGN_KEY_CHECKS=0;
 
-drop table if exists box_score;
+drop table box_score;
 
-drop table if exists game;
+drop table game;
 
-drop table if exists official;
+drop table official;
 
-drop table if exists period_score;
+drop table period_score;
 
-drop table if exists team;
+drop table team;
 
-SET REFERENTIAL_INTEGRITY TRUE;
-
-drop sequence if exists box_score_seq;
-
-drop sequence if exists game_seq;
-
-drop sequence if exists official_seq;
-
-drop sequence if exists period_score_seq;
-
-drop sequence if exists team_seq;
+SET FOREIGN_KEY_CHECKS=1;
 
