@@ -4,12 +4,12 @@
 @import helper._
 
 @main("TeamSchedule") {
-    <h1>Team Schedule</h1>
+    <h1>Edit Team</h1>
 
     @form(routes.Application.editTeam(id)) {
         <fieldset>        
             @inputText(teamForm("fullName"), '_label -> "Team name")
-            @inputText(teamForm("abbr"), '_label -> "Abbr")
+            @inputText(teamForm("abbr"), '_label -> "Abbreviation")
             @inputText(teamForm("division"), '_label -> "Division")
             @inputText(teamForm("conference"), '_label -> "Conference")
         </fieldset>
@@ -24,8 +24,12 @@
         </fieldset>
         
         <div class="actions">
+            <a href="@routes.Application.listTeams()" class="btn">Update</a> 
             <a href="@routes.Application.listTeams()" class="btn">Cancel</a> 
-        </div>        
+        </div>
+        <div class="actions">
+        	<input type="submit" value="Add this account" class="btn btn-primary">
+        </div>
     }
 
 }
