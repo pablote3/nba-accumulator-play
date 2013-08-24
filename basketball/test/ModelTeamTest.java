@@ -14,6 +14,16 @@ import com.avaje.ebean.Page;
 
 public class ModelTeamTest {    
     @Test
+    public void findAllTeams() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  List<Team> teams = Team.findAll();
+        	  assertThat(teams.size()).isEqualTo(31);
+          }
+        });
+    }
+    
+	@Test
     public void findActiveTeams() {
         running(fakeApplication(), new Runnable() {
           public void run() {
