@@ -5,7 +5,7 @@ import models.Team;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.editTeamForm;
+import views.html.editTeam;
 import views.html.listTeams;
 
 public class Application extends Controller {
@@ -50,7 +50,7 @@ public class Application extends Controller {
             Team.find.byId(id)
         );
         return ok(
-            editTeamForm.render(id, teamForm)
+            editTeam.render(id, teamForm)
         );
     }
     
@@ -62,7 +62,7 @@ public class Application extends Controller {
     public static Result updateTeam(Long id) {
         Form<Team> teamForm = form(Team.class).bindFromRequest();
         if(teamForm.hasErrors()) {
-            return badRequest(editTeamForm.render(id, teamForm));
+            return badRequest(editTeam.render(id, teamForm));
         }
         teamForm.get().update(id);
         flash("success", "Team " + teamForm.get().getFullName() + " has been updated");
