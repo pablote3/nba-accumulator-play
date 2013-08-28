@@ -6,24 +6,17 @@
     <h1>Edit Team</h1>
 
     @form(routes.Application.editTeam(id)) {
-        <fieldset>        
+        <fieldset>
+        	@inputText(teamForm("id"), '_label -> "Temp Id")
+             
             @inputText(teamForm("fullName"), '_label -> "Team name")
             @inputText(teamForm("abbr"), '_label -> "Abbreviation")
             @inputText(teamForm("division"), '_label -> "Division")
             @inputText(teamForm("conference"), '_label -> "Conference")
         </fieldset>
         
-        <fieldset>
-            @select(
-                teamForm("boxScore.id"), 
-                options(BoxScore.options), 
-                '_label -> "Box Score", '_default -> "-- Choose a box score --",
-                '_showConstraints -> false
-            )
-        </fieldset>
-        
         <div class="actions">
-            <a href="@routes.Application.listTeams()" class="btn">Update</a> 
+            <a href="@routes.Application.updateTeam()" class="btn">Update</a> 
             <a href="@routes.Application.listTeams()" class="btn">Cancel</a> 
         </div>
         <div class="actions">
