@@ -180,12 +180,14 @@ public class Team extends Model {
 		return (new StringBuffer())
 			.append("  id: " + this.id)
 			.append("  key: " + this.key)
+			.append("  fullName: " + this.fullName)
 			.append("  abbr: " + this.abbr)
 			.append("  conference: " + this.conference)
 			.append("  division: " + this.division)
 			.append("  siteName: " + this.siteName)
 			.append("  city: " + this.city)
 			.append("  state: " + this.state)
+			.append("  active: " + this.active)
 			.toString();
 	}
 }
