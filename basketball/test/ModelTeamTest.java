@@ -56,6 +56,24 @@ public class ModelTeamTest {
           }
         });
     }
+    
+    @Test
+    public void updateTeam() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+              Team team = Team.find.where().eq("key", "new-orleans-hornets").findUnique();
+              team.setActive(true);
+              team.update();
+              
+              Team updateTeam = Team.find.where().eq("key", "new-orleans-hornets").findUnique();
+              assertThat(updateTeam.getFullName()).isEqualTo("New Orleans Hornets");
+              assertThat(updateTeam.getAbbr()).isEqualTo("NO");
+              assertThat(updateTeam.getActive()).isTrue();
+              updateTeam.setActive(false);
+              updateTeam.update();
+          }
+        });
+    }
 
     @Test
     public void paginationTeams() {
