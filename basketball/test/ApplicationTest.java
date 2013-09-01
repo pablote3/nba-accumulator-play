@@ -61,40 +61,17 @@ public class ApplicationTest {
 	  public static void stopApp() {
 	    Helpers.stop(app);
 	  } 
-	  
-    @Test 
-    public void simpleCheck() {
-        int a = 1 + 1;
-        assertThat(a).isEqualTo(2);
-    }
-    
-    @Test
-    public void saveTeam() {
-    	Team team = new Team();
-        team.setKey("seattle-supersonics");
-        team.setAbbr("SEA");
-        team.setFullName("Seattle Supersonics");
-        team.setConference(Conference.West);
-        team.setDivision(Division.Pacific);
-        team.setSiteName("Microsoft Stadium");
-        team.setCity("Seattle");
-        team.setState("WA");
-        team.setActive(true);
-        team.save();
-        assertThat(team.getId()).isNotNull();
-    }
     
     @Test
     public void updateTeam() {
 	    running(fakeApplication(), new Runnable() {
 	        public void run() {
-//	            Result result = callAction(controllers.routes.ref.Application.updateTeam(11L));
-//	            assertThat(status(result)).isEqualTo(BAD_REQUEST);
-	            
-	            Result result = null;
+	        	Long teamId = 11L;
+	        	Result result;
+
 	            Map<String,String> data = new HashMap<String,String>();
 	            data.put("id", "11");
-	            data.put("key", "atlanta-hawks");
+	            data.put("key", "atlanta-hawks-update");
 	            data.put("fullName", "Atlanta Hawks");
 	            data.put("abbr", "ATL");
 	            data.put("active", "true");
@@ -103,42 +80,31 @@ public class ApplicationTest {
 	            data.put("siteName", "Phillips Arena");
 	            data.put("city", "Atlanta");
 	            data.put("state", "GA");
-	            //data.put("boxScore.id", "1");
 	            
-	            FakeRequest fakeRequest = fakeRequest().withFormUrlEncodedBody(data);
-	            result = callAction(controllers.routes.ref.Application.updateTeam(11L), fakeRequest);
+                result = callAction(controllers.routes.ref.Application.updateTeam(teamId), fakeRequest().withFormUrlEncodedBody(data));
 	            
-	            assertThat(status(result)).isEqualTo(BAD_REQUEST);
-//	            assertThat(contentAsString(result)).contains("<option value=\"1\" selected>Apple Inc.</option>");
-//	            assertThat(contentAsString(result)).contains("<input type=\"text\" id=\"introduced\" name=\"introduced\" value=\"badbadbad\" >");
-//	            assertThat(contentAsString(result)).contains("<input type=\"text\" id=\"name\" name=\"name\" value=\"FooBar\" >");
+	            assertThat(status(result)).isEqualTo(SEE_OTHER);
+	            assertThat(flash(result).get("success")).isEqualTo("Team Atlanta Hawks has been updated");
+	            assertThat(redirectLocation(result)).isEqualTo("/teams");
+
+	            data.put("key", "atlanta-hawks");
+                result = callAction(controllers.routes.ref.Application.updateTeam(teamId), fakeRequest().withFormUrlEncodedBody(data));
             
-//	            data.put("introduced", "2011-12-24");
-            
-//	            result = callAction(controllers.routes.ref.Application.updateTeam(11L), fakeRequest().withFormUrlEncodedBody(data));
-            
-//	            assertThat(status(result)).isEqualTo(SEE_OTHER);
-//	            assertThat(redirectLocation(result)).isEqualTo("/computers");
-//	            assertThat(flash(result).get("success")).isEqualTo("Computer FooBar has been created");
-            
-//	            result = callAction(controllers.routes.ref.Application.listTeams(0, "name", "asc", "FooBar"));
-//	            assertThat(status(result)).isEqualTo(OK);
-//	            assertThat(contentAsString(result)).contains("One computer found");
-	            
+	            assertThat(status(result)).isEqualTo(SEE_OTHER);
+	            assertThat(flash(result).get("success")).isEqualTo("Team Atlanta Hawks has been updated");
+	            assertThat(redirectLocation(result)).isEqualTo("/teams");         
 	        }
 	    });
     }
-    
-    @Test
-    public void getAllTeams() {
-    	List<Team> teamList = Team.findAll();
-     	assertThat(teamList.size()).isEqualTo(31);
-    }
 
-    @Test
-    public void renderTemplate() {
-        Content html = views.html.index.render(Team.findAll(), teamForm);
-        assertThat(contentType(html)).isEqualTo("text/html");
-        assertThat(contentAsString(html)).contains("Team Entry");
-    }
+//    @Test
+//    public void renderTemplate() {
+//	    running(fakeApplication(), new Runnable() {
+//	        public void run() {
+//	        	Content html = views.html.index.render(Team.findAll(), teamForm);
+//	        	assertThat(contentType(html)).isEqualTo("text/html");
+//	        	assertThat(contentAsString(html)).contains("Team Entry");
+//	        }
+//	    });	        	
+//    }
 }
