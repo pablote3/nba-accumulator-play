@@ -40,10 +40,13 @@ public class TeamsCsvFile {
 					while((line = bufRdr.readLine()) != null) {
 						StringTokenizer st = new StringTokenizer(line,",");
 						team = new Team();
+						
+//						team.id = 1L;
+						
 						team.setKey(st.nextToken());
 			            team.setFullName(st.nextToken());
 			            team.setAbbr(st.nextToken());
-			            team.setActive(true);
+			            team.setActive((Boolean.valueOf(st.nextToken()).booleanValue()));
 			            team.setConference(Conference.valueOf(st.nextToken()));
 			            team.setDivision(Division.valueOf(st.nextToken()));
 			            team.setSiteName(st.nextToken());
