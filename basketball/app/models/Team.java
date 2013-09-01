@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.TableGenerator;
+import javax.persistence.Version;
 
 import play.db.ebean.Model;
 
@@ -23,7 +24,9 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 @Entity
 public class Team extends Model {
-	private static final long serialVersionUID = 1L;	
+	private static final long serialVersionUID = 1L;
+	private Long id;
+//	private int lockCount;
 	private String key;
 	private String fullName;
 	private String abbr;
@@ -38,10 +41,20 @@ public class Team extends Model {
 	@Id
 	@TableGenerator(name="table_gen", table="sequence_table", pkColumnName="seq_name", valueColumnName="seq_count", pkColumnValue="team_seq")
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="table_gen")
-	private Long id;
 	public Long getId() {
 		return id;
 	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+//	@Version
+//	public int getLockCount()  {
+//		return lockCount;
+//	}
+//	public void setLockCount(int lockCount) {
+//		this.lockCount = lockCount;
+//	}
 	
 	@OneToMany(mappedBy="team", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	public List<BoxScore> getBoxScores()  {
