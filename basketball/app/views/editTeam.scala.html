@@ -5,22 +5,22 @@
 @main("TeamSchedule") {
     <h1>Edit Team</h1>
 
-    @form(routes.Application.editTeam(id)) {
-        <fieldset>
-        	@inputText(teamForm("id"), '_label -> "Temp Id")
-             
-            @inputText(teamForm("fullName"), '_label -> "Team name")
+    @form(routes.Application.updateTeam(id)) {
+        <fieldset> 
+            @inputText(teamForm("key"), '_label -> "Key")
+            @inputText(teamForm("fullName"), '_label -> "Name")
             @inputText(teamForm("abbr"), '_label -> "Abbreviation")
             @inputText(teamForm("division"), '_label -> "Division")
             @inputText(teamForm("conference"), '_label -> "Conference")
+            @inputText(teamForm("siteName"), '_label -> "Site")
+            @inputText(teamForm("city"), '_label -> "City")
+            @inputText(teamForm("state"), '_label -> "State")
+            @inputText(teamForm("active"), '_label -> "Active")
         </fieldset>
         
         <div class="actions">
-            <a href="@routes.Application.updateTeam()" class="btn">Update</a> 
+            <input type="submit" value="Update" class="btn primary"> 
             <a href="@routes.Application.listTeams()" class="btn">Cancel</a> 
-        </div>
-        <div class="actions">
-        	<input type="submit" value="Add this account" class="btn primary">
         </div>
     }
 
