@@ -25,7 +25,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @Entity
 public class Team extends Model {
 	private static final long serialVersionUID = 1L;
-	private Long id;
+
 //	private int lockCount;
 	private String key;
 	private String fullName;
@@ -41,6 +41,7 @@ public class Team extends Model {
 	@Id
 	@TableGenerator(name="table_gen", table="sequence_table", pkColumnName="seq_name", valueColumnName="seq_count", pkColumnValue="team_seq")
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="table_gen")
+	private Long id;
 	public Long getId() {
 		return id;
 	}
