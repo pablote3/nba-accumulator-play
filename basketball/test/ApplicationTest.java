@@ -1,14 +1,18 @@
 import static org.fest.assertions.Assertions.assertThat;
-import static play.test.Helpers.*;
+import static play.mvc.Http.Status.SEE_OTHER;
+import static play.test.Helpers.callAction;
+import static play.test.Helpers.fakeApplication;
+import static play.test.Helpers.fakeRequest;
+import static play.test.Helpers.flash;
+import static play.test.Helpers.redirectLocation;
+import static play.test.Helpers.running;
+import static play.test.Helpers.status;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import models.Team;
-import models.Team.Conference;
-import models.Team.Division;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
@@ -16,13 +20,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.avaje.ebean.Ebean;
-
-import play.test.FakeApplication;
-import play.test.FakeRequest;
 import play.data.Form;
-import play.mvc.*;
+import play.mvc.Result;
+import play.test.FakeApplication;
 import play.test.Helpers;
+
+import com.avaje.ebean.Ebean;
 
 public class ApplicationTest {
 	static Form<Team> teamForm = Form.form(Team.class);
