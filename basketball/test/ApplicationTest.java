@@ -1,9 +1,10 @@
 import static org.fest.assertions.Assertions.assertThat;
-import static play.test.Helpers.contentAsString;
-import static play.test.Helpers.contentType;
+import static play.test.Helpers.*;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import models.Team;
 import models.Team.Conference;
@@ -18,8 +19,9 @@ import org.junit.Test;
 import com.avaje.ebean.Ebean;
 
 import play.test.FakeApplication;
+import play.test.FakeRequest;
 import play.data.Form;
-import play.mvc.Content;
+import play.mvc.*;
 import play.test.Helpers;
 
 public class ApplicationTest {
@@ -80,6 +82,51 @@ public class ApplicationTest {
         team.setActive(true);
         team.save();
         assertThat(team.getId()).isNotNull();
+    }
+    
+    @Test
+    public void updateTeam() {
+	    running(fakeApplication(), new Runnable() {
+	        public void run() {
+//	            Result result = callAction(controllers.routes.ref.Application.updateTeam(11L));
+//	            assertThat(status(result)).isEqualTo(BAD_REQUEST);
+	            
+	            Result result = null;
+	            Map<String,String> data = new HashMap<String,String>();
+	            data.put("id", "11");
+	            data.put("key", "atlanta-hawks");
+	            data.put("fullName", "Atlanta Hawks");
+	            data.put("abbr", "ATL");
+	            data.put("active", "true");
+	            data.put("conference", "East");
+	            data.put("division", "Southeast");
+	            data.put("siteName", "Phillips Arena");
+	            data.put("city", "Atlanta");
+	            data.put("state", "GA");
+	            //data.put("boxScore.id", "1");
+	            
+	            FakeRequest fakeRequest = fakeRequest().withFormUrlEncodedBody(data);
+	            result = callAction(controllers.routes.ref.Application.updateTeam(11L), fakeRequest);
+	            
+	            assertThat(status(result)).isEqualTo(BAD_REQUEST);
+//	            assertThat(contentAsString(result)).contains("<option value=\"1\" selected>Apple Inc.</option>");
+//	            assertThat(contentAsString(result)).contains("<input type=\"text\" id=\"introduced\" name=\"introduced\" value=\"badbadbad\" >");
+//	            assertThat(contentAsString(result)).contains("<input type=\"text\" id=\"name\" name=\"name\" value=\"FooBar\" >");
+            
+//	            data.put("introduced", "2011-12-24");
+            
+//	            result = callAction(controllers.routes.ref.Application.updateTeam(11L), fakeRequest().withFormUrlEncodedBody(data));
+            
+//	            assertThat(status(result)).isEqualTo(SEE_OTHER);
+//	            assertThat(redirectLocation(result)).isEqualTo("/computers");
+//	            assertThat(flash(result).get("success")).isEqualTo("Computer FooBar has been created");
+            
+//	            result = callAction(controllers.routes.ref.Application.listTeams(0, "name", "asc", "FooBar"));
+//	            assertThat(status(result)).isEqualTo(OK);
+//	            assertThat(contentAsString(result)).contains("One computer found");
+	            
+	        }
+	    });
     }
     
     @Test
