@@ -61,6 +61,7 @@ create table period_score (
 
 create table team (
   id                        bigint auto_increment not null,
+  last_update               datetime not null,
   team_key                  varchar(35) not null,
   full_name                 varchar(35) not null,
   abbr                      varchar(5) not null,
