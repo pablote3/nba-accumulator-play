@@ -193,7 +193,6 @@ public class Team extends Model {
 	public String toString() {
 		return (new StringBuffer())
 			.append("  id: " + this.id)
-			.append("  lastUpdate: " + this.lastUpdate)
 			.append("  key: " + this.key)
 			.append("  fullName: " + this.fullName)
 			.append("  abbr: " + this.abbr)
