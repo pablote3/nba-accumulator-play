@@ -1,5 +1,6 @@
 package models;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +26,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @Entity
 public class Team extends Model {
 	private static final long serialVersionUID = 1L;
-
-//	private int lockCount;
+	private Timestamp lastUpdate;
 	private String key;
 	private String fullName;
 	private String abbr;
@@ -49,13 +49,13 @@ public class Team extends Model {
 		this.id = id;
 	}
 	
-//	@Version
-//	public int getLockCount()  {
-//		return lockCount;
-//	}
-//	public void setLockCount(int lockCount) {
-//		this.lockCount = lockCount;
-//	}
+	@Version
+	public Timestamp getLastUpdate()  {
+		return lastUpdate;
+	}
+	public void setLastUpdate(Timestamp lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
 	
 	@OneToMany(mappedBy="team", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	public List<BoxScore> getBoxScores()  {
@@ -193,6 +193,7 @@ public class Team extends Model {
 	public String toString() {
 		return (new StringBuffer())
 			.append("  id: " + this.id)
+			.append("  lastUpdate: " + this.lastUpdate)
 			.append("  key: " + this.key)
 			.append("  fullName: " + this.fullName)
 			.append("  abbr: " + this.abbr)
