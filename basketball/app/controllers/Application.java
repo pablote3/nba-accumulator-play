@@ -5,6 +5,7 @@ import models.Team;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import views.html.createTeam;
 import views.html.editTeam;
 import views.html.listTeams;
 
@@ -67,6 +68,40 @@ public class Application extends Controller {
         }
         form.get().update(id);
         flash("success", "Team " + form.get().getFullName() + " has been updated");
+        return GO_HOME;
+    }
+    
+    /**
+     * Display (GET) the 'create form' of a new team.
+     */
+    public static Result createTeam() {
+        Form<Team> form = form(Team.class);
+        return ok(
+            createTeam.render(form)
+        );
+    }
+    
+    /**
+     * Handle (POST) the 'create form' submission 
+     */
+    public static Result saveTeam() {
+        Form<Team> form = form(Team.class).bindFromRequest();
+        if(form.hasErrors()) {
+            return badRequest(createTeam.render(form));
+        }
+        form.get().save();
+        flash("success", "Team " + form.get().getFullName() + " has been created");
+        return GO_HOME;
+    }
+    
+    /**
+     * Handle (POST) the 'edit form' submission 
+     *
+     * @param id Id of the team to delete
+     */
+    public static Result deleteTeam(Long id) {
+        Team.find.ref(id).delete();
+        flash("success", "Team has been deleted");
         return GO_HOME;
     }
 }
