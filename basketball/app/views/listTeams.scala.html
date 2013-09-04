@@ -48,9 +48,10 @@
         <form action="@link(0, "fullName")" method="GET">        
        <!-- input text box
    		================================================== -->     
-            <input type="search" id="searchbox" fullName="f" value="@currentFilter" placeholder="Filter by Conference...">
-            <input type="submit" id="searchsubmit" value="Filter by team name" class="btn info">
+            <input type="search" id="searchbox" fullName="f" value="@currentFilter" placeholder="Filter">
+            <input type="submit" id="searchsubmit" value="Filter by Conference" class="btn info">
         </form>
+        <a class="btn success" id="addTeam" href="@routes.Application.createTeam()">Add Team</a>
     </div>
     
     @if(currentPage.getTotalRowCount == 0) {       
@@ -62,7 +63,7 @@
             <thead>
                 <tr>
                 	<th class="span10">Team</th>
-                	<th class="span2">Abbr</th>
+                	<th class="span2">Abbreviation</th>
 					<th class="span2">Division</th>
 					<th class="span2">Conference</th>
                 </tr>
@@ -125,10 +126,7 @@
                 }
             </ul>
         </div>
-    }
-    	
+    }    	
   </body>
 </html>
-
-       
 }
