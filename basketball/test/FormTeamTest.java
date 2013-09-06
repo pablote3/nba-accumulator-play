@@ -44,15 +44,13 @@ public class FormTeamTest {
 	            data.put("city", "Atlanta");
 	            data.put("state", "GA");
 	            
-                result = callAction(controllers.routes.ref.Application.updateTeam(teamId), fakeRequest().withFormUrlEncodedBody(data));
-	            
+                result = callAction(controllers.routes.ref.Application.updateTeam(teamId), fakeRequest().withFormUrlEncodedBody(data));	            
 	            assertThat(status(result)).isEqualTo(SEE_OTHER);
 	            assertThat(flash(result).get("success")).isEqualTo("Team Atlanta Hawks has been updated");
 	            assertThat(redirectLocation(result)).isEqualTo("/teams");
 
 	            data.put("key", "atlanta-hawks");
-                result = callAction(controllers.routes.ref.Application.updateTeam(teamId), fakeRequest().withFormUrlEncodedBody(data));
-            
+                result = callAction(controllers.routes.ref.Application.updateTeam(teamId), fakeRequest().withFormUrlEncodedBody(data));            
 	            assertThat(status(result)).isEqualTo(SEE_OTHER);
 	            assertThat(flash(result).get("success")).isEqualTo("Team Atlanta Hawks has been updated");
 	            assertThat(redirectLocation(result)).isEqualTo("/teams");         
@@ -77,16 +75,19 @@ public class FormTeamTest {
 	            data.put("city", "Seattle");
 	            data.put("state", "WA");
 	            
-                result = callAction(controllers.routes.ref.Application.saveTeam(), fakeRequest().withFormUrlEncodedBody(data));
-	            
+                result = callAction(controllers.routes.ref.Application.saveTeam(), fakeRequest().withFormUrlEncodedBody(data));	            
 	            assertThat(status(result)).isEqualTo(SEE_OTHER);
 	            assertThat(flash(result).get("success")).isEqualTo("Team Seattle Supersonics has been saved");
 	            assertThat(redirectLocation(result)).isEqualTo("/teams");
 	            
-	            result = callAction(controllers.routes.ref.Application.searchTeam("key", "seattle-supersonics"), fakeRequest().withFormUrlEncodedBody(data));
+	            result = callAction(controllers.routes.ref.Application.searchTeam("key", "seattle-supersonics"));
 	            assertThat(status(result)).isEqualTo(OK);
-	            int teamId = Integer.parseInt(contentAsString(result));
-
+	            String teamId = contentAsString(result);
+	            
+	            result = callAction(controllers.routes.ref.Application.deleteTeam(Integer.parseInt(teamId)));
+	            assertThat(status(result)).isEqualTo(SEE_OTHER);
+	            assertThat(flash(result).get("success")).isEqualTo("Team has been deleted");
+	            assertThat(redirectLocation(result)).isEqualTo("/teams");	            
 	        }
 	    });
     }
