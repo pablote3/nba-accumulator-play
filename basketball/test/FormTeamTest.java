@@ -1,5 +1,6 @@
 import static org.fest.assertions.Assertions.assertThat;
 import static play.mvc.Http.Status.SEE_OTHER;
+import static play.mvc.Http.Status.OK;
 import static play.test.Helpers.callAction;
 import static play.test.Helpers.contentAsString;
 import static play.test.Helpers.contentType;
@@ -82,14 +83,10 @@ public class FormTeamTest {
 	            assertThat(flash(result).get("success")).isEqualTo("Team Seattle Supersonics has been saved");
 	            assertThat(redirectLocation(result)).isEqualTo("/teams");
 	            
-//	            teamId = result.
+	            result = callAction(controllers.routes.ref.Application.searchTeam("key", "seattle-supersonics"), fakeRequest().withFormUrlEncodedBody(data));
+	            assertThat(status(result)).isEqualTo(OK);
+	            int teamId = Integer.parseInt(contentAsString(result));
 
-//	            data.put("key", "atlanta-hawks");
-//                result = callAction(controllers.routes.ref.Application.updateTeam(teamId), fakeRequest().withFormUrlEncodedBody(data));
-//            
-//	            assertThat(status(result)).isEqualTo(SEE_OTHER);
-//	            assertThat(flash(result).get("success")).isEqualTo("Team Atlanta Hawks has been updated");
-//	            assertThat(redirectLocation(result)).isEqualTo("/teams");         
 	        }
 	    });
     }
