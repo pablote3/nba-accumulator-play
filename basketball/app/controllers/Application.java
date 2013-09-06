@@ -56,6 +56,21 @@ public class Application extends Controller {
     }
     
     /**
+     * Return the id of an existing team.
+     *
+     * @param key of the team to search for
+     * @param value of the team to search for
+     */
+    public static Result searchTeam(String key, String value) {
+        try {
+        	Team team = Team.find.where().eq(key, value).findUnique();
+			return ok(team.getId().toString());
+		} catch (Exception e) {
+			return badRequest();
+		}
+    }
+
+    /**
      * Handle (POST) the 'edit form' submission 
      *
      * @param id Id of the team to edit
@@ -90,7 +105,7 @@ public class Application extends Controller {
             return badRequest(createTeam.render(form));
         }
         form.get().save();
-        System.out.println(form.get().getId());
+//        System.out.println(form.get().getId());
         flash("success", "Team " + form.get().getFullName() + " has been saved");
         return GO_HOME;
     }
