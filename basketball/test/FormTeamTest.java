@@ -1,6 +1,8 @@
 import static org.fest.assertions.Assertions.assertThat;
 import static play.mvc.Http.Status.SEE_OTHER;
 import static play.test.Helpers.callAction;
+import static play.test.Helpers.contentAsString;
+import static play.test.Helpers.contentType;
 import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.fakeRequest;
 import static play.test.Helpers.flash;
@@ -18,16 +20,9 @@ import org.junit.Test;
 import play.data.Form;
 import play.mvc.Content;
 import play.mvc.Result;
-import play.test.FakeApplication;
-import static play.test.Helpers.contentAsString;
-import static play.test.Helpers.contentType;
 
 public class FormTeamTest {
 	static Form<Team> teamForm = Form.form(Team.class);
-	
-	  public static FakeApplication app;
-	  public static String createDdl = "";
-	  public static String dropDdl = "";
 
     @Test
     public void updateTeam() {
@@ -38,7 +33,7 @@ public class FormTeamTest {
 
 	            Map<String,String> data = new HashMap<String,String>();
 	            data.put("id", "11");
-	            data.put("key", "atlanta-hawks-update");
+	            data.put("key", "atlanta-hawks2");
 	            data.put("fullName", "Atlanta Hawks");
 	            data.put("abbr", "ATL");
 	            data.put("active", "true");
@@ -65,29 +60,29 @@ public class FormTeamTest {
     }
     
     @Test
-    public void createTeam() {
+    public void saveAndDeleteTeam() {
 	    running(fakeApplication(), new Runnable() {
 	        public void run() {
-//	        	Long teamId = 11L;
 	        	Result result;
 
 	            Map<String,String> data = new HashMap<String,String>();
-//	            data.put("id", "11");
-	            data.put("key", "atlanta-hawks-update");
-	            data.put("fullName", "Atlanta Hawks");
-	            data.put("abbr", "ATL");
+	            data.put("key", "seattle-supersonics");
+	            data.put("fullName", "Seattle Supersonics");
+	            data.put("abbr", "SEA");
 	            data.put("active", "false");
-	            data.put("conference", "East");
-	            data.put("division", "Southeast");
-	            data.put("siteName", "Phillips Arena");
-	            data.put("city", "Atlanta");
-	            data.put("state", "GA");
+	            data.put("conference", "West");
+	            data.put("division", "Pacific");
+	            data.put("siteName", "Key Arena");
+	            data.put("city", "Seattle");
+	            data.put("state", "WA");
 	            
-                result = callAction(controllers.routes.ref.Application.createTeam(), fakeRequest().withFormUrlEncodedBody(data));
+                result = callAction(controllers.routes.ref.Application.saveTeam(), fakeRequest().withFormUrlEncodedBody(data));
 	            
 	            assertThat(status(result)).isEqualTo(SEE_OTHER);
-	            assertThat(flash(result).get("success")).isEqualTo("Team Atlanta Hawks has been updated");
+	            assertThat(flash(result).get("success")).isEqualTo("Team Seattle Supersonics has been saved");
 	            assertThat(redirectLocation(result)).isEqualTo("/teams");
+	            
+//	            teamId = result.
 
 //	            data.put("key", "atlanta-hawks");
 //                result = callAction(controllers.routes.ref.Application.updateTeam(teamId), fakeRequest().withFormUrlEncodedBody(data));
