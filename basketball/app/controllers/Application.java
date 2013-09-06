@@ -90,7 +90,8 @@ public class Application extends Controller {
             return badRequest(createTeam.render(form));
         }
         form.get().save();
-        flash("success", "Team " + form.get().getFullName() + " has been created");
+        System.out.println(form.get().getId());
+        flash("success", "Team " + form.get().getFullName() + " has been saved");
         return GO_HOME;
     }
     
