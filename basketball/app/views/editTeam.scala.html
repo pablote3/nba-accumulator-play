@@ -23,5 +23,8 @@
             <a href="@routes.Application.listTeams()" class="btn">Cancel</a> 
         </div>
     }
-
+    
+    @form(routes.Application.deleteTeam(id), 'class -> "topRight") {
+        <input type="submit" value="Delete this team" class="btn danger">
+    }
 }
