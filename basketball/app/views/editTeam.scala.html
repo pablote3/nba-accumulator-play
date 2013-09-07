@@ -4,7 +4,9 @@
 
 @main("TeamSchedule") {
     <h1>Edit Team</h1>
-
+    @form(routes.Application.deleteTeam(id), 'class -> "topRight") {
+        <input type="submit" value="Delete this team" class="btn danger">
+    }
     @form(routes.Application.updateTeam(id)) {
         <fieldset> 
             @inputText(teamForm("key"), '_label -> "Key")
@@ -23,16 +25,15 @@
             @inputText(teamForm("siteName"), '_label -> "Site")
             @inputText(teamForm("city"), '_label -> "City")
             @inputText(teamForm("state"), '_label -> "State")
-            @inputText(teamForm("active"), '_label -> "Active")
+            @helper.select(teamForm("active"), 
+            	options(Seq("true","false")),
+            	'_label -> "Active"
+            )
         </fieldset>
         
         <div class="actions">
             <input type="submit" value="Update" class="btn primary"> 
             <a href="@routes.Application.listTeams()" class="btn">Cancel</a> 
         </div>
-    }
-    
-    @form(routes.Application.deleteTeam(id), 'class -> "topRight") {
-        <input type="submit" value="Delete this team" class="btn danger">
     }
 }

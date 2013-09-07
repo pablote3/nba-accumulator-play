@@ -23,7 +23,10 @@
             @inputText(teamForm("siteName"), '_label -> "Site")
             @inputText(teamForm("city"), '_label -> "City")
             @inputText(teamForm("state"), '_label -> "State")
-            @inputText(teamForm("active"), '_label -> "Active")
+            @helper.select(teamForm("active"), 
+            	options(Seq("true","false")),
+            	'_label -> "Active"
+            )
         </fieldset>
         
         <div class="actions">
