@@ -54,7 +54,7 @@
         <form action="@link(0, "fullName")" method="GET">        
        <!-- input text box
    		================================================== -->     
-            <input type="search" id="searchbox" fullName="f" value="@currentFilter" placeholder="Team Name">
+            <input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Team Name">
             <input type="submit" id="searchsubmit" value="Filter" class="btn info">
             <a class="btn success" id="addTeam" href="@routes.Application.createTeam()">Create</a>
         </form>
