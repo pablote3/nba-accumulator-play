@@ -2,47 +2,47 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Aggregator</title>
-  </head>
+<head>
+	<title>Aggregator</title>
+</head>
   
-  <body data-spy="scroll" data-target=".bs-docs-sidebar">
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
 
-	@****************************************
-	* Helper generating navigation links    *
-	****************************************@
-	@link(newPage:Int, newSortBy:String) = @{    
-	    var sortBy = currentSortBy
-	    var order = currentOrder
+@****************************************
+* Helper generating navigation links    *
+****************************************@
+@link(newPage:Int, newSortBy:String) = @{    
+    var sortBy = currentSortBy
+    var order = currentOrder
 	    
-	    if(newSortBy != null) {
-	        sortBy = newSortBy
-	        if(currentSortBy == newSortBy) {
-	            if(currentOrder == "asc") {
-	                order = "desc"
-	            } else {
-	                order = "asc"
-	            }
-	        } else {
-	            order = "asc"
-	        }
-	    }
+    if(newSortBy != null) {
+        sortBy = newSortBy
+        if(currentSortBy == newSortBy) {
+            if(currentOrder == "asc") {
+                order = "desc"
+            } else {
+                order = "asc"
+            }
+        } else {
+            order = "asc"
+        }
+    }
 	    
-	    // Generate the link
-	    routes.Application.listTeams(newPage, sortBy, order, currentFilter)    
-	}
+	// Generate the link
+	routes.Application.listTeams(newPage, sortBy, order, currentFilter)    
+}
 
-	@**********************************
-	* Helper generating table headers *
-	***********************************@
-	@header(key:String, title:String) = {
-	    <th class="@key.replace(".","_") header @if(currentSortBy == key) @{if(currentOrder == "asc") "headerSortDown" else "headerSortUp"}">
-	        <a href="@link(0, key)">@title</a>
-	    </th>
-	}
+@**********************************
+* Helper generating table headers *
+***********************************@
+@header(key:String, title:String) = {
+	<th class="@key.replace(".","_") header @if(currentSortBy == key) @{if(currentOrder == "asc") "headerSortDown" else "headerSortUp"}">
+        <a href="@link(0, key)">@title</a>
+    </th>
+}
 
-	@main("Team Search") {  
-    <h1>Team Search</h1>
+@main("Team Search") {   
+    <h1 id="homeTitle">@Messages("teams.list.title", currentPage.getTotalRowCount)</h1>
     
     @if(flash.containsKey("success")) {
         <div class="alert-message warning">
@@ -54,10 +54,10 @@
         <form action="@link(0, "fullName")" method="GET">        
        <!-- input text box
    		================================================== -->     
-            <input type="search" id="searchbox" fullName="f" value="@currentFilter" placeholder="Filter">
-            <input type="submit" id="searchsubmit" value="Filter by Conference" class="btn info">
+            <input type="search" id="searchbox" fullName="f" value="@currentFilter" placeholder="Team Name">
+            <input type="submit" id="searchsubmit" value="Filter" class="btn info">
+            <a class="btn success" id="addTeam" href="@routes.Application.createTeam()">Create</a>
         </form>
-        <a class="btn success" id="addTeam" href="@routes.Application.createTeam()">Add Team</a>
     </div>
     
     @if(currentPage.getTotalRowCount == 0) {       
