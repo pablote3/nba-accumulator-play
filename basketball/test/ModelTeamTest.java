@@ -32,6 +32,16 @@ public class ModelTeamTest {
           }
         });
     }
+	
+	@Test
+    public void findFilterTeams() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  List<Team> teams = Team.findFilter("new");
+        	  assertThat(teams.size()).isEqualTo(3);
+          }
+        });
+    }
     
     @Test
     public void createTeam() {
@@ -79,9 +89,20 @@ public class ModelTeamTest {
     public void paginationTeams() {
         running(fakeApplication(), new Runnable() {
            public void run() {
-               Page<Team> teams = Team.page(1, 15, "fullName", "ASC", "");
+               Page<Team> teams = Team.page(0, 15, "fullName", "ASC", "");
                assertThat(teams.getTotalRowCount()).isEqualTo(31);
                assertThat(teams.getList().size()).isEqualTo(15);
+           }
+        });
+    }
+    
+    @Test
+    public void filterTeams() {
+        running(fakeApplication(), new Runnable() {
+           public void run() {
+               Page<Team> teams = Team.page(0, 15, "fullName", "ASC", "new");
+               assertThat(teams.getTotalRowCount()).isEqualTo(3);
+               assertThat(teams.getList().size()).isEqualTo(3);
            }
         });
     }
