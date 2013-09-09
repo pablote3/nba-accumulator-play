@@ -11,10 +11,11 @@ import models.Team.Division;
 import org.junit.Test;
 
 import com.avaje.ebean.Page;
+import com.avaje.ebean.ValidationException;
 
 public class ModelTeamTest {    
     @Test
-    public void findAllTeams() {
+    public void findTeamsAll() {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	  List<Team> teams = Team.findAll();
@@ -24,7 +25,7 @@ public class ModelTeamTest {
     }
     
 	@Test
-    public void findActiveTeams() {
+    public void findTeamsActive() {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	  List<Team> teams = Team.findActive(true);
@@ -34,11 +35,23 @@ public class ModelTeamTest {
     }
 	
 	@Test
-    public void findFilterTeams() {
+    public void findTeamsFilter() {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	  List<Team> teams = Team.findFilter("new");
         	  assertThat(teams.size()).isEqualTo(3);
+          }
+        });
+    }
+	
+    @Test
+    public void findTeamFinder() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+              Team team = Team.find.where().eq("key", "new-orleans-pelicans").findUnique();
+              assertThat(team.getFullName()).isEqualTo("New Orleans Pelicans");
+              assertThat(team.getAbbr()).isEqualTo("NOP");
+              assertThat(team.getActive()).isTrue();
           }
         });
     }
@@ -84,6 +97,22 @@ public class ModelTeamTest {
           }
         });
     }
+    
+    @Test
+    public void updateTeamValidation() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  try {
+        		  Team team = Team.find.where().eq("key", "new-orleans-hornets").findUnique();
+        		  team.setFullName(null);
+        		  team.update();
+        	  } catch (ValidationException e) {
+        		  assertThat(e.getInvalid().getChildren()[0].getPropertyName().equalsIgnoreCase("fullName"));
+        		  assertThat(e.getInvalid().getChildren()[0].getValidatorKey().equalsIgnoreCase("notnull"));
+        	  }
+          }
+        });
+    }
 
     @Test
     public void paginationTeams() {
@@ -97,7 +126,7 @@ public class ModelTeamTest {
     }
     
     @Test
-    public void filterTeams() {
+    public void pagnationTeamsFilter() {
         running(fakeApplication(), new Runnable() {
            public void run() {
                Page<Team> teams = Team.page(0, 15, "fullName", "ASC", "new");
