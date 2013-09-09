@@ -68,8 +68,8 @@
                 <tr>
                 	<th class="span10">Team</th>
                 	<th class="span2">Abbreviation</th>
+                	<th class="span2">Conference</th>
 					<th class="span2">Division</th>
-					<th class="span2">Conference</th>
                 </tr>
             </thead>
                        
@@ -87,17 +87,17 @@
                             }
                         </td>
                         <td>
-                            @if(team.getDivision() == null) {
-                                <em>-</em>
-                            } else {
-                                @team.getDivision()
-                            }
-                        </td>
-                        <td>
                             @if(team.getConference() == null) {
                                 <em>-</em>
                             } else {
                                 @team.getConference()
+                            }
+                        </td>
+                        <td>
+                            @if(team.getDivision() == null) {
+                                <em>-</em>
+                            } else {
+                                @team.getDivision()
                             }
                         </td>
                     </tr>
