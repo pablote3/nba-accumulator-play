@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.TableGenerator;
 import javax.persistence.Version;
 
+import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 import com.avaje.ebean.Page;
@@ -26,17 +27,6 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @Entity
 public class Team extends Model {
 	private static final long serialVersionUID = 1L;
-	private Timestamp lastUpdate;
-	private String key;
-	private String fullName;
-	private String abbr;
-	private boolean active;
-	private Conference conference;
-	private Division division;
-	private String siteName;
-	private String city;
-	private String state;
-	private List<BoxScore> boxScores = new ArrayList<BoxScore>();
   
 	@Id
 	@TableGenerator(name="table_gen", table="sequence_table", pkColumnName="seq_name", valueColumnName="seq_count", pkColumnValue="team_seq")
@@ -50,6 +40,7 @@ public class Team extends Model {
 	}
 	
 	@Version
+	private Timestamp lastUpdate;
 	public Timestamp getLastUpdate()  {
 		return lastUpdate;
 	}
@@ -58,6 +49,7 @@ public class Team extends Model {
 	}
 	
 	@OneToMany(mappedBy="team", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	private List<BoxScore> boxScores = new ArrayList<BoxScore>();
 	public List<BoxScore> getBoxScores()  {
 		return boxScores;
 	}
@@ -71,8 +63,10 @@ public class Team extends Model {
 		this.getBoxScores().remove(boxScore);
 	}
 
+	@Required
 	@Column(name="team_key", length=35, nullable=false)
 	@JsonProperty("team_id")
+	private String key;
 	public String getKey() {
 		return key;
 	}
@@ -80,8 +74,10 @@ public class Team extends Model {
 		this.key = key;
 	}
 	
+	@Required
 	@Column(name="full_name", length=35, nullable=false)
 	@JsonProperty("full_name")
+	private String fullName;
 	public String getFullName() {
 		return fullName;
 	}
@@ -89,8 +85,10 @@ public class Team extends Model {
 		this.fullName = fullName;
 	}
 	
+	@Required
 	@Column(name="abbr", length=5, nullable=false)
 	@JsonProperty("abbreviation")
+	private String abbr;
 	public String getAbbr() {
 		return abbr;
 	}
@@ -98,7 +96,9 @@ public class Team extends Model {
 		this.abbr = abbr;
 	}
 	
+	@Required
 	@Column(name="active", nullable=false)
+	private boolean active;
 	public boolean getActive() {
 		return active;
 	}
@@ -106,8 +106,10 @@ public class Team extends Model {
 		this.active = active;
 	}
 	
+	@Required
 	@Enumerated(EnumType.STRING)
 	@Column(name="conference", length=4, nullable=false)
+	private Conference conference;
 	public Conference getConference() {
 		return conference;
 	}
@@ -120,8 +122,10 @@ public class Team extends Model {
         @EnumValue("West") West,
     }
 	
+    @Required
 	@Enumerated(EnumType.STRING)
 	@Column(name="division", length=9, nullable=false)
+	private Division division;
 	public Division getDivision() {
 		return division;
 	}
@@ -140,6 +144,7 @@ public class Team extends Model {
 	
 	@Column(name="site_name", length=30, nullable=false)
 	@JsonProperty("site_name")
+	private String siteName;
 	public String getSiteName() {
 		return siteName;
 	}
@@ -148,6 +153,7 @@ public class Team extends Model {
 	}
     
 	@Column(name="city", length=15, nullable=false)
+	private String city;
 	public String getCity() {
 		return city;
 	}
@@ -156,6 +162,7 @@ public class Team extends Model {
 	}
     
 	@Column(name="state", length=2, nullable=false)
+	private String state;
 	public String getState() {
 		return state;
 	}
