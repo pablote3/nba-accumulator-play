@@ -61,7 +61,6 @@ create table period_score (
 
 create table team (
   id                        bigint auto_increment not null,
-  last_update               datetime not null,
   team_key                  varchar(35) not null,
   full_name                 varchar(35) not null,
   abbr                      varchar(5) not null,
@@ -71,6 +70,7 @@ create table team (
   site_name                 varchar(30) not null,
   city                      varchar(15) not null,
   state                     varchar(2) not null,
+  last_update               datetime not null,
   constraint ck_team_conference check (conference in ('West','East')),
   constraint ck_team_division check (division in ('Central','Atlantic','Northwest','Pacific','Southeast','Southwest')),
   constraint pk_team primary key (id))
