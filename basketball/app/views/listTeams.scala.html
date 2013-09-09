@@ -41,7 +41,7 @@
     </th>
 }
 
-@main("Team Search") {   
+@main("Team Maintenance") {   
     <h1 id="homeTitle">@Messages("teams.list.title", currentPage.getTotalRowCount)</h1>
     
     @if(flash.containsKey("success")) {
@@ -52,8 +52,6 @@
 
     <div id="actions">        
         <form action="@link(0, "fullName")" method="GET">        
-       <!-- input text box
-   		================================================== -->     
             <input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Team Name">
             <input type="submit" id="searchsubmit" value="Filter" class="btn info">
             <a class="btn success" id="addTeam" href="@routes.Application.createTeam()">Create</a>

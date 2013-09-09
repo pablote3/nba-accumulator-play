@@ -2,8 +2,7 @@
 
 @import helper._
 
-@main("TeamSchedule") {
-    <h1>Edit Team</h1>
+@main("Edit Team") {
     @form(routes.Application.updateTeam(id)) {
         <fieldset> 
             @inputText(teamForm("key"), '_label -> "Key")
