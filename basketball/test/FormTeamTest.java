@@ -1,6 +1,7 @@
 import static org.fest.assertions.Assertions.assertThat;
-import static play.mvc.Http.Status.SEE_OTHER;
+import static play.mvc.Http.Status.BAD_REQUEST;
 import static play.mvc.Http.Status.OK;
+import static play.mvc.Http.Status.SEE_OTHER;
 import static play.test.Helpers.callAction;
 import static play.test.Helpers.contentAsString;
 import static play.test.Helpers.contentType;
@@ -29,11 +30,13 @@ public class FormTeamTest {
     public void updateTeam() {
 	    running(fakeApplication(), new Runnable() {
 	        public void run() {
-	        	Long teamId = 11L;
 	        	Result result;
+	        	
+	            result = callAction(controllers.routes.ref.Application.searchTeam("key", "atlanta-hawks"));
+	            assertThat(status(result)).isEqualTo(OK);
+	            String teamId = contentAsString(result);
 
 	            Map<String,String> data = new HashMap<String,String>();
-	            data.put("id", "11");
 	            data.put("key", "atlanta-hawks2");
 	            data.put("fullName", "Atlanta Hawks");
 	            data.put("abbr", "ATL");
@@ -44,16 +47,40 @@ public class FormTeamTest {
 	            data.put("city", "Atlanta");
 	            data.put("state", "GA");
 	            
-                result = callAction(controllers.routes.ref.Application.updateTeam(teamId), fakeRequest().withFormUrlEncodedBody(data));	            
+                result = callAction(controllers.routes.ref.Application.updateTeam(Integer.parseInt(teamId)), fakeRequest().withFormUrlEncodedBody(data));	            
 	            assertThat(status(result)).isEqualTo(SEE_OTHER);
 	            assertThat(flash(result).get("success")).isEqualTo("Team Atlanta Hawks has been updated");
 	            assertThat(redirectLocation(result)).isEqualTo("/teams");
 
 	            data.put("key", "atlanta-hawks");
-                result = callAction(controllers.routes.ref.Application.updateTeam(teamId), fakeRequest().withFormUrlEncodedBody(data));            
+                result = callAction(controllers.routes.ref.Application.updateTeam(Integer.parseInt(teamId)), fakeRequest().withFormUrlEncodedBody(data));            
 	            assertThat(status(result)).isEqualTo(SEE_OTHER);
 	            assertThat(flash(result).get("success")).isEqualTo("Team Atlanta Hawks has been updated");
 	            assertThat(redirectLocation(result)).isEqualTo("/teams");         
+	        }
+	    });
+    }
+    
+    @Test
+    public void updateTeamValidate() {
+	    running(fakeApplication(), new Runnable() {
+	        public void run() {
+	        	Result result;
+	        	
+	            result = callAction(controllers.routes.ref.Application.searchTeam("key", "atlanta-hawks"));
+	            assertThat(status(result)).isEqualTo(OK);
+	            String teamId = contentAsString(result);
+
+	            Map<String,String> data = new HashMap<String,String>();
+	            data.put("key", "atlanta-hawks2");
+	            data.put("fullName", "Atlanta Hawks");
+	            data.put("abbr", "ATL");
+	            data.put("active", "true");
+	            data.put("conference", null);
+	            data.put("division", "Southeast");
+	            
+                result = callAction(controllers.routes.ref.Application.updateTeam(Integer.parseInt(teamId)), fakeRequest().withFormUrlEncodedBody(data));	            
+	            assertThat(status(result)).isEqualTo(BAD_REQUEST);
 	        }
 	    });
     }
