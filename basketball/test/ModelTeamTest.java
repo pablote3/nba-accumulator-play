@@ -69,6 +69,7 @@ public class ModelTeamTest {
               team.setSiteName("Key Arena");
               team.setCity("Seattle");
               team.setState("WA");
+              team.setActive(false);
               
               Team.create(team);
               
