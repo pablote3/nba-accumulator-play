@@ -5,25 +5,43 @@
 @main("Edit Team") {
     @form(routes.Application.updateTeam(id)) {
         <fieldset> 
-            @inputText(teamForm("key"), '_label -> "Key")
-            @inputText(teamForm("fullName"), '_label -> "Name")
-            @inputText(teamForm("abbr"), '_label -> "Abbreviation")
+            @inputText(teamForm("key"), 
+            	'_label -> "Key",
+            	'_showConstraints -> false
+            )
+            @inputText(teamForm("fullName"), 
+            	'_label -> "Name",
+            	'_showConstraints -> false
+            )
+            @inputText(teamForm("abbr"), 
+            	'_label -> "Abbreviation",
+            	'_showConstraints -> false
+            )
             @helper.select(
 				teamForm("conference"), 
  				options(models.Team.Conference.values().toSeq.map(_.toString)), 
- 				'_label -> "Conference"
+ 				'_label -> "Conference",
+ 				'_showConstraints -> false
  			)
             @helper.select(
 				teamForm("division"), 
  				options(models.Team.Division.values().toSeq.map(_.toString)), 
- 				'_label -> "Division"
+ 				'_label -> "Division",
+ 				'_showConstraints -> false
  			)
-            @inputText(teamForm("siteName"), '_label -> "Site")
-            @inputText(teamForm("city"), '_label -> "City")
-            @inputText(teamForm("state"), '_label -> "State")
+            @inputText(teamForm("siteName"), 
+            	'_label -> "Site"
+            )
+            @inputText(teamForm("city"), 
+            	'_label -> "City"
+            )
+            @inputText(teamForm("state"), 
+            	'_label -> "State"
+            )
             @helper.select(teamForm("active"), 
             	options(Seq("true","false")),
-            	'_label -> "Active"
+            	'_label -> "Active",
+            	'_showConstraints -> false
             )
         </fieldset>
         
