@@ -23,6 +23,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import play.db.ebean.Model;
 
+import com.avaje.ebean.Page;
 import com.avaje.ebean.annotation.EnumValue;
 
 @Entity
@@ -118,6 +119,19 @@ public class Game extends Model {
 	public static void delete(Long id) {
 	  	find.ref(id).delete();
 	}
+	
+    /**
+     * Return a page of game
+     *
+     * @param page Page to display
+     * @param pageSize Number of games per page
+     */
+    public static Page<Game> page(int page, int pageSize) {
+        return 
+            find.where()
+                .findPagingList(pageSize)
+                .getPage(page);
+    }
 	  
 	public String toString() {
 		return (new StringBuffer())

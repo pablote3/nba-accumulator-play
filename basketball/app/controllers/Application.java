@@ -1,12 +1,14 @@
 package controllers;
 
 import static play.data.Form.form;
+import models.Game;
 import models.Team;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.createTeam;
 import views.html.editTeam;
+import views.html.listGames;
 import views.html.listTeams;
 
 public class Application extends Controller {
@@ -120,4 +122,17 @@ public class Application extends Controller {
         flash("success", "Team has been deleted");
         return GO_HOME;
     }
+    
+     /**
+     * Display the list of games.
+     *
+     * @param page Current page number (starts from 0)
+     */
+   public static Result listGames(int page) {
+       return ok(
+           listGames.render(
+               Game.page(page, 15)
+           )
+       );
+   }
 }

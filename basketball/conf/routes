@@ -5,6 +5,23 @@
 # Home page
 GET     /                       controllers.Application.index()
 
+# Games list
+GET     /games		            controllers.Application.listGames(p:Int ?= 0)
+
+# Create a game
+#GET     /games/new	            controllers.Application.createGame()
+#POST    /games		            controllers.Application.saveGame()
+
+# Edit an existing game
+#GET     /games/:id              controllers.Application.editGame(id:Long)
+#POST    /games/:id              controllers.Application.updateGame(id:Long)
+
+# Find an existing game
+#GET     /games/id			    controllers.Application.searchGame(key:String, value:String)
+
+# Delete a game
+#POST    /games/:id/delete       controllers.Application.deleteGame(id:Long)
+
 # Teams list
 GET     /teams		            controllers.Application.listTeams(p:Int ?= 0, s ?= "fullName", o ?= "asc", f ?= "")
 
