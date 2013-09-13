@@ -23,7 +23,7 @@ import models.Team;
 
 import org.junit.Test;
 
-import utils.Utilities;
+import util.Utilities;
 
 public class ScheduleCsvFile {
 	@Test

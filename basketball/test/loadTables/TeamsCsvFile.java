@@ -16,7 +16,7 @@ import models.Team.Division;
 
 import org.junit.Test;
 
-import utils.Utilities;
+import util.Utilities;
 
 public class TeamsCsvFile {
 	@Test

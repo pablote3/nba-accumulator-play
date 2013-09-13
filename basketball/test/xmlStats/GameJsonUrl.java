@@ -17,7 +17,7 @@ import models.XmlStats;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import utils.Utilities;
+import util.Utilities;
 
 public class GameJsonUrl {
     static final String AUTHORIZATION = "Authorization";
