@@ -3,7 +3,7 @@
 @import helper._
 
 @main("Create Team") {
-    @form(routes.Application.saveTeam()) {
+    @form(routes.Teams.saveTeam()) {
         <fieldset> 
             @inputText(teamForm("fullName"), 
             	'_label -> "Name", 
@@ -43,7 +43,7 @@
         
         <div class="actions">
             <input type="submit" value="Create" class="btn primary"> 
-            <a href="@routes.Application.listTeams()" class="btn">Cancel</a> 
+            <a href="@routes.Teams.listTeams()" class="btn">Cancel</a> 
         </div>
     }
 }

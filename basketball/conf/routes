@@ -6,38 +6,38 @@
 GET     /                       controllers.Application.index()
 
 # Games list
-GET     /games		            controllers.Application.listGames(p:Int ?= 0)
+GET     /games		            controllers.Schedule.listGames(p:Int ?= 0)
 
 # Create a game
-#GET     /games/new	            controllers.Application.createGame()
-#POST    /games		            controllers.Application.saveGame()
+#GET     /games/new	            controllers.Schedule.createGame()
+#POST    /games		            controllers.Schedule.saveGame()
 
 # Edit an existing game
-#GET     /games/:id              controllers.Application.editGame(id:Long)
-#POST    /games/:id              controllers.Application.updateGame(id:Long)
+#GET     /games/:id             controllers.Schedule.editGame(id:Long)
+#POST    /games/:id             controllers.Schedule.updateGame(id:Long)
 
 # Find an existing game
-#GET     /games/id			    controllers.Application.searchGame(key:String, value:String)
+#GET     /games/id			    controllers.Schedule.searchGame(key:String, value:String)
 
 # Delete a game
-#POST    /games/:id/delete       controllers.Application.deleteGame(id:Long)
+#POST    /games/:id/delete      controllers.Schedule.deleteGame(id:Long)
 
 # Teams list
-GET     /teams		            controllers.Application.listTeams(p:Int ?= 0, s ?= "fullName", o ?= "asc", f ?= "")
+GET     /teams		            controllers.Teams.listTeams(p:Int ?= 0, s ?= "fullName", o ?= "asc", f ?= "")
 
 # Create a team
-GET     /teams/new	            controllers.Application.createTeam()
-POST    /teams		            controllers.Application.saveTeam()
+GET     /teams/new	            controllers.Teams.createTeam()
+POST    /teams		            controllers.Teams.saveTeam()
 
 # Edit an existing team
-GET     /teams/:id              controllers.Application.editTeam(id:Long)
-POST    /teams/:id              controllers.Application.updateTeam(id:Long)
+GET     /teams/:id              controllers.Teams.editTeam(id:Long)
+POST    /teams/:id              controllers.Teams.updateTeam(id:Long)
 
 # Find an existing team
-GET     /teams/id			    controllers.Application.searchTeam(key:String, value:String)
+GET     /teams/id			    controllers.Teams.searchTeam(key:String, value:String)
 
 # Delete a team
-POST    /teams/:id/delete       controllers.Application.deleteTeam(id:Long)
+POST    /teams/:id/delete       controllers.Teams.deleteTeam(id:Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file           controllers.Assets.at(path="/public", file)

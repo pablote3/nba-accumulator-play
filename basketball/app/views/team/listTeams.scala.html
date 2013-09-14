@@ -29,7 +29,7 @@
     }
 	    
 	// Generate the link
-	routes.Application.listTeams(newPage, sortBy, order, currentFilter)    
+	routes.Teams.listTeams(newPage, sortBy, order, currentFilter)    
 }
 
 @**********************************
@@ -54,8 +54,8 @@
         <form action="@link(0, "fullName")" method="GET">        
             <input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Team Name">
             <input type="submit" id="searchsubmit" value="Filter" class="btn info">
-            <a class="btn success" id="addTeam" href="@routes.Application.createTeam()">Create</a>
-            <a href="@routes.Application.listGames()" class="btn">Cancel</a> 
+            <a class="btn success" id="addTeam" href="@routes.Teams.createTeam()">Create</a>
+            <a href="@routes.Schedule.listGames()" class="btn">Cancel</a> 
         </form>
     </div>
     
@@ -78,7 +78,7 @@
                 @for(team <- currentPage.getList) {
                     <tr>
                         <td>
-                        	<a href="@routes.Application.editTeam(team.getId())">@team.getFullName()</a>
+                        	<a href="@routes.Teams.editTeam(team.getId())">@team.getFullName()</a>
                         </td>
                         <td>
                             @if(team.getAbbr() == null) {
