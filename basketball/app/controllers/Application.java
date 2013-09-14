@@ -6,10 +6,8 @@ import models.Team;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.createTeam;
-import views.html.editTeam;
-import views.html.listGames;
-import views.html.listTeams;
+import views.html.game.*;
+import views.html.team.*;
 
 public class Application extends Controller {
 	
