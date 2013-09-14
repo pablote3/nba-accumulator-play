@@ -15,7 +15,7 @@ public class Application extends Controller {
      * This result directly redirect to application home.
      */
     public static Result GO_HOME = redirect(
-        routes.Application.listTeams(0, "fullName", "asc", "")
+    	routes.Application.listGames(0)
     );
     
     /**
