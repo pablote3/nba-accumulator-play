@@ -36,6 +36,7 @@ create table game (
   date                      datetime not null,
   status                    varchar(9) not null,
   seasonType                varchar(7) not null,
+  last_update               datetime not null,
   constraint ck_game_status check (status in ('Scheduled','Cancelled','Postponed','Suspended','Completed')),
   constraint ck_game_seasonType check (seasonType in ('Post','Regular','Pre')),
   constraint pk_game primary key (id))
