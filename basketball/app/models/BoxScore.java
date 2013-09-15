@@ -18,6 +18,7 @@ import javax.persistence.TableGenerator;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 import com.avaje.ebean.annotation.EnumValue;
@@ -25,29 +26,7 @@ import com.avaje.ebean.annotation.EnumValue;
 @Entity
 public class BoxScore extends Model {
 	private static final long serialVersionUID = 1L;
-	private Team team;
-	private Game game;
-	private List<PeriodScore> periodScores;
-	private Location location;
-	private Result result;
-	private Short points;
-	private Short assists;
-	private Short turnovers;
-	private Short steals;
-	private Short blocks;
-	private Short fieldGoalAttempts;
-	private Short fieldGoalMade;
-	private Float fieldGoalPercent;
-	private Short threePointAttempts;
-	private Short threePointMade;
-	private Float threePointPercent;
-	private Short freeThrowAttempts;
-	private Short freeThrowMade;
-	private Float freeThrowPercent;
-	private Short reboundsOffense;
-	private Short reboundsDefense;
-	private Short personalFouls;
-	
+
 	@Id
 	@TableGenerator(name="table_gen", table="seq_table", pkColumnName="seq_name", valueColumnName="seq_count", pkColumnValue="boxscore_seq", initialValue=1)
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="table_gen")
@@ -58,6 +37,7 @@ public class BoxScore extends Model {
 	
 	@ManyToOne
 	@JoinColumn(name="team_id", referencedColumnName="id", nullable=false)
+	private Team team;
 	public Team getTeam() {
 		return team;
 	}
@@ -67,6 +47,7 @@ public class BoxScore extends Model {
 	
 	@ManyToOne
 	@JoinColumn(name="game_id", referencedColumnName="id", nullable=false)
+	private Game game;
 	public Game getGame() {
 		return game;
 	}
@@ -76,12 +57,15 @@ public class BoxScore extends Model {
 	
 	@OneToMany
 	@JoinColumn(name="periodscore_seq", nullable=true)
+	private List<PeriodScore> periodScores;
 	public List<PeriodScore> getPeriodScores()  {
 		return periodScores;
 	}
 	
+	@Required
 	@Enumerated(EnumType.STRING)
 	@Column(name="location", length=5, nullable=false)
+	private Location location;
 	public Location getLocation() {
 		return location;
 	}
@@ -95,6 +79,7 @@ public class BoxScore extends Model {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name="result", length=4, nullable=true)
+	private Result result;
 	public Result getResult() {
 		return result;
 	}
@@ -107,6 +92,7 @@ public class BoxScore extends Model {
     }
 	
 	@Column(name="points", nullable=true)
+	private Short points;
 	public Short getPoints() {
 		return points;
 	}
@@ -115,6 +101,7 @@ public class BoxScore extends Model {
 	}
 	
 	@Column(name="assists", nullable=true)
+	private Short assists;
 	public Short getAssists() {
 		return assists;
 	}
@@ -123,6 +110,7 @@ public class BoxScore extends Model {
 	}
 	
 	@Column(name="turnovers", nullable=true)
+	private Short turnovers;
 	public Short getTurnovers() {
 		return turnovers;
 	}
@@ -131,6 +119,7 @@ public class BoxScore extends Model {
 	}
 	
 	@Column(name="steals", nullable=true)
+	private Short steals;
 	public Short getSteals() {
 		return steals;
 	}
@@ -139,6 +128,7 @@ public class BoxScore extends Model {
 	}
 	
 	@Column(name="blocks", nullable=true)
+	private Short blocks;
 	public Short getBlocks() {
 		return blocks;
 	}
@@ -148,6 +138,7 @@ public class BoxScore extends Model {
 	
 	@Column(name="fieldGoalAttempts", nullable=true)
 	@JsonProperty("field_goals_attempted")
+	private Short fieldGoalAttempts;
 	public Short getFieldGoalAttempts() {
 		return fieldGoalAttempts;
 	}
@@ -156,6 +147,7 @@ public class BoxScore extends Model {
 	}	
 	@Column(name="fieldGoalMade", nullable=true)
 	@JsonProperty("field_goals_made")
+	private Short fieldGoalMade;
 	public Short getFieldGoalMade() {
 		return fieldGoalMade;
 	}
@@ -164,6 +156,7 @@ public class BoxScore extends Model {
 	}	
 	@Column(name="fieldGoalPercent", nullable=true)
 	@JsonProperty("field_goal_percentage")
+	private Float fieldGoalPercent;
 	public Float getFieldGoalPercent() {
 		return fieldGoalPercent;
 	}
@@ -173,6 +166,7 @@ public class BoxScore extends Model {
 	
 	@Column(name="threePointAttempts", nullable=true)
 	@JsonProperty("three_point_field_goals_attempted")
+	private Short threePointAttempts;
 	public Short getThreePointAttempts() {
 		return threePointAttempts;
 	}
@@ -181,6 +175,7 @@ public class BoxScore extends Model {
 	}	
 	@Column(name="threePointMade", nullable=true)
 	@JsonProperty("three_point_field_goals_made")
+	private Short threePointMade;
 	public Short getThreePointMade() {
 		return threePointMade;
 	}
@@ -189,6 +184,7 @@ public class BoxScore extends Model {
 	}	
 	@Column(name="threePointPercent", nullable=true)
 	@JsonProperty("three_point_percentage")
+	private Float threePointPercent;
 	public Float getThreePointPercent() {
 		return threePointPercent;
 	}
@@ -198,6 +194,7 @@ public class BoxScore extends Model {
 	
 	@Column(name="freeThrowAttempts", nullable=true)
 	@JsonProperty("free_throws_attempted")
+	private Short freeThrowAttempts;
 	public Short getFreeThrowAttempts() {
 		return freeThrowAttempts;
 	}
@@ -206,6 +203,7 @@ public class BoxScore extends Model {
 	}	
 	@Column(name="freeThrowMade", nullable=true)
 	@JsonProperty("free_throws_made")
+	private Short freeThrowMade;
 	public Short getFreeThrowMade() {
 		return freeThrowMade;
 	}
@@ -214,6 +212,7 @@ public class BoxScore extends Model {
 	}	
 	@Column(name="freeThrowPercent", nullable=true)
 	@JsonProperty("free_throw_percentage")
+	private Float freeThrowPercent;
 	public Float getFreeThrowPercent() {
 		return freeThrowPercent;
 	}
@@ -223,6 +222,7 @@ public class BoxScore extends Model {
 	
 	@Column(name="reboundsOffense", nullable=true)
 	@JsonProperty("offensive_rebounds")
+	private Short reboundsOffense;
 	public Short getReboundsOffense() {
 		return reboundsOffense;
 	}
@@ -232,6 +232,7 @@ public class BoxScore extends Model {
 	
 	@Column(name="reboundsDefense", nullable=true)
 	@JsonProperty("defensive_rebounds")
+	private Short reboundsDefense;
 	public Short getReboundsDefense() {
 		return reboundsDefense;
 	}
@@ -241,6 +242,7 @@ public class BoxScore extends Model {
 	
 	@Column(name="personalFouls", nullable=true)
 	@JsonProperty("personal_fouls")
+	private Short personalFouls;
 	public Short getPersonalFouls() {
 		return personalFouls;
 	}

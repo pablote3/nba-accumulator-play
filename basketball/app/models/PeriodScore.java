@@ -16,10 +16,7 @@ import play.db.ebean.Model;
 @Entity
 public class PeriodScore extends Model {
 	private static final long serialVersionUID = 1L;
-	private BoxScore boxScore;
-	private Short quarter;
-	private Short score;
-	
+
 	@Id
 	@TableGenerator(name="table_gen", table="seq_table", pkColumnName="seq_name", valueColumnName="seq_count", pkColumnValue="periodscore_seq", initialValue=1)
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="table_gen")
@@ -30,6 +27,7 @@ public class PeriodScore extends Model {
 	
 	@ManyToOne
 	@JoinColumn(name="boxscore_id", referencedColumnName="id", nullable=false)
+	private BoxScore boxScore;
 	public BoxScore getBoxScore() {
 		return boxScore;
 	}
@@ -38,6 +36,7 @@ public class PeriodScore extends Model {
 	}
 	
 	@Column(name="quarter", nullable=false)
+	private Short quarter;
 	public Short getQuarter() {
 		return quarter;
 	}
@@ -46,6 +45,7 @@ public class PeriodScore extends Model {
 	}
 	
 	@Column(name="score", nullable=false)
+	private Short score;
 	public Short getScore() {
 		return score;
 	}

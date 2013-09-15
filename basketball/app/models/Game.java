@@ -1,5 +1,6 @@
 package models;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,9 +19,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 import com.avaje.ebean.Page;
@@ -29,12 +32,7 @@ import com.avaje.ebean.annotation.EnumValue;
 @Entity
 public class Game extends Model {
 	private static final long serialVersionUID = 1L;
-	private Date date;
-	private Status status;
-	private SeasonType seasonType;
-	private List<BoxScore> boxScores = new ArrayList<BoxScore>();
-	private List<Official> officials;
-	
+
 	@Id
 	@TableGenerator(name="table_gen", table="sequence_table", pkColumnName="seq_name", valueColumnName="seq_count", pkColumnValue="game_seq")
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="table_gen")
@@ -42,8 +40,21 @@ public class Game extends Model {
 	public Long getId() {
 		return id;
 	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	@Version
+	private Timestamp lastUpdate;
+	public Timestamp getLastUpdate()  {
+		return lastUpdate;
+	}
+	public void setLastUpdate(Timestamp lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
 	
 	@OneToMany(mappedBy="game", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	private List<BoxScore> boxScores = new ArrayList<BoxScore>();
 	public List<BoxScore> getBoxScores()  {
 		return boxScores;
 	}
@@ -59,13 +70,16 @@ public class Game extends Model {
 	
 	@OneToMany
 	@JoinColumn(name="official_seq")
+	private List<Official> officials;
 	public List<Official> getOfficials()  {
 		return officials;
 	}
 
+	@Required
 	@Column(name="date", nullable=false)
 	@Temporal(TemporalType.DATE)
 	@JsonProperty("start_date_time")
+	private Date date;
 	public Date getDate() {
 		return date;
 	}
@@ -73,6 +87,8 @@ public class Game extends Model {
 		this.date = date;
 	}
 	
+	@Required
+	private Status status;
 	@Enumerated(EnumType.STRING)
 	@Column(name="status", length=9, nullable=false)
 	public Status getStatus() {
@@ -90,9 +106,11 @@ public class Game extends Model {
         @EnumValue("Cancelled") cancelled,
     }
 	
+	@Required
 	@Enumerated(EnumType.STRING)
 	@Column(name="seasonType", length=7, nullable=false)
 	@JsonProperty("season_type")
+	private SeasonType seasonType;
 	public SeasonType getSeasonType() {
 		return seasonType;
 	}

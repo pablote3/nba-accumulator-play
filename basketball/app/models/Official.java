@@ -18,16 +18,11 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import play.db.ebean.Model;
 
 import com.avaje.ebean.annotation.EnumValue;
-//import org.codehaus.jackson.annotate.JsonProperty;
 
 @Entity
 public class Official extends Model {
 	private static final long serialVersionUID = 1L;
-	private Game game;
-	private Position position;
-	private String lastName;
-	private String firstName;
-	
+
 	@Id
 	@TableGenerator(name="table_gen", table="seq_table", pkColumnName="seq_name", valueColumnName="seq_count", pkColumnValue="official_seq", initialValue=1)
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="table_gen")
@@ -38,6 +33,7 @@ public class Official extends Model {
 	
 	@ManyToOne
 	@JoinColumn(name="game_id", referencedColumnName="id", nullable=false)
+	private Game game;
 	public Game getGame() {
 		return game;
 	}
@@ -47,6 +43,7 @@ public class Official extends Model {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name="position", length=5, nullable=false)
+	private Position position;
 	public Position getPosition() {
 		return position;
 	}
@@ -61,6 +58,7 @@ public class Official extends Model {
 	
 	@Column(name="lastName", length=35, nullable=false)
 	@JsonProperty("last_name")
+	private String lastName;
 	public String getLastName() {
 		return lastName;
 	}
@@ -70,6 +68,7 @@ public class Official extends Model {
 	
 	@Column(name="firstName", length=35, nullable=false)
 	@JsonProperty("first_name")
+	private String firstName;
 	public String getFirstName() {
 		return firstName;
 	}
