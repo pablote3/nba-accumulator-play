@@ -32,7 +32,7 @@ public class FormTeamTest {
 	        public void run() {
 	        	Result result;
 	        	
-	            result = callAction(controllers.routes.ref.Teams.searchTeam("key", "atlanta-hawks"));
+	            result = callAction(controllers.routes.ref.Teams.search("key", "atlanta-hawks"));
 	            assertThat(status(result)).isEqualTo(OK);
 	            Long teamId = Long.valueOf(contentAsString(result));
 
@@ -67,7 +67,7 @@ public class FormTeamTest {
 	        public void run() {
 	        	Result result;
 	        	
-	            result = callAction(controllers.routes.ref.Teams.searchTeam("key", "atlanta-hawks"));
+	            result = callAction(controllers.routes.ref.Teams.search("key", "atlanta-hawks"));
 	            assertThat(status(result)).isEqualTo(OK);
 	            Long teamId = Long.valueOf(contentAsString(result));
 
@@ -102,11 +102,11 @@ public class FormTeamTest {
 	            assertThat(flash(result).get("success")).isEqualTo("Team Seattle Supersonics has been created");
 	            assertThat(redirectLocation(result)).isEqualTo("/teams");
 	            
-	            result = callAction(controllers.routes.ref.Teams.searchTeam("key", "seattle-supersonics"));
+	            result = callAction(controllers.routes.ref.Teams.search("key", "seattle-supersonics"));
 	            assertThat(status(result)).isEqualTo(OK);
 	            String teamId = contentAsString(result);
 	            
-	            result = callAction(controllers.routes.ref.Teams.deleteTeam(Integer.parseInt(teamId)));
+	            result = callAction(controllers.routes.ref.Teams.delete(Integer.parseInt(teamId)));
 	            assertThat(status(result)).isEqualTo(SEE_OTHER);
 	            assertThat(flash(result).get("success")).isEqualTo("Team has been deleted");
 	            assertThat(redirectLocation(result)).isEqualTo("/teams");	            

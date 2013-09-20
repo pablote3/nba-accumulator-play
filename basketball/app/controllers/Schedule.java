@@ -12,7 +12,7 @@ public class Schedule extends Controller {
     *
     * @param page Current page number (starts from 0)
     */
-   public static Result listGames(int page) {
+   public static Result list(int page) {
        return ok(
            listGames.render(
                Game.page(page, 15)

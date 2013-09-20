@@ -9,7 +9,7 @@ public class Application extends Controller {
      * This result directly redirect to application home.
      */
     public static Result GO_HOME = redirect(
-    	routes.Schedule.listGames(0)
+    	routes.Schedule.list(0)
     );
     
     /**

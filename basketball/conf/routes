@@ -6,20 +6,20 @@
 GET     /                       controllers.Application.index()
 
 # Games list
-GET     /games		            controllers.Schedule.listGames(p:Int ?= 0)
+GET     /games		            controllers.Schedule.list(p:Int ?= 0)
 
 # Teams list
-GET     /teams		            controllers.Teams.listTeams(p:Int ?= 0, s ?= "fullName", o ?= "asc", f ?= "")
+GET     /teams		            controllers.Teams.list(p:Int ?= 0, s ?= "fullName", o ?= "asc", f ?= "")
 
 # Create a team or edit an existing team
 GET     /teams/:id              controllers.Teams.edit(id:Long)
 POST    /teams/:id              controllers.Teams.save(id:Long)
 
 # Find an existing team
-GET     /teams/id			    controllers.Teams.searchTeam(key:String, value:String)
+GET     /teams/id			    controllers.Teams.search(key:String, value:String)
 
 # Delete a team
-POST    /teams/:id/delete       controllers.Teams.deleteTeam(id:Long)
+POST    /teams/:id/delete       controllers.Teams.delete(id:Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file           controllers.Assets.at(path="/public", file)

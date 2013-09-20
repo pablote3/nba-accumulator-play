@@ -18,7 +18,7 @@ public class Teams extends Controller {
      * @param order Sort order (either asc or desc)
      * @param filter Filter applied on team names
      */
-    public static Result listTeams(int page, String sortBy, String order, String filter) {
+    public static Result list(int page, String sortBy, String order, String filter) {
         return ok(
             listTeams.render(
                 Team.page(page, 15, sortBy, order, filter), sortBy, order, filter
@@ -32,7 +32,7 @@ public class Teams extends Controller {
      * @param key of the team to search for
      * @param value of the team to search for
      */
-    public static Result searchTeam(String key, String value) {
+    public static Result search(String key, String value) {
         try {
         	Team team = Team.find.where().eq(key, value).findUnique();
 			return ok(team.getId().toString());
@@ -78,7 +78,7 @@ public class Teams extends Controller {
             form.get().update(id);
             flash("success", "Team " + form.get().getFullName() + " has been updated");
     	}        
-        return redirect(routes.Teams.listTeams(0, "fullName", "asc", ""));
+        return redirect(routes.Teams.list(0, "fullName", "asc", ""));
     }
     
     /**
@@ -86,9 +86,9 @@ public class Teams extends Controller {
      *
      * @param id Id of the team to delete
      */
-    public static Result deleteTeam(Long id) {
+    public static Result delete(Long id) {
         Team.find.ref(id).delete();
         flash("success", "Team has been deleted");
-        return redirect(routes.Teams.listTeams(0, "fullName", "asc", ""));
+        return redirect(routes.Teams.list(0, "fullName", "asc", ""));
     }
 }
