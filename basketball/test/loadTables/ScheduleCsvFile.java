@@ -39,11 +39,11 @@ public class ScheduleCsvFile {
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
-				String line = null;
-				Game game = null;
-				BoxScore boxScoreHome = null;
-				BoxScore boxScoreAway = null;
-				Date date = null;
+				String line;
+				Game game;
+				BoxScore boxScoreHome;
+				BoxScore boxScoreAway;
+				Date date;
 				 
 				//read each line of text file
 				try {
@@ -55,6 +55,7 @@ public class ScheduleCsvFile {
 			            	date = new SimpleDateFormat("MMM dd yyyy", Locale.ENGLISH).parse(st.nextToken());
 			            } catch (ParseException e) {
 			            	e.printStackTrace();
+			            	break;
 			            }
 			            game.setDate(date);
 			            game.setStatus(Status.completed);
