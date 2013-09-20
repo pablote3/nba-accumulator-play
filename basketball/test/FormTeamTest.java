@@ -34,7 +34,7 @@ public class FormTeamTest {
 	        	
 	            result = callAction(controllers.routes.ref.Teams.searchTeam("key", "atlanta-hawks"));
 	            assertThat(status(result)).isEqualTo(OK);
-	            String teamId = contentAsString(result);
+	            Long teamId = Long.valueOf(contentAsString(result));
 
 	            Map<String,String> data = new HashMap<String,String>();
 	            data.put("key", "atlanta-hawks2");
@@ -47,13 +47,13 @@ public class FormTeamTest {
 	            data.put("city", "Atlanta");
 	            data.put("state", "GA");
 	            
-                result = callAction(controllers.routes.ref.Teams.updateTeam(Integer.parseInt(teamId)), fakeRequest().withFormUrlEncodedBody(data));	            
+                result = callAction(controllers.routes.ref.Teams.save(teamId), fakeRequest().withFormUrlEncodedBody(data));	            
 	            assertThat(status(result)).isEqualTo(SEE_OTHER);
 	            assertThat(flash(result).get("success")).isEqualTo("Team Atlanta Hawks has been updated");
 	            assertThat(redirectLocation(result)).isEqualTo("/teams");
 
 	            data.put("key", "atlanta-hawks");
-                result = callAction(controllers.routes.ref.Teams.updateTeam(Integer.parseInt(teamId)), fakeRequest().withFormUrlEncodedBody(data));            
+                result = callAction(controllers.routes.ref.Teams.save(teamId), fakeRequest().withFormUrlEncodedBody(data));            
 	            assertThat(status(result)).isEqualTo(SEE_OTHER);
 	            assertThat(flash(result).get("success")).isEqualTo("Team Atlanta Hawks has been updated");
 	            assertThat(redirectLocation(result)).isEqualTo("/teams");         
@@ -62,24 +62,19 @@ public class FormTeamTest {
     }
     
     @Test
-    public void updateTeamValidate() {
+    public void updateTeam_MissingRequiredField() {
 	    running(fakeApplication(), new Runnable() {
 	        public void run() {
 	        	Result result;
 	        	
 	            result = callAction(controllers.routes.ref.Teams.searchTeam("key", "atlanta-hawks"));
 	            assertThat(status(result)).isEqualTo(OK);
-	            String teamId = contentAsString(result);
+	            Long teamId = Long.valueOf(contentAsString(result));
 
 	            Map<String,String> data = new HashMap<String,String>();
-	            data.put("key", "atlanta-hawks2");
-	            data.put("fullName", "Atlanta Hawks");
-	            data.put("abbr", "ATL");
-	            data.put("active", "true");
 	            data.put("conference", null);
-	            data.put("division", "Southeast");
 	            
-                result = callAction(controllers.routes.ref.Teams.updateTeam(Integer.parseInt(teamId)), fakeRequest().withFormUrlEncodedBody(data));	            
+                result = callAction(controllers.routes.ref.Teams.save(teamId), fakeRequest().withFormUrlEncodedBody(data));	            
 	            assertThat(status(result)).isEqualTo(BAD_REQUEST);
 	        }
 	    });
@@ -102,9 +97,9 @@ public class FormTeamTest {
 	            data.put("city", "Seattle");
 	            data.put("state", "WA");
 	            
-                result = callAction(controllers.routes.ref.Teams.saveTeam(), fakeRequest().withFormUrlEncodedBody(data));	            
+                result = callAction(controllers.routes.ref.Teams.save(-1L), fakeRequest().withFormUrlEncodedBody(data));	            
 	            assertThat(status(result)).isEqualTo(SEE_OTHER);
-	            assertThat(flash(result).get("success")).isEqualTo("Team Seattle Supersonics has been saved");
+	            assertThat(flash(result).get("success")).isEqualTo("Team Seattle Supersonics has been created");
 	            assertThat(redirectLocation(result)).isEqualTo("/teams");
 	            
 	            result = callAction(controllers.routes.ref.Teams.searchTeam("key", "seattle-supersonics"));

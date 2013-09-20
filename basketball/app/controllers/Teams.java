@@ -5,7 +5,6 @@ import models.Team;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.team.createTeam;
 import views.html.team.editTeam;
 import views.html.team.listTeams;
 
@@ -28,20 +27,6 @@ public class Teams extends Controller {
     }
     
     /**
-     * Display (GET) the 'edit form' of a existing team.
-     *
-     * @param id Id of the team to edit
-     */
-    public static Result editTeam(Long id) {
-        Form<Team> form = form(Team.class).fill(
-        	Team.find.byId(id)
-        );
-        return ok(
-            editTeam.render(id, form)
-        );
-    }
-    
-    /**
      * Return the id of an existing team.
      *
      * @param key of the team to search for
@@ -57,42 +42,42 @@ public class Teams extends Controller {
     }
 
     /**
+     * Display (GET) the 'edit form' of an existing team or a new team.
+     *
+     * @param id Id of the team to edit
+     */
+    public static Result edit(Long id) {
+    	Form<Team> form = null;
+    	if (id == -1L) {
+    		form = form(Team.class);
+    	}
+    	else {
+            form = form(Team.class).fill(Team.find.byId(id));
+    	}
+        return ok(
+        	editTeam.render(id, form)
+	    );
+    } 
+    
+    /**
      * Handle (POST) the 'edit form' submission 
      *
      * @param id Id of the team to edit
      */
-    public static Result updateTeam(Long id) {
-        Form<Team> form = form(Team.class).fill(
-        	Team.find.byId(id)).bindFromRequest();
+    public static Result save(Long id) {
+    	Form<Team> form = form(Team.class).bindFromRequest();
         if(form.hasErrors()) {
+        	//rename to form
             return badRequest(editTeam.render(id, form));
         }
-        form.get().update(id);
-        flash("success", "Team " + form.get().getFullName() + " has been updated");
-        return redirect(routes.Teams.listTeams(0, "fullName", "asc", ""));
-    }
-    
-    /**
-     * Display (GET) the 'create form' of a new team.
-     */
-    public static Result createTeam() {
-        Form<Team> form = form(Team.class);
-        return ok(
-            createTeam.render(form)
-        );
-    }
-    
-    /**
-     * Handle (POST) the 'create form' submission 
-     */
-    public static Result saveTeam() {
-        Form<Team> form = form(Team.class).bindFromRequest();
-        if(form.hasErrors()) {
-            return badRequest(createTeam.render(form));
-        }
-        form.get().save();
-//        System.out.println(form.get().getId());
-        flash("success", "Team " + form.get().getFullName() + " has been saved");
+    	if (id == -1L) {
+    		form.get().save();
+            flash("success", "Team " + form.get().getFullName() + " has been created");
+    	}
+    	else {
+            form.get().update(id);
+            flash("success", "Team " + form.get().getFullName() + " has been updated");
+    	}        
         return redirect(routes.Teams.listTeams(0, "fullName", "asc", ""));
     }
     

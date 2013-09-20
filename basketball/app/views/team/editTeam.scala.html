@@ -3,7 +3,7 @@
 @import helper._
 
 @main("Edit Team") {
-    @form(routes.Teams.updateTeam(id)) {
+    @form(routes.Teams.save(id)) {
         <fieldset> 
             @inputText(teamForm("key"), 
             	'_label -> "Key",

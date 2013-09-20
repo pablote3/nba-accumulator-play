@@ -8,30 +8,12 @@ GET     /                       controllers.Application.index()
 # Games list
 GET     /games		            controllers.Schedule.listGames(p:Int ?= 0)
 
-# Create a game
-#GET     /games/new	            controllers.Schedule.createGame()
-#POST    /games		            controllers.Schedule.saveGame()
-
-# Edit an existing game
-#GET     /games/:id             controllers.Schedule.editGame(id:Long)
-#POST    /games/:id             controllers.Schedule.updateGame(id:Long)
-
-# Find an existing game
-#GET     /games/id			    controllers.Schedule.searchGame(key:String, value:String)
-
-# Delete a game
-#POST    /games/:id/delete      controllers.Schedule.deleteGame(id:Long)
-
 # Teams list
 GET     /teams		            controllers.Teams.listTeams(p:Int ?= 0, s ?= "fullName", o ?= "asc", f ?= "")
 
-# Create a team
-GET     /teams/new	            controllers.Teams.createTeam()
-POST    /teams		            controllers.Teams.saveTeam()
-
-# Edit an existing team
-GET     /teams/:id              controllers.Teams.editTeam(id:Long)
-POST    /teams/:id              controllers.Teams.updateTeam(id:Long)
+# Create a team or edit an existing team
+GET     /teams/:id              controllers.Teams.edit(id:Long)
+POST    /teams/:id              controllers.Teams.save(id:Long)
 
 # Find an existing team
 GET     /teams/id			    controllers.Teams.searchTeam(key:String, value:String)

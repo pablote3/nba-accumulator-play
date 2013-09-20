@@ -54,7 +54,7 @@
         <form action="@link(0, "fullName")" method="GET">        
             <input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Team Name">
             <input type="submit" id="searchsubmit" value="Filter" class="btn info">
-            <a class="btn success" id="addTeam" href="@routes.Teams.createTeam()">Create</a>
+            <a class="btn success" id="addTeam" href="@routes.Teams.edit(-1)">Create</a>
             <a href="@routes.Schedule.listGames()" class="btn">Cancel</a> 
         </form>
     </div>
@@ -78,7 +78,7 @@
                 @for(team <- currentPage.getList) {
                     <tr>
                         <td>
-                        	<a href="@routes.Teams.editTeam(team.getId())">@team.getFullName()</a>
+                        	<a href="@routes.Teams.edit(team.getId())">@team.getFullName()</a>
                         </td>
                         <td>
                             @if(team.getAbbr() == null) {
