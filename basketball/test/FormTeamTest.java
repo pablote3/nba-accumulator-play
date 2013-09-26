@@ -15,7 +15,7 @@ import static play.test.Helpers.status;
 import java.util.HashMap;
 import java.util.Map;
 
-import models.Team;
+import models.entity.Team;
 
 import org.junit.Test;
 

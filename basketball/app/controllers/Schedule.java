@@ -1,6 +1,6 @@
 package controllers;
 
-import models.Game;
+import models.entity.Game;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.game.listGames;

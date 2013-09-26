@@ -5,10 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import models.BoxScore.Location;
-import models.BoxScore.Result;
-import models.Game.Status;
-import models.XmlStats;
+import models.entity.BoxScore.Location;
+import models.entity.BoxScore.Result;
+import models.entity.Game.Status;
+
+import models.partial.XmlStats;
 
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;

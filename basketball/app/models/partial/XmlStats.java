@@ -1,4 +1,9 @@
-package models;
+package models.partial;
+
+import models.entity.BoxScore;
+import models.entity.Game;
+import models.entity.Official;
+import models.entity.Team;
 
 public class XmlStats {
 	public Team away_team;

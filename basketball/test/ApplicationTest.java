@@ -1,6 +1,6 @@
 import java.io.IOException;
 
-import models.Team;
+import models.entity.Team;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;

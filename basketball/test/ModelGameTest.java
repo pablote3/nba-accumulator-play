@@ -8,12 +8,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import models.BoxScore;
-import models.BoxScore.Location;
-import models.Game;
-import models.Game.SeasonType;
-import models.Game.Status;
-import models.Team;
+import models.entity.*;
+import models.entity.BoxScore.Location;
+import models.entity.Game.SeasonType;
+import models.entity.Game.Status;
 
 import org.junit.Test;
 
@@ -22,7 +20,17 @@ import com.avaje.ebean.Query;
 import com.avaje.ebean.RawSql;
 import com.avaje.ebean.RawSqlBuilder;
 
-public class ModelGameTest {    
+public class ModelGameTest {
+	
+	@Test
+    public void findGamesFilter() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  List<Game> games = Game.findFilter("new");
+        	  assertThat(games.size()).isEqualTo(3);
+          }
+        });
+    }
 
     @Test
     public void createGameScheduled() {
