@@ -64,6 +64,7 @@ create table team (
   id                        bigint auto_increment not null,
   team_key                  varchar(35) not null,
   full_name                 varchar(35) not null,
+  short_name                varchar(20) not null,
   abbr                      varchar(5) not null,
   active                    tinyint(1) default 0 not null,
   conference                varchar(4) not null,

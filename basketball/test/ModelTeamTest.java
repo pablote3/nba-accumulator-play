@@ -63,6 +63,7 @@ public class ModelTeamTest {
               Team team = new Team();
               team.setKey("seattle-supersonics");
               team.setFullName("Seattle Supersonics");
+              team.setShortName("Supersonics");
               team.setAbbr("SEA");
               team.setConference(Conference.West);
               team.setDivision(Division.Pacific);

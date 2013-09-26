@@ -42,6 +42,7 @@ public class TeamsCsvFile {
 						team = new Team();
 						team.setKey(st.nextToken());
 			            team.setFullName(st.nextToken());
+			            team.setShortName(st.nextToken());
 			            team.setAbbr(st.nextToken());
 			            team.setActive((Boolean.valueOf(st.nextToken()).booleanValue()));
 			            team.setConference(Conference.valueOf(st.nextToken()));

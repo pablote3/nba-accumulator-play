@@ -86,6 +86,17 @@ public class Team extends Model {
 	}
 	
 	@Required
+	@Column(name="short_name", length=20, nullable=false)
+	@JsonProperty("short_name")
+	private String shortName;
+	public String getShortName() {
+		return shortName;
+	}
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
+	
+	@Required
 	@Column(name="abbr", length=5, nullable=false)
 	@JsonProperty("abbreviation")
 	private String abbr;
