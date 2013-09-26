@@ -129,6 +129,10 @@ public class Game extends Model {
 	public static List<Game> all() {
 	    return find.all();
 	}
+	
+	public static List<Game> findFilter(String filter) {
+		return find.where().ilike("fullName", "%" + filter + "%").findList();
+	}
 	  
 	public static void create(Game game) {
 	  	game.save();
