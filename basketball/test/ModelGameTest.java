@@ -21,16 +21,6 @@ import com.avaje.ebean.RawSql;
 import com.avaje.ebean.RawSqlBuilder;
 
 public class ModelGameTest {
-	
-	@Test
-    public void findGamesFilter() {
-        running(fakeApplication(), new Runnable() {
-          public void run() {
-        	  List<Game> games = Game.findFilter("new");
-        	  assertThat(games.size()).isEqualTo(3);
-          }
-        });
-    }
 
     @Test
     public void createGameScheduled() {
