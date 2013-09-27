@@ -100,6 +100,7 @@ public class Game extends Model {
 	
 	public enum Status {
         @EnumValue("Scheduled") scheduled,
+        @EnumValue("Finished") finished,
         @EnumValue("Completed") completed,
         @EnumValue("Postponed") postponed,
         @EnumValue("Suspended") suspended,
