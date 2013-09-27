@@ -39,6 +39,7 @@ public class FormTeamTest {
 	            Map<String,String> data = new HashMap<String,String>();
 	            data.put("key", "atlanta-hawks2");
 	            data.put("fullName", "Atlanta Hawks");
+	            data.put("shortName", "Hawks");
 	            data.put("abbr", "ATL");
 	            data.put("active", "true");
 	            data.put("conference", "East");
@@ -89,6 +90,7 @@ public class FormTeamTest {
 	            Map<String,String> data = new HashMap<String,String>();
 	            data.put("key", "seattle-supersonics");
 	            data.put("fullName", "Seattle Supersonics");
+	            data.put("shortName", "Supersonics");
 	            data.put("abbr", "SEA");
 	            data.put("active", "false");
 	            data.put("conference", "West");
