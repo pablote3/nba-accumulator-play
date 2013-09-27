@@ -10,7 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -53,7 +52,7 @@ public class Game extends Model {
 		this.lastUpdate = lastUpdate;
 	}
 	
-	@OneToMany(mappedBy="game", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="game", cascade=CascadeType.ALL)
 	private List<BoxScore> boxScores = new ArrayList<BoxScore>();
 	public List<BoxScore> getBoxScores()  {
 		return boxScores;
@@ -131,10 +130,6 @@ public class Game extends Model {
 	    return find.all();
 	}
 	
-	public static List<Game> findFilter(String filter) {
-		return find.where().ilike("fullName", "%" + filter + "%").findList();
-	}
-	  
 	public static void create(Game game) {
 	  	game.save();
 	}
