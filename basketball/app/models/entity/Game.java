@@ -13,7 +13,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
@@ -66,18 +65,25 @@ public class Game extends Model {
 	public void removeBoxScore(BoxScore boxScore)  {
 		this.getBoxScores().remove(boxScore);
 	}
-	
-	@OneToMany
-	@JoinColumn(name="official_seq")
-	private List<Official> officials;
-	public List<Official> getOfficials()  {
-		return officials;
+
+	@OneToMany(mappedBy="game", cascade=CascadeType.ALL)
+	private List<GameOfficial> gameOfficials = new ArrayList<GameOfficial>();
+	public List<GameOfficial> getGameOfficials()  {
+		return gameOfficials;
+	}
+	public void setGameOfficial(List<GameOfficial> gameOfficials)  {
+		this.gameOfficials = gameOfficials;
+	}
+	public void addGameOfficial(GameOfficial gameOfficial)  {
+		this.getGameOfficials().add(gameOfficial);
+	}
+	public void removeGameOfficial(GameOfficial gameOfficial)  {
+		this.getGameOfficials().remove(gameOfficial);
 	}
 
 	@Required
 	@Column(name="date", nullable=false)
-	@Temporal(TemporalType.DATE)
-	@JsonProperty("start_date_time")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
 	public Date getDate() {
 		return date;

@@ -37,18 +37,26 @@ create table game (
   status                    varchar(9) not null,
   seasonType                varchar(7) not null,
   last_update               datetime not null,
-  constraint ck_game_status check (status in ('Scheduled','Cancelled','Postponed','Suspended','Completed')),
+  constraint ck_game_status check (status in ('Scheduled','Cancelled','Postponed','Finished','Suspended','Completed')),
   constraint ck_game_seasonType check (seasonType in ('Post','Regular','Pre')),
   constraint pk_game primary key (id))
 ;
 
-create table official (
+create table game_official (
   id                        bigint auto_increment not null,
   game_id                   bigint,
-  position                  varchar(5) not null,
+  official_id               bigint,
+  constraint pk_game_official primary key (id))
+;
+
+create table official (
+  id                        bigint auto_increment not null,
+  number                    smallint,
   lastName                  varchar(35) not null,
   firstName                 varchar(35) not null,
-  constraint ck_official_position check (position in ('Center','Trail','Lead')),
+  firstGame                 datetime not null,
+  active                    tinyint(1) default 0 not null,
+  last_update               datetime not null,
   constraint pk_official primary key (id))
 ;
 
@@ -82,10 +90,12 @@ alter table box_score add constraint fk_box_score_team_1 foreign key (team_id) r
 create index ix_box_score_team_1 on box_score (team_id);
 alter table box_score add constraint fk_box_score_game_2 foreign key (game_id) references game (id) on delete restrict on update restrict;
 create index ix_box_score_game_2 on box_score (game_id);
-alter table official add constraint fk_official_game_3 foreign key (game_id) references game (id) on delete restrict on update restrict;
-create index ix_official_game_3 on official (game_id);
-alter table period_score add constraint fk_period_score_boxScore_4 foreign key (boxscore_id) references box_score (id) on delete restrict on update restrict;
-create index ix_period_score_boxScore_4 on period_score (boxscore_id);
+alter table game_official add constraint fk_game_official_game_3 foreign key (game_id) references game (id) on delete restrict on update restrict;
+create index ix_game_official_game_3 on game_official (game_id);
+alter table game_official add constraint fk_game_official_official_4 foreign key (official_id) references official (id) on delete restrict on update restrict;
+create index ix_game_official_official_4 on game_official (official_id);
+alter table period_score add constraint fk_period_score_boxScore_5 foreign key (boxscore_id) references box_score (id) on delete restrict on update restrict;
+create index ix_period_score_boxScore_5 on period_score (boxscore_id);
 
 
 
@@ -96,6 +106,8 @@ SET FOREIGN_KEY_CHECKS=0;
 drop table box_score;
 
 drop table game;
+
+drop table game_official;
 
 drop table official;
 

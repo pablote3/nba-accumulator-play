@@ -1,21 +1,24 @@
 package models.entity;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.TableGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Version;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
+import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
-
-import com.avaje.ebean.annotation.EnumValue;
 
 @Entity
 public class Official extends Model {
@@ -28,34 +31,44 @@ public class Official extends Model {
 	public Long getId() {
 		return id;
 	}
-	
-	@ManyToOne
-	@JoinColumn(name="game_id", referencedColumnName="id", nullable=false)
-	private Game game;
-	public Game getGame() {
-		return game;
-	}
-	public void setGame(Game game) {
-		this.game = game;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
-	@Enumerated(EnumType.STRING)
-	@Column(name="position", length=5, nullable=false)
-	private Position position;
-	public Position getPosition() {
-		return position;
+	@Version
+	private Timestamp lastUpdate;
+	public Timestamp getLastUpdate()  {
+		return lastUpdate;
 	}
-	public void setPosition(Position position) {
-		this.position = position;
+	public void setLastUpdate(Timestamp lastUpdate) {
+		this.lastUpdate = lastUpdate;
 	}
-	public enum Position {
-        @EnumValue("Lead") lead,
-        @EnumValue("Trail") trail,
-        @EnumValue("Center") center
-    }
+	
+	@OneToMany(mappedBy="official", fetch=FetchType.LAZY)
+	private List<GameOfficial> gameOfficials = new ArrayList<GameOfficial>();
+	public List<GameOfficial> getGameOfficials()  {
+		return gameOfficials;
+	}
+	public void setGameOfficial(List<GameOfficial> gameOfficials)  {
+		this.gameOfficials = gameOfficials;
+	}
+	public void addGameOfficial(GameOfficial gameOfficial)  {
+		this.getGameOfficials().add(gameOfficial);
+	}
+	public void removeGameOfficial(GameOfficial gameOfficial)  {
+		this.getGameOfficials().remove(gameOfficial);
+	}
+	
+	@Column(name="number", nullable=true)
+	private Short number;
+	public Short getNumber() {
+		return number;
+	}
+	public void setNumber(Short number) {
+		this.number = number;
+	}
 	
 	@Column(name="lastName", length=35, nullable=false)
-	@JsonProperty("last_name")
 	private String lastName;
 	public String getLastName() {
 		return lastName;
@@ -65,7 +78,6 @@ public class Official extends Model {
 	}
 	
 	@Column(name="firstName", length=35, nullable=false)
-	@JsonProperty("first_name")
 	private String firstName;
 	public String getFirstName() {
 		return firstName;
@@ -73,13 +85,35 @@ public class Official extends Model {
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+	
+	@Required
+	@Column(name="firstGame", nullable=false)
+	@Temporal(TemporalType.DATE)
+	private Date date;
+	public Date getDate() {
+		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
+	}
+		
+	@Required
+	@Column(name="active", nullable=false)
+	private boolean active;
+	public boolean getActive() {
+		return active;
+	}
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 
 	public String toString() {
 		return (new StringBuffer())
 			.append("  id:" + this.id)
-			.append("  position:" + this.position)
+			.append("  number:" + this.number)
 			.append("  lastName:" + this.lastName)
 			.append("  firstName:" + this.firstName)
+			.append("  active:" + this.active)
 			.toString();
 	}
 }
