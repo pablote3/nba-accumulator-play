@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,12 +16,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.TableGenerator;
 import javax.persistence.Version;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 import com.avaje.ebean.Page;
 import com.avaje.ebean.annotation.EnumValue;
-import org.codehaus.jackson.annotate.JsonProperty;
 
 @Entity
 public class Team extends Model {
@@ -48,7 +48,7 @@ public class Team extends Model {
 		this.lastUpdate = lastUpdate;
 	}
 	
-	@OneToMany(mappedBy="team", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="team", fetch=FetchType.LAZY)
 	private List<BoxScore> boxScores = new ArrayList<BoxScore>();
 	public List<BoxScore> getBoxScores()  {
 		return boxScores;
