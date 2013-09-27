@@ -45,13 +45,25 @@ public class ModelTeamTest {
     }
 	
     @Test
-    public void findTeamFinder() {
+    public void findTeamFinderKey() {
         running(fakeApplication(), new Runnable() {
           public void run() {
               Team team = Team.find.where().eq("key", "new-orleans-pelicans").findUnique();
               assertThat(team.getFullName()).isEqualTo("New Orleans Pelicans");
               assertThat(team.getAbbr()).isEqualTo("NOP");
               assertThat(team.getActive()).isTrue();
+          }
+        });
+    }
+    
+    @Test
+    public void findTeamFinderShortName() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  Team team1 = Team.find.where().eq("shortName", "Pelicans").findUnique();
+              assertThat(team1.getFullName()).isEqualTo("New Orleans Pelicans");
+              assertThat(team1.getAbbr()).isEqualTo("NOP");
+              assertThat(team1.getActive()).isTrue();
           }
         });
     }
