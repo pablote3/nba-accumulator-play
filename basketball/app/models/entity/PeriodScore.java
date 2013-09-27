@@ -1,7 +1,5 @@
 package models.entity;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -51,20 +49,6 @@ public class PeriodScore extends Model {
 	}
 	public void setScore(Short score) {
 		this.score = score;
-	}
-	
-	public static Finder<Long,PeriodScore> find = new Finder<Long, PeriodScore>(Long.class, PeriodScore.class);
-	  
-	public static List<PeriodScore> all() {
-	    return find.all();
-	}
-	  
-	public static void create(PeriodScore boxScore) {
-	  	boxScore.save();
-	}
-	  
-	public static void delete(Long id) {
-	  	find.ref(id).delete();
 	}
 
 	public String toString() {

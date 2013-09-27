@@ -1,7 +1,5 @@
 package models.entity;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -74,20 +72,6 @@ public class Official extends Model {
 	}
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
-	}
-	
-	public static Finder<Long,Official> find = new Finder<Long, Official>(Long.class, Official.class);
-	  
-	public static List<Official> all() {
-	    return find.all();
-	}
-	  
-	public static void create(Official boxScore) {
-	  	boxScore.save();
-	}
-	  
-	public static void delete(Long id) {
-	  	find.ref(id).delete();
 	}
 
 	public String toString() {

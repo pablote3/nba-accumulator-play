@@ -1,8 +1,6 @@
 package models.entity;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -250,28 +248,6 @@ public class BoxScore extends Model {
 	public void setPersonalFouls(Short personalFouls) {
 		this.personalFouls = personalFouls;
 	}
-	
-	public static Finder<Long,BoxScore> find = new Finder<Long, BoxScore>(Long.class, BoxScore.class);
-	  
-	public static List<BoxScore> all() {
-	    return find.all();
-	}
-	  
-	public static void create(BoxScore boxScore) {
-	  	boxScore.save();
-	}
-	  
-	public static void delete(Long id) {
-	  	find.ref(id).delete();
-	}
-	
-    public static Map<String,String> options() {
-        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
-        for(BoxScore bs: BoxScore.find.orderBy("location").findList()) {
-            options.put(bs.id.toString(), bs.id.toString());
-        }
-        return options;
-    }
 
 	public String toString() {
 		return (new StringBuffer())
