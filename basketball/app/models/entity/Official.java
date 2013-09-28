@@ -89,12 +89,12 @@ public class Official extends Model {
 	@Required
 	@Column(name="firstGame", nullable=false)
 	@Temporal(TemporalType.DATE)
-	private Date date;
-	public Date getDate() {
-		return date;
+	private Date firstGame;
+	public Date getFirstGame() {
+		return firstGame;
 	}
-	public void setDate(Date date) {
-		this.date = date;
+	public void setFirstGame(Date firstGame) {
+		this.firstGame = firstGame;
 	}
 		
 	@Required
