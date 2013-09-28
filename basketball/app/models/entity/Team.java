@@ -203,15 +203,6 @@ public class Team extends Model {
 	  	find.ref(id).delete();
 	}
 	
-    /**
-     * Return a page of team
-     *
-     * @param page Page to display
-     * @param pageSize Number of teams per page
-     * @param sortBy Team property used for sorting
-     * @param order Sort order (either or asc or desc)
-     * @param filter Filter applied on the fullName column
-     */
     public static Page<Team> page(int page, int pageSize, String sortBy, String order, String filter) {
         return 
             find.where()
