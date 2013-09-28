@@ -19,6 +19,7 @@ import javax.persistence.Version;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import play.db.ebean.Model.Finder;
 
 @Entity
 public class Official extends Model {
@@ -105,6 +106,20 @@ public class Official extends Model {
 	}
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+	
+	public static Finder<Long,Official> find = new Finder<Long, Official>(Long.class, Official.class);
+	  
+	public static List<Official> findAll() {
+	    return find.all();
+	}
+	
+	public static void create(Official official) {
+		official.save();
+	}
+	  
+	public static void delete(Long id) {
+	  	find.ref(id).delete();
 	}
 
 	public String toString() {
