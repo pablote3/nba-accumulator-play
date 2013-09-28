@@ -17,6 +17,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+import com.avaje.ebean.Page;
+
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
@@ -120,6 +122,15 @@ public class Official extends Model {
 	public static void delete(Long id) {
 	  	find.ref(id).delete();
 	}
+	
+    public static Page<Official> page(int page, int pageSize, String sortBy, String order, String filter) {
+        return 
+            find.where()
+                .ilike("lastName", "%" + filter + "%")
+                .orderBy(sortBy + " " + order)
+                .findPagingList(pageSize)
+                .getPage(page);
+    }
 
 	public String toString() {
 		return (new StringBuffer())
