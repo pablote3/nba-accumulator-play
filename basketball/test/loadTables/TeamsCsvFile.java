@@ -32,8 +32,9 @@ public class TeamsCsvFile {
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
-				String line = null;
-				Team team = null;
+				String line;
+				Team team;
+				int i = 0;
 				 
 				//read each line of text file
 				try {
@@ -50,8 +51,9 @@ public class TeamsCsvFile {
 			            team.setSiteName(st.nextToken());
 			            team.setCity(st.nextToken());
 			            team.setState(st.nextToken());
+			            
 						Team.create(team);
-						team = null;
+						System.out.println("i = " + i++ + " " + team.getFullName());
 					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
