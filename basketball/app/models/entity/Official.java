@@ -59,12 +59,12 @@ public class Official extends Model {
 		this.getGameOfficials().remove(gameOfficial);
 	}
 	
-	@Column(name="number", nullable=true)
-	private Short number;
-	public Short getNumber() {
+	@Column(name="number", length=2, nullable=false)
+	private String number;
+	public String getNumber() {
 		return number;
 	}
-	public void setNumber(Short number) {
+	public void setNumber(String number) {
 		this.number = number;
 	}
 	
