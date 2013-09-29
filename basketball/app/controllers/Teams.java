@@ -67,7 +67,6 @@ public class Teams extends Controller {
     public static Result save(Long id) {
     	Form<Team> form = form(Team.class).bindFromRequest();
         if(form.hasErrors()) {
-        	//rename to form
             return badRequest(editTeam.render(id, form));
         }
     	if (id == -1L) {
