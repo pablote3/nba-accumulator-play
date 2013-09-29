@@ -12,14 +12,14 @@ GET     /games					controllers.Schedule.list(p:Int ?= 0)
 GET     /teams					controllers.Teams.list(p:Int ?= 0, s ?= "fullName", o ?= "asc", f ?= "")
 GET     /teams/:id				controllers.Teams.edit(id:Long)
 POST    /teams/:id				controllers.Teams.save(id:Long)
-GET     /teams/:id				controllers.Teams.search(key:String, value:String)
+GET     /teams/id				controllers.Teams.search(key:String, value:String)
 POST    /teams/:id/delete		controllers.Teams.delete(id:Long)
 
 # Officials
 GET     /officials				controllers.Officials.list(p:Int ?= 0, s ?= "lastName", o ?= "asc", f ?= "")
 GET     /officials/:id			controllers.Officials.edit(id:Long)
 POST    /officials/:id			controllers.Officials.save(id:Long)
-GET     /officials/:id			controllers.Officials.search(key:String, value:String)
+GET     /officials/id			controllers.Officials.search(key:String, value:String)
 POST    /officials/:id/delete	controllers.Officials.delete(id:Long)
 
 # Map static resources from the /public folder to the /assets URL path
