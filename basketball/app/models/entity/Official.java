@@ -61,6 +61,7 @@ public class Official extends Model {
 		this.getGameOfficials().remove(gameOfficial);
 	}
 	
+	@Required
 	@Column(name="number", length=2, nullable=false)
 	private String number;
 	public String getNumber() {
@@ -70,6 +71,7 @@ public class Official extends Model {
 		this.number = number;
 	}
 	
+	@Required
 	@Column(name="lastName", length=35, nullable=false)
 	private String lastName;
 	public String getLastName() {
@@ -78,7 +80,8 @@ public class Official extends Model {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	
+
+	@Required
 	@Column(name="firstName", length=35, nullable=false)
 	private String firstName;
 	public String getFirstName() {
@@ -113,6 +116,14 @@ public class Official extends Model {
 	  
 	public static List<Official> findAll() {
 	    return find.all();
+	}
+	
+	public static List<Official> findActive(boolean active) {
+		return find.where().eq("active", active).findList();
+	}
+	
+	public static Official findByName(String lastName, String firstName) {
+		return find.where().eq("lastName", lastName).eq("firstName", firstName).findUnique();
 	}
 	
 	public static void create(Official official) {
