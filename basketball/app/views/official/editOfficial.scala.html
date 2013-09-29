@@ -1,0 +1,39 @@
+@(id: Long, officialForm: Form[models.entity.Official])
+
+@import helper._
+
+@main("Edit Official") {
+    @form(routes.Officials.delete(id), 'class -> "topRight") {
+        <input type="submit" value="Delete" class="btn danger">
+    }
+    @form(routes.Officials.save(id)) {
+        <fieldset> 
+            @inputText(officialForm("number"), 
+            	'_label -> "Number",
+            	'_showConstraints -> false
+            )
+            @inputText(officialForm("lastName"), 
+            	'_label -> "Last Name",
+            	'_showConstraints -> false
+            )
+            @inputText(officialForm("firstName"), 
+            	'_label -> "First Name",
+            	'_showConstraints -> false
+            )
+            @inputText(officialForm("firstGame"), 
+            	'_label -> "First Game",
+            	'_showConstraints -> false
+            )
+            @helper.select(officialForm("active"), 
+            	options(Seq("true","false")),
+            	'_label -> "Active",
+            	'_showConstraints -> false
+            )
+        </fieldset>
+        
+        <div class="actions">
+            <input type="submit" value="Update" class="btn primary"> 
+            <a class="btn" href="@routes.Officials.list()">Cancel</a> 
+        </div>   
+    }
+}
