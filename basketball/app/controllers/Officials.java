@@ -77,7 +77,7 @@ public class Officials extends Controller {
             form.get().update(id);
             flash("success", "Official " + form.get().getFirstName() + " " +  form.get().getLastName() + " has been updated");
     	}        
-        return redirect(routes.Officials.list(0, "fullName", "asc", ""));
+        return redirect(routes.Officials.list(0, "number", "asc", ""));
     }
     
     /**
@@ -88,6 +88,6 @@ public class Officials extends Controller {
     public static Result delete(Long id) {
     	Official.find.ref(id).delete();
         flash("success", "Official has been deleted");
-        return redirect(routes.Officials.list(0, "fullName", "asc", ""));
+        return redirect(routes.Officials.list(0, "number", "asc", ""));
     }
 }
