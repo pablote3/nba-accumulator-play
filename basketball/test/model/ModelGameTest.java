@@ -102,4 +102,33 @@ public class ModelGameTest {
           }
         });
     }
+    
+    //	http://scores.espn.go.com/nba/scoreboard?date=20121031
+
+    @Test
+    public void createSqlQueryGameDay() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {                      	  
+        	  Date gameDate = null;
+        	  
+        	  try {
+        		  SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        		  gameDate = simpleDateFormat.parse("2012-10-31");
+        	  } catch (ParseException e) {
+        		  e.printStackTrace();
+        	  }
+        	  
+        	  //Query<Schedule> query = Ebean.find(Schedule.class).where().
+        	  
+//              query.where().eq("g.date", gameDate);
+//              query.where().eq("t1.abbr", "SAC");
+       	  
+        	  //GameDay game = Ebean.createSqlQuery(sql)
+
+//              List<Game> games = query.findList();
+//              assertThat(games.size() == 82);
+          }
+        });
+    }
+    
 }
