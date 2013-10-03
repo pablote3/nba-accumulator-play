@@ -7,6 +7,7 @@ import static play.test.Helpers.running;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -106,27 +107,25 @@ public class ModelGameTest {
     //	http://scores.espn.go.com/nba/scoreboard?date=20121031
 
     @Test
-    public void createSqlQueryGameDay() {
+    public void findGamesByDate() {
         running(fakeApplication(), new Runnable() {
           public void run() {                      	  
-        	  Date gameDate = null;
+        	  String gameDate = "2012-10-31%";
         	  
-        	  try {
-        		  SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-        		  gameDate = simpleDateFormat.parse("2012-10-31");
-        	  } catch (ParseException e) {
-        		  e.printStackTrace();
-        	  }
-        	  
-        	  //Query<Schedule> query = Ebean.find(Schedule.class).where().
-        	  
-//              query.where().eq("g.date", gameDate);
-//              query.where().eq("t1.abbr", "SAC");
-       	  
-        	  //GameDay game = Ebean.createSqlQuery(sql)
+        	  Query<Game> query = Ebean.find(Game.class);
+        	  query.fetch("boxScores");
+        	  query.fetch("boxScores.team");
+              query.where().ilike("date", gameDate);
 
-//              List<Game> games = query.findList();
-//              assertThat(games.size() == 82);
+              List<Game> games = query.findList();
+              Game game = null;
+              Iterator<Game> iter = games.iterator();
+              while (iter.hasNext()) {
+            	  game = iter.next();
+            	  System.out.println(game.toString());
+              }
+              
+              assertThat(games.size()).isEqualTo(9);
           }
         });
     }
