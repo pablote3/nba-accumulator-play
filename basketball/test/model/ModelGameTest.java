@@ -7,14 +7,10 @@ import static play.test.Helpers.running;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
 import models.entity.*;
-import models.entity.BoxScore.Location;
-import models.entity.Game.SeasonType;
-import models.entity.Game.Status;
 
 import org.junit.Test;
 
@@ -25,42 +21,6 @@ import com.avaje.ebean.RawSqlBuilder;
 
 public class ModelGameTest {
 
-    @Test
-    public void createGameScheduled() {
-        running(fakeApplication(), new Runnable() {
-          public void run() {
-              Game game = new Game();
-              Date date = null;
-              try {
-            	  date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2012-07-05");
-              } catch (ParseException e) {
-            	  e.printStackTrace();
-              }
-              game.setDate(date);
-              game.setStatus(Status.scheduled);
-              game.setSeasonType(SeasonType.regular);
-              
-              BoxScore boxScoreHome = new BoxScore();
-              boxScoreHome.setLocation(Location.home);
-              boxScoreHome.setTeam(Team.find.where().eq("fullName", "Sacramento Kings").findUnique());
-              game.addBoxScore(boxScoreHome);
-              
-              BoxScore boxScoreAway = new BoxScore();
-              boxScoreAway.setLocation(Location.away);
-              boxScoreAway.setTeam(Team.find.where().eq("fullName", "Golden State Warriors").findUnique());              
-              game.addBoxScore(boxScoreAway);
-              
-              Game.create(game);
-          
-              //does finder need unique value or list returned
-              Game createGame = Game.find.where().eq("date", date).findUnique();
-              assertThat(createGame.getBoxScores().size()).isEqualTo(2);
-              assertThat(createGame.getStatus()).isEqualTo(Status.scheduled);
-              Game.delete(createGame.getId());
-          }
-        });
-    }
-    
     @Test
     public void aggregateScores() {
         running(fakeApplication(), new Runnable() {
@@ -107,7 +67,17 @@ public class ModelGameTest {
     //	http://scores.espn.go.com/nba/scoreboard?date=20121031
 
     @Test
-    public void findGamesByDate() {
+    public void findGamesDate() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  List<Game> games = Game.findByDate("2012-10-31");        
+              assertThat(games.size()).isEqualTo(9);
+          }
+        });
+    }
+    
+    @Test
+    public void findGamesFinderDate() {
         running(fakeApplication(), new Runnable() {
           public void run() {                      	  
         	  String gameDate = "2012-10-31";
@@ -118,16 +88,14 @@ public class ModelGameTest {
               query.where().ilike("date", gameDate + "%");
 
               List<Game> games = query.findList();
-              Game game = null;
-              Iterator<Game> iter = games.iterator();
-              while (iter.hasNext()) {
-            	  game = iter.next();
-            	  System.out.println(game.toString());
-              }
-              
               assertThat(games.size()).isEqualTo(9);
+//              Game game = null;
+//              java.util.Iterator<Game> iter = games.iterator();
+//              while (iter.hasNext()) {
+//            	  game = iter.next();
+//            	  System.out.println(game.toString());
+//              }
           }
         });
     }
-    
 }
