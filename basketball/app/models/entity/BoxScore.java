@@ -251,15 +251,15 @@ public class BoxScore extends Model {
 
 	public String toString() {
 		return (new StringBuffer())
-			.append("\n" + "  id:" + this.id)
-			.append("  location:" + this.location)
-			.append("  result:" + this.result)
-			.append("  points:" + this.points)
-			.append("  assists:" + this.assists)
-			.append("  turnovers:" + this.turnovers)
-			.append("  steals:" + this.steals)
-			.append("  blocks:" + this.blocks)
-			.append(   "\n" + this.team)
+			.append("\n" + this.team + "\n")
+			.append("  id: " + this.id)
+			.append("  location: " + this.location)
+			.append("  result: " + this.result)
+			.append("  points: " + this.points)
+			.append("  assists: " + this.assists)
+			.append("  turnovers: " + this.turnovers)
+			.append("  steals: " + this.steals)
+			.append("  blocks: " + this.blocks)
 			.toString();
 	}
 }

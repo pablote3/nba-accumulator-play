@@ -159,11 +159,11 @@ public class Game extends Model {
 	  
 	public String toString() {
 		return (new StringBuffer())
-			.append("  id: " + this.id)
+			.append("\r" + "  id: " + this.id)
 			.append("  date: " + this.date)
 			.append("  status: " + this.status)
 			.append("  seasonType: " + this.seasonType)
-			.append(   "\n" + this.boxScores)
+			.append("\n" + this.boxScores)
 			.toString();
 	}
 }
