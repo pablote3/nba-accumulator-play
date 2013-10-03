@@ -6,7 +6,7 @@
 GET     /						controllers.Application.index()
 
 # Games
-GET     /games					controllers.Schedule.list(p:Int ?= 0)
+GET     /games					controllers.Games.list(p:Int ?= 0)
 
 # Teams
 GET     /teams					controllers.Teams.list(p:Int ?= 0, s ?= "fullName", o ?= "asc", f ?= "")

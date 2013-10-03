@@ -110,12 +110,12 @@ public class ModelGameTest {
     public void findGamesByDate() {
         running(fakeApplication(), new Runnable() {
           public void run() {                      	  
-        	  String gameDate = "2012-10-31%";
+        	  String gameDate = "2012-10-31";
         	  
         	  Query<Game> query = Ebean.find(Game.class);
         	  query.fetch("boxScores");
         	  query.fetch("boxScores.team");
-              query.where().ilike("date", gameDate);
+              query.where().ilike("date", gameDate + "%");
 
               List<Game> games = query.findList();
               Game game = null;
