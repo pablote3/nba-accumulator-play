@@ -251,7 +251,7 @@ public class BoxScore extends Model {
 
 	public String toString() {
 		return (new StringBuffer())
-			.append("  id:" + this.id)
+			.append("\n" + "  id:" + this.id)
 			.append("  location:" + this.location)
 			.append("  result:" + this.result)
 			.append("  points:" + this.points)
@@ -259,6 +259,7 @@ public class BoxScore extends Model {
 			.append("  turnovers:" + this.turnovers)
 			.append("  steals:" + this.steals)
 			.append("  blocks:" + this.blocks)
+			.append(   "\n" + this.team)
 			.toString();
 	}
 }

@@ -214,16 +214,12 @@ public class Team extends Model {
 	  
 	public String toString() {
 		return (new StringBuffer())
-			.append("  id: " + this.id)
+			.append("\n" + "  id: " + this.id)
 			.append("  key: " + this.key)
 			.append("  fullName: " + this.fullName)
 			.append("  abbr: " + this.abbr)
 			.append("  conference: " + this.conference)
-			.append("  division: " + this.division)
-			.append("  siteName: " + this.siteName)
-			.append("  city: " + this.city)
-			.append("  state: " + this.state)
-			.append("  active: " + this.active)
+			.append("  division: " + this.division + "\n")
 			.toString();
 	}
 }

@@ -162,7 +162,8 @@ public class Game extends Model {
 			.append("  id: " + this.id)
 			.append("  date: " + this.date)
 			.append("  status: " + this.status)
-			.append("  seasonType:" + this.seasonType)
+			.append("  seasonType: " + this.seasonType)
+			.append(   "\n" + this.boxScores)
 			.toString();
 	}
 }
