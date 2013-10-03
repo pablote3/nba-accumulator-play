@@ -3,6 +3,7 @@ package models.entity;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -24,7 +25,9 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
+import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Page;
+import com.avaje.ebean.Query;
 import com.avaje.ebean.annotation.EnumValue;
 
 @Entity
@@ -132,8 +135,20 @@ public class Game extends Model {
 	
 	public static Finder<Long,Game> find = new Finder<Long, Game>(Long.class, Game.class);
 	  
-	public static List<Game> all() {
+	public static List<Game> findAll() {
 	    return find.all();
+	}
+	
+	public static List<Game> findByDate(String date) {
+	  	String gameDate = "2012-10-31";
+		
+	  	Query<Game> query = Ebean.find(Game.class);
+	  	query.fetch("boxScores");
+	  	query.fetch("boxScores.team");
+	    query.where().ilike("date", gameDate + "%");
+	
+	    List<Game> games = query.findList();
+	    return games;
 	}
 	
 	public static void create(Game game) {
