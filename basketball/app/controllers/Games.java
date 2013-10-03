@@ -5,7 +5,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.game.listGames;
 
-public class Schedule extends Controller {
+public class Games extends Controller {
 
    /**
     * Display the list of games.
