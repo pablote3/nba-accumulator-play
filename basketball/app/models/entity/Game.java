@@ -138,9 +138,7 @@ public class Game extends Model {
 	    return find.all();
 	}
 	
-	public static List<Game> findByDate(String date) {
-	  	String gameDate = "2012-10-31";
-		
+	public static List<Game> findByDate(String gameDate) {
 	  	Query<Game> query = Ebean.find(Game.class);
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
@@ -163,6 +161,15 @@ public class Game extends Model {
             find.where()
                 .findPagingList(pageSize)
                 .getPage(page);
+    }
+	
+	public static Page<Game> pageByDate(int page, int pageSize, String gameDate) {
+	  	Query<Game> query = Ebean.find(Game.class);
+	  	query.fetch("boxScores");
+	  	query.fetch("boxScores.team");
+	    query.where().ilike("date", gameDate + "%");
+	
+	    return query.findPagingList(pageSize).getPage(page);
     }
 	  
 	public String toString() {
