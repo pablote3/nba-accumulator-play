@@ -63,8 +63,6 @@ public class ModelGameTest {
           }
         });
     }
-    
-    //	http://scores.espn.go.com/nba/scoreboard?date=20121031
 
     @Test
     public void findGamesDate() {
