@@ -15,7 +15,7 @@
 	routes.Games.list(newPage)    
 }
 
-@main("Game Maintenance") {   
+@main("Game Day") {   
     <h1 id="homeTitle">@Messages("games.list.title", currentPage.getTotalRowCount)</h1>
     
     @if(flash.containsKey("success")) {
