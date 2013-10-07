@@ -16,9 +16,9 @@
 }
 
 @main("Game Day") {   
-    <h1 id="homeTitle">@Messages("games.list.title", currentPage.getTotalRowCount)</h1>
-    <h1 id="homeTitle">@Messages(jsDate())</h1>
-    
+    <h1 id="homeTitle">@Messages("games.list.title", currentPage.getTotalRowCount) for jsDate())</h1>
+
+    <input type="submit" id="searchsubmit" value="jsDate" class="btn info" onclick="jsDate()">
     
     @if(flash.containsKey("success")) {
         <div class="alert-message warning">
@@ -87,13 +87,6 @@
             </ul>
         </div>
     }
-    <script>
-		function jsDate() {
-			var date = new Date();
-			dateString = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear().toString().substr(2,2);
-			return dateString;
-		}
-	</script>   	
 	</body>
 </html>
 }
