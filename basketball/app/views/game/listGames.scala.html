@@ -16,9 +16,8 @@
 }
 
 @main("Game Day") {   
-    <h1 id="homeTitle">@Messages("games.list.title", currentPage.getTotalRowCount) for jsDate())</h1>
-
-    <input type="submit" id="searchsubmit" value="jsDate" class="btn info" onclick="jsDate()">
+	<h1 id="today">jsDate()</h1>
+    <h1 id="today">@Messages("games.list.title", currentPage.getTotalRowCount)</h1>
     
     @if(flash.containsKey("success")) {
         <div class="alert-message warning">
@@ -61,32 +60,15 @@
             </tbody>
         </table>
 
-        <div id="pagination" class="pagination pagination-centered">
-            <ul>
-                @if(currentPage.hasPrev) {
-                    <li class="prev">
-                        <a href="@link(currentPage.getPageIndex - 1)">&larr; Previous</a>
-                    </li>
-                } else {
-                    <li class="prev disabled">
-                        <a>&larr; Previous</a>
-                    </li>
-                }
-                <li class="current">
-                    <a>Displaying @currentPage.getDisplayXtoYofZ(" to "," of ")</a>
-                </li>
-                @if(currentPage.hasNext) {
-                    <li class="next">
-                        <a href="@link(currentPage.getPageIndex + 1)">Next &rarr;</a>
-                    </li>
-                } else {
-                    <li class="next disabled">
-                        <a>Next &rarr;</a>
-                    </li>
-                }
-            </ul>
-        </div>
     }
-	</body>
+	<script>
+		document.getElementById("today").innerHTML=jsDate();
+		function jsDate() {
+			var date = new Date();
+			dateString = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
+			return dateString;
+		}
+	</script>	
+</body>
 </html>
 }
