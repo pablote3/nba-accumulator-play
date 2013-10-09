@@ -1,6 +1,5 @@
-function jsDate() {
+function todayDate() {
 	var date = new Date();
-	dateString = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear().toString().substr(2,2);
-	alert("Welcome " + dateString);
+	var dateString = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
 	return dateString;
 }
