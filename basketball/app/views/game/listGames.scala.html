@@ -55,6 +55,43 @@
                                 @game.getStatus()
                             }
                         </td>
+                        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed" id="boxscoregrid">
+				            <thead>
+				                <tr>
+				                	<th class="span5">Team</th>
+				                	<th class="span5">Location</th>
+				                	<th class="span5">Points</th>
+				                </tr>
+				            </thead>
+				            
+							<tbody>
+				                @for(boxScore <- game.getBoxScores()) {
+				                    <tr>
+				                    	<td>
+				                        	@if(boxScore.getTeam().getAbbr() == null) {
+				                                <em>-</em>
+				                            } else {
+				                                @boxScore.getTeam().getAbbr()
+				                            }
+				                        </td>
+				                        <td>
+				                        	@if(boxScore.getLocation() == null) {
+				                                <em>-</em>
+				                            } else {
+				                                @boxScore.getLocation()
+				                            }
+				                        </td>
+				                        <td>
+				                            @if(boxScore.getPoints() == null) {
+				                                <em>-</em>
+				                            } else {
+				                                @boxScore.getPoints()
+				                            }
+				                        </td>
+				                    </tr>
+				                }
+				            </tbody>
+                        </table>
                     </tr>
                 }
             </tbody>
