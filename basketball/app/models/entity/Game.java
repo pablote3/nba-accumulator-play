@@ -23,6 +23,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import util.DateTime;
 
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Page;
@@ -92,6 +93,9 @@ public class Game extends Model {
 	}
 	public void setDate(Date date) {
 		this.date = date;
+	}
+	public String getDisplayTime() {
+		return DateTime.getDisplayTime(date);
 	}
 	
 	@Required

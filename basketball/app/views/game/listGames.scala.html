@@ -42,10 +42,10 @@
                 @for(game <- currentPage.getList) {
                     <tr>
                         <td>
-                        	@if(game.getDate() == null) {
+                        	@if(game.getDisplayTime() == null) {
                                 <em>-</em>
                             } else {
-                                @game.getDate()
+                                @game.getDisplayTime()
                             }
                         </td>
                         <td>
