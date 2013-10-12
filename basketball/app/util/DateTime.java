@@ -10,14 +10,11 @@ public class DateTime {
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(date);
 		
-		String time = new StringBuffer()
+		return new StringBuffer()
 				.append(calendar.get(Calendar.HOUR_OF_DAY) + ":")
 				.append(calendar.get(Calendar.MINUTE) + " ")
 				.append(DateTime.getTwelveHourClock(calendar.get(Calendar.AM_PM)))
 				.toString();
-		
-		System.out.println("time = " + time);
-		return time;
 	}
 	
 	static public String getTwelveHourClock(int period) {
