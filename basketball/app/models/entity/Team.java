@@ -213,7 +213,7 @@ public class Team extends Model {
     }
 	  
 	public String toString() {
-		return (new StringBuffer())
+		return new StringBuffer()
 			.append("\n" + "  id: " + this.id)
 			.append("  key: " + this.key)
 			.append("  fullName: " + this.fullName)

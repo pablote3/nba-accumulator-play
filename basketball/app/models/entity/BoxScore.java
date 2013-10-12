@@ -250,7 +250,7 @@ public class BoxScore extends Model {
 	}
 
 	public String toString() {
-		return (new StringBuffer())
+		return new StringBuffer()
 			.append("\n" + this.team + "\n")
 			.append("  id: " + this.id)
 			.append("  location: " + this.location)

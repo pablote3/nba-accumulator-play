@@ -177,7 +177,7 @@ public class Game extends Model {
     }
 	  
 	public String toString() {
-		return (new StringBuffer())
+		return new StringBuffer()
 			.append("\r" + "  id: " + this.id)
 			.append("  date: " + this.date)
 			.append("  status: " + this.status)

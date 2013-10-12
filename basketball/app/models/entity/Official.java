@@ -144,7 +144,7 @@ public class Official extends Model {
     }
 
 	public String toString() {
-		return (new StringBuffer())
+		return new StringBuffer()
 			.append("  id:" + this.id)
 			.append("  number:" + this.number)
 			.append("  lastName:" + this.lastName)

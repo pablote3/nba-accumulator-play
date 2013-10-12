@@ -52,7 +52,7 @@ public class PeriodScore extends Model {
 	}
 
 	public String toString() {
-		return (new StringBuffer())
+		return new StringBuffer()
 			.append("  id:" + this.id)
 			.append("  quarter:" + this.quarter)
 			.append("  score:" + this.score)
