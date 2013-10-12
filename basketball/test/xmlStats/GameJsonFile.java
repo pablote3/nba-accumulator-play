@@ -14,14 +14,14 @@ import models.partial.XmlStats;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import util.Utilities;
+import util.FileIO;
 
 public class GameJsonFile {
     
 	public static void main(String[] args) {
 	   InputStream baseJson; 
 	   try {
-		   	String path = Utilities.getPropertyPath("config.basketball");
+		   	String path = FileIO.getPropertyPath("config.basketball");
 	        baseJson = new FileInputStream(path + "//test//GameJson.txt");
 	        
             ObjectMapper mapper = new ObjectMapper();

@@ -22,7 +22,7 @@ import models.entity.Game.Status;
 
 import org.junit.Test;
 
-import util.Utilities;
+import util.FileIO;
 
 public class MySportsCalCsvFile {
 	@Test
@@ -31,7 +31,7 @@ public class MySportsCalCsvFile {
 	        public void run() {
 	        	//entire nba schedule from www.mysportscal.com/nba.html
 	        	//need to replace ,, with , , prior to execution for parsing to work correctly
-			   	String path = Utilities.getPropertyPath("config.basketball");
+			   	String path = FileIO.getPropertyPath("config.basketball");
 				File file = new File(path + "//load//nba-complete-2012-2013.csv");
 				 
 				BufferedReader bufRdr = null;

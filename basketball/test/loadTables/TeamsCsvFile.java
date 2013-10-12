@@ -16,14 +16,14 @@ import models.entity.Team.Division;
 
 import org.junit.Test;
 
-import util.Utilities;
+import util.FileIO;
 
 public class TeamsCsvFile {
 	@Test
 	public void createTeam() {
 	    running(fakeApplication(), new Runnable() {
 	        public void run() {
-			   	String path = Utilities.getPropertyPath("config.basketball");
+			   	String path = FileIO.getPropertyPath("config.basketball");
 				File file = new File(path + "//load//Teams.csv");
 				 
 				BufferedReader bufRdr = null;

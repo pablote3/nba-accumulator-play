@@ -17,7 +17,7 @@ import models.partial.XmlStats;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import util.Utilities;
+import util.FileIO;
 
 public class GameJsonUrl {
     static final String AUTHORIZATION = "Authorization";
@@ -30,7 +30,7 @@ public class GameJsonUrl {
 	public static void main(String[] args) {
         InputStream in = null;
         try {
-        	Properties props = Utilities.loadProperties("config.basketball");
+        	Properties props = FileIO.loadProperties("config.basketball");
         	if (props != null) {
             	String urlBoxScore = props.getProperty("xmlstats.urlBoxScore");
             	String event = "20120621-oklahoma-city-thunder-at-miami-heat.json";

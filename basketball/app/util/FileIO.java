@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
-public class Utilities {
+public class FileIO {
 	static public Properties loadProperties(String key) throws FileNotFoundException, IOException {
 		final FileInputStream in;
 		String propPath = getPropertyPath(key) + "\\properties\\service.properties";

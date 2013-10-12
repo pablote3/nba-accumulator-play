@@ -18,14 +18,14 @@ import models.entity.Official;
 
 import org.junit.Test;
 
-import util.Utilities;
+import util.FileIO;
 
 public class OfficialsCsvFile {
 	@Test
 	public void createOfficial() {
 	    running(fakeApplication(), new Runnable() {
 	        public void run() {
-			   	String path = Utilities.getPropertyPath("config.basketball");
+			   	String path = FileIO.getPropertyPath("config.basketball");
 				File file = new File(path + "//load//Officials.csv");
 				 
 				BufferedReader bufRdr = null;
