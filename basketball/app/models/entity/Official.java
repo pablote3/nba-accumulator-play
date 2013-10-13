@@ -21,6 +21,7 @@ import com.avaje.ebean.Page;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import util.DateTime;
 
 @Entity
 public class Official extends Model {
@@ -100,6 +101,9 @@ public class Official extends Model {
 	}
 	public void setFirstGame(Date firstGame) {
 		this.firstGame = firstGame;
+	}
+	public String getFirstGameDisplay() {
+		return DateTime.getDisplayDateShort(firstGame);
 	}
 		
 	@Required
