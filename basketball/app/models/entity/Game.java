@@ -94,7 +94,7 @@ public class Game extends Model {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	public String getDisplayTime() {
+	public String getTimeDisplay() {
 		return DateTime.getDisplayTime(date);
 	}
 	
