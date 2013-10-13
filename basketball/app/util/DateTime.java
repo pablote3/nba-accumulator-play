@@ -13,8 +13,12 @@ public class DateTime {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEEEEEEE, MMMMMMMMM d, y", Locale.ENGLISH);
 		return simpleDateFormat.format(date);
 	}
-	static public String getDisplayDateShort(Date date) {
+	static public String getDisplayDateMiddle(Date date) {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMMMMMMM d, y", Locale.ENGLISH);
+		return simpleDateFormat.format(date);
+	}
+	static public String getDisplayDateShort(Date date) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.ENGLISH);
 		return simpleDateFormat.format(date);
 	}
 }

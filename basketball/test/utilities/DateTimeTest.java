@@ -44,9 +44,15 @@ public class DateTimeTest {
     }
     
     @Test
+    public void displayDateMiddle() {
+    	Date date = parseDate("2013-03-30 19:00:00");
+        assertThat(DateTime.getDisplayDateMiddle(date)).isEqualTo("March 30, 2013");
+    }
+    
+    @Test
     public void displayDateShort() {
     	Date date = parseDate("2013-03-30 19:00:00");
-        assertThat(DateTime.getDisplayDateShort(date)).isEqualTo("March 30, 2013");
+        assertThat(DateTime.getDisplayDateShort(date)).isEqualTo("03-30-2013");
     }
     
     public Date parseDate(String stringDate) {
