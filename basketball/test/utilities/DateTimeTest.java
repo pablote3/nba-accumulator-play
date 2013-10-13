@@ -14,17 +14,27 @@ import util.DateTime;
 
 public class DateTimeTest {	
     @Test
-    public void displayTimeHalfHour() {
-    	Date date = parseDate("2013-03-30 19:30:00");
-    	System.out.println(DateTime.getDisplayTime(date));
-    	assertThat(DateTime.getDisplayTime(date)).isEqualTo("19:30 PM PDT");
+    public void displayTimeHalfHourAM() {
+    	Date date = parseDate("2013-03-30 09:30:00");
+    	assertThat(DateTime.getDisplayTime(date)).isEqualTo("09:30 AM PDT");
     }
     
     @Test
-    public void displayTimeFullHour() {
+    public void displayTimeFullHourAM() {
+    	Date date = parseDate("2013-03-30 09:00:00");
+        assertThat(DateTime.getDisplayTime(date)).isEqualTo("09:00 AM PDT");
+    }
+    
+    @Test
+    public void displayTimeHalfHourPM() {
+    	Date date = parseDate("2013-03-30 19:30:00");
+    	assertThat(DateTime.getDisplayTime(date)).isEqualTo("07:30 PM PDT");
+    }
+    
+    @Test
+    public void displayTimeFullHourPM() {
     	Date date = parseDate("2013-03-30 19:00:00");
-    	System.out.println(DateTime.getDisplayTime(date));
-        assertThat(DateTime.getDisplayTime(date)).isEqualTo("19:00 PM PDT");
+        assertThat(DateTime.getDisplayTime(date)).isEqualTo("07:00 PM PDT");
     }
     
     public Date parseDate(String stringDate) {
