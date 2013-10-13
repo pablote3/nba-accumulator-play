@@ -37,6 +37,18 @@ public class DateTimeTest {
         assertThat(DateTime.getDisplayTime(date)).isEqualTo("07:00 PM PDT");
     }
     
+    @Test
+    public void displayDateLong() {
+    	Date date = parseDate("2013-03-30 19:00:00");
+        assertThat(DateTime.getDisplayDateLong(date)).isEqualTo("Saturday, March 30, 2013");
+    }
+    
+    @Test
+    public void displayDateShort() {
+    	Date date = parseDate("2013-03-30 19:00:00");
+        assertThat(DateTime.getDisplayDateShort(date)).isEqualTo("March 30, 2013");
+    }
+    
     public Date parseDate(String stringDate) {
     	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.ENGLISH); 
     	Date date = null;
