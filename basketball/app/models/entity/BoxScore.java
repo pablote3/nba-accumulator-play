@@ -1,5 +1,6 @@
 package models.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -56,9 +57,18 @@ public class BoxScore extends Model {
 	}
 	
 	@OneToMany(mappedBy="boxScore", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	private List<PeriodScore> periodScores;
+	private List<PeriodScore> periodScores = new ArrayList<PeriodScore>();
 	public List<PeriodScore> getPeriodScores()  {
 		return periodScores;
+	}
+	public void setPeriodScore(List<PeriodScore> periodScores)  {
+		this.periodScores = periodScores;
+	}
+	public void addPeriodScore(PeriodScore periodScore)  {
+		this.getPeriodScores().add(periodScore);
+	}
+	public void removePeriodScore(PeriodScore periodScore)  {
+		this.getPeriodScores().remove(periodScore);
 	}
 	
 	@Required
