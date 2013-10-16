@@ -86,6 +86,7 @@ public class Game extends Model {
 
 	@Required
 	@Column(name="date", nullable=false)
+	@JsonProperty("start_date_time")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
 	public Date getDate() {

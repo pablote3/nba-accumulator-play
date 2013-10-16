@@ -17,6 +17,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 import com.avaje.ebean.Page;
 
 import play.data.validation.Constraints.Required;
@@ -74,6 +76,7 @@ public class Official extends Model {
 	
 	@Required
 	@Column(name="lastName", length=35, nullable=false)
+	@JsonProperty("last_name")
 	private String lastName;
 	public String getLastName() {
 		return lastName;
@@ -84,6 +87,7 @@ public class Official extends Model {
 
 	@Required
 	@Column(name="firstName", length=35, nullable=false)
+	@JsonProperty("first_name")
 	private String firstName;
 	public String getFirstName() {
 		return firstName;
