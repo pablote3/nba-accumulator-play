@@ -4,11 +4,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.running;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import models.entity.Official;
 
@@ -65,21 +61,7 @@ public class ModelOfficialTest {
     public void createOfficial() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Official official = new Official();
-        	  official.setNumber("99");
-        	  official.setLastName("Hansen");
-        	  official.setFirstName("Chris");
-        	  
-              Date date = null;
-              try {
-            	  date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2012-11-05");
-              } catch (ParseException e) {
-            	  e.printStackTrace();
-              }
-        	  official.setFirstGame(date);
-        	  official.setActive(false);
-              
-        	  Official.create(official);
+        	  Official.create(MockTestHelper.getOfficial());
               
         	  Official createOfficial = Official.findByName("Hansen", "Chris");
               assertThat(createOfficial.getNumber()).isEqualTo("99");

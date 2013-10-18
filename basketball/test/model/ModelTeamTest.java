@@ -73,20 +73,8 @@ public class ModelTeamTest {
     @Test
     public void createTeam() {
         running(fakeApplication(), new Runnable() {
-          public void run() {
-              Team team = new Team();
-              team.setKey("seattle-supersonics");
-              team.setFullName("Seattle Supersonics");
-              team.setShortName("Supersonics");
-              team.setAbbr("SEA");
-              team.setConference(Conference.West);
-              team.setDivision(Division.Pacific);
-              team.setSiteName("Key Arena");
-              team.setCity("Seattle");
-              team.setState("WA");
-              team.setActive(false);
-              
-              Team.create(team);
+          public void run() {       
+              Team.create(MockTestHelper.getTeam());
               
               Team createTeam = Team.find.where().eq("key", "seattle-supersonics").findUnique();
               assertThat(createTeam.getFullName()).isEqualTo("Seattle Supersonics");
