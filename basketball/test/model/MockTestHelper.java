@@ -3,6 +3,7 @@ package model;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -63,6 +64,22 @@ public class MockTestHelper {
 	  	gameOfficials.add(gameOfficial);
     	return gameOfficials;
     }
+	
+	protected static Official getOfficial() {
+  	  Official official = new Official();
+  	  official.setNumber("99");
+  	  official.setLastName("Hansen");
+  	  official.setFirstName("Chris");
+      Date date = null;
+      try {
+    	  date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2012-11-05");
+      } catch (ParseException e) {
+    	  e.printStackTrace();
+      }
+	  official.setFirstGame(date);
+	  official.setActive(false);
+  	  return official;
+	}
     
 	protected static BoxScore getBoxScoreHomeScheduled() {
     	BoxScore boxScore = new BoxScore();
