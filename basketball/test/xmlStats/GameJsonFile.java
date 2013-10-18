@@ -1,6 +1,5 @@
 package xmlStats;
 
-import static org.fest.assertions.Assertions.assertThat;
 import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.running;
 
@@ -20,9 +19,8 @@ import models.entity.PeriodScore;
 import models.entity.Team;
 import models.partial.XmlStats;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.DeserializationConfig;
-
+import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
 import util.FileIO;

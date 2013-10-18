@@ -7,8 +7,6 @@ import static play.test.Helpers.running;
 import java.util.List;
 
 import models.entity.Team;
-import models.entity.Team.Conference;
-import models.entity.Team.Division;
 
 import org.junit.Test;
 
