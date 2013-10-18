@@ -13,9 +13,12 @@ import models.entity.BoxScore.Result;
 import models.entity.Game;
 import models.entity.Game.SeasonType;
 import models.entity.Game.Status;
+import models.entity.Team.Conference;
+import models.entity.Team.Division;
 import models.entity.GameOfficial;
 import models.entity.Official;
 import models.entity.PeriodScore;
+import models.entity.Team;
 
 public class MockTestHelper {
 
@@ -79,6 +82,21 @@ public class MockTestHelper {
 	  official.setFirstGame(date);
 	  official.setActive(false);
   	  return official;
+	}
+	
+	protected static Team getTeam() {
+        Team team = new Team();
+        team.setKey("seattle-supersonics");
+        team.setFullName("Seattle Supersonics");
+        team.setShortName("Supersonics");
+        team.setAbbr("SEA");
+        team.setConference(Conference.West);
+        team.setDivision(Division.Pacific);
+        team.setSiteName("Key Arena");
+        team.setCity("Seattle");
+        team.setState("WA");
+        team.setActive(false);
+        return team;
 	}
     
 	protected static BoxScore getBoxScoreHomeScheduled() {
