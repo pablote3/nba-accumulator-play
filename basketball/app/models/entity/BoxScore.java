@@ -61,7 +61,7 @@ public class BoxScore extends Model {
 	public List<PeriodScore> getPeriodScores()  {
 		return periodScores;
 	}
-	public void setPeriodScore(List<PeriodScore> periodScores)  {
+	public void setPeriodScores(List<PeriodScore> periodScores)  {
 		this.periodScores = periodScores;
 	}
 	public void addPeriodScore(PeriodScore periodScore)  {

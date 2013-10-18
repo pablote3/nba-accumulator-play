@@ -28,7 +28,7 @@ public class ModelGameTest {
         running(fakeApplication(), new Runnable() {
           public void run() {  
         	Game game = MockTestHelper.getGameScheduled();
-        	game.setGameOfficial(MockTestHelper.getOfficials());
+        	game.setGameOfficials(MockTestHelper.getGameOfficials());
 		    
 		    BoxScore homeBoxScore = MockTestHelper.getBoxScoreHomeScheduled();
 		    homeBoxScore.setTeam(Team.find.where().eq("key", "new-orleans-pelicans").findUnique());
@@ -50,16 +50,16 @@ public class ModelGameTest {
         running(fakeApplication(), new Runnable() {
           public void run() {  
         	Game game = MockTestHelper.getGameCompleted();
-        	game.setGameOfficial(MockTestHelper.getOfficials());
+        	game.setGameOfficials(MockTestHelper.getGameOfficials());
 		    
 		    BoxScore homeBoxScore = MockTestHelper.getBoxScoreHomeCompleted();
 		    homeBoxScore.setTeam(Team.find.where().eq("key", "new-orleans-pelicans").findUnique());
-		    homeBoxScore.setPeriodScore(MockTestHelper.getPeriodScoresHome());
+		    homeBoxScore.setPeriodScores(MockTestHelper.getPeriodScoresHome());
 		    game.addBoxScore(homeBoxScore);
 		    
 		    BoxScore awayBoxScore = MockTestHelper.getBoxScoreAwayCompleted();
 		    awayBoxScore.setTeam(Team.find.where().eq("key", "sacramento-kings").findUnique());
-		    awayBoxScore.setPeriodScore(MockTestHelper.getPeriodScoresAway());
+		    awayBoxScore.setPeriodScores(MockTestHelper.getPeriodScoresAway());
 		    game.addBoxScore(awayBoxScore);
 		
 		    System.out.println(game.toString());

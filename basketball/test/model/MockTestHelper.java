@@ -42,7 +42,7 @@ public class MockTestHelper {
 	    return game;
     }
     
-	protected static List<GameOfficial> getOfficials() {
+	protected static List<GameOfficial> getGameOfficials() {
     	List<GameOfficial> gameOfficials = new ArrayList<GameOfficial>();    
 	    GameOfficial gameOfficial;
 	    Official official;

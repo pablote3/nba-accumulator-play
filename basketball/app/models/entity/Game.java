@@ -74,7 +74,7 @@ public class Game extends Model {
 	public List<GameOfficial> getGameOfficials()  {
 		return gameOfficials;
 	}
-	public void setGameOfficial(List<GameOfficial> gameOfficials)  {
+	public void setGameOfficials(List<GameOfficial> gameOfficials)  {
 		this.gameOfficials = gameOfficials;
 	}
 	public void addGameOfficial(GameOfficial gameOfficial)  {
