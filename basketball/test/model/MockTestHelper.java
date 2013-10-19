@@ -25,24 +25,24 @@ public class MockTestHelper {
 	protected static Game getGameCompleted() {
 	    Game game = new Game();
 	    try {
-			game.setDate(new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2012-11-05"));
+			game.setDate(new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2013-07-05"));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 	    game.setStatus(Status.completed);
-	    game.setSeasonType(SeasonType.regular);
+	    game.setSeasonType(SeasonType.pre);
 	    return game;
     }
     
 	protected static Game getGameScheduled() {
 	    Game game = new Game();
 	    try {
-			game.setDate(new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2013-11-04"));
+			game.setDate(new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2013-07-04"));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 	    game.setStatus(Status.scheduled);
-	    game.setSeasonType(SeasonType.regular);
+	    game.setSeasonType(SeasonType.pre);
 	    return game;
     }
     
