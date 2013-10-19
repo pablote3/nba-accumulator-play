@@ -137,22 +137,6 @@ public class Game extends Model {
         @EnumValue("Post") post,
     }
 	
-	public static Finder<Long,Game> find = new Finder<Long, Game>(Long.class, Game.class);
-	  
-	public static List<Game> findAll() {
-	    return find.all();
-	}
-	
-	public static List<Game> findByDate(String gameDate) {
-	  	Query<Game> query = Ebean.find(Game.class);
-	  	query.fetch("boxScores");
-	  	query.fetch("boxScores.team");
-	    query.where().ilike("date", gameDate + "%");
-	
-	    List<Game> games = query.findList();
-	    return games;
-	}
-	
 	public static void create(Game game) {
 	  	game.save();
 	}
@@ -160,7 +144,34 @@ public class Game extends Model {
 	public static void delete(Long id) {
 	  	find.ref(id).delete();
 	}
-
+	
+	public static Finder<Long,Game> find = new Finder<Long, Game>(Long.class, Game.class);
+	  
+	public static List<Game> findAll() {
+	    return find.all();
+	}
+	
+	public static List<Game> findByDate(String date) {
+	  	Query<Game> query = Ebean.find(Game.class);
+	  	query.fetch("boxScores");
+	  	query.fetch("boxScores.team");
+	    query.where().ilike("date", date + "%");
+	
+	    List<Game> games = query.findList();
+	    return games;
+	}
+	
+	public static Game findByDateTeamKey(String date, String teamKey) {
+	  	Query<Game> query = Ebean.find(Game.class);
+	  	query.fetch("boxScores");
+	  	query.fetch("boxScores.team");
+	    query.where().ilike("t0.date", date + "%");
+	    query.where().eq("t2.team_key", teamKey);
+	
+	    Game game = query.findUnique();
+	    return game;
+	}
+	
 	public static Page<Game> page(int page, int pageSize) {
         return 
             find.where()
