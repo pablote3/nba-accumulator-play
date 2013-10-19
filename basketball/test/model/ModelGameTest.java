@@ -12,11 +12,14 @@ import java.util.Locale;
 
 import models.entity.BoxScore;
 import models.entity.Game;
+import models.entity.BoxScore.Location;
+import models.entity.Game.SeasonType;
 import models.entity.Team;
 
 import org.junit.Test;
 
 import com.avaje.ebean.Ebean;
+import com.avaje.ebean.Page;
 import com.avaje.ebean.Query;
 import com.avaje.ebean.RawSql;
 import com.avaje.ebean.RawSqlBuilder;
@@ -40,7 +43,7 @@ public class ModelGameTest {
 		
 		    System.out.println(game.toString());
 		    
-		//    Game.create(game);
+//		    Game.create(game);
 		  }
 		});
 	}
@@ -69,6 +72,28 @@ public class ModelGameTest {
 		});
 	}
     
+
+    @Test
+    public void findGamesDate() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  List<Game> games = Game.findByDate("2012-10-31");        
+              assertThat(games.size()).isEqualTo(9);
+          }
+        });
+    }
+    
+    @Test
+    public void findGameDateTeam() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  Game game = Game.findByDateTeamKey("2012-10-31", "sacramento-kings");        
+              assertThat(game.getSeasonType()).isEqualTo(SeasonType.regular);
+              assertThat(game.getBoxScores().get(0).getLocation()).isEqualTo(Location.away);
+              assertThat(game.getBoxScores().get(0).getTeam().getAbbr()).isEqualTo("SAC");
+          }
+        });
+    }
 
     @Test
     public void aggregateScores() {
@@ -109,39 +134,6 @@ public class ModelGameTest {
 
               List<Game> games = query.findList();
               assertThat(games.size() == 82);
-          }
-        });
-    }
-
-    @Test
-    public void findGamesDate() {
-        running(fakeApplication(), new Runnable() {
-          public void run() {
-        	  List<Game> games = Game.findByDate("2012-10-31");        
-              assertThat(games.size()).isEqualTo(9);
-          }
-        });
-    }
-    
-    @Test
-    public void findGamesFinderDate() {
-        running(fakeApplication(), new Runnable() {
-          public void run() {                      	  
-        	  String gameDate = "2012-10-31";
-        	  
-        	  Query<Game> query = Ebean.find(Game.class);
-        	  query.fetch("boxScores");
-        	  query.fetch("boxScores.team");
-              query.where().ilike("date", gameDate + "%");
-
-              List<Game> games = query.findList();
-              assertThat(games.size()).isEqualTo(9);
-//              Game game = null;
-//              java.util.Iterator<Game> iter = games.iterator();
-//              while (iter.hasNext()) {
-//            	  game = iter.next();
-//            	  System.out.println(game.toString());
-//              }
           }
         });
     }
