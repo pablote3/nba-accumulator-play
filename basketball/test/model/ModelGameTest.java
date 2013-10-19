@@ -11,15 +11,14 @@ import java.util.List;
 import java.util.Locale;
 
 import models.entity.BoxScore;
-import models.entity.Game;
 import models.entity.BoxScore.Location;
+import models.entity.Game;
 import models.entity.Game.SeasonType;
 import models.entity.Team;
 
 import org.junit.Test;
 
 import com.avaje.ebean.Ebean;
-import com.avaje.ebean.Page;
 import com.avaje.ebean.Query;
 import com.avaje.ebean.RawSql;
 import com.avaje.ebean.RawSqlBuilder;
@@ -29,9 +28,8 @@ public class ModelGameTest {
     @Test
     public void createGameScheduled() {
         running(fakeApplication(), new Runnable() {
-          public void run() {  
+          public void run() {
         	Game game = MockTestHelper.getGameScheduled();
-        	game.setGameOfficials(MockTestHelper.getGameOfficials());
 		    
 		    BoxScore homeBoxScore = MockTestHelper.getBoxScoreHomeScheduled();
 		    homeBoxScore.setTeam(Team.find.where().eq("key", "new-orleans-pelicans").findUnique());
@@ -40,10 +38,14 @@ public class ModelGameTest {
 		    BoxScore awayBoxScore = MockTestHelper.getBoxScoreAwayScheduled();
 		    awayBoxScore.setTeam(Team.find.where().eq("key", "sacramento-kings").findUnique());
 		    game.addBoxScore(awayBoxScore);
-		
-		    System.out.println(game.toString());
 		    
-//		    Game.create(game);
+		    Game.create(game);
+		    
+		    Game createGame = Game.findByDateTeamKey("2013-07-04", "sacramento-kings");
+            assertThat(createGame.getSeasonType()).isEqualTo(SeasonType.pre);
+            assertThat(createGame.getBoxScores().get(0).getLocation()).isEqualTo(Location.away);
+            assertThat(createGame.getBoxScores().get(0).getTeam().getAbbr()).isEqualTo("SAC");
+            Game.delete(createGame.getId());		    
 		  }
 		});
 	}
