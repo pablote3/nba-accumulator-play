@@ -14,6 +14,7 @@ import models.entity.BoxScore;
 import models.entity.BoxScore.Location;
 import models.entity.Game;
 import models.entity.Game.SeasonType;
+import models.entity.Game.Status;
 import models.entity.Team;
 
 import org.junit.Test;
@@ -79,12 +80,12 @@ public class ModelGameTest {
         	Game game = MockTestHelper.getGameCompleted();
         	game.setGameOfficials(MockTestHelper.getGameOfficials());
 		    
-		    BoxScore homeBoxScore = MockTestHelper.getBoxScoreHomeCompleted();
+		    BoxScore homeBoxScore = MockTestHelper.getBoxScoreHomeCompleted(MockTestHelper.getBoxScoreHomeScheduled());
 		    homeBoxScore.setTeam(Team.find.where().eq("key", "toronto-raptors").findUnique());
 		    homeBoxScore.setPeriodScores(MockTestHelper.getPeriodScoresHome());
 		    game.addBoxScore(homeBoxScore);
 		    
-		    BoxScore awayBoxScore = MockTestHelper.getBoxScoreAwayCompleted();
+		    BoxScore awayBoxScore = MockTestHelper.getBoxScoreAwayCompleted(MockTestHelper.getBoxScoreAwayScheduled());
 		    awayBoxScore.setTeam(Team.find.where().eq("key", "detroit-pistons").findUnique());
 		    awayBoxScore.setPeriodScores(MockTestHelper.getPeriodScoresAway());
 		    game.addBoxScore(awayBoxScore);
@@ -103,7 +104,51 @@ public class ModelGameTest {
 		});
 	}
     
+    @Test
+    public void updateGameScheduled() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {  
+          	Game scheduleGame = MockTestHelper.getGameScheduled();
+		    
+  		    BoxScore homeBoxScore = MockTestHelper.getBoxScoreHomeScheduled();
+  		    homeBoxScore.setTeam(Team.find.where().eq("key", "new-orleans-pelicans").findUnique());
+  		    scheduleGame.addBoxScore(homeBoxScore);
+  		    
+  		    BoxScore awayBoxScore = MockTestHelper.getBoxScoreAwayScheduled();
+  		    awayBoxScore.setTeam(Team.find.where().eq("key", "sacramento-kings").findUnique());
+  		    scheduleGame.addBoxScore(awayBoxScore);
+  		    
+  		    Game.create(scheduleGame);
+  		    
+  		    Game completeGame = Game.findByDateTeamKey("2013-07-04", "sacramento-kings");
+  		    completeGame.setStatus(Status.completed);
+  		    completeGame.setGameOfficials(MockTestHelper.getGameOfficials());
+  		    
+  		    for (int i = 0; i < completeGame.getBoxScores().size(); i++) {
+				BoxScore boxScore = completeGame.getBoxScores().get(i);
+				if (boxScore.getLocation().equals(Location.away)) {
+					MockTestHelper.getBoxScoreAwayCompleted(boxScore);
+					boxScore.setPeriodScores(MockTestHelper.getPeriodScoresAway());
+				} 
+				else {
+					MockTestHelper.getBoxScoreHomeCompleted(boxScore);
+					boxScore.setPeriodScores(MockTestHelper.getPeriodScoresHome());
+				}
+			}
 
+  		    completeGame.update();
+  		    
+  		    Game updateGame = Game.findByDateTeamKey("2013-07-04", "sacramento-kings");
+            assertThat(updateGame.getSeasonType()).isEqualTo(SeasonType.pre);
+            assertThat(updateGame.getGameOfficials().get(0).getOfficial().getLastName()).endsWith("Brown");
+            assertThat(updateGame.getBoxScores().get(0).getLocation()).isEqualTo(Location.away);
+            assertThat(updateGame.getBoxScores().get(0).getFieldGoalMade()).isEqualTo((short)29);
+            assertThat(updateGame.getBoxScores().get(0).getPeriodScores().get(0).getScore()).isEqualTo((short)25);
+            assertThat(updateGame.getBoxScores().get(0).getTeam().getAbbr()).isEqualTo("SAC");
+            Game.delete(updateGame.getId());	
+		  }
+		});
+	}
 
     @Test
     public void aggregateScores() {
