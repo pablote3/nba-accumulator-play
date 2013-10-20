@@ -111,9 +111,7 @@ public class MockTestHelper {
     	return boxScore;
     }
     
-	protected static BoxScore getBoxScoreHomeCompleted() {
-    	BoxScore boxScore = new BoxScore();
-    	boxScore.setLocation(Location.home);
+	protected static BoxScore getBoxScoreHomeCompleted(BoxScore boxScore) {
     	boxScore.setResult(Result.win);
 	    boxScore.setPoints((short)100);
 	    boxScore.setAssists((short)25);
@@ -135,9 +133,7 @@ public class MockTestHelper {
     	return boxScore;
     }
     
-	protected static BoxScore getBoxScoreAwayCompleted() {
-    	BoxScore boxScore = new BoxScore();
-    	boxScore.setLocation(Location.away);
+	protected static BoxScore getBoxScoreAwayCompleted(BoxScore boxScore) {
     	boxScore.setResult(Result.loss);
 	    boxScore.setPoints((short)99);
 	    boxScore.setAssists((short)25);
