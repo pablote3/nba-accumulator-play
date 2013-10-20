@@ -56,12 +56,12 @@ public class MockTestHelper {
 	  	gameOfficial.setOfficial(official);
 	  	gameOfficials.add(gameOfficial);
 	  	
-	    official = Official.findByName("Fehr", "Kevin");
+	  	official = Official.findByName("Davis", "Marc");
 	  	gameOfficial = new GameOfficial();
 	  	gameOfficial.setOfficial(official);
 	  	gameOfficials.add(gameOfficial);
-	  	
-	    official = Official.findByName("Davis", "Marc");
+    	
+	    official = Official.findByName("Palmer", "Violet");
 	  	gameOfficial = new GameOfficial();
 	  	gameOfficial.setOfficial(official);
 	  	gameOfficials.add(gameOfficial);
