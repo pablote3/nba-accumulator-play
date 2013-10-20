@@ -1,5 +1,6 @@
 package xmlStats;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.running;
 
@@ -12,6 +13,7 @@ import models.entity.BoxScore;
 import models.entity.BoxScore.Location;
 import models.entity.BoxScore.Result;
 import models.entity.Game;
+import models.entity.Game.SeasonType;
 import models.entity.Game.Status;
 import models.entity.Team;
 import models.partial.XmlStats;
@@ -44,15 +46,17 @@ public class GameJsonFile {
 	              game.setSeasonType(xmlStats.event_information.getSeasonType());	              
 	              game.setGameOfficials(GameJsonHelper.getGameOfficials(xmlStats.officials));
 	              
-	              BoxScore homeBoxScore = GameJsonHelper.getBoxScore(xmlStats.home_totals);
+	              BoxScore homeBoxScore = new BoxScore();
 	              homeBoxScore.setLocation(Location.home);
 	              homeBoxScore.setTeam(Team.find.where().eq("key", xmlStats.home_team.getKey()).findUnique());
 	              homeBoxScore.setPeriodScores(GameJsonHelper.getPeriodScores(xmlStats.home_period_scores));
+	              GameJsonHelper.getBoxScoreStats(homeBoxScore, xmlStats.home_totals);
 	              
-	              BoxScore awayBoxScore = GameJsonHelper.getBoxScore(xmlStats.away_totals);
+	              BoxScore awayBoxScore = new BoxScore();
 	              awayBoxScore.setLocation(Location.away);
 	              awayBoxScore.setTeam(Team.find.where().eq("key", xmlStats.away_team.getKey()).findUnique());
 	              awayBoxScore.setPeriodScores(GameJsonHelper.getPeriodScores(xmlStats.away_period_scores));
+	              GameJsonHelper.getBoxScoreStats(awayBoxScore, xmlStats.away_totals);
 
 	              if (xmlStats.away_totals.getPoints() > xmlStats.home_totals.getPoints()) {
 	            	  homeBoxScore.setResult(Result.loss);
@@ -67,17 +71,20 @@ public class GameJsonFile {
 	              game.addBoxScore(awayBoxScore);
 	              
 	              Game.create(game);
-	              
+			    
+	              Game createGame = Game.findByDateTeamKey("2012-06-21", "miami-heat");
+	              assertThat(createGame.getSeasonType()).isEqualTo(SeasonType.post);
+	              assertThat(createGame.getGameOfficials().get(1).getOfficial().getLastName()).endsWith("Crawford");
+	              assertThat(createGame.getBoxScores().get(0).getLocation()).isEqualTo(Location.home);
+	              assertThat(createGame.getBoxScores().get(0).getFieldGoalMade()).isEqualTo((short)40);
+	              assertThat(createGame.getBoxScores().get(0).getPeriodScores().get(0).getScore()).isEqualTo((short)31);
+	              assertThat(createGame.getBoxScores().get(0).getTeam().getAbbr()).isEqualTo("MIA");
+	              Game.delete(createGame.getId());
       	      } catch (FileNotFoundException e) {
       	          e.printStackTrace();
       	      } catch (IOException e) {
       	          e.printStackTrace();
       	      }
-              
-//              Team createTeam = Team.find.where().eq("key", "seattle-supersonics").findUnique();
-//              assertThat(createTeam.getFullName()).isEqualTo("Seattle Supersonics");
-//              assertThat(createTeam.getAbbr()).isEqualTo("SEA");
-//              Team.delete(createTeam.getId());
           }
         });
     }
