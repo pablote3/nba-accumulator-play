@@ -56,7 +56,7 @@ public class BoxScore extends Model {
 		this.game = game;
 	}
 	
-	@OneToMany(mappedBy="boxScore", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="boxScore", cascade=CascadeType.ALL)
 	private List<PeriodScore> periodScores = new ArrayList<PeriodScore>();
 	public List<PeriodScore> getPeriodScores()  {
 		return periodScores;
