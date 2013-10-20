@@ -26,6 +26,28 @@ import com.avaje.ebean.RawSqlBuilder;
 public class ModelGameTest {
 
     @Test
+    public void findGamesDate() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  List<Game> games = Game.findByDate("2012-10-31");        
+              assertThat(games.size()).isEqualTo(9);
+          }
+        });
+    }
+    
+    @Test
+    public void findGameDateTeam() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  Game game = Game.findByDateTeamKey("2012-10-31", "sacramento-kings");        
+              assertThat(game.getSeasonType()).isEqualTo(SeasonType.regular);
+              assertThat(game.getBoxScores().get(0).getLocation()).isEqualTo(Location.away);
+              assertThat(game.getBoxScores().get(0).getTeam().getAbbr()).isEqualTo("SAC");
+          }
+        });
+    }
+    
+    @Test
     public void createGameScheduled() {
         running(fakeApplication(), new Runnable() {
           public void run() {
@@ -58,44 +80,30 @@ public class ModelGameTest {
         	game.setGameOfficials(MockTestHelper.getGameOfficials());
 		    
 		    BoxScore homeBoxScore = MockTestHelper.getBoxScoreHomeCompleted();
-		    homeBoxScore.setTeam(Team.find.where().eq("key", "new-orleans-pelicans").findUnique());
+		    homeBoxScore.setTeam(Team.find.where().eq("key", "toronto-raptors").findUnique());
 		    homeBoxScore.setPeriodScores(MockTestHelper.getPeriodScoresHome());
 		    game.addBoxScore(homeBoxScore);
 		    
 		    BoxScore awayBoxScore = MockTestHelper.getBoxScoreAwayCompleted();
-		    awayBoxScore.setTeam(Team.find.where().eq("key", "sacramento-kings").findUnique());
+		    awayBoxScore.setTeam(Team.find.where().eq("key", "detroit-pistons").findUnique());
 		    awayBoxScore.setPeriodScores(MockTestHelper.getPeriodScoresAway());
 		    game.addBoxScore(awayBoxScore);
-		
-		    System.out.println(game.toString());
 		    
-		//    Game.create(game);
+		    Game.create(game);
+		    
+		    Game createGame = Game.findByDateTeamKey("2013-07-05", "toronto-raptors");
+            assertThat(createGame.getSeasonType()).isEqualTo(SeasonType.pre);
+            assertThat(createGame.getGameOfficials().get(0).getOfficial().getLastName()).endsWith("Brown");
+            assertThat(createGame.getBoxScores().get(0).getLocation()).isEqualTo(Location.home);
+            assertThat(createGame.getBoxScores().get(0).getFieldGoalMade()).isEqualTo((short)30);
+            assertThat(createGame.getBoxScores().get(0).getPeriodScores().get(0).getScore()).isEqualTo((short)25);
+            assertThat(createGame.getBoxScores().get(0).getTeam().getAbbr()).isEqualTo("TOR");
+            Game.delete(createGame.getId());	
 		  }
 		});
 	}
     
 
-    @Test
-    public void findGamesDate() {
-        running(fakeApplication(), new Runnable() {
-          public void run() {
-        	  List<Game> games = Game.findByDate("2012-10-31");        
-              assertThat(games.size()).isEqualTo(9);
-          }
-        });
-    }
-    
-    @Test
-    public void findGameDateTeam() {
-        running(fakeApplication(), new Runnable() {
-          public void run() {
-        	  Game game = Game.findByDateTeamKey("2012-10-31", "sacramento-kings");        
-              assertThat(game.getSeasonType()).isEqualTo(SeasonType.regular);
-              assertThat(game.getBoxScores().get(0).getLocation()).isEqualTo(Location.away);
-              assertThat(game.getBoxScores().get(0).getTeam().getAbbr()).isEqualTo("SAC");
-          }
-        });
-    }
 
     @Test
     public void aggregateScores() {
