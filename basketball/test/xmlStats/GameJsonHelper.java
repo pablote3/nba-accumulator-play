@@ -37,8 +37,7 @@ public class GameJsonHelper {
 	    return periodScores;
     }
     
-	protected static BoxScore getBoxScore(BoxScore stats) {
-		BoxScore boxScore = new BoxScore();
+	protected static BoxScore getBoxScoreStats(BoxScore boxScore, BoxScore stats) {
         boxScore.setPoints(stats.getPoints());
         boxScore.setAssists(stats.getAssists());
         boxScore.setTurnovers(stats.getTurnovers());
