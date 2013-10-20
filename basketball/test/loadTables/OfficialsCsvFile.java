@@ -16,11 +16,13 @@ import java.util.StringTokenizer;
 
 import models.entity.Official;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import util.FileIO;
 
 public class OfficialsCsvFile {
+	@Ignore
 	@Test
 	public void createOfficial() {
 	    running(fakeApplication(), new Runnable() {

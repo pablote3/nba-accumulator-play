@@ -14,11 +14,13 @@ import models.entity.*;
 import models.entity.Team.Conference;
 import models.entity.Team.Division;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import util.FileIO;
 
 public class TeamsCsvFile {
+	@Ignore
 	@Test
 	public void createTeam() {
 	    running(fakeApplication(), new Runnable() {

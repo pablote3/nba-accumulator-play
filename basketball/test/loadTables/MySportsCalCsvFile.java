@@ -20,11 +20,13 @@ import models.entity.BoxScore.Location;
 import models.entity.Game.SeasonType;
 import models.entity.Game.Status;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import util.FileIO;
 
 public class MySportsCalCsvFile {
+	@Ignore
 	@Test
 	public void createSchedule() {
 	    running(fakeApplication(), new Runnable() {
