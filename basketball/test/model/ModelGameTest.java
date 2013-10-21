@@ -40,10 +40,17 @@ public class ModelGameTest {
     public void findGameDateTeam() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Game game = Game.findByDateTeamKey("2012-10-31", "sacramento-kings");        
-              assertThat(game.getSeasonType()).isEqualTo(SeasonType.regular);
-              assertThat(game.getBoxScores().get(0).getLocation()).isEqualTo(Location.away);
-              assertThat(game.getBoxScores().get(0).getTeam().getAbbr()).isEqualTo("SAC");
+        	  Game game = Game.findByDateTeamKey("2012-10-31", "sacramento-kings");
+        	  assertThat(game.getSeasonType()).isEqualTo(SeasonType.regular);
+        	  for (int i = 0; i < game.getBoxScores().size(); i++) {
+        		  BoxScore boxScore = game.getBoxScores().get(i);
+        		  if (boxScore.getLocation().equals(Location.away)) {
+        			  assertThat(game.getBoxScores().get(0).getTeam().getAbbr()).isEqualTo("SAC");
+        		  }
+        		  else {
+        			  assertThat(game.getBoxScores().get(0).getTeam().getAbbr()).isEqualTo("CHI");
+        		  }
+        	  }
           }
         });
     }
@@ -65,9 +72,16 @@ public class ModelGameTest {
 		    Game.create(game);
 		    
 		    Game createGame = Game.findByDateTeamKey("2013-07-04", "sacramento-kings");
-            assertThat(createGame.getSeasonType()).isEqualTo(SeasonType.pre);
-            assertThat(createGame.getBoxScores().get(0).getLocation()).isEqualTo(Location.away);
-            assertThat(createGame.getBoxScores().get(0).getTeam().getAbbr()).isEqualTo("SAC");
+		    assertThat(createGame.getSeasonType()).isEqualTo(SeasonType.pre);
+      	  	for (int i = 0; i < createGame.getBoxScores().size(); i++) {
+      	  		BoxScore boxScore = createGame.getBoxScores().get(i);
+      	  		if (boxScore.getLocation().equals(Location.away)) {
+      	  			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("SAC");
+      	  		}
+      	  		else {
+      	  			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("NOP");
+      	  		}
+      	  	}
             Game.delete(createGame.getId());		    
 		  }
 		});
@@ -94,11 +108,23 @@ public class ModelGameTest {
 		    
 		    Game createGame = Game.findByDateTeamKey("2013-07-05", "toronto-raptors");
             assertThat(createGame.getSeasonType()).isEqualTo(SeasonType.pre);
-            assertThat(createGame.getGameOfficials().get(0).getOfficial().getLastName()).endsWith("Brown");
-            assertThat(createGame.getBoxScores().get(0).getLocation()).isEqualTo(Location.home);
-            assertThat(createGame.getBoxScores().get(0).getFieldGoalMade()).isEqualTo((short)30);
-            assertThat(createGame.getBoxScores().get(0).getPeriodScores().get(0).getScore()).isEqualTo((short)25);
-            assertThat(createGame.getBoxScores().get(0).getTeam().getAbbr()).isEqualTo("TOR");
+            if (createGame.getGameOfficials().size() > 0)
+            	assertThat(createGame.getGameOfficials().get(0).getOfficial().getLastName()).endsWith("Brown");
+            for (int i = 0; i < createGame.getBoxScores().size(); i++) {
+            	BoxScore boxScore = createGame.getBoxScores().get(i);
+            	if (boxScore.getLocation().equals(Location.away)) {
+            		assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)29);
+            		if (boxScore.getPeriodScores().size() > 0)
+            			assertThat(boxScore.getPeriodScores().get(0).getScore()).isEqualTo((short)25);
+            		assertThat(boxScore.getTeam().getAbbr()).isEqualTo("DET");           		
+            	}
+            	else {
+            		assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)30);
+            		if (boxScore.getPeriodScores().size() > 0)
+            			assertThat(boxScore.getPeriodScores().get(0).getScore()).isEqualTo((short)25);
+            		assertThat(boxScore.getTeam().getAbbr()).isEqualTo("TOR");
+            	}
+            }
             Game.delete(createGame.getId());	
 		  }
 		});
@@ -119,8 +145,9 @@ public class ModelGameTest {
   		    scheduleGame.addBoxScore(awayBoxScore);
   		    
   		    Game.create(scheduleGame);
-  		    
+
   		    Game completeGame = Game.findByDateTeamKey("2013-07-04", "sacramento-kings");
+  		    
   		    completeGame.setStatus(Status.completed);
   		    completeGame.setGameOfficials(MockTestHelper.getGameOfficials());
   		    
@@ -140,11 +167,23 @@ public class ModelGameTest {
   		    
   		    Game updateGame = Game.findByDateTeamKey("2013-07-04", "sacramento-kings");
             assertThat(updateGame.getSeasonType()).isEqualTo(SeasonType.pre);
-            assertThat(updateGame.getGameOfficials().get(0).getOfficial().getLastName()).endsWith("Brown");
-            assertThat(updateGame.getBoxScores().get(0).getLocation()).isEqualTo(Location.away);
-            assertThat(updateGame.getBoxScores().get(0).getFieldGoalMade()).isEqualTo((short)29);
-            assertThat(updateGame.getBoxScores().get(0).getPeriodScores().get(0).getScore()).isEqualTo((short)25);
-            assertThat(updateGame.getBoxScores().get(0).getTeam().getAbbr()).isEqualTo("SAC");
+            if (updateGame.getGameOfficials().size() > 0)
+            	assertThat(updateGame.getGameOfficials().get(0).getOfficial().getLastName()).endsWith("Brown");
+            for (int i = 0; i < updateGame.getBoxScores().size(); i++) {
+            	BoxScore boxScore = updateGame.getBoxScores().get(i);
+            	if (boxScore.getLocation().equals(Location.away)) {
+                    assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)29);
+                    assertThat(boxScore.getTeam().getAbbr()).isEqualTo("SAC");
+                    if (boxScore.getPeriodScores().size() > 0)
+                    	assertThat(boxScore.getPeriodScores().get(0).getScore()).isEqualTo((short)25);
+            	}
+            	else {
+                    assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)29);
+                    assertThat(boxScore.getTeam().getAbbr()).isEqualTo("NOP");
+                    if (boxScore.getPeriodScores().size() > 0)
+                    	assertThat(boxScore.getPeriodScores().get(0).getScore()).isEqualTo((short)25);
+            	}
+            }
             Game.delete(updateGame.getId());	
 		  }
 		});
