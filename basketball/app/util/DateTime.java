@@ -21,4 +21,8 @@ public class DateTime {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.ENGLISH);
 		return simpleDateFormat.format(date);
 	}
+	static public String getFindDateShort(Date date) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+		return simpleDateFormat.format(date);
+	}
 }
