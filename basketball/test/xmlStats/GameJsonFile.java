@@ -73,7 +73,7 @@ public class GameJsonFile {
 	              
 	              Game.create(game);
 	              
-	              Game createGame = Game.findByDateTeamKey("2012-06-21", "miami-heat");
+	              Game createGame = Game.findByDateTeamKey(DateTime.getFindDateShort(xmlStats.event_information.getDate()), xmlStats.home_team.getKey());
 			    
 	              assertThat(createGame.getSeasonType()).isEqualTo(SeasonType.post);
 	              if (createGame.getGameOfficials().size() > 0) {
@@ -152,7 +152,7 @@ public class GameJsonFile {
 	            	  awayBoxScore.setResult(Result.loss);
 	              }	  
 	              
-	              Game createGame = Game.findByDateTeamKey("2012-06-21", "miami-heat");
+	              Game createGame = Game.findByDateTeamKey(DateTime.getFindDateShort(xmlStats.event_information.getDate()), xmlStats.home_team.getKey());
 	              
 	              createGame.update();
 	              
