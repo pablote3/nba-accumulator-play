@@ -18,12 +18,13 @@ import models.entity.Game.Status;
 import models.entity.Team;
 import models.partial.XmlStats;
 
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
 import util.DateTime;
 import util.FileIO;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class GameJsonFile {
 
@@ -37,7 +38,7 @@ public class GameJsonFile {
 	              baseJson = new FileInputStream(path + "//test//GameJson.txt");
 		        
 	              ObjectMapper mapper = new ObjectMapper();
-	              mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+	              mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	            
 	              XmlStats xmlStats = mapper.readValue(baseJson, XmlStats.class);
               
@@ -112,7 +113,7 @@ public class GameJsonFile {
 	              baseJson = new FileInputStream(path + "//test//GameJson.txt");
 		        
 	              ObjectMapper mapper = new ObjectMapper();
-	              mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+	              mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	            
 	              XmlStats xmlStats = mapper.readValue(baseJson, XmlStats.class);
               

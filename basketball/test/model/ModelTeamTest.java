@@ -6,12 +6,14 @@ import static play.test.Helpers.running;
 
 import java.util.List;
 
+import javax.persistence.PersistenceException;
+
+
 import models.entity.Team;
 
 import org.junit.Test;
 
 import com.avaje.ebean.Page;
-import com.avaje.ebean.ValidationException;
 
 public class ModelTeamTest {    
     @Test
@@ -104,14 +106,13 @@ public class ModelTeamTest {
     public void updateTeamValidation() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  try {
-        		  Team team = Team.find.where().eq("key", "new-orleans-hornets").findUnique();
-        		  team.setFullName(null);
-        		  team.update();
-        	  } catch (ValidationException e) {
-        		  assertThat(e.getInvalid().getChildren()[0].getPropertyName().equalsIgnoreCase("fullName"));
-        		  assertThat(e.getInvalid().getChildren()[0].getValidatorKey().equalsIgnoreCase("notnull"));
-        	  }
+       		  try {
+       			  Team team = Team.find.where().eq("key", "new-orleans-hornets").findUnique();
+       			  team.setFullName(null);
+       			  team.update();
+       		  } catch (PersistenceException e) {
+       			  assertThat(e.getCause().getMessage().equalsIgnoreCase("Column 'full_name' cannot be null"));
+       		  }
           }
         });
     }

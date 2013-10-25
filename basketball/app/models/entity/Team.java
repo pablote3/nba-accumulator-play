@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.TableGenerator;
 import javax.persistence.Version;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;

@@ -6,12 +6,13 @@ import static play.test.Helpers.running;
 
 import java.util.List;
 
+import javax.persistence.PersistenceException;
+
 import models.entity.Official;
 
 import org.junit.Test;
 
 import com.avaje.ebean.Page;
-import com.avaje.ebean.ValidationException;
 
 public class ModelOfficialTest {    
     @Test
@@ -91,14 +92,13 @@ public class ModelOfficialTest {
     public void updateOfficialValidation() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  try {
-        		  Official official = Official.findByName("Palmer", "Violet");
-        		  official.setFirstName(null);
-        		  official.update();
-        	  } catch (ValidationException e) {
-        		  assertThat(e.getInvalid().getChildren()[0].getPropertyName().equalsIgnoreCase("firstName"));
-        		  assertThat(e.getInvalid().getChildren()[0].getValidatorKey().equalsIgnoreCase("notnull"));
-        	  }
+       		  try {
+       			  Official official = Official.findByName("Palmer", "Violet");
+				  official.setFirstName(null);
+				  official.update();
+       		  } catch (PersistenceException e) {
+       			  assertThat(e.getCause().getMessage().equalsIgnoreCase("Column 'first_name' cannot be null"));
+       		  }
           }
         });
     }
