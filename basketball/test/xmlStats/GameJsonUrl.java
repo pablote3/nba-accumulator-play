@@ -22,6 +22,7 @@ import models.entity.Game.Status;
 import models.entity.Team;
 import models.partial.XmlStats;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import util.DateTime;
@@ -38,6 +39,7 @@ public class GameJsonUrl {
     static final String ISO_8601_FMT = "yyyy-MM-dd'T'HH:mm:ssXXX";
     static final SimpleDateFormat XMLSTATS_DATE = new SimpleDateFormat(ISO_8601_FMT);
     
+    @Ignore
     @Test
     public void updateGame() {
         running(fakeApplication(), new Runnable() {
