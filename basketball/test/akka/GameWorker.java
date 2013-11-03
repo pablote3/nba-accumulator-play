@@ -1,6 +1,6 @@
 package akka;
-import static akka.LoadGames.PropertyApi.GameDay;
-import static akka.LoadGames.PropertyApi.XmlStats;
+import static akka.GameWorker.PropertyApi.GameDay;
+import static akka.GameWorker.PropertyApi.XmlStats;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,20 +9,20 @@ import java.util.concurrent.TimeUnit;
 
 import scala.concurrent.duration.Duration;
 import util.FileIO;
-import akka.LoadGames.PropertyApi.GameDayProps;
-import akka.LoadGames.PropertyApi.PropertyException;
-import akka.LoadGames.PropertyApi.XmlStatProps;
+import akka.GameWorker.PropertyApi.GameDayProps;
+import akka.GameWorker.PropertyApi.PropertyException;
+import akka.GameWorker.PropertyApi.XmlStatProps;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.routing.RoundRobinRouter;
 
-public class LoadGames {
+public class GameWorker {
  
 	public static void main(String[] args) {
-		LoadGames pi = new LoadGames();
-		pi.calculate(4, 10000, 10000);
+		GameWorker helper = new GameWorker();
+		helper.synch(4, 10000, 10000);
 	}
  
 	static class Calculate { }
@@ -233,9 +233,9 @@ public class LoadGames {
 		}
 	}
 
-	public void calculate(final int nrOfWorkers, final int nrOfElements, final int nrOfMessages) {
+	public void synch(final int nrOfWorkers, final int nrOfElements, final int nrOfMessages) {
 		// Create an Akka system
-		ActorSystem system = ActorSystem.create("PiSystem");
+		ActorSystem system = ActorSystem.create("GameHelperSystem");
 
  		// create the result listener, which will print the result and shutdown the system
 		final ActorRef listener = system.actorOf(Props.create(Listener.class));
