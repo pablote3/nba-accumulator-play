@@ -1,6 +1,7 @@
 package akka;
 import static akka.LoadGames.PropertyApi.GameDay;
 import static akka.LoadGames.PropertyApi.XmlStats;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
@@ -8,8 +9,9 @@ import java.util.concurrent.TimeUnit;
 
 import scala.concurrent.duration.Duration;
 import util.FileIO;
-import akka.FaultTolerance.StorageApi.StorageException;
+import akka.LoadGames.PropertyApi.GameDayProps;
 import akka.LoadGames.PropertyApi.PropertyException;
+import akka.LoadGames.PropertyApi.XmlStatProps;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
@@ -73,7 +75,7 @@ public class LoadGames {
 		}
 	}
  	
-	public static class Worker extends UntypedActor {
+	public static class Worker extends UntypedActor {
 
 		private double calculatePiFor(int start, int nrOfElements) {
 			double acc = 0.0;
@@ -113,12 +115,12 @@ public class LoadGames {
 			}
 		}
 		
-		public static class XmlStatsProps {
+		public static class XmlStatProps {
 			public final String accessToken;
 			public final String userAgentName;
 			public final String urlBoxScore;
 			
-			public XmlStatsProps(String accessToken, String userAgentName, String urlBoxScore) {
+			public XmlStatProps(String accessToken, String userAgentName, String urlBoxScore) {
 				this.accessToken = accessToken;
 				this.userAgentName = userAgentName;
 				this.urlBoxScore = urlBoxScore;
@@ -136,9 +138,9 @@ public class LoadGames {
 			}
 		}
 	}
-	
-	public static class Property extends UntypedActor {
-		private Properties props;
+	
+	public static class Property extends UntypedActor {
+		private Properties props;
 		private Properties getProperties() throws PropertyException {
 			if (props == null) {
 				try {
@@ -158,18 +160,25 @@ public class LoadGames {
 		public void onReceive(Object message) {
 			if (message.equals(GameDay)) {
 				Properties props = getProperties();
-				
-//				getSender().tell(new Result(result), getSelf());
+				String accessToken = props.getProperty("xmlstats.accessToken");
+				String userAgentName = props.getProperty("xmlstats.userAgentName");
+				String urlBoxScore = props.getProperty("xmlstats.urlBoxScore");
+				XmlStatProps xmlStatProps = new XmlStatProps(accessToken, userAgentName, urlBoxScore);
+				getSender().tell(xmlStatProps, getSelf());
 			} 
 			else if (message.equals(XmlStats)) {
-				
+				Properties props = getProperties();
+				String date = props.getProperty("gameday.date");
+				String team = props.getProperty("gameday.team");
+				GameDayProps gameDayProps = new GameDayProps(date, team);
+				getSender().tell(gameDayProps, getSelf());				
 			}
 			else {
 				unhandled(message);
 			}
 		}
 	}
-	
+	
 	public static class Master extends UntypedActor {
 		private final int nrOfMessages;
 		private final int nrOfElements;
@@ -210,7 +219,7 @@ public class LoadGames {
 			}
 		}
 	}
-	public static class Listener extends UntypedActor {
+	public static class Listener extends UntypedActor {
 		
 		public void onReceive(Object message) {
 			if (message instanceof PiApproximation) {
