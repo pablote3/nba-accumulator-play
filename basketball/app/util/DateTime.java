@@ -1,5 +1,6 @@
 package util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -24,5 +25,14 @@ public class DateTime {
 	static public String getFindDateShort(Date date) {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 		return simpleDateFormat.format(date);
+	}
+	static public boolean isValidDate(String date)  {
+		try {
+			new SimpleDateFormat("yyyy-MM-dd").parse(date);
+			return true;
+		} 
+		catch (ParseException e) {
+			return false;
+		}
 	}
 }
