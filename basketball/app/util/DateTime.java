@@ -35,4 +35,13 @@ public class DateTime {
 			return false;
 		}
 	}
+	static public Date createDateFromString(String date) {
+		try {
+			return new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(date);
+		} 
+		catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
