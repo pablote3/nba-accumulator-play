@@ -1,13 +1,14 @@
 package actor;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Properties;
-import util.FileIO;
-
 import static actor.PropertyApi.GameDay;
 import static actor.PropertyApi.XmlStats;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
+import util.FileIO;
+import util.DateTime;
 import actor.PropertyApi.GameDayProps;
 import actor.PropertyApi.PropertyException;
 import actor.PropertyApi.XmlStatProps;
@@ -43,6 +44,8 @@ public class PropertyActor extends UntypedActor {
 		else if (message.equals(GameDay)) {
 			Properties props = getProperties();
 			String date = props.getProperty("gameday.date");
+			if (!util.DateTime.isValidDate(date))
+				throw new PropertyException("InvalidDate");
 			String team = props.getProperty("gameday.team");
 			GameDayProps gameDayProps = new GameDayProps(date, team);
 			getSender().tell(gameDayProps, getSelf());				
