@@ -26,6 +26,10 @@ public class DateTime {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 		return simpleDateFormat.format(date);
 	}
+	static public String getFindDateNaked(Date date) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
+		return simpleDateFormat.format(date);
+	}
 	static public boolean isValidDate(String date)  {
 		try {
 			new SimpleDateFormat("yyyy-MM-dd").parse(date);

@@ -16,6 +16,7 @@ import models.entity.Game;
 import models.entity.Game.SeasonType;
 import models.entity.Game.Status;
 import models.entity.Team;
+import models.partial.GameKey;
 
 import org.junit.Test;
 
@@ -31,6 +32,16 @@ public class ModelGameTest {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	  List<Game> games = Game.findByDate("2012-10-31");        
+              assertThat(games.size()).isEqualTo(9);
+          }
+        });
+    }
+    
+    @Test
+    public void findGameKeysDate() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  List<GameKey> games = Game.findKeyByDate("2012-10-31");        
               assertThat(games.size()).isEqualTo(9);
           }
         });

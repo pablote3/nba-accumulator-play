@@ -19,6 +19,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+import models.entity.BoxScore.Location;
+import models.partial.GameKey;
+
 import com.fasterxml.jackson.annotation.*;
 
 import play.data.validation.Constraints.Required;
@@ -159,6 +162,28 @@ public class Game extends Model {
 	
 	    List<Game> games = query.findList();
 	    return games;
+	}
+	
+	public static List<GameKey> findKeyByDate(String date) {
+	  	Query<Game> query = Ebean.find(Game.class);
+	  	query.fetch("boxScores");
+	  	query.fetch("boxScores.team");
+	    query.where().ilike("date", date + "%");
+	    
+	    List<Game> games = query.findList();
+	    List<GameKey> gameKeys = new ArrayList<GameKey>();
+	    GameKey key = new GameKey();
+	    for (int i = 0; i < games.size(); i++) {
+			key.setDate(DateTime.getFindDateShort(games.get(i).getDate()));
+			for (int j = 0; j < games.get(i).getBoxScores().size(); j++) {
+				if (games.get(i).getBoxScores().get(j).getLocation().equals(Location.away))
+					key.setAwayTeamKey(games.get(i).getBoxScores().get(j).getTeam().getKey());
+				else
+					key.setHomeTeamKey(games.get(i).getBoxScores().get(j).getTeam().getKey());
+			}
+			gameKeys.add(key);
+		}
+		return gameKeys;
 	}
 	
 	public static Game findByDateTeamKey(String date, String teamKey) {

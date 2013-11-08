@@ -55,6 +55,12 @@ public class DateTimeTest {
         assertThat(DateTime.getDisplayDateShort(date)).isEqualTo("03-30-2013");
     }
     
+    @Test
+    public void displayDateNaked() {
+    	Date date = parseDate("2013-03-30 19:00:00");
+        assertThat(DateTime.getFindDateNaked(date)).isEqualTo("20130330");
+    }
+    
     public Date parseDate(String stringDate) {
     	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.ENGLISH); 
     	Date date = null;
