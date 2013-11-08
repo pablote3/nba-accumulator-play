@@ -74,7 +74,7 @@ public class GameJsonFile {
 	              
 	              Game.create(game);
 	              
-	              Game createGame = Game.findByDateTeamKey(DateTime.getFindDateShort(xmlStats.event_information.getDate()), xmlStats.home_team.getKey());
+	              Game createGame = Game.findByDateTeam(DateTime.getFindDateShort(xmlStats.event_information.getDate()), xmlStats.home_team.getKey());
 			    
 	              assertThat(createGame.getSeasonType()).isEqualTo(SeasonType.post);
 	              if (createGame.getGameOfficials().size() > 0) {
@@ -134,7 +134,7 @@ public class GameJsonFile {
 	              
 	              Game.create(scheduleGame);
 	              
-	    		  Game completeGame = Game.findByDateTeamKey(DateTime.getFindDateShort(xmlStats.event_information.getDate()), xmlStats.home_team.getKey());
+	    		  Game completeGame = Game.findByDateTeam(DateTime.getFindDateShort(xmlStats.event_information.getDate()), xmlStats.home_team.getKey());
 	      		  completeGame.setStatus(Status.completed);	              
 	              completeGame.setGameOfficials(GameJsonHelper.getGameOfficials(xmlStats.officials));
 	              
@@ -153,7 +153,7 @@ public class GameJsonFile {
 	            	  awayBoxScore.setResult(Result.loss);
 	              }	  
 	              
-	              Game createGame = Game.findByDateTeamKey(DateTime.getFindDateShort(xmlStats.event_information.getDate()), xmlStats.home_team.getKey());
+	              Game createGame = Game.findByDateTeam(DateTime.getFindDateShort(xmlStats.event_information.getDate()), xmlStats.home_team.getKey());
 	              
 	              createGame.update();
 	              

@@ -86,7 +86,7 @@ public class GameJsonUrl {
 				              
 				            Game.create(scheduleGame);
 				            
-		    		  		Game completeGame = Game.findByDateTeamKey(DateTime.getFindDateShort(xmlStats.event_information.getDate()), xmlStats.home_team.getKey());
+		    		  		Game completeGame = Game.findByDateTeam(DateTime.getFindDateShort(xmlStats.event_information.getDate()), xmlStats.home_team.getKey());
 			      		  	completeGame.setStatus(Status.completed);	              
 			      		  	completeGame.setGameOfficials(GameJsonHelper.getGameOfficials(xmlStats.officials));
 			              
@@ -105,7 +105,7 @@ public class GameJsonUrl {
 			      		  		awayBoxScore.setResult(Result.loss);
 			      		  	}
 			              
-			      		  	Game createGame = Game.findByDateTeamKey(DateTime.getFindDateShort(xmlStats.event_information.getDate()), xmlStats.home_team.getKey());
+			      		  	Game createGame = Game.findByDateTeam(DateTime.getFindDateShort(xmlStats.event_information.getDate()), xmlStats.home_team.getKey());
 			              
 			      		  	createGame.update();
 			    	        

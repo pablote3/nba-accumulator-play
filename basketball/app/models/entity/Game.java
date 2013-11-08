@@ -186,7 +186,18 @@ public class Game extends Model {
 		return gameKeys;
 	}
 	
-	public static Game findByDateTeamKey(String date, String teamKey) {
+	public static Game findByDateTeam(String date, String teamKey) {
+	  	Query<Game> query = Ebean.find(Game.class);
+	  	query.fetch("boxScores");
+	  	query.fetch("boxScores.team");
+	    query.where().ilike("t0.date", date + "%");
+	    query.where().eq("t2.team_key", teamKey);
+	
+	    Game game = query.findUnique();
+	    return game;
+	}
+	
+	public static Game findKeyByDateTeam(String date, String teamKey) {
 	  	Query<Game> query = Ebean.find(Game.class);
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");

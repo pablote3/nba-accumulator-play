@@ -51,7 +51,7 @@ public class ModelGameTest {
     public void findGameDateTeam() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Game game = Game.findByDateTeamKey("2012-10-31", "sacramento-kings");
+        	  Game game = Game.findByDateTeam("2012-10-31", "sacramento-kings");
         	  assertThat(game.getSeasonType()).isEqualTo(SeasonType.regular);
         	  for (int i = 0; i < game.getBoxScores().size(); i++) {
         		  BoxScore boxScore = game.getBoxScores().get(i);
@@ -82,7 +82,7 @@ public class ModelGameTest {
 		    
 		    Game.create(game);
 		    
-		    Game createGame = Game.findByDateTeamKey("2013-07-04", "sacramento-kings");
+		    Game createGame = Game.findByDateTeam("2013-07-04", "sacramento-kings");
 		    assertThat(createGame.getSeasonType()).isEqualTo(SeasonType.pre);
       	  	for (int i = 0; i < createGame.getBoxScores().size(); i++) {
       	  		BoxScore boxScore = createGame.getBoxScores().get(i);
@@ -117,7 +117,7 @@ public class ModelGameTest {
 		    
 		    Game.create(game);
 		    
-		    Game createGame = Game.findByDateTeamKey("2013-07-05", "toronto-raptors");
+		    Game createGame = Game.findByDateTeam("2013-07-05", "toronto-raptors");
             assertThat(createGame.getSeasonType()).isEqualTo(SeasonType.pre);
             if (createGame.getGameOfficials().size() > 0)
             	assertThat(createGame.getGameOfficials().get(0).getOfficial().getLastName()).endsWith("Brown");
@@ -157,7 +157,7 @@ public class ModelGameTest {
   		    
   		    Game.create(scheduleGame);
 
-  		    Game completeGame = Game.findByDateTeamKey("2013-07-04", "sacramento-kings");
+  		    Game completeGame = Game.findByDateTeam("2013-07-04", "sacramento-kings");
   		    
   		    completeGame.setStatus(Status.completed);
   		    completeGame.setGameOfficials(MockTestHelper.getGameOfficials());
@@ -176,7 +176,7 @@ public class ModelGameTest {
 
   		    completeGame.update();
   		    
-  		    Game updateGame = Game.findByDateTeamKey("2013-07-04", "sacramento-kings");
+  		    Game updateGame = Game.findByDateTeam("2013-07-04", "sacramento-kings");
             assertThat(updateGame.getSeasonType()).isEqualTo(SeasonType.pre);
             if (updateGame.getGameOfficials().size() > 0)
             	assertThat(updateGame.getGameOfficials().get(0).getOfficial().getLastName()).endsWith("Brown");
