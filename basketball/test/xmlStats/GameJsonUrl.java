@@ -46,7 +46,7 @@ public class GameJsonUrl {
         	public void run() {
 		        InputStream baseJson = null;
 		        try {
-		        	Properties props = FileIO.loadProperties("config.basketball");
+					Properties props = FileIO.loadProperties(FileIO.getPropertyPath("config.basketball") + "\\properties\\service.properties");
 		        	if (props != null) {
 		            	String urlBoxScore = props.getProperty("xmlstats.urlBoxScore");
 		            	String event = "20120621-oklahoma-city-thunder-at-miami-heat.json";
