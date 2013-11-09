@@ -19,7 +19,7 @@ public class PropertyActor extends UntypedActor {
 		if (props == null) {
 			try {
 				String path = FileIO.getPropertyPath("config.basketball");
-				props = FileIO.loadProperties(path + "//properties//service.properties");
+				props = FileIO.loadProperties(path + "\\properties\\service.properties");
 			}
 			catch (FileNotFoundException e) {
 				throw new PropertyException("FileNotFoundException");

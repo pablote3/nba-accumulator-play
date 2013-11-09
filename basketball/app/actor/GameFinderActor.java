@@ -1,11 +1,13 @@
 package actor;
 
+import static actor.GameFinderApi.Start;
+import static actor.PropertyApi.GameDay;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import static actor.GameFinderApi.Start;
-import static actor.PropertyApi.GameDay;
 import models.entity.Game;
+import models.partial.GameKey;
 import actor.PropertyApi.GameDayProps;
 import akka.actor.ActorRef;
 import akka.actor.Props;
@@ -22,13 +24,13 @@ public class GameFinderActor extends UntypedActor {
 			String propDate = ((GameDayProps) message).date;
 			String propTeam = ((GameDayProps) message).team;
 			
-			List<Game> games;
-			if (propTeam == null) {
-				games = Game.findByDate(propDate);
-			}
+			List<GameKey> games;
+			if (propTeam == null)
+				games = Game.findKeyByDate(propDate);
 			else {
-				games = new ArrayList<Game>();
-				games.add(Game.findByDateTeamKey(propDate, propTeam));
+				GameKey key = Game.findKeyByDateTeam(propDate, propTeam);
+				games = new ArrayList<GameKey>();
+				games.add(key);
 			}
 			getSender().tell(games, getSelf());				
 		}

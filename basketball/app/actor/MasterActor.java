@@ -1,6 +1,11 @@
 package actor;
 
 import static actor.MasterApi.Start;
+
+import java.util.List;
+
+import models.partial.GameKey;
+import actor.MasterApi.GameKeys;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
@@ -18,11 +23,15 @@ public class MasterActor extends UntypedActor {
 			final ActorRef gameFinderActor = getContext().actorOf(Props.create(GameFinderActor.class), "gameFinder");
 			gameFinderActor.tell(Start, getSelf());
 		}
-//		else if(message.equals(GameDay))
-//			for (int start = 0; start < nrOfMessages; start++) {
-//				workerRouter.tell(new Work(start, nrOfElements), getSelf());
-//			}
-//		}
+		else if(message instanceof GameKeys) {
+			@SuppressWarnings("unchecked")
+			List<GameKey> keys = (List<GameKey>)message;
+			for (int i = 0; i < keys.size(); i++) {
+				GameKey key = keys.get(i);
+				System.out.println("i: " + i + " " + key.getDate() + " " + key.getHomeTeamKey() + " " + key.getAwayTeamKey());
+				//workerRouter.tell(new Work(start, nrOfElements), getSelf());
+			}
+		}
 
 //		else if (message instanceof Result) {
 //			Result result = (Result) message;
