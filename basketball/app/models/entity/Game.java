@@ -173,8 +173,8 @@ public class Game extends Model {
 	    List<Game> games = query.findList();
 	    List<GameKey> gameKeys = new ArrayList<GameKey>();
 	    GameKey key = new GameKey();
+		key.setDate(date);
 	    for (int i = 0; i < games.size(); i++) {
-			key.setDate(DateTime.getFindDateShort(games.get(i).getDate()));
 			for (int j = 0; j < games.get(i).getBoxScores().size(); j++) {
 				if (games.get(i).getBoxScores().get(j).getLocation().equals(Location.away))
 					key.setAwayTeamKey(games.get(i).getBoxScores().get(j).getTeam().getKey());
@@ -197,7 +197,7 @@ public class Game extends Model {
 	    return game;
 	}
 	
-	public static Game findKeyByDateTeam(String date, String teamKey) {
+	public static GameKey findKeyByDateTeam(String date, String teamKey) {
 	  	Query<Game> query = Ebean.find(Game.class);
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
@@ -205,7 +205,15 @@ public class Game extends Model {
 	    query.where().eq("t2.team_key", teamKey);
 	
 	    Game game = query.findUnique();
-	    return game;
+	    GameKey key = new GameKey();
+		key.setDate(date);
+		for (int j = 0; j < game.getBoxScores().size(); j++) {
+			if (game.getBoxScores().get(j).getLocation().equals(Location.away))
+				key.setAwayTeamKey(game.getBoxScores().get(j).getTeam().getKey());
+			else
+				key.setHomeTeamKey(game.getBoxScores().get(j).getTeam().getKey());
+		}
+		return key;
 	}
 	
 	public static Page<Game> page(int page, int pageSize) {

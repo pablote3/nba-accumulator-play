@@ -41,7 +41,7 @@ public class ModelGameTest {
     public void findGameKeysDate() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  List<GameKey> games = Game.findKeyByDate("2012-10-31");        
+        	  List<GameKey> games = Game.findKeyByDate("2012-10-31");     
               assertThat(games.size()).isEqualTo(9);
           }
         });
@@ -63,6 +63,15 @@ public class ModelGameTest {
         		  }
         	  }
           }
+        });
+    }
+    
+    public void findGameKeyByDateTeam() {
+        running(fakeApplication(), new Runnable() {
+            public void run() {
+          	  GameKey game = Game.findKeyByDateTeam("2012-10-31", "sacramento-kings");
+          	  assertThat(game.getHomeTeamKey().equals("chigago-bulls"));
+            }
         });
     }
     
