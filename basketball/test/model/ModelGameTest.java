@@ -70,7 +70,7 @@ public class ModelGameTest {
         running(fakeApplication(), new Runnable() {
             public void run() {
           	  GameKey game = Game.findKeyByDateTeam("2012-10-31", "sacramento-kings");
-          	  assertThat(game.getHomeTeamKey().equals("chigago-bulls"));
+          	  assertThat(game.getHomeTeamKey()).isEqualTo("chicago-bulls");
             }
         });
     }
