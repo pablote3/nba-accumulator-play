@@ -1,5 +1,7 @@
 package ebean;
 
+import static org.fest.assertions.Assertions.assertThat;
+
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.EbeanServerFactory;
 import com.avaje.ebean.SqlRow;
@@ -26,7 +28,6 @@ public class CreateServerTest {
 		
 		String sql = "select count(*) as count from team";
 		SqlRow row = server.createSqlQuery(sql).findUnique();
-		Integer i = row.getInteger("count");
-		System.out.println("Got " + i + " count");
+        assertThat(row.getInteger("count")).isEqualTo(31);
 	}
 }
