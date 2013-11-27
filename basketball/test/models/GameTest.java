@@ -1,4 +1,4 @@
-package model;
+package models;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static play.test.Helpers.fakeApplication;
@@ -25,7 +25,7 @@ import com.avaje.ebean.Query;
 import com.avaje.ebean.RawSql;
 import com.avaje.ebean.RawSqlBuilder;
 
-public class ModelGameTest {
+public class GameTest {
 
     @Test
     public void findGamesDate() {
@@ -79,13 +79,13 @@ public class ModelGameTest {
     public void createGameScheduled() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	Game game = MockTestHelper.getGameScheduled();
+        	Game game = TestMockHelper.getGameScheduled();
 		    
-		    BoxScore homeBoxScore = MockTestHelper.getBoxScoreHomeScheduled();
+		    BoxScore homeBoxScore = TestMockHelper.getBoxScoreHomeScheduled();
 		    homeBoxScore.setTeam(Team.find.where().eq("key", "new-orleans-pelicans").findUnique());
 		    game.addBoxScore(homeBoxScore);
 		    
-		    BoxScore awayBoxScore = MockTestHelper.getBoxScoreAwayScheduled();
+		    BoxScore awayBoxScore = TestMockHelper.getBoxScoreAwayScheduled();
 		    awayBoxScore.setTeam(Team.find.where().eq("key", "sacramento-kings").findUnique());
 		    game.addBoxScore(awayBoxScore);
 		    
@@ -111,17 +111,17 @@ public class ModelGameTest {
     public void createGameCompleted() {
         running(fakeApplication(), new Runnable() {
           public void run() {  
-        	Game game = MockTestHelper.getGameCompleted();
-        	game.setGameOfficials(MockTestHelper.getGameOfficials());
+        	Game game = TestMockHelper.getGameCompleted();
+        	game.setGameOfficials(TestMockHelper.getGameOfficials());
 		    
-		    BoxScore homeBoxScore = MockTestHelper.getBoxScoreHomeCompleted(MockTestHelper.getBoxScoreHomeScheduled());
+		    BoxScore homeBoxScore = TestMockHelper.getBoxScoreHomeCompleted(TestMockHelper.getBoxScoreHomeScheduled());
 		    homeBoxScore.setTeam(Team.find.where().eq("key", "toronto-raptors").findUnique());
-		    homeBoxScore.setPeriodScores(MockTestHelper.getPeriodScoresHome());
+		    homeBoxScore.setPeriodScores(TestMockHelper.getPeriodScoresHome());
 		    game.addBoxScore(homeBoxScore);
 		    
-		    BoxScore awayBoxScore = MockTestHelper.getBoxScoreAwayCompleted(MockTestHelper.getBoxScoreAwayScheduled());
+		    BoxScore awayBoxScore = TestMockHelper.getBoxScoreAwayCompleted(TestMockHelper.getBoxScoreAwayScheduled());
 		    awayBoxScore.setTeam(Team.find.where().eq("key", "detroit-pistons").findUnique());
-		    awayBoxScore.setPeriodScores(MockTestHelper.getPeriodScoresAway());
+		    awayBoxScore.setPeriodScores(TestMockHelper.getPeriodScoresAway());
 		    game.addBoxScore(awayBoxScore);
 		    
 		    Game.create(game);
@@ -154,13 +154,13 @@ public class ModelGameTest {
     public void updateGameScheduled() {
         running(fakeApplication(), new Runnable() {
           public void run() {  
-          	Game scheduleGame = MockTestHelper.getGameScheduled();
+          	Game scheduleGame = TestMockHelper.getGameScheduled();
 		    
-  		    BoxScore homeBoxScore = MockTestHelper.getBoxScoreHomeScheduled();
+  		    BoxScore homeBoxScore = TestMockHelper.getBoxScoreHomeScheduled();
   		    homeBoxScore.setTeam(Team.find.where().eq("key", "new-orleans-pelicans").findUnique());
   		    scheduleGame.addBoxScore(homeBoxScore);
   		    
-  		    BoxScore awayBoxScore = MockTestHelper.getBoxScoreAwayScheduled();
+  		    BoxScore awayBoxScore = TestMockHelper.getBoxScoreAwayScheduled();
   		    awayBoxScore.setTeam(Team.find.where().eq("key", "sacramento-kings").findUnique());
   		    scheduleGame.addBoxScore(awayBoxScore);
   		    
@@ -169,17 +169,17 @@ public class ModelGameTest {
   		    Game completeGame = Game.findByDateTeam("2013-07-04", "sacramento-kings");
   		    
   		    completeGame.setStatus(Status.completed);
-  		    completeGame.setGameOfficials(MockTestHelper.getGameOfficials());
+  		    completeGame.setGameOfficials(TestMockHelper.getGameOfficials());
   		    
   		    for (int i = 0; i < completeGame.getBoxScores().size(); i++) {
 				BoxScore boxScore = completeGame.getBoxScores().get(i);
 				if (boxScore.getLocation().equals(Location.away)) {
-					MockTestHelper.getBoxScoreAwayCompleted(boxScore);
-					boxScore.setPeriodScores(MockTestHelper.getPeriodScoresAway());
+					TestMockHelper.getBoxScoreAwayCompleted(boxScore);
+					boxScore.setPeriodScores(TestMockHelper.getPeriodScoresAway());
 				} 
 				else {
-					MockTestHelper.getBoxScoreHomeCompleted(boxScore);
-					boxScore.setPeriodScores(MockTestHelper.getPeriodScoresHome());
+					TestMockHelper.getBoxScoreHomeCompleted(boxScore);
+					boxScore.setPeriodScores(TestMockHelper.getPeriodScoresHome());
 				}
 			}
 

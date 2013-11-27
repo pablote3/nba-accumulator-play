@@ -1,4 +1,4 @@
-package model;
+package models;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,7 +20,7 @@ import models.entity.Official;
 import models.entity.PeriodScore;
 import models.entity.Team;
 
-public class MockTestHelper {
+public class TestMockHelper {
 
 	protected static Game getGameCompleted() {
 	    Game game = new Game();

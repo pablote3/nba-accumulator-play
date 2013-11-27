@@ -1,4 +1,4 @@
-package ebean;
+package services;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -8,7 +8,7 @@ import com.avaje.ebean.SqlRow;
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 
-public class CreateServerTest {
+public class CreateEbeanServerTest {
 
 	public static void main(String[] args) {
 		ServerConfig config = new ServerConfig();

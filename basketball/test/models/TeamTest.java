@@ -1,4 +1,4 @@
-package model;
+package models;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static play.test.Helpers.fakeApplication;
@@ -15,7 +15,7 @@ import org.junit.Test;
 
 import com.avaje.ebean.Page;
 
-public class ModelTeamTest {    
+public class TeamTest {    
     @Test
     public void findTeamsAll() {
         running(fakeApplication(), new Runnable() {
@@ -74,7 +74,7 @@ public class ModelTeamTest {
     public void createTeam() {
         running(fakeApplication(), new Runnable() {
           public void run() {       
-              Team.create(MockTestHelper.getTeam());
+              Team.create(TestMockHelper.getTeam());
               
               Team createTeam = Team.find.where().eq("key", "seattle-supersonics").findUnique();
               assertThat(createTeam.getFullName()).isEqualTo("Seattle Supersonics");

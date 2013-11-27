@@ -1,4 +1,4 @@
-package model;
+package models;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static play.test.Helpers.fakeApplication;
@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import com.avaje.ebean.Page;
 
-public class ModelOfficialTest {    
+public class OfficialTest {    
     @Test
     public void findOfficialsAll() {
         running(fakeApplication(), new Runnable() {
@@ -62,7 +62,7 @@ public class ModelOfficialTest {
     public void createOfficial() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Official.create(MockTestHelper.getOfficial());
+        	  Official.create(TestMockHelper.getOfficial());
               
         	  Official createOfficial = Official.findByName("Hansen", "Chris");
               assertThat(createOfficial.getNumber()).isEqualTo("99");
