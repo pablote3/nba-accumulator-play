@@ -12,7 +12,7 @@ import com.avaje.ebean.config.ServerConfig;
 
 import controllers.Games;
 
-public class EbeanTest {
+public class EbeanServerTest {
 
 	/**
 	 * @param args
