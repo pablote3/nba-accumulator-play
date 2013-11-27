@@ -12,7 +12,8 @@ object ApplicationBuild extends Build {
     javaCore,
     javaJdbc,
     javaEbean,
-    "mysql" % "mysql-connector-java" % "5.1.23"
+    "mysql" % "mysql-connector-java" % "5.1.23",
+    "com.google.inject" % "guice" % "4.0-beta"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
