@@ -82,11 +82,11 @@ public class GameTest {
         	Game game = TestMockHelper.getGameScheduled();
 		    
 		    BoxScore homeBoxScore = TestMockHelper.getBoxScoreHomeScheduled();
-		    homeBoxScore.setTeam(Team.find.where().eq("key", "new-orleans-pelicans").findUnique());
+		    homeBoxScore.setTeam(Team.findByKey("key", "new-orleans-pelicans"));
 		    game.addBoxScore(homeBoxScore);
 		    
 		    BoxScore awayBoxScore = TestMockHelper.getBoxScoreAwayScheduled();
-		    awayBoxScore.setTeam(Team.find.where().eq("key", "sacramento-kings").findUnique());
+		    awayBoxScore.setTeam(Team.findByKey("key", "sacramento-kings"));
 		    game.addBoxScore(awayBoxScore);
 		    
 		    Game.create(game);
@@ -115,12 +115,12 @@ public class GameTest {
         	game.setGameOfficials(TestMockHelper.getGameOfficials());
 		    
 		    BoxScore homeBoxScore = TestMockHelper.getBoxScoreHomeCompleted(TestMockHelper.getBoxScoreHomeScheduled());
-		    homeBoxScore.setTeam(Team.find.where().eq("key", "toronto-raptors").findUnique());
+		    homeBoxScore.setTeam(Team.findByKey("key", "toronto-raptors"));
 		    homeBoxScore.setPeriodScores(TestMockHelper.getPeriodScoresHome());
 		    game.addBoxScore(homeBoxScore);
 		    
 		    BoxScore awayBoxScore = TestMockHelper.getBoxScoreAwayCompleted(TestMockHelper.getBoxScoreAwayScheduled());
-		    awayBoxScore.setTeam(Team.find.where().eq("key", "detroit-pistons").findUnique());
+		    awayBoxScore.setTeam(Team.findByKey("key", "detroit-pistons"));
 		    awayBoxScore.setPeriodScores(TestMockHelper.getPeriodScoresAway());
 		    game.addBoxScore(awayBoxScore);
 		    
@@ -157,11 +157,11 @@ public class GameTest {
           	Game scheduleGame = TestMockHelper.getGameScheduled();
 		    
   		    BoxScore homeBoxScore = TestMockHelper.getBoxScoreHomeScheduled();
-  		    homeBoxScore.setTeam(Team.find.where().eq("key", "new-orleans-pelicans").findUnique());
+  		    homeBoxScore.setTeam(Team.findByKey("key", "new-orleans-pelicans"));
   		    scheduleGame.addBoxScore(homeBoxScore);
   		    
   		    BoxScore awayBoxScore = TestMockHelper.getBoxScoreAwayScheduled();
-  		    awayBoxScore.setTeam(Team.find.where().eq("key", "sacramento-kings").findUnique());
+  		    awayBoxScore.setTeam(Team.findByKey("key", "sacramento-kings"));
   		    scheduleGame.addBoxScore(awayBoxScore);
   		    
   		    Game.create(scheduleGame);

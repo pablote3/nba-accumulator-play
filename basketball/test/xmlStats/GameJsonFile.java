@@ -50,13 +50,13 @@ public class GameJsonFile {
 	              
 	              BoxScore homeBoxScore = new BoxScore();
 	              homeBoxScore.setLocation(Location.home);
-	              homeBoxScore.setTeam(Team.find.where().eq("key", xmlStats.home_team.getKey()).findUnique());
+	              homeBoxScore.setTeam(Team.findByKey("key", xmlStats.home_team.getKey()));
 	              homeBoxScore.setPeriodScores(GameJsonHelper.getPeriodScores(xmlStats.home_period_scores));
 	              GameJsonHelper.getBoxScoreStats(homeBoxScore, xmlStats.home_totals);
 	              
 	              BoxScore awayBoxScore = new BoxScore();
 	              awayBoxScore.setLocation(Location.away);
-	              awayBoxScore.setTeam(Team.find.where().eq("key", xmlStats.away_team.getKey()).findUnique());
+	              awayBoxScore.setTeam(Team.findByKey("key", xmlStats.away_team.getKey()));
 	              awayBoxScore.setPeriodScores(GameJsonHelper.getPeriodScores(xmlStats.away_period_scores));
 	              GameJsonHelper.getBoxScoreStats(awayBoxScore, xmlStats.away_totals);
 
@@ -124,12 +124,12 @@ public class GameJsonFile {
 	              
 	              BoxScore homeBoxScore = new BoxScore();
 	              homeBoxScore.setLocation(Location.home);
-	              homeBoxScore.setTeam(Team.find.where().eq("key", xmlStats.home_team.getKey()).findUnique());
+	              homeBoxScore.setTeam(Team.findByKey("key", xmlStats.home_team.getKey()));
 	              scheduleGame.addBoxScore(homeBoxScore);
 	              
 	              BoxScore awayBoxScore = new BoxScore();
 	              awayBoxScore.setLocation(Location.away);
-	              awayBoxScore.setTeam(Team.find.where().eq("key", xmlStats.away_team.getKey()).findUnique());
+	              awayBoxScore.setTeam(Team.findByKey("key", xmlStats.away_team.getKey()));
 	              scheduleGame.addBoxScore(awayBoxScore);
 	              
 	              Game.create(scheduleGame);

@@ -88,8 +88,8 @@ public class MySportsCalCsvFile {
 				            String awayTeam = st.nextToken().trim();
 				            String homeTeam = st.nextToken().trim();
 				            
-				            teamHome = Team.find.where().eq("shortName", homeTeam).findUnique();
-				            teamAway = Team.find.where().eq("shortName", awayTeam).findUnique();
+				            teamHome = Team.findByKey("shortName", homeTeam);
+				            teamAway = Team.findByKey("shortName", awayTeam);
 				            
 				            
 							game = new Game();

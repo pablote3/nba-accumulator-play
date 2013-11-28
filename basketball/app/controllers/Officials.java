@@ -34,7 +34,7 @@ public class Officials extends Controller {
      */
     public static Result search(String key, String value) {
         try {
-        	Official official = Official.find.where().eq(key, value).findUnique();
+        	Official official = Official.findByKey(key, value);
 			return ok(official.getId().toString());
 		} catch (Exception e) {
 			return badRequest();
@@ -52,7 +52,7 @@ public class Officials extends Controller {
     		form = form(Official.class);
     	}
     	else {
-            form = form(Official.class).fill(Official.find.byId(id));
+            form = form(Official.class).fill(Official.findById(id));
     	}
         return ok(
         	editOfficial.render(id, form)
@@ -86,7 +86,8 @@ public class Officials extends Controller {
      * @param id Id of the official to delete
      */
     public static Result delete(Long id) {
-    	Official.find.ref(id).delete();
+    	Official official = Official.findById(id);
+    	official.delete();
         flash("success", "Official has been deleted");
         return redirect(routes.Officials.list(0, "number", "asc", ""));
     }

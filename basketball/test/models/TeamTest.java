@@ -50,7 +50,7 @@ public class TeamTest {
     public void findTeamFinderKey() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-              Team team = Team.find.where().eq("key", "new-orleans-pelicans").findUnique();
+              Team team = Team.findByKey("key", "new-orleans-pelicans");
               assertThat(team.getFullName()).isEqualTo("New Orleans Pelicans");
               assertThat(team.getAbbr()).isEqualTo("NOP");
               assertThat(team.getActive()).isTrue();
@@ -62,7 +62,7 @@ public class TeamTest {
     public void findTeamFinderShortName() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Team team1 = Team.find.where().eq("shortName", "Pelicans").findUnique();
+        	  Team team1 = Team.findByKey("shortName", "Pelicans");
               assertThat(team1.getFullName()).isEqualTo("New Orleans Pelicans");
               assertThat(team1.getAbbr()).isEqualTo("NOP");
               assertThat(team1.getActive()).isTrue();
@@ -76,7 +76,7 @@ public class TeamTest {
           public void run() {       
               Team.create(TestMockHelper.getTeam());
               
-              Team createTeam = Team.find.where().eq("key", "seattle-supersonics").findUnique();
+              Team createTeam = Team.findByKey("key", "seattle-supersonics");
               assertThat(createTeam.getFullName()).isEqualTo("Seattle Supersonics");
               assertThat(createTeam.getAbbr()).isEqualTo("SEA");
               Team.delete(createTeam.getId());
@@ -88,11 +88,11 @@ public class TeamTest {
     public void updateTeam() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-              Team team = Team.find.where().eq("key", "new-orleans-hornets").findUnique();
+              Team team = Team.findByKey("key", "new-orleans-hornets");
               team.setActive(true);
               team.update();
               
-              Team updateTeam = Team.find.where().eq("key", "new-orleans-hornets").findUnique();
+              Team updateTeam = Team.findByKey("key", "new-orleans-hornets");
               assertThat(updateTeam.getFullName()).isEqualTo("New Orleans Hornets");
               assertThat(updateTeam.getAbbr()).isEqualTo("NO");
               assertThat(updateTeam.getActive()).isTrue();
@@ -107,7 +107,7 @@ public class TeamTest {
         running(fakeApplication(), new Runnable() {
           public void run() {
        		  try {
-       			  Team team = Team.find.where().eq("key", "new-orleans-hornets").findUnique();
+       			  Team team = Team.findByKey("key", "new-orleans-hornets");
        			  team.setFullName(null);
        			  team.update();
        		  } catch (PersistenceException e) {

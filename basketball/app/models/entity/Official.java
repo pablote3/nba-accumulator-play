@@ -19,7 +19,9 @@ import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.*;
 
+import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Page;
+import com.avaje.ebean.Query;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
@@ -120,18 +122,37 @@ public class Official extends Model {
 		this.active = active;
 	}
 	
-	public static Finder<Long,Official> find = new Finder<Long, Official>(Long.class, Official.class);
+	public static Official findById(Long id) {
+		Official official = Ebean.find(Official.class, id);
+		return official;
+	}
+	
+	public static Official findByKey(String key, String value) {
+		Query<Official> query = Ebean.find(Official.class);
+		query.where().eq(key, value);	
+		Official official = query.findUnique();
+		return official;
+	}
 	  
 	public static List<Official> findAll() {
-	    return find.all();
+		Query<Official> query = Ebean.find(Official.class);
+		List<Official> officials = query.findList();
+	    return officials;
 	}
 	
 	public static List<Official> findActive(boolean active) {
-		return find.where().eq("active", active).findList();
+		Query<Official> query = Ebean.find(Official.class);
+		query.where().eq("active", active);
+		List<Official> officials = query.findList();
+	    return officials;
 	}
 	
 	public static Official findByName(String lastName, String firstName) {
-		return find.where().eq("lastName", lastName).eq("firstName", firstName).findUnique();
+		Query<Official> query = Ebean.find(Official.class);
+		query.where().eq("lastName", lastName);
+		query.where().eq("firstName", firstName);
+		Official official = query.findUnique();
+	    return official;
 	}
 	
 	public static void create(Official official) {
@@ -139,16 +160,16 @@ public class Official extends Model {
 	}
 	  
 	public static void delete(Long id) {
-	  	find.ref(id).delete();
+		Official official = Official.findById(id);
+	  	official.delete();
 	}
 	
     public static Page<Official> page(int page, int pageSize, String sortBy, String order, String filter) {
-        return 
-            find.where()
-                .ilike("lastName", "%" + filter + "%")
-                .orderBy(sortBy + " " + order)
-                .findPagingList(pageSize)
-                .getPage(page);
+    	Query<Official> query = Ebean.find(Official.class);
+    	query.where().ilike("lastName", "%" + filter + "%");
+    	query.where().orderBy(sortBy + " " + order);
+    	Page<Official> p = query.findPagingList(pageSize).getPage(page);
+    	return p;
     }
 
 	public String toString() {

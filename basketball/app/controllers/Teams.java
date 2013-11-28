@@ -34,7 +34,7 @@ public class Teams extends Controller {
      */
     public static Result search(String key, String value) {
         try {
-        	Team team = Team.find.where().eq(key, value).findUnique();
+        	Team team = Team.findByKey(key, value);
 			return ok(team.getId().toString());
 		} catch (Exception e) {
 			return badRequest();
@@ -52,7 +52,8 @@ public class Teams extends Controller {
     		form = form(Team.class);
     	}
     	else {
-            form = form(Team.class).fill(Team.find.byId(id));
+    		Team team = Team.findById(id);
+            form = form(Team.class).fill(team);
     	}
         return ok(
         	editTeam.render(id, form)
@@ -86,7 +87,8 @@ public class Teams extends Controller {
      * @param id Id of the team to delete
      */
     public static Result delete(Long id) {
-        Team.find.ref(id).delete();
+    	Team team = Team.findById(id);
+        team.delete();
         flash("success", "Team has been deleted");
         return redirect(routes.Teams.list(0, "fullName", "asc", ""));
     }

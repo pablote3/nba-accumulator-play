@@ -50,7 +50,7 @@ public class OfficialTest {
     public void findOfficialFinderByNumber() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Official official = Official.find.where().eq("number", "10").findUnique();
+        	  Official official = Official.findByKey("number", "10");
               assertThat(official.getFirstName()).isEqualTo("Ron");
               assertThat(official.getLastName()).isEqualTo("Garretson");
               assertThat(official.getActive()).isTrue();

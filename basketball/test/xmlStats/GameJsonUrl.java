@@ -76,12 +76,12 @@ public class GameJsonUrl {
 				              
 				            BoxScore homeBoxScore = new BoxScore();
 				            homeBoxScore.setLocation(Location.home);
-				            homeBoxScore.setTeam(Team.find.where().eq("key", xmlStats.home_team.getKey()).findUnique());
+				            homeBoxScore.setTeam(Team.findByKey("key", xmlStats.home_team.getKey()));
 				            scheduleGame.addBoxScore(homeBoxScore);
 				              
 				            BoxScore awayBoxScore = new BoxScore();
 				            awayBoxScore.setLocation(Location.away);
-				            awayBoxScore.setTeam(Team.find.where().eq("key", xmlStats.away_team.getKey()).findUnique());
+				            awayBoxScore.setTeam(Team.findByKey("key", xmlStats.away_team.getKey()));
 				            scheduleGame.addBoxScore(awayBoxScore);
 				              
 				            Game.create(scheduleGame);

@@ -21,7 +21,9 @@ import com.fasterxml.jackson.annotation.*;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
+import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Page;
+import com.avaje.ebean.Query;
 import com.avaje.ebean.annotation.EnumValue;
 
 @Entity
@@ -181,18 +183,36 @@ public class Team extends Model {
 		this.state = state;
 	}
 	
-	public static Finder<Long,Team> find = new Finder<Long, Team>(Long.class, Team.class);
+	public static Team findById(Long id) {
+		Team team = Ebean.find(Team.class, id);
+		return team;
+	}
+	
+	public static Team findByKey(String key, String value) {
+		Query<Team> query = Ebean.find(Team.class);
+		query.where().eq(key, value);		
+		Team team = query.findUnique();
+		return team;
+	}
 	  
 	public static List<Team> findAll() {
-	    return find.all();
+		Query<Team> query = Ebean.find(Team.class);
+		List<Team> teams = query.findList();
+	    return teams;
 	}
 	
 	public static List<Team> findActive(boolean active) {
-		return find.where().eq("active", active).findList();
+		Query<Team> query = Ebean.find(Team.class);
+		query.where().eq("active", active);
+		List<Team> teams = query.findList();
+	    return teams;
 	}
 	
 	public static List<Team> findFilter(String filter) {
-		return find.where().ilike("fullName", "%" + filter + "%").findList();
+		Query<Team> query = Ebean.find(Team.class);
+		query.where().ilike("fullName", "%" + filter + "%");
+		List<Team> teams = query.findList();
+		return teams;
 	}
 	  
 	public static void create(Team team) {
@@ -200,16 +220,16 @@ public class Team extends Model {
 	}
 	  
 	public static void delete(Long id) {
-	  	find.ref(id).delete();
+		Team team = Team.findById(id);
+	  	team.delete();
 	}
 	
     public static Page<Team> page(int page, int pageSize, String sortBy, String order, String filter) {
-        return 
-            find.where()
-                .ilike("fullName", "%" + filter + "%")
-                .orderBy(sortBy + " " + order)
-                .findPagingList(pageSize)
-                .getPage(page);
+    	Query<Team> query = Ebean.find(Team.class);
+    	query.where().ilike("fullName", "%" + filter + "%");
+    	query.where().orderBy(sortBy + " " + order);
+    	Page<Team> p = query.findPagingList(pageSize).getPage(page);
+    	return p;
     }
 	  
 	public String toString() {
