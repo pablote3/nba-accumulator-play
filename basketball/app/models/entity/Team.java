@@ -16,19 +16,26 @@ import javax.persistence.OneToMany;
 import javax.persistence.TableGenerator;
 import javax.persistence.Version;
 
-import com.fasterxml.jackson.annotation.*;
-
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import services.EbeanServerService;
+import services.EbeanServerServiceImpl;
+import services.InjectorModule;
 
-import com.avaje.ebean.Ebean;
+import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.Page;
 import com.avaje.ebean.Query;
 import com.avaje.ebean.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 @Entity
 public class Team extends Model {
 	private static final long serialVersionUID = 1L;
+	private static Injector injector = Guice.createInjector(new InjectorModule());
+	private static EbeanServerService service = injector.getInstance(EbeanServerServiceImpl.class);	
+	private static EbeanServer ebeanServer = service.createEbeanServer();
   
 	@Id
 	@TableGenerator(name="table_gen", table="sequence_table", pkColumnName="seq_name", valueColumnName="seq_count", pkColumnValue="team_seq")
@@ -184,32 +191,32 @@ public class Team extends Model {
 	}
 	
 	public static Team findById(Long id) {
-		Team team = Ebean.find(Team.class, id);
+		Team team = ebeanServer.find(Team.class, id);
 		return team;
 	}
 	
 	public static Team findByKey(String key, String value) {
-		Query<Team> query = Ebean.find(Team.class);
+		Query<Team> query = ebeanServer.find(Team.class);
 		query.where().eq(key, value);		
 		Team team = query.findUnique();
 		return team;
 	}
 	  
 	public static List<Team> findAll() {
-		Query<Team> query = Ebean.find(Team.class);
+		Query<Team> query = ebeanServer.find(Team.class);
 		List<Team> teams = query.findList();
 	    return teams;
 	}
 	
 	public static List<Team> findActive(boolean active) {
-		Query<Team> query = Ebean.find(Team.class);
+		Query<Team> query = ebeanServer.find(Team.class);
 		query.where().eq("active", active);
 		List<Team> teams = query.findList();
 	    return teams;
 	}
 	
 	public static List<Team> findFilter(String filter) {
-		Query<Team> query = Ebean.find(Team.class);
+		Query<Team> query = ebeanServer.find(Team.class);
 		query.where().ilike("fullName", "%" + filter + "%");
 		List<Team> teams = query.findList();
 		return teams;
@@ -225,7 +232,7 @@ public class Team extends Model {
 	}
 	
     public static Page<Team> page(int page, int pageSize, String sortBy, String order, String filter) {
-    	Query<Team> query = Ebean.find(Team.class);
+    	Query<Team> query = ebeanServer.find(Team.class);
     	query.where().ilike("fullName", "%" + filter + "%");
     	query.where().orderBy(sortBy + " " + order);
     	Page<Team> p = query.findPagingList(pageSize).getPage(page);

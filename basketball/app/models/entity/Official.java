@@ -17,19 +17,26 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
-import com.fasterxml.jackson.annotation.*;
-
-import com.avaje.ebean.Ebean;
-import com.avaje.ebean.Page;
-import com.avaje.ebean.Query;
-
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import services.EbeanServerService;
+import services.EbeanServerServiceImpl;
+import services.InjectorModule;
 import util.DateTime;
+
+import com.avaje.ebean.EbeanServer;
+import com.avaje.ebean.Page;
+import com.avaje.ebean.Query;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 @Entity
 public class Official extends Model {
 	private static final long serialVersionUID = 1L;
+	private static Injector injector = Guice.createInjector(new InjectorModule());
+	private static EbeanServerService service = injector.getInstance(EbeanServerServiceImpl.class);	
+	private static EbeanServer ebeanServer = service.createEbeanServer();
 
 	@Id
 	@TableGenerator(name="table_gen", table="seq_table", pkColumnName="seq_name", valueColumnName="seq_count", pkColumnValue="official_seq", initialValue=1)
@@ -123,32 +130,32 @@ public class Official extends Model {
 	}
 	
 	public static Official findById(Long id) {
-		Official official = Ebean.find(Official.class, id);
+		Official official = ebeanServer.find(Official.class, id);
 		return official;
 	}
 	
 	public static Official findByKey(String key, String value) {
-		Query<Official> query = Ebean.find(Official.class);
+		Query<Official> query = ebeanServer.find(Official.class);
 		query.where().eq(key, value);	
 		Official official = query.findUnique();
 		return official;
 	}
 	  
 	public static List<Official> findAll() {
-		Query<Official> query = Ebean.find(Official.class);
+		Query<Official> query = ebeanServer.find(Official.class);
 		List<Official> officials = query.findList();
 	    return officials;
 	}
 	
 	public static List<Official> findActive(boolean active) {
-		Query<Official> query = Ebean.find(Official.class);
+		Query<Official> query = ebeanServer.find(Official.class);
 		query.where().eq("active", active);
 		List<Official> officials = query.findList();
 	    return officials;
 	}
 	
 	public static Official findByName(String lastName, String firstName) {
-		Query<Official> query = Ebean.find(Official.class);
+		Query<Official> query = ebeanServer.find(Official.class);
 		query.where().eq("lastName", lastName);
 		query.where().eq("firstName", firstName);
 		Official official = query.findUnique();
@@ -165,7 +172,7 @@ public class Official extends Model {
 	}
 	
     public static Page<Official> page(int page, int pageSize, String sortBy, String order, String filter) {
-    	Query<Official> query = Ebean.find(Official.class);
+    	Query<Official> query = ebeanServer.find(Official.class);
     	query.where().ilike("lastName", "%" + filter + "%");
     	query.where().orderBy(sortBy + " " + order);
     	Page<Official> p = query.findPagingList(pageSize).getPage(page);

@@ -21,21 +21,27 @@ import javax.persistence.Version;
 
 import models.entity.BoxScore.Location;
 import models.partial.GameKey;
-
-import com.fasterxml.jackson.annotation.*;
-
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import services.EbeanServerService;
+import services.EbeanServerServiceImpl;
+import services.InjectorModule;
 import util.DateTime;
 
-import com.avaje.ebean.Ebean;
+import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.Page;
 import com.avaje.ebean.Query;
 import com.avaje.ebean.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 @Entity
 public class Game extends Model {
 	private static final long serialVersionUID = 1L;
+	private static Injector injector = Guice.createInjector(new InjectorModule());
+	private static EbeanServerService service = injector.getInstance(EbeanServerServiceImpl.class);	
+	private static EbeanServer ebeanServer = service.createEbeanServer();
 
 	@Id
 	@TableGenerator(name="table_gen", table="sequence_table", pkColumnName="seq_name", valueColumnName="seq_count", pkColumnValue="game_seq")
@@ -155,7 +161,7 @@ public class Game extends Model {
 	}
 	
 	public static List<Game> findByDate(String date) {
-	  	Query<Game> query = Ebean.find(Game.class);
+	  	Query<Game> query = ebeanServer.find(Game.class);
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
 	    query.where().ilike("date", date + "%");
@@ -165,7 +171,7 @@ public class Game extends Model {
 	}
 	
 	public static List<GameKey> findKeyByDate(String date) {
-	  	Query<Game> query = Ebean.find(Game.class);
+	  	Query<Game> query = ebeanServer.find(Game.class);
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
 	    query.where().ilike("date", date + "%");
@@ -187,7 +193,7 @@ public class Game extends Model {
 	}
 	
 	public static Game findByDateTeam(String date, String teamKey) {
-	  	Query<Game> query = Ebean.find(Game.class);
+	  	Query<Game> query = ebeanServer.find(Game.class);
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
 	    query.where().ilike("t0.date", date + "%");
@@ -198,7 +204,7 @@ public class Game extends Model {
 	}
 	
 	public static GameKey findKeyByDateTeam(String date, String teamKey) {
-	  	Query<Game> query = Ebean.find(Game.class);
+	  	Query<Game> query = ebeanServer.find(Game.class);
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
 	    query.where().ilike("t0.date", date + "%");
@@ -224,7 +230,7 @@ public class Game extends Model {
     }
 	
 	public static Page<Game> pageByDate(int page, int pageSize, String gameDate) {
-	  	Query<Game> query = Ebean.find(Game.class);
+	  	Query<Game> query = ebeanServer.find(Game.class);
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
 	    query.where().ilike("date", gameDate + "%");
