@@ -23,4 +23,11 @@ public class GameKey {
 	public void setAwayTeamKey(String awayTeamKey) {
 		this.awayTeamKey = awayTeamKey;
 	}
+	public String toString() {
+		return new StringBuffer()
+		.append("  date: " + this.date)
+		.append("  homeTeamKey: " + this.homeTeamKey)
+		.append("  awayTeamKey: " + this.awayTeamKey)
+		.toString();
+	}
 }
