@@ -178,9 +178,10 @@ public class Game extends Model {
 	    
 	    List<Game> games = query.findList();
 	    List<GameKey> gameKeys = new ArrayList<GameKey>();
-	    GameKey key = new GameKey();
-		key.setDate(date);
+	    GameKey key;
 	    for (int i = 0; i < games.size(); i++) {
+	    	key = new GameKey();
+			key.setDate(date);
 			for (int j = 0; j < games.get(i).getBoxScores().size(); j++) {
 				if (games.get(i).getBoxScores().get(j).getLocation().equals(Location.away))
 					key.setAwayTeamKey(games.get(i).getBoxScores().get(j).getTeam().getKey());
