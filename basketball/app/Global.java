@@ -1,6 +1,5 @@
-import play.GlobalSettings;
-import play.Logger;
 import play.Application;
+import play.GlobalSettings;
 import services.InjectorModule;
 
 import com.google.inject.Guice;
@@ -12,7 +11,7 @@ import com.google.inject.Injector;
       
       @Override
       public void onStart(Application app) {
-        Logger.info("Application has started");
+        //Logger.info("Application has started");
       }  
 
       @Override
