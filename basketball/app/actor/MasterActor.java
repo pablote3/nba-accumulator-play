@@ -24,8 +24,7 @@ public class MasterActor extends UntypedActor {
 			gameFinderActor.tell(Start, getSelf());
 		}
 		else if(message instanceof GameKeys) {
-			@SuppressWarnings("unchecked")
-			List<GameKey> keys = (List<GameKey>)message;
+			List<GameKey> keys = ((GameKeys) message).games;
 			for (int i = 0; i < keys.size(); i++) {
 				GameKey key = keys.get(i);
 				System.out.println("i: " + i + " " + key.getDate() + " " + key.getHomeTeamKey() + " " + key.getAwayTeamKey());
