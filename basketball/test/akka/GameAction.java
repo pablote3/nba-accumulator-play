@@ -1,6 +1,6 @@
 package akka;
 import static actor.MasterApi.Start;
-import actor.MasterActor;
+import actor.Master;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
@@ -15,7 +15,7 @@ public class GameAction {
 		Config config = ConfigFactory.parseString("akka.loglevel = DEBUG \n" + "akka.actor.debug.lifecycle = on");
 		ActorSystem system = ActorSystem.create("GameSystem", config);
 		final ActorRef listener = system.actorOf(Props.create(Listener.class));
-		final ActorRef master = system.actorOf(Props.create(MasterActor.class, 60, listener));
+		final ActorRef master = system.actorOf(Props.create(Master.class, 60, listener));
 		master.tell(Start, listener);
 	}
 

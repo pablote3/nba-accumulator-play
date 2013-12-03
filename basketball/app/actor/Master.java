@@ -10,17 +10,17 @@ import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 
-public class MasterActor extends UntypedActor {
+public class Master extends UntypedActor {
 	private int nbrSecondsDelay;
 	private final long start = System.currentTimeMillis();
+	private final ActorRef gameFinderActor = getContext().actorOf(Props.create(GameSchedule.class), "gameFinder");
 
-	public MasterActor(final int nbrSecondsDelay, ActorRef listener) {
+	public Master(final int nbrSecondsDelay, ActorRef listener) {
 		this.nbrSecondsDelay = nbrSecondsDelay;
 	}
 
 	public void onReceive(Object message) {
 		if (message.equals(Start)) {
-			final ActorRef gameFinderActor = getContext().actorOf(Props.create(GameFinderActor.class), "gameFinder");
 			gameFinderActor.tell(Start, getSelf());
 		}
 		else if(message instanceof GameKeys) {
@@ -28,7 +28,13 @@ public class MasterActor extends UntypedActor {
 			for (int i = 0; i < keys.size(); i++) {
 				GameKey key = keys.get(i);
 				System.out.println("i: " + i + " " + key.getDate() + " " + key.getHomeTeamKey() + " " + key.getAwayTeamKey());
-				//workerRouter.tell(new Work(start, nrOfElements), getSelf());
+//				gameFinderActor.tell(new Work(start, nrOfElements), getSelf());
+				
+				try {
+				    Thread.sleep(10000);
+				} catch(InterruptedException ex) {
+				    Thread.currentThread().interrupt();
+				}
 			}
 		}
 
