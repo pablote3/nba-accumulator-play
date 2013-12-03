@@ -1,6 +1,7 @@
 package actor;
 
 import static actor.MasterApi.Start;
+import static actor.GameScheduleApi.Retrieve;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ import akka.actor.UntypedActor;
 public class Master extends UntypedActor {
 	private int nbrSecondsDelay;
 	private final long start = System.currentTimeMillis();
-	private final ActorRef gameFinderActor = getContext().actorOf(Props.create(GameSchedule.class), "gameFinder");
+	private final ActorRef gameScheduleActor = getContext().actorOf(Props.create(GameSchedule.class), "gameSchedule");
 
 	public Master(final int nbrSecondsDelay, ActorRef listener) {
 		this.nbrSecondsDelay = nbrSecondsDelay;
@@ -21,7 +22,7 @@ public class Master extends UntypedActor {
 
 	public void onReceive(Object message) {
 		if (message.equals(Start)) {
-			gameFinderActor.tell(Start, getSelf());
+			gameScheduleActor.tell(Retrieve, getSelf());
 		}
 		else if(message instanceof GameKeys) {
 			List<GameKey> keys = ((GameKeys) message).games;
