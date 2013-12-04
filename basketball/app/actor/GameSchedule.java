@@ -21,9 +21,11 @@ public class GameSchedule extends UntypedActor {
 			final ActorRef propertyActor = getContext().actorOf(Props.create(Property.class), "property");
 			propertyActor.tell(Service, getSelf());
 		}	
-		else if (message instanceof ServiceProps) {	
+		else if (message instanceof ServiceProps) {		
 			final ActorRef gameModelActor = getContext().actorOf(Props.create(GameModel.class), "gameModel");
-			gameModelActor.tell(message, getSelf()); 			
+			gameModelActor.tell(message, getSelf());	
+			final ActorRef xmlStatsActor = getContext().actorOf(Props.create(XmlStats.class), "xmlStatsModel");
+			xmlStatsActor.tell(message, getSelf()); 	
 		}
 		else if(message instanceof GameKeys) {
 			List<GameKey> keys = ((GameKeys) message).games;
