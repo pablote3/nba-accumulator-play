@@ -24,21 +24,6 @@ public class Master extends UntypedActor {
 		if (message.equals(Start)) {
 			gameScheduleActor.tell(Retrieve, getSelf());
 		}
-		else if(message instanceof GameKeys) {
-			List<GameKey> keys = ((GameKeys) message).games;
-			for (int i = 0; i < keys.size(); i++) {
-				GameKey key = keys.get(i);
-				System.out.println("i: " + i + " " + key.getDate() + " " + key.getHomeTeamKey() + " " + key.getAwayTeamKey());
-//				gameFinderActor.tell(new Work(start, nrOfElements), getSelf());
-				
-				try {
-				    Thread.sleep(10000);
-				} catch(InterruptedException ex) {
-				    Thread.currentThread().interrupt();
-				}
-			}
-		}
-
 //		else if (message instanceof Result) {
 //			Result result = (Result) message;
 //			pi += result.getValue();

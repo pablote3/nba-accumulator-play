@@ -3,10 +3,8 @@ package actor;
 import static actor.GameScheduleApi.Retrieve;
 import static actor.PropertyApi.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import models.entity.Game;
 import models.partial.GameKey;
 import actor.MasterApi.GameKeys;
 import actor.PropertyApi.ServiceProps;
@@ -16,9 +14,7 @@ import akka.actor.UntypedActor;
 
 public class GameSchedule extends UntypedActor {
 	private ActorRef masterActor = null;
-	private String accessToken;
-	private String userAgentName;
-	private String urlBoxScore;
+
 	public void onReceive(Object message) {
 		if (message.equals(Retrieve)) {
 			masterActor = getSender();
@@ -26,25 +22,22 @@ public class GameSchedule extends UntypedActor {
 			propertyActor.tell(Service, getSelf());
 		}	
 		else if (message instanceof ServiceProps) {	
-			String propDate = ((ServiceProps) message).date;
-			String propTeam = ((ServiceProps) message).team;
-			accessToken = ((ServiceProps) message).accessToken;
-			userAgentName = ((ServiceProps) message).userAgentName;
-			urlBoxScore = ((ServiceProps) message).urlBoxScore;
-			
-			List<GameKey> games;
-			if (propTeam == null) {
-				games = Game.findKeyByDate(propDate);
-			}
-			else {
-				games = new ArrayList<GameKey>();
-				GameKey key = Game.findKeyByDateTeam(propDate, propTeam);
-				if (key != null) {
-					games.add(key);
+			final ActorRef gameModelActor = getContext().actorOf(Props.create(GameModel.class), "gameModel");
+			gameModelActor.tell(message, getSelf()); 			
+		}
+		else if(message instanceof GameKeys) {
+			List<GameKey> keys = ((GameKeys) message).games;
+			for (int i = 0; i < keys.size(); i++) {
+				GameKey key = keys.get(i);
+				System.out.println("i: " + i + " " + key.getDate() + " " + key.getHomeTeamKey() + " " + key.getAwayTeamKey());
+//				gameFinderActor.tell(new Work(start, nrOfElements), getSelf());
+				
+				try {
+				    Thread.sleep(10000);
+				} catch(InterruptedException ex) {
+				    Thread.currentThread().interrupt();
 				}
 			}
-			GameKeys key = new GameKeys(games);
-			masterActor.tell(key, getSelf());				
 		}
 		else {
 			unhandled(message);
