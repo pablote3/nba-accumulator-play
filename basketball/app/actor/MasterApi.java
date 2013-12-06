@@ -2,15 +2,13 @@ package actor;
 
 import java.util.List;
 
-import models.partial.GameKey;
-
 public interface MasterApi {
 	public static final Object Start = "Start";
 	
-	public static class GameKeys {
-		public final List<GameKey> games;
+	public static class GameIds {
+		public final List<Long> games;
 		
-		public GameKeys(List<GameKey> games) {
+		public GameIds(List<Long> games) {
 			this.games = games;
 		}			
 	}

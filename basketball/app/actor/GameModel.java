@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import models.entity.Game;
-import models.partial.GameKey;
-import actor.MasterApi.GameKeys;
+import actor.MasterApi.GameIds;
 import actor.PropertyApi.ServiceProps;
 import akka.actor.UntypedActor;
 
@@ -16,19 +15,24 @@ public class GameModel extends UntypedActor {
 			String propDate = ((ServiceProps) message).date;
 			String propTeam = ((ServiceProps) message).team;
 			
-			List<GameKey> games;
+			List<Long> games;
 			if (propTeam == null) {
-				games = Game.findKeyByDate(propDate);
+				games = Game.findIdsByDate(propDate);
 			}
 			else {
-				games = new ArrayList<GameKey>();
-				GameKey key = Game.findKeyByDateTeam(propDate, propTeam);
-				if (key != null) {
-					games.add(key);
+				games = new ArrayList<Long>();
+				Long id = Game.findIdByDateTeam(propDate, propTeam);
+				if (id != null) {
+					games.add(id);
 				}
 			}
-			GameKeys key = new GameKeys(games);
-			getSender().tell(key, getSelf());
+			GameIds ids = new GameIds(games);
+			getSender().tell(ids, getSelf());
+		}
+		else if(message instanceof Long) {
+			Long gameId = (Long)message;			
+			Game game = Game.findById(gameId);
+			getSender().tell(game, getSelf());
 		}
 		else {
 			unhandled(message);

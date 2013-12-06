@@ -6,8 +6,8 @@ import static actor.XmlStatsApi.InitXmlStats;
 
 import java.util.List;
 
-import models.partial.GameKey;
-import actor.MasterApi.GameKeys;
+import models.entity.Game;
+import actor.MasterApi.GameIds;
 import actor.PropertyApi.ServiceProps;
 import akka.actor.ActorRef;
 import akka.actor.Props;
@@ -16,7 +16,6 @@ import akka.actor.UntypedActor;
 public class Master extends UntypedActor {
 	private boolean isInitXmlStats = false;
 	private int nbrSecondsDelay;
-	private final long start = System.currentTimeMillis();
 	private final ActorRef gameModelActor = getContext().actorOf(Props.create(GameModel.class), "gameModel");
 	private final ActorRef xmlStatsActor = getContext().actorOf(Props.create(XmlStats.class), "xmlStatsModel");
 
@@ -37,13 +36,14 @@ public class Master extends UntypedActor {
 			isInitXmlStats = true;
 			System.out.println("InitXmlStats = " + isInitXmlStats);
 		}
-		else if(message instanceof GameKeys) {
+		else if(message instanceof GameIds) {
 			if (isInitXmlStats) {
-				List<GameKey> keys = ((GameKeys) message).games;
-				for (int i = 0; i < keys.size(); i++) {
-					GameKey key = keys.get(i);
-					System.out.println("i: " + i + " " + key.getDate() + " " + key.getHomeTeamKey() + " " + key.getAwayTeamKey());
-//					gameFinderActor.tell(new Work(start, nrOfElements), getSelf());
+				GameIds gameIds = (GameIds) message;
+				List<Long> ids = gameIds.games;
+				for (int i = 0; i < ids.size(); i++) {
+					Long id = ids.get(i);
+					gameModelActor.tell(id, getSelf());
+					//xmlStatsActor.tell(id, getSelf());
 					
 					try {
 					    Thread.sleep(nbrSecondsDelay);
@@ -55,6 +55,10 @@ public class Master extends UntypedActor {
 			else {
 				
 			}
+		}
+		else if(message instanceof Game) {
+			Game game = (Game)message;
+			System.out.println(game.getDate() + " " + game.getBoxScores().get(0).getTeam().getAbbr() + " " + game.getBoxScores().get(1).getTeam().getAbbr());
 		}
 //		else if (message instanceof Result) {
 //			Result result = (Result) message;

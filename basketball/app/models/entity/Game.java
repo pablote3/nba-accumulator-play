@@ -19,8 +19,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
-import models.entity.BoxScore.Location;
-import models.partial.GameKey;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import services.EbeanServerService;
@@ -176,29 +174,6 @@ public class Game extends Model {
 	    return games;
 	}
 	
-	public static List<GameKey> findKeyByDate(String date) {
-	  	Query<Game> query = ebeanServer.find(Game.class);
-	  	query.fetch("boxScores");
-	  	query.fetch("boxScores.team");
-	    query.where().ilike("date", date + "%");
-	    
-	    List<Game> games = query.findList();
-	    List<GameKey> gameKeys = new ArrayList<GameKey>();
-	    GameKey key;
-	    for (int i = 0; i < games.size(); i++) {
-	    	key = new GameKey();
-			key.setDate(date);
-			for (int j = 0; j < games.get(i).getBoxScores().size(); j++) {
-				if (games.get(i).getBoxScores().get(j).getLocation().equals(Location.away))
-					key.setAwayTeamKey(games.get(i).getBoxScores().get(j).getTeam().getKey());
-				else
-					key.setHomeTeamKey(games.get(i).getBoxScores().get(j).getTeam().getKey());
-			}
-			gameKeys.add(key);
-		}
-		return gameKeys;
-	}
-	
 	public static List<Long> findIdsByDate(String date) {
 	  	Query<Game> query = ebeanServer.find(Game.class);
 	    query.where().ilike("date", date + "%");
@@ -223,7 +198,7 @@ public class Game extends Model {
 	    return game;
 	}
 	
-	public static GameKey findKeyByDateTeam(String date, String teamKey) {
+	public static Long findIdByDateTeam(String date, String teamKey) {
 	  	Query<Game> query = ebeanServer.find(Game.class);
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
@@ -231,17 +206,9 @@ public class Game extends Model {
 	    query.where().eq("t2.team_key", teamKey);
 	
 	    Game game = query.findUnique();
-	    GameKey key = new GameKey();
-		key.setDate(date);
-		for (int j = 0; j < game.getBoxScores().size(); j++) {
-			if (game.getBoxScores().get(j).getLocation().equals(Location.away))
-				key.setAwayTeamKey(game.getBoxScores().get(j).getTeam().getKey());
-			else
-				key.setHomeTeamKey(game.getBoxScores().get(j).getTeam().getKey());
-		}
-		return key;
+		return game.getId();
 	}
-	
+
 	public static Page<Game> page(int page, int pageSize) {
     	Query<Game> query = ebeanServer.find(Game.class);
     	Page<Game> p = query.findPagingList(pageSize).getPage(page);
