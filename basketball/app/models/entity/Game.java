@@ -151,13 +151,19 @@ public class Game extends Model {
 	}
 	  
 	public static void delete(Long id) {
-	  	find.ref(id).delete();
+		Game game = Game.findById(id);
+	  	game.delete();
+	}
+	  
+	public static Game findById(Long id) {
+		Game game = ebeanServer.find(Game.class, id);
+		return game;
 	}
 	
-	public static Finder<Long,Game> find = new Finder<Long, Game>(Long.class, Game.class);
-	  
 	public static List<Game> findAll() {
-	    return find.all();
+		Query<Game> query = ebeanServer.find(Game.class);
+		List<Game> games = query.findList();
+	    return games;
 	}
 	
 	public static List<Game> findByDate(String date) {
@@ -193,7 +199,20 @@ public class Game extends Model {
 		return gameKeys;
 	}
 	
+	public static List<Long> findIdsByDate(String date) {
+	  	Query<Game> query = ebeanServer.find(Game.class);
+	    query.where().ilike("date", date + "%");
+	    
+	    List<Game> games = query.findList();
+	    List<Long> gameIds = new ArrayList<Long>();
+	    for (int i = 0; i < games.size(); i++) {
+			gameIds.add(games.get(i).getId());
+		}
+		return gameIds;
+	}
+	
 	public static Game findByDateTeam(String date, String teamKey) {
+		//Returns only box score of team queried
 	  	Query<Game> query = ebeanServer.find(Game.class);
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
@@ -224,10 +243,9 @@ public class Game extends Model {
 	}
 	
 	public static Page<Game> page(int page, int pageSize) {
-        return 
-            find.where()
-                .findPagingList(pageSize)
-                .getPage(page);
+    	Query<Game> query = ebeanServer.find(Game.class);
+    	Page<Game> p = query.findPagingList(pageSize).getPage(page);
+    	return p;
     }
 	
 	public static Page<Game> pageByDate(int page, int pageSize, String gameDate) {
