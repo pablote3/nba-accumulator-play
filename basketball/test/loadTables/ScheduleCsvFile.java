@@ -25,13 +25,13 @@ import org.junit.Test;
 
 import util.FileIO;
 
-public class MySportsCalCsvFile {
+public class ScheduleCsvFile {
 	@Ignore
 	@Test
 	public void createSchedule() {
 	    running(fakeApplication(), new Runnable() {
 	        public void run() {
-	        	//entire nba schedule from www.mysportscal.com/nba.html
+	        	//entire nba schedule from www.LiveFanChat.com
 	        	//need to replace ,, with , , prior to execution for parsing to work correctly
 			   	String path = FileIO.getPropertyPath("config.basketball");
 				File file = new File(path + "//load//nba-complete-2012-2013.csv");
@@ -60,37 +60,21 @@ public class MySportsCalCsvFile {
 						StringTokenizer st = new StringTokenizer(line,",");
 						sbDate = new StringBuffer();
 			            
-						sbDate.append(st.nextToken());				//start date
-			            st.nextToken();								//end date
-			            st.nextToken();								//subject			                     
-			            sbDate.append(" " + st.nextToken());		//start time (PT)
+						sbDate.append(st.nextToken());				//start date                  
+			            sbDate.append(" " + st.nextToken());		//start time (ET)
+			            String awayTeam = st.nextToken().trim();
+			            String homeTeam = st.nextToken().trim();
 
 			            try {			            	
-			            	date = new SimpleDateFormat("MM/dd/yyyy hh:mm aa", Locale.ENGLISH).parse(sbDate.toString());
+			            	date = new SimpleDateFormat("MM/dd/yyyy kk:mm", Locale.ENGLISH).parse(sbDate.toString());
 			            } catch (ParseException e) {
 			            	e.printStackTrace();
 			            	break;
 			            }
 			            
 			            if(date.after(preseasonEnd)) {
-				            st.nextToken();							//start time (MT)
-				            st.nextToken();							//start time (CT)
-				            st.nextToken();							//start time (ET)
-				            st.nextToken();							//end time (PT)
-				            st.nextToken();							//end time (MT)
-				            st.nextToken();							//end time (CT)
-				            st.nextToken();							//end time (ET)
-				            st.nextToken();							//show time as
-				            st.nextToken();							//description
-				            st.nextToken();							//@
-				            st.nextToken();							//at
-				            st.nextToken();							//television
-				            String awayTeam = st.nextToken().trim();
-				            String homeTeam = st.nextToken().trim();
-				            
 				            teamHome = Team.findByKey("shortName", homeTeam);
-				            teamAway = Team.findByKey("shortName", awayTeam);
-				            
+				            teamAway = Team.findByKey("shortName", awayTeam);				            
 				            
 							game = new Game();
 				            game.setDate(date);
@@ -111,7 +95,7 @@ public class MySportsCalCsvFile {
 							System.out.println("i = " + i++ + " " + teamAway.getFullName() + " " + teamHome.getFullName());
 			            }
 			            else
-							System.out.println("b = " + i++);
+							System.out.println("b = " + i++ +  " " + awayTeam + " " + homeTeam);
 					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
