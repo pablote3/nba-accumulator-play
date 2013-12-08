@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.text.SimpleDateFormat;
 import java.util.Properties;
 import java.util.zip.GZIPInputStream;
 
@@ -36,8 +35,6 @@ public class GameJsonUrl {
     static final String USER_AGENT = "User-agent";
     static final String ACCEPT_ENCODING = "Accept-encoding";
     static final String GZIP = "gzip";
-    static final String ISO_8601_FMT = "yyyy-MM-dd'T'HH:mm:ssXXX";
-    static final SimpleDateFormat XMLSTATS_DATE = new SimpleDateFormat(ISO_8601_FMT);
     
     @Ignore
     @Test
