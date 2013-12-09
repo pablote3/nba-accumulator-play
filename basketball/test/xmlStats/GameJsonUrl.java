@@ -24,7 +24,6 @@ import models.partial.XmlStat;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import util.DateTime;
 import util.FileIO;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -70,28 +69,32 @@ public class GameJsonUrl {
 				            scheduleGame.setDate(xmlStats.event_information.getDate());
 				            scheduleGame.setStatus(Status.scheduled);
 				            scheduleGame.setSeasonType(xmlStats.event_information.getSeasonType());
-				              
-				            BoxScore homeBoxScore = new BoxScore();
-				            homeBoxScore.setLocation(Location.home);
-				            homeBoxScore.setTeam(Team.findByKey("key", xmlStats.home_team.getKey()));
-				            scheduleGame.addBoxScore(homeBoxScore);
-				              
+				            
 				            BoxScore awayBoxScore = new BoxScore();
 				            awayBoxScore.setLocation(Location.away);
 				            awayBoxScore.setTeam(Team.findByKey("key", xmlStats.away_team.getKey()));
 				            scheduleGame.addBoxScore(awayBoxScore);
 				              
-				            Game.create(scheduleGame);
-				            
-		    		  		Game completeGame = Game.findByDateTeam(DateTime.getFindDateShort(xmlStats.event_information.getDate()), xmlStats.home_team.getKey());
-			      		  	completeGame.setStatus(Status.completed);	              
-			      		  	completeGame.setGameOfficials(GameJsonHelper.getGameOfficials(xmlStats.officials));
-			              
-			      		  	homeBoxScore.setPeriodScores(GameJsonHelper.getPeriodScores(xmlStats.home_period_scores));
-			      		  	GameJsonHelper.getBoxScoreStats(homeBoxScore, xmlStats.home_totals);              
+				            BoxScore homeBoxScore = new BoxScore();
+				            homeBoxScore.setLocation(Location.home);
+				            homeBoxScore.setTeam(Team.findByKey("key", xmlStats.home_team.getKey()));
+				            scheduleGame.addBoxScore(homeBoxScore);
 
+				            Game.create(scheduleGame);
+				            Long gameId = scheduleGame.getId();
+				              
+				    		Game completeGame = Game.findById(gameId);
+
+				    		completeGame.setStatus(Status.completed);	              
+			      		  	completeGame.setGameOfficials(GameJsonHelper.getGameOfficials(xmlStats.officials));
+			      		  	
+			      		  	awayBoxScore = completeGame.getBoxScores().get(0);
 			      		  	awayBoxScore.setPeriodScores(GameJsonHelper.getPeriodScores(xmlStats.away_period_scores));
 			      		  	GameJsonHelper.getBoxScoreStats(awayBoxScore, xmlStats.away_totals);
+			              
+			      		  	homeBoxScore = completeGame.getBoxScores().get(1);
+			      		  	homeBoxScore.setPeriodScores(GameJsonHelper.getPeriodScores(xmlStats.home_period_scores));
+			      		  	GameJsonHelper.getBoxScoreStats(homeBoxScore, xmlStats.home_totals);              
 
 			      		  	if (xmlStats.away_totals.getPoints() > xmlStats.home_totals.getPoints()) {
 			      		  		homeBoxScore.setResult(Result.loss);
@@ -102,13 +105,14 @@ public class GameJsonUrl {
 			      		  		awayBoxScore.setResult(Result.loss);
 			      		  	}
 			              
-			      		  	Game createGame = Game.findByDateTeam(DateTime.getFindDateShort(xmlStats.event_information.getDate()), xmlStats.home_team.getKey());
+			      		  	completeGame.update();
+			      		  	Game createGame = Game.findById(gameId);
 			              
-			      		  	createGame.update();
-			    	        
 				            assertThat(createGame.getSeasonType()).isEqualTo(SeasonType.post);
+				            assertThat(createGame.getGameOfficials().size()).isEqualTo(3);
 				            if (createGame.getGameOfficials().size() > 0) {
 				            	assertThat(createGame.getGameOfficials().get(1).getOfficial().getLastName()).endsWith("Crawford");
+				            	assertThat(createGame.getBoxScores().size()).isEqualTo(2);
 				              	for (int i = 0; i < createGame.getBoxScores().size(); i++) {
 				              		BoxScore boxScore = createGame.getBoxScores().get(i);
 				              		if (boxScore.getLocation().equals(Location.away)) {
