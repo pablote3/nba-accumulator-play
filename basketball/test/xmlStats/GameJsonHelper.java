@@ -10,7 +10,7 @@ import models.entity.PeriodScore;
 
 public class GameJsonHelper {
    
-	protected static List<GameOfficial> getGameOfficials(Official[] officials) {
+	public static List<GameOfficial> getGameOfficials(Official[] officials) {
     	List<GameOfficial> gameOfficials = new ArrayList<GameOfficial>();
 	    GameOfficial gameOfficial;
 	    Official official;
@@ -24,7 +24,7 @@ public class GameJsonHelper {
     	return gameOfficials;
     }
 	
-	protected static List<PeriodScore> getPeriodScores(int[] scores) {
+	public static List<PeriodScore> getPeriodScores(int[] scores) {
     	List<PeriodScore> periodScores = new ArrayList<PeriodScore>();	    
 	    PeriodScore periodScore;
 
@@ -37,7 +37,7 @@ public class GameJsonHelper {
 	    return periodScores;
     }
     
-	protected static BoxScore getBoxScoreStats(BoxScore boxScore, BoxScore stats) {
+	public static BoxScore getBoxScoreStats(BoxScore boxScore, BoxScore stats) {
         boxScore.setPoints(stats.getPoints());
         boxScore.setAssists(stats.getAssists());
         boxScore.setTurnovers(stats.getTurnovers());

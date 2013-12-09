@@ -5,7 +5,7 @@ import models.entity.Game;
 import models.entity.Official;
 import models.entity.Team;
 
-public class XmlStats {
+public class XmlStat {
 	public Team away_team;
 	public Team home_team;
 	public Game event_information;

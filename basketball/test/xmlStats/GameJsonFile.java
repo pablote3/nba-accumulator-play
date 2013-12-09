@@ -16,7 +16,7 @@ import models.entity.Game;
 import models.entity.Game.SeasonType;
 import models.entity.Game.Status;
 import models.entity.Team;
-import models.partial.XmlStats;
+import models.partial.XmlStat;
 
 import org.junit.Test;
 
@@ -40,7 +40,7 @@ public class GameJsonFile {
 	              ObjectMapper mapper = new ObjectMapper();
 	              mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	            
-	              XmlStats xmlStats = mapper.readValue(baseJson, XmlStats.class);
+	              XmlStat xmlStats = mapper.readValue(baseJson, XmlStat.class);
               
 	              Game game = new Game();
 	              game.setDate(xmlStats.event_information.getDate());
@@ -115,7 +115,7 @@ public class GameJsonFile {
 	              ObjectMapper mapper = new ObjectMapper();
 	              mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	            
-	              XmlStats xmlStats = mapper.readValue(baseJson, XmlStats.class);
+	              XmlStat xmlStats = mapper.readValue(baseJson, XmlStat.class);
               
 	              Game scheduleGame = new Game();
 	              scheduleGame.setDate(xmlStats.event_information.getDate());
