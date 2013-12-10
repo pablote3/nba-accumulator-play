@@ -1,14 +1,14 @@
 package actor;
 
-import static actor.PropertyApi.Service;
+import static actor.ActorApi.Service;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
 import util.FileIO;
-import actor.PropertyApi.PropertyException;
-import actor.PropertyApi.ServiceProps;
+import actor.ActorApi.PropertyException;
+import actor.ActorApi.ServiceProps;
 import akka.actor.UntypedActor;
 
 public class Property extends UntypedActor {

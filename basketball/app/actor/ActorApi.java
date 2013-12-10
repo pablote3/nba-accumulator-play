@@ -1,7 +1,12 @@
 package actor;
 
-public interface PropertyApi {
+import java.util.List;
+
+public interface ActorApi {
+	public static final Object Start = "Start";
+	public static final Object Complete = "Start";
 	public static final Object Service = "Service";
+	public static final Object InitXmlStats = "InitXmlStats";
 	
 	public static class ServiceProps {
 		public final String date;
@@ -21,12 +26,20 @@ public interface PropertyApi {
 			return String.format("%s(%s)", getClass().getSimpleName(), date, team);
 		}
 	}
-
+	
 	public static class PropertyException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 		
 		public PropertyException(String msg) {
 			super(msg);
 		}
+	}
+	
+	public static class GameIds {
+		public final List<Long> games;
+		
+		public GameIds(List<Long> games) {
+			this.games = games;
+		}			
 	}
 }

@@ -1,13 +1,15 @@
 package actor;
 
-import static actor.XmlStatsApi.InitXmlStats;
+import static actor.ActorApi.InitXmlStats;
+import static actor.ActorApi.Complete;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import models.entity.BoxScore;
 import models.entity.Game;
-import actor.MasterApi.GameIds;
-import actor.PropertyApi.ServiceProps;
+import actor.ActorApi.GameIds;
+import actor.ActorApi.ServiceProps;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
@@ -45,6 +47,14 @@ public class GameModel extends UntypedActor {
 			Game game = Game.findById(gameId);
 			xmlStatsActor.tell(game, getSelf());
 		}
+		else if(message instanceof Game) {
+			Game game = (Game)message;
+			BoxScore awayBoxScore = game.getBoxScores().get(0);
+			BoxScore homeBoxScore = game.getBoxScores().get(1);
+			System.out.println(awayBoxScore.getTeam().getShortName() +  " " + awayBoxScore.getPoints() + " " + homeBoxScore.getTeam().getShortName() +  " " + homeBoxScore.getPoints());
+//		  	game.update();
+		  	masterActor.tell(Complete, getSender());
+		}		
 		else {
 			unhandled(message);
 		}

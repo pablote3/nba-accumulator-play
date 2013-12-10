@@ -1,12 +1,12 @@
 package actor;
 
-import static actor.MasterApi.Start;
-import static actor.PropertyApi.Service;
+import static actor.ActorApi.Start;
+import static actor.ActorApi.Service;
 
 import java.util.List;
 
-import actor.MasterApi.GameIds;
-import actor.PropertyApi.ServiceProps;
+import actor.ActorApi.GameIds;
+import actor.ActorApi.ServiceProps;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;

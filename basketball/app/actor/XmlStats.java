@@ -1,6 +1,6 @@
 package actor;
 
-import static actor.XmlStatsApi.InitXmlStats;
+import static actor.ActorApi.InitXmlStats;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +19,7 @@ import models.entity.Game.Status;
 import models.partial.XmlStat;
 import util.DateTime;
 import xmlStats.GameJsonHelper;
-import actor.PropertyApi.ServiceProps;
+import actor.ActorApi.ServiceProps;
 import akka.actor.UntypedActor;
 
 public class XmlStats extends UntypedActor {
@@ -49,7 +49,6 @@ public class XmlStats extends UntypedActor {
 			String urlAwayTeam = awayBoxScore.getTeam().getKey();
 			String urlHomeTeam = homeBoxScore.getTeam().getKey();			
 			String urlEvent = urlDate + "-" + urlAwayTeam + "-at-" + urlHomeTeam + ".json";
-			System.out.println(urlEvent);
 						
 			try {
 				url = new URL(urlBoxScore + urlEvent);
@@ -84,8 +83,7 @@ public class XmlStats extends UntypedActor {
 	    		  		homeBoxScore.setResult(Result.win);
 	    		  		awayBoxScore.setResult(Result.loss);
 	    		  	}
-	    		    
-	    		  	game.update();
+	    		  	getSender().tell(game, getSelf());
 	            }
 			} 
 			catch (MalformedURLException e) {
