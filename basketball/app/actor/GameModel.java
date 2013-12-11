@@ -8,6 +8,7 @@ import java.util.List;
 
 import models.entity.BoxScore;
 import models.entity.Game;
+import actor.ActorApi.GameId;
 import actor.ActorApi.GameIds;
 import actor.ActorApi.ServiceProps;
 import akka.actor.ActorRef;
@@ -42,9 +43,9 @@ public class GameModel extends UntypedActor {
 			GameIds ids = new GameIds(games);
 			masterActor.tell(ids, getSender());
 		}
-		else if(message instanceof Long) {
-			Long gameId = (Long)message;			
-			Game game = Game.findById(gameId);
+		else if(message instanceof GameId) {
+			GameId gameId = (GameId)message;			
+			Game game = Game.findById(gameId.game);
 			xmlStatsActor.tell(game, getSelf());
 		}
 		else if(message instanceof Game) {

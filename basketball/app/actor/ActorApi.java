@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface ActorApi {
 	public static final Object Start = "Start";
-	public static final Object Complete = "Start";
 	public static final Object Service = "Service";
 	public static final Object InitXmlStats = "InitXmlStats";
+	public static final Object Complete = "Complete";
 	
 	public static class ServiceProps {
 		public final String date;
@@ -41,5 +41,13 @@ public interface ActorApi {
 		public GameIds(List<Long> games) {
 			this.games = games;
 		}			
+	}
+	
+	public static class GameId {
+		public final Long game;
+		
+		public GameId(Long game) {
+			this.game = game;
+		}
 	}
 }
