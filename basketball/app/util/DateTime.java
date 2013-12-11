@@ -30,6 +30,15 @@ public class DateTime {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
 		return simpleDateFormat.format(date);
 	}
+	static public boolean isDate(String date)  {
+		try {
+			new SimpleDateFormat("yyyy-MM-dd").parse(date);
+			return true;
+		} 
+		catch (ParseException e) {
+			return false;
+		}
+	}
 	static public Date createDateFromString(String date) {
 		try {
 			return new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(date);
