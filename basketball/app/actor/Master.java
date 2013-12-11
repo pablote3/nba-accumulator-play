@@ -2,9 +2,12 @@ package actor;
 
 import static actor.ActorApi.Start;
 import static actor.ActorApi.Service;
+import static actor.ActorApi.PropertyException;
+import static actor.ActorApi.Complete;
 
 import java.util.List;
 
+import actor.ActorApi.GameId;
 import actor.ActorApi.GameIds;
 import actor.ActorApi.ServiceProps;
 import akka.actor.ActorRef;
@@ -24,36 +27,33 @@ public class Master extends UntypedActor {
 			final ActorRef propertyActor = getContext().actorOf(Props.create(Property.class), "property");
 			propertyActor.tell(Service, getSelf());
 		}
+		else if (message instanceof PropertyException) {
+			PropertyException pe = (PropertyException) message;
+			System.out.println("Property Exception " + pe.getMessage());
+			getContext().stop(getSelf());
+		}
 		else if (message instanceof ServiceProps) {		
 			gameModelActor.tell(message, getSelf());	
 		}
-		else if(message instanceof GameIds) {
+		else if (message instanceof GameIds) {
 			GameIds gameIds = (GameIds) message;
 			List<Long> ids = gameIds.games;
 			for (int i = 0; i < ids.size(); i++) {
 				Long id = ids.get(i);
-				gameModelActor.tell(id, getSelf());
+				GameId gid = new GameId(id);
+				gameModelActor.tell(gid, getSelf());
 
-			try {
-			    Thread.sleep(nbrSecondsDelay);
-				} catch(InterruptedException ex) {
+				try {
+				    Thread.sleep(nbrSecondsDelay);
+				} 
+				catch(InterruptedException ex) {
 				    Thread.currentThread().interrupt();
 				}
 			}
 		}
-//		else if (message instanceof Result) {
-//			Result result = (Result) message;
-//			pi += result.getValue();
-//			nrOfResults += 1;
-//			if (nrOfResults == nrOfMessages) {
-//				// Send the result to the listener
-//				Duration duration = Duration.create(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
-//				listener.tell(new PiApproximation(pi, duration), getSelf());
-//				
-//				// Stops this actor and all its supervised children
-//				getContext().stop(getSelf());
-//			}
-//		} 
+		else if (message.equals(Complete)) {
+			getContext().stop(getSelf());
+		} 
 		else {
 			unhandled(message);
 		}

@@ -18,6 +18,9 @@ public class Property extends UntypedActor {
 			try {
 				String path = FileIO.getPropertyPath("config.basketball");
 				props = FileIO.loadProperties(path + "\\properties\\service.properties");
+				
+				if (!util.DateTime.isValidDate(props.getProperty("gameday.date")))
+					throw new PropertyException("InvalidDate");
 			}
 			catch (FileNotFoundException e) {
 				throw new PropertyException("FileNotFoundException");
@@ -31,16 +34,21 @@ public class Property extends UntypedActor {
 
 	public void onReceive(Object message) {
 		if (message.equals(Service)) {
-			Properties props = getProperties();
-			String date = props.getProperty("gameday.date");
-			if (!util.DateTime.isValidDate(date))
-				throw new PropertyException("InvalidDate");
-			String team = props.getProperty("gameday.team");
-			String accessToken = props.getProperty("xmlstats.accessToken");
-			String userAgentName = props.getProperty("xmlstats.userAgentName");
-			String urlBoxScore = props.getProperty("xmlstats.urlBoxScore");
-			ServiceProps serviceProps = new ServiceProps(date, team, accessToken, userAgentName, urlBoxScore);
-			getSender().tell(serviceProps, getSelf());
+			Properties props;
+			try {
+				props = getProperties();
+				String date = props.getProperty("gameday.date");
+				String team = props.getProperty("gameday.team");
+				String accessToken = props.getProperty("xmlstats.accessToken");
+				String userAgentName = props.getProperty("xmlstats.userAgentName");
+				String urlBoxScore = props.getProperty("xmlstats.urlBoxScore");
+				ServiceProps serviceProps = new ServiceProps(date, team, accessToken, userAgentName, urlBoxScore);
+				getSender().tell(serviceProps, getSelf());
+				getContext().stop(getSelf());
+			} 
+			catch (PropertyException e) {
+				getSender().tell(e, getSelf());
+			}
 		} 
 		else {
 			unhandled(message);
