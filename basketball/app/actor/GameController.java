@@ -15,7 +15,7 @@ import akka.actor.UntypedActor;
 
 public class GameController extends UntypedActor {
 	private ActorRef listener;
-	private final ActorRef gameModel = getContext().actorOf(Props.create(GameModel.class, listener));
+	private final ActorRef gameModel = getContext().actorOf(Props.create(GameModel.class, listener), "gameModel");
 	private ActorRef master;
 	private int nbrSecondsDelay;
 	private List<Long> ids;

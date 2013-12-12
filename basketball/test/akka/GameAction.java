@@ -18,8 +18,8 @@ public class GameAction {
 	public static void main(String[] args) {
 		Config config = ConfigFactory.parseString("akka.loglevel = DEBUG \n" + "akka.actor.debug.lifecycle = on");
 		ActorSystem system = ActorSystem.create("GameSystem", config);
-		final ActorRef listener = system.actorOf(Props.create(Listener.class));
-		final ActorRef master = system.actorOf(Props.create(Master.class, listener));
+		final ActorRef listener = system.actorOf(Props.create(Listener.class), "listener");
+		final ActorRef master = system.actorOf(Props.create(Master.class, listener), "master");
 		master.tell(Start, listener);
 	}
 

@@ -13,7 +13,7 @@ import akka.actor.UntypedActor;
 
 public class Master extends UntypedActor {
 	private ActorRef listener;
-	private final ActorRef gameController = getContext().actorOf(Props.create(GameController.class, listener));
+	private final ActorRef gameController = getContext().actorOf(Props.create(GameController.class, listener), "gameController");
 	
 	public Master(ActorRef listener) {
 		this.listener = listener;
@@ -21,7 +21,7 @@ public class Master extends UntypedActor {
 
 	public void onReceive(Object message) {
 		if (message.equals(Start)) {
-			final ActorRef property = getContext().actorOf(Props.create(Property.class, listener));
+			final ActorRef property = getContext().actorOf(Props.create(Property.class, listener), "property");
 			property.tell(InitializeStart, getSelf());
 		}
 		else if (message instanceof ServiceProps) {

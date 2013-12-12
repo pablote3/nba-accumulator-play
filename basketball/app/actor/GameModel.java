@@ -20,7 +20,7 @@ import akka.actor.UntypedActor;
 
 public class GameModel extends UntypedActor {
 	private ActorRef listener;
-	private final ActorRef xmlStats = getContext().actorOf(Props.create(XmlStats.class, listener));
+	private final ActorRef xmlStats = getContext().actorOf(Props.create(XmlStats.class, listener), "xmlStats");
 	private ActorRef gameController;
 	private String propDate;
 	private String propTeam;
@@ -36,23 +36,29 @@ public class GameModel extends UntypedActor {
 			xmlStats.tell(message, getSender());
 		}
 		else if (message.equals(WorkStart)) {					
-			List<Long> games;
+			List<Long> games = null;
 			gameController = getSender();
-			if (propTeam == null) {
-				games = Game.findIdsByDate(propDate);
-				if (games == null) {
-					listener.tell(new ModelException("GamesNotFound"), getSelf());
-				}
-			}
-			else {
-				games = new ArrayList<Long>();
-				Long id = Game.findIdByDateTeam(propDate, propTeam);
-				if (id != null) {
-					games.add(id);
+			try {
+				if (propTeam == null) {
+					games = Game.findIdsByDate(propDate);
+					if (games == null) {
+						listener.tell(new ModelException("GamesNotFound"), getSelf());
+					}
 				}
 				else {
-					listener.tell(new ModelException("GameNotFound"), getSelf());
+					games = new ArrayList<Long>();
+					Long id = Game.findIdByDateTeam(propDate, propTeam);
+					if (id != null) {
+						games.add(id);
+					}
+					else {
+						listener.tell(new ModelException("GameNotFound"), getSelf());
+					}
 				}
+			} catch (NullPointerException e) {
+				getContext().stop(getSelf());
+				ModelException me = new ModelException("GamesNotFound");
+				listener.tell(me, getSelf());
 			}
 			GameIds ids = new GameIds(games);
 			getSender().tell(ids, getSelf());
