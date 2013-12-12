@@ -32,10 +32,26 @@ public interface ActorApi {
 		}
 	}
 	
-	public static class ActorException extends RuntimeException {
+	public static class PropertyException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 		
-		public ActorException(String msg) {
+		public PropertyException(String msg) {
+			super(msg);
+		}
+	}
+	
+	public static class ModelException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+		
+		public ModelException(String msg) {
+			super(msg);
+		}
+	}
+	
+	public static class XmlStatsException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+		
+		public XmlStatsException(String msg) {
 			super(msg);
 		}
 	}

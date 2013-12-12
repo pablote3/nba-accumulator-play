@@ -1,16 +1,16 @@
 package actor;
 
-import static actor.ActorApi.WorkStart;
 import static actor.ActorApi.NextGame;
+import static actor.ActorApi.WorkStart;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import models.entity.BoxScore;
 import models.entity.Game;
-import actor.ActorApi.ActorException;
 import actor.ActorApi.GameId;
 import actor.ActorApi.GameIds;
+import actor.ActorApi.ModelException;
 import actor.ActorApi.ServiceProps;
 import akka.actor.ActorRef;
 import akka.actor.Props;
@@ -39,7 +39,7 @@ public class GameModel extends UntypedActor {
 			if (propTeam == null) {
 				games = Game.findIdsByDate(propDate);
 				if (games == null) {
-					listener.tell(new ActorException("GamesNotFound"), getSelf());
+					listener.tell(new ModelException("GamesNotFound"), getSelf());
 				}
 			}
 			else {
@@ -49,7 +49,7 @@ public class GameModel extends UntypedActor {
 					games.add(id);
 				}
 				else {
-					listener.tell(new ActorException("GameNotFound"), getSelf());
+					listener.tell(new ModelException("GameNotFound"), getSelf());
 				}
 			}
 			GameIds ids = new GameIds(games);

@@ -9,9 +9,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.zip.GZIPInputStream;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import models.entity.BoxScore;
 import models.entity.BoxScore.Result;
 import models.entity.Game;
@@ -19,10 +16,13 @@ import models.entity.Game.Status;
 import models.partial.XmlStat;
 import util.DateTime;
 import xmlStats.GameJsonHelper;
-import actor.ActorApi.ActorException;
 import actor.ActorApi.ServiceProps;
+import actor.ActorApi.XmlStatsException;
 import akka.actor.ActorRef;
 import akka.actor.UntypedActor;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class XmlStats extends UntypedActor {
     static final String AUTHORIZATION = "Authorization";
@@ -94,10 +94,10 @@ public class XmlStats extends UntypedActor {
 	            }
 			} 
 			catch (MalformedURLException e) {
-				listener.tell(new ActorException("MalformedURLException"), getSelf());
+				listener.tell(new XmlStatsException("MalformedURLException"), getSelf());
 			} 
 			catch (IOException e) {
-			listener.tell(new ActorException("IOException"), getSelf());
+			listener.tell(new XmlStatsException("IOException"), getSelf());
 			}
 		}
 		else {

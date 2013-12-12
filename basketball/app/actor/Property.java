@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import util.FileIO;
-import actor.ActorApi.ActorException;
+import actor.ActorApi.PropertyException;
 import actor.ActorApi.ServiceProps;
 import akka.actor.ActorRef;
 import akka.actor.UntypedActor;
@@ -20,23 +20,23 @@ public class Property extends UntypedActor {
 		this.listener = listener;
 	}
 	
-	private Properties getProperties() throws ActorException {
+	private Properties getProperties() throws PropertyException {
 		if (props == null) {
 			try {
 				String path = FileIO.getPropertyPath("config.basketball");
 				props = FileIO.loadProperties(path + "\\properties\\service.properties");
 				
 				if (!util.DateTime.isDate(props.getProperty("gameday.date")))
-					throw new ActorException("InvalidDate - gameday.date");
+					throw new PropertyException("InvalidDate - gameday.date");
 				
 				if (!util.Numeric.isNumber(props.getProperty("xmlstats.delay")))
-					throw new ActorException("InvalidNumber - xmlstats.delay");
+					throw new PropertyException("InvalidNumber - xmlstats.delay");
 			}
 			catch (FileNotFoundException e) {
-				throw new ActorException("FileNotFoundException");
+				throw new PropertyException("FileNotFoundException");
 			}
 			catch (IOException e) {
-				throw new ActorException("IOException");
+				throw new PropertyException("IOException");
 			}
 		}
 		return props;
@@ -57,7 +57,7 @@ public class Property extends UntypedActor {
 				getSender().tell(serviceProps, getSelf());
 				getContext().stop(getSelf());
 			} 
-			catch (ActorException e) {
+			catch (PropertyException e) {
 				listener.tell(e, getSelf());
 			}
 		} 
