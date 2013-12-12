@@ -1,39 +1,49 @@
 package actor;
 
-import static actor.ActorApi.Service;
+import static actor.ActorApi.InitializeStart;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
 import util.FileIO;
-import actor.ActorApi.PropertyException;
+import actor.ActorApi.ActorException;
 import actor.ActorApi.ServiceProps;
+import akka.actor.ActorRef;
 import akka.actor.UntypedActor;
 
 public class Property extends UntypedActor {
 	private Properties props;
-	private Properties getProperties() throws PropertyException {
+	private ActorRef listener;
+	
+	public Property(ActorRef listener) {
+		this.listener = listener;
+	}
+	
+	private Properties getProperties() throws ActorException {
 		if (props == null) {
 			try {
 				String path = FileIO.getPropertyPath("config.basketball");
 				props = FileIO.loadProperties(path + "\\properties\\service.properties");
 				
-				if (!util.DateTime.isValidDate(props.getProperty("gameday.date")))
-					throw new PropertyException("InvalidDate");
+				if (!util.DateTime.isDate(props.getProperty("gameday.date")))
+					throw new ActorException("InvalidDate - gameday.date");
+				
+				if (!util.Numeric.isNumber(props.getProperty("xmlstats.delay")))
+					throw new ActorException("InvalidNumber - xmlstats.delay");
 			}
 			catch (FileNotFoundException e) {
-				throw new PropertyException("FileNotFoundException");
+				throw new ActorException("FileNotFoundException");
 			}
 			catch (IOException e) {
-				throw new PropertyException("IOException");
+				throw new ActorException("IOException");
 			}
 		}
 		return props;
 	}
 
 	public void onReceive(Object message) {
-		if (message.equals(Service)) {
+		if (message.equals(InitializeStart)) {
 			Properties props;
 			try {
 				props = getProperties();
@@ -42,12 +52,13 @@ public class Property extends UntypedActor {
 				String accessToken = props.getProperty("xmlstats.accessToken");
 				String userAgentName = props.getProperty("xmlstats.userAgentName");
 				String urlBoxScore = props.getProperty("xmlstats.urlBoxScore");
-				ServiceProps serviceProps = new ServiceProps(date, team, accessToken, userAgentName, urlBoxScore);
+				String delay = props.getProperty("xmlstats.delay");
+				ServiceProps serviceProps = new ServiceProps(date, team, accessToken, userAgentName, urlBoxScore, delay);
 				getSender().tell(serviceProps, getSelf());
 				getContext().stop(getSelf());
 			} 
-			catch (PropertyException e) {
-				getSender().tell(e, getSelf());
+			catch (ActorException e) {
+				listener.tell(e, getSelf());
 			}
 		} 
 		else {

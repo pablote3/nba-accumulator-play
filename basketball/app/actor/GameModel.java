@@ -1,13 +1,14 @@
 package actor;
 
-import static actor.ActorApi.InitXmlStats;
-import static actor.ActorApi.Complete;
+import static actor.ActorApi.WorkStart;
+import static actor.ActorApi.NextGame;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import models.entity.BoxScore;
 import models.entity.Game;
+import actor.ActorApi.ActorException;
 import actor.ActorApi.GameId;
 import actor.ActorApi.GameIds;
 import actor.ActorApi.ServiceProps;
@@ -16,22 +17,30 @@ import akka.actor.Props;
 import akka.actor.UntypedActor;
 
 public class GameModel extends UntypedActor {
-	private final ActorRef xmlStatsActor = getContext().actorOf(Props.create(XmlStats.class), "xmlStatsModel");
-	private ActorRef masterActor;
+	private ActorRef listener;
+	private final ActorRef xmlStats = getContext().actorOf(Props.create(XmlStats.class, listener));
+	private ActorRef gameController;
 	private String propDate;
 	private String propTeam;
+	
+	public GameModel(ActorRef listener) {
+		this.listener = listener;
+	}
 
 	public void onReceive(Object message) {
 		if (message instanceof ServiceProps) {
-			masterActor = getSender();
 			propDate = ((ServiceProps) message).date;
 			propTeam = ((ServiceProps) message).team;			
-			xmlStatsActor.tell(message, getSelf());
+			xmlStats.tell(message, getSender());
 		}
-		else if (message.equals(InitXmlStats)) {					
+		else if (message.equals(WorkStart)) {					
 			List<Long> games;
+			gameController = getSender();
 			if (propTeam == null) {
 				games = Game.findIdsByDate(propDate);
+				if (games == null) {
+					listener.tell(new ActorException("GamesNotFound"), getSelf());
+				}
 			}
 			else {
 				games = new ArrayList<Long>();
@@ -39,14 +48,17 @@ public class GameModel extends UntypedActor {
 				if (id != null) {
 					games.add(id);
 				}
+				else {
+					listener.tell(new ActorException("GameNotFound"), getSelf());
+				}
 			}
 			GameIds ids = new GameIds(games);
-			masterActor.tell(ids, getSender());
+			getSender().tell(ids, getSelf());
 		}
 		else if(message instanceof GameId) {
 			GameId gameId = (GameId)message;			
 			Game game = Game.findById(gameId.game);
-			xmlStatsActor.tell(game, getSelf());
+			xmlStats.tell(game, getSelf());
 		}
 		else if(message instanceof Game) {
 			Game game = (Game)message;
@@ -54,7 +66,7 @@ public class GameModel extends UntypedActor {
 			BoxScore homeBoxScore = game.getBoxScores().get(1);
 			System.out.println(awayBoxScore.getTeam().getShortName() +  " " + awayBoxScore.getPoints() + " " + homeBoxScore.getTeam().getShortName() +  " " + homeBoxScore.getPoints());
 //		  	game.update();
-		  	masterActor.tell(Complete, getSender());
+		  	gameController.tell(NextGame, getSelf());
 		}		
 		else {
 			unhandled(message);

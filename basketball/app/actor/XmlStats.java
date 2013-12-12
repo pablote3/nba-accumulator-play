@@ -1,6 +1,6 @@
 package actor;
 
-import static actor.ActorApi.InitXmlStats;
+import static actor.ActorApi.InitializeComplete;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +19,9 @@ import models.entity.Game.Status;
 import models.partial.XmlStat;
 import util.DateTime;
 import xmlStats.GameJsonHelper;
+import actor.ActorApi.ActorException;
 import actor.ActorApi.ServiceProps;
+import akka.actor.ActorRef;
 import akka.actor.UntypedActor;
 
 public class XmlStats extends UntypedActor {
@@ -30,13 +32,18 @@ public class XmlStats extends UntypedActor {
 	private String accessToken;
 	private String userAgentName;
 	private String urlBoxScore;
+	private ActorRef listener;
+	
+	public XmlStats(ActorRef listener) {
+		this.listener = listener;
+	}
 
 	public void onReceive(Object message) {
 		if (message instanceof ServiceProps) {
 			accessToken = "Bearer " + ((ServiceProps) message).accessToken;
 			userAgentName = ((ServiceProps) message).userAgentName;
 			urlBoxScore = ((ServiceProps) message).urlBoxScore;
-			getSender().tell(InitXmlStats, getSelf());
+			getSender().tell(InitializeComplete, getSelf());
 		}
 		else if(message instanceof Game) {
 			URL url;
@@ -87,10 +94,10 @@ public class XmlStats extends UntypedActor {
 	            }
 			} 
 			catch (MalformedURLException e) {
-				e.printStackTrace();
+				listener.tell(new ActorException("MalformedURLException"), getSelf());
 			} 
 			catch (IOException e) {
-				e.printStackTrace();
+			listener.tell(new ActorException("IOException"), getSelf());
 			}
 		}
 		else {
