@@ -2,6 +2,8 @@ package actor;
 
 import java.util.List;
 
+import models.entity.Game;
+
 public interface ActorApi {
 	public static final Object Start = "Start";
 	public static final Object InitializeStart = "InitializeStart";
@@ -68,6 +70,22 @@ public interface ActorApi {
 		public final Long game;
 		
 		public GameId(Long game) {
+			this.game = game;
+		}
+	}
+	
+	public static class ScheduleGame {
+		public final Game game;
+		
+		public ScheduleGame(Game game) {
+			this.game = game;
+		}
+	}
+	
+	public static class CompleteGame {
+		public final Game game;
+		
+		public CompleteGame(Game game) {
 			this.game = game;
 		}
 	}

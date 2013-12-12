@@ -8,9 +8,11 @@ import java.util.List;
 
 import models.entity.BoxScore;
 import models.entity.Game;
+import actor.ActorApi.CompleteGame;
 import actor.ActorApi.GameId;
 import actor.ActorApi.GameIds;
 import actor.ActorApi.ModelException;
+import actor.ActorApi.ScheduleGame;
 import actor.ActorApi.ServiceProps;
 import akka.actor.ActorRef;
 import akka.actor.Props;
@@ -58,10 +60,11 @@ public class GameModel extends UntypedActor {
 		else if(message instanceof GameId) {
 			GameId gameId = (GameId)message;			
 			Game game = Game.findById(gameId.game);
-			xmlStats.tell(game, getSelf());
+			ScheduleGame sg = new ScheduleGame(game);
+			xmlStats.tell(sg, getSelf());
 		}
-		else if(message instanceof Game) {
-			Game game = (Game)message;
+		else if(message instanceof CompleteGame) {
+			Game game = ((CompleteGame)message).game;
 			BoxScore awayBoxScore = game.getBoxScores().get(0);
 			BoxScore homeBoxScore = game.getBoxScores().get(1);
 			System.out.println(awayBoxScore.getTeam().getShortName() +  " " + awayBoxScore.getPoints() + " " + homeBoxScore.getTeam().getShortName() +  " " + homeBoxScore.getPoints());

@@ -16,6 +16,8 @@ import models.entity.Game.Status;
 import models.partial.XmlStat;
 import util.DateTime;
 import xmlStats.GameJsonHelper;
+import actor.ActorApi.CompleteGame;
+import actor.ActorApi.ScheduleGame;
 import actor.ActorApi.ServiceProps;
 import actor.ActorApi.XmlStatsException;
 import akka.actor.ActorRef;
@@ -45,10 +47,10 @@ public class XmlStats extends UntypedActor {
 			urlBoxScore = ((ServiceProps) message).urlBoxScore;
 			getSender().tell(InitializeComplete, getSelf());
 		}
-		else if(message instanceof Game) {
+		else if(message instanceof ScheduleGame) {
 			URL url;
 			InputStream baseJson = null;
-			Game game = (Game)message;
+			Game game = ((ScheduleGame)message).game;
 			BoxScore awayBoxScore = game.getBoxScores().get(0);
 			BoxScore homeBoxScore = game.getBoxScores().get(1);
 			
@@ -90,7 +92,8 @@ public class XmlStats extends UntypedActor {
 	    		  		homeBoxScore.setResult(Result.win);
 	    		  		awayBoxScore.setResult(Result.loss);
 	    		  	}
-	    		  	getSender().tell(game, getSelf());
+	    		  	CompleteGame cg = new CompleteGame(game);
+	    		  	getSender().tell(cg, getSelf());
 	            }
 			} 
 			catch (MalformedURLException e) {
