@@ -42,17 +42,17 @@ public class GameController extends UntypedActor {
 		}
 		else if (message.equals(NextGame)) {
 			if (i < ids.size()) {
-				id = ids.get(i);
-				gid = new GameId(id);
-				gameModel.tell(gid, getSelf());
-				i++;
-
 				try {
 				    Thread.sleep(nbrSecondsDelay);
 				} 
 				catch(InterruptedException ex) {
 				    Thread.currentThread().interrupt();
 				}
+				
+				id = ids.get(i);
+				gid = new GameId(id);
+				gameModel.tell(gid, getSelf());
+				i++;
 			}
 			else {
 				master.tell(WorkComplete, getSelf());
