@@ -28,25 +28,23 @@ public class GameAction {
 			if (message instanceof PropertyException) {
 				PropertyException pe = (PropertyException) message;
 				System.out.println("Property Exception " + pe.getMessage());
-				getContext().system().shutdown();
 			}
-			if (message instanceof ModelException) {
+			else if (message instanceof ModelException) {
 				ModelException pe = (ModelException) message;
 				System.out.println("Model Exception " + pe.getMessage());
-				getContext().system().shutdown();
 			}
-			if (message instanceof XmlStatsException) {
+			else if (message instanceof XmlStatsException) {
 				XmlStatsException pe = (XmlStatsException) message;
 				System.out.println("XmlStats Exception " + pe.getMessage());
-				getContext().system().shutdown();
 			}
 			else if (message.equals(Finish)) {
 				System.out.println("Mission Compete");
-				getContext().system().shutdown();
 			}
 			else {
 				unhandled(message);
 			}
+			getContext().system().shutdown();
+			System.exit(0);
 		}
 	}
 }
