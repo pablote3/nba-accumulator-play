@@ -179,10 +179,13 @@ public class Game extends Model {
 	    query.where().ilike("date", date + "%");
 	    
 	    List<Game> games = query.findList();
-	    List<Long> gameIds = new ArrayList<Long>();
-	    for (int i = 0; i < games.size(); i++) {
-			gameIds.add(games.get(i).getId());
-		}
+	    List<Long> gameIds = null;
+	    if (games.size() > 0) {
+	    	gameIds = new ArrayList<Long>();
+		    for (int i = 0; i < games.size(); i++) {
+				gameIds.add(games.get(i).getId());
+			}
+	    }
 		return gameIds;
 	}
 	
