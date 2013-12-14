@@ -100,7 +100,10 @@ public class XmlStats extends UntypedActor {
 				listener.tell(new XmlStatsException("MalformedURLException"), getSelf());
 			} 
 			catch (IOException e) {
-			listener.tell(new XmlStatsException("IOException"), getSelf());
+				listener.tell(new XmlStatsException("IOException"), getSelf());
+			}
+			catch (Exception e) {
+				System.out.println("Exception");
 			}
 		}
 		else {
