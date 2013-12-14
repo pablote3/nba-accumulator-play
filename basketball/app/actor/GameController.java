@@ -14,8 +14,7 @@ import akka.actor.Props;
 import akka.actor.UntypedActor;
 
 public class GameController extends UntypedActor {
-	private ActorRef listener;
-	private final ActorRef gameModel = getContext().actorOf(Props.create(GameModel.class, listener), "gameModel");
+	private final ActorRef gameModel;
 	private ActorRef master;
 	private int nbrSecondsDelay;
 	private List<Long> ids;
@@ -24,7 +23,7 @@ public class GameController extends UntypedActor {
 	private GameId gid;
 
 	public GameController(ActorRef listener) {
-		this.listener = listener;
+		gameModel = getContext().actorOf(Props.create(GameModel.class, listener), "gameModel");
 	}
 
 	public void onReceive(Object message) {

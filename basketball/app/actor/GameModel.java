@@ -20,13 +20,14 @@ import akka.actor.UntypedActor;
 
 public class GameModel extends UntypedActor {
 	private ActorRef listener;
-	private final ActorRef xmlStats = getContext().actorOf(Props.create(XmlStats.class, listener), "xmlStats");
+	private final ActorRef xmlStats;
 	private ActorRef gameController;
 	private String propDate;
 	private String propTeam;
 	
 	public GameModel(ActorRef listener) {
 		this.listener = listener;
+		xmlStats = getContext().actorOf(Props.create(XmlStats.class, listener), "xmlStats");
 	}
 
 	public void onReceive(Object message) {
@@ -42,7 +43,7 @@ public class GameModel extends UntypedActor {
 				if (propTeam == null) {
 					games = Game.findIdsByDate(propDate);
 					if (games == null) {
-						listener.tell(new ModelException("GamesNotFound"), getSelf());
+						throw new NullPointerException();
 					}
 				}
 				else {
@@ -51,13 +52,10 @@ public class GameModel extends UntypedActor {
 					if (id != null) {
 						games.add(id);
 					}
-					else {
-						listener.tell(new ModelException("GameNotFound"), getSelf());
-					}
 				}
 			} catch (NullPointerException e) {
 				getContext().stop(getSelf());
-				ModelException me = new ModelException("GamesNotFound");
+				ModelException me = new ModelException("NoGamesFound");
 				listener.tell(me, getSelf());
 			}
 			GameIds ids = new GameIds(games);

@@ -13,10 +13,11 @@ import akka.actor.UntypedActor;
 
 public class Master extends UntypedActor {
 	private ActorRef listener;
-	private final ActorRef gameController = getContext().actorOf(Props.create(GameController.class, listener), "gameController");
+	private final ActorRef gameController;
 	
 	public Master(ActorRef listener) {
 		this.listener = listener;
+		gameController = getContext().actorOf(Props.create(GameController.class, listener), "gameController");
 	}
 
 	public void onReceive(Object message) {
