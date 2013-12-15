@@ -1,4 +1,4 @@
-package xmlStats;
+package json;
 
 import java.util.ArrayList;
 import java.util.List;

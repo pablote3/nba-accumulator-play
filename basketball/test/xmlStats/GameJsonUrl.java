@@ -12,6 +12,9 @@ import java.net.URLConnection;
 import java.util.Properties;
 import java.util.zip.GZIPInputStream;
 
+import json.GameJsonHelper;
+import json.XmlStat;
+
 import models.entity.BoxScore;
 import models.entity.BoxScore.Location;
 import models.entity.BoxScore.Result;
@@ -19,7 +22,6 @@ import models.entity.Game;
 import models.entity.Game.SeasonType;
 import models.entity.Game.Status;
 import models.entity.Team;
-import models.partial.XmlStat;
 
 import org.junit.Ignore;
 import org.junit.Test;

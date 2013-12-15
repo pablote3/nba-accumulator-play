@@ -9,6 +9,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import json.GameJsonHelper;
+import json.XmlStat;
+
 import models.entity.BoxScore;
 import models.entity.BoxScore.Location;
 import models.entity.BoxScore.Result;
@@ -16,7 +19,6 @@ import models.entity.Game;
 import models.entity.Game.SeasonType;
 import models.entity.Game.Status;
 import models.entity.Team;
-import models.partial.XmlStat;
 
 import org.junit.Test;
 

@@ -9,13 +9,14 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.zip.GZIPInputStream;
 
+import json.GameJsonHelper;
+import json.XmlStat;
+
 import models.entity.BoxScore;
 import models.entity.BoxScore.Result;
 import models.entity.Game;
 import models.entity.Game.Status;
-import models.partial.XmlStat;
 import util.DateTime;
-import xmlStats.GameJsonHelper;
 import actor.ActorApi.CompleteGame;
 import actor.ActorApi.ScheduleGame;
 import actor.ActorApi.ServiceProps;

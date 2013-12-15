@@ -1,4 +1,4 @@
-package models.partial;
+package json;
 
 import models.entity.BoxScore;
 import models.entity.Game;
