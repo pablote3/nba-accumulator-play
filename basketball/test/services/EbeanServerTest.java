@@ -2,9 +2,6 @@ package services;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import models.entity.Team;
-
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.avaje.ebean.EbeanServer;
@@ -16,9 +13,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 public class EbeanServerTest {
-	@Ignore
     @Test
-    //fails running test suite, new session
     public void createEbeanServer() {
 		ServerConfig config = new ServerConfig();
 		config.setName("test"); 
@@ -45,9 +40,7 @@ public class EbeanServerTest {
         assertThat(row.getInteger("count")).isEqualTo(31);
     }
     
-	@Ignore
     @Test
-    //fails running test suite, new session
     public void invokeEbeanServerUsingSqlQuery() {
 		Injector injector = Guice.createInjector(new InjectorModule());		
 		EbeanServerService service = injector.getInstance(EbeanServerServiceImpl.class);		
@@ -57,11 +50,4 @@ public class EbeanServerTest {
 		SqlRow row = server.createSqlQuery(sql).findUnique();
         assertThat(row.getInteger("count")).isEqualTo(31);
     }
-    
-    @Test
-    public void invokeEbeanServerUsingTeamFinder() {
-		Team team = Team.findByKey("key", "sacramento-kings");
-        assertThat(team.getAbbr()).isEqualTo("SAC");
-    }
-    
 }
