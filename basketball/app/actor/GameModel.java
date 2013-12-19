@@ -8,6 +8,7 @@ import java.util.List;
 
 import models.entity.BoxScore;
 import models.entity.Game;
+import models.entity.Game.ProcessingType;
 import actor.ActorApi.CompleteGame;
 import actor.ActorApi.GameId;
 import actor.ActorApi.GameIds;
@@ -24,6 +25,7 @@ public class GameModel extends UntypedActor {
 	private ActorRef gameController;
 	private String propDate;
 	private String propTeam;
+	private ProcessingType processingType;
 	
 	public GameModel(ActorRef listener) {
 		this.listener = listener;
@@ -33,7 +35,8 @@ public class GameModel extends UntypedActor {
 	public void onReceive(Object message) {
 		if (message instanceof ServiceProps) {
 			propDate = ((ServiceProps) message).date;
-			propTeam = ((ServiceProps) message).team;			
+			propTeam = ((ServiceProps) message).team;		
+			processingType = Game.ProcessingType.valueOf(((ServiceProps) message).processType);
 			xmlStats.tell(message, getSender());
 		}
 		else if (message.equals(WorkStart)) {					
@@ -41,14 +44,14 @@ public class GameModel extends UntypedActor {
 			gameController = getSender();
 			try {
 				if (propTeam == null) {
-					games = Game.findIdsByDate(propDate);
+					games = Game.findIdsByDate(propDate, processingType);
 					if (games == null) {
 						throw new NullPointerException();
 					}
 				}
 				else {
 					games = new ArrayList<Long>();
-					Long id = Game.findIdByDateTeam(propDate, propTeam);
+					Long id = Game.findIdByDateTeam(propDate, propTeam, processingType);
 					if (id != null) {
 						games.add(id);
 					}
@@ -63,7 +66,7 @@ public class GameModel extends UntypedActor {
 		}
 		else if(message instanceof GameId) {
 			GameId gameId = (GameId)message;			
-			Game game = Game.findById(gameId.game);
+			Game game = Game.findById(gameId.game, processingType);
 			ScheduleGame sg = new ScheduleGame(game);
 			xmlStats.tell(sg, getSelf());
 		}
@@ -72,7 +75,7 @@ public class GameModel extends UntypedActor {
 			BoxScore awayBoxScore = game.getBoxScores().get(0);
 			BoxScore homeBoxScore = game.getBoxScores().get(1);
 			System.out.println(awayBoxScore.getTeam().getShortName() +  " " + awayBoxScore.getPoints() + " " + homeBoxScore.getTeam().getShortName() +  " " + homeBoxScore.getPoints());
-//		  	game.update();
+		  	Game.update(game, processingType);
 		  	gameController.tell(NextGame, getSelf());
 		}		
 		else {

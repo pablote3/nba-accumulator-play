@@ -22,10 +22,10 @@ import javax.persistence.Version;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import services.EbeanServerService;
-import services.EbeanServerServiceImpl;
 import services.InjectorModule;
 import util.DateTime;
 
+import com.avaje.ebean.Ebean;
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.Page;
 import com.avaje.ebean.Query;
@@ -38,7 +38,7 @@ import com.google.inject.Injector;
 public class Game extends Model {
 	private static final long serialVersionUID = 1L;
 	private static Injector injector = Guice.createInjector(new InjectorModule());
-	private static EbeanServerService service = injector.getInstance(EbeanServerServiceImpl.class);	
+	private static EbeanServerService service = injector.getInstance(EbeanServerService.class);	
 	private static EbeanServer ebeanServer = service.createEbeanServer();
 
 	@Id
@@ -123,7 +123,7 @@ public class Game extends Model {
         @EnumValue("Completed") completed,
         @EnumValue("Postponed") postponed,
         @EnumValue("Suspended") suspended,
-        @EnumValue("Cancelled") cancelled,
+        @EnumValue("Cancelled") cancelled
     }
 	
 	@Required
@@ -141,31 +141,47 @@ public class Game extends Model {
 	public enum SeasonType {
         @EnumValue("Pre") pre,
         @EnumValue("Regular") regular,
-        @EnumValue("Post") post,
+        @EnumValue("Post") post
+    }
+	
+	public enum ProcessingType {
+        @EnumValue("Batch") batch,
+        @EnumValue("Online") online
     }
 	
 	public static void create(Game game) {
 	  	game.save();
 	}
+	
+	public static void update(Game game, ProcessingType processingType) {
+		if (processingType.equals(ProcessingType.batch))
+			ebeanServer.update(game);
+		else
+			Ebean.update(game);
+	}
 	  
-	public static void delete(Long id) {
-		Game game = Game.findById(id);
+	public static void delete(Long id, ProcessingType processingType) {
+		Game game = Game.findById(id, processingType);
 	  	game.delete();
 	}
 	  
-	public static Game findById(Long id) {
-		Game game = ebeanServer.find(Game.class, id);
+	public static Game findById(Long id, ProcessingType processingType) {
+		Game game;
+		if (processingType.equals(ProcessingType.batch))
+			game = ebeanServer.find(Game.class, id);
+		else
+			game = Ebean.find(Game.class, id);
 		return game;
 	}
 	
 	public static List<Game> findAll() {
-		Query<Game> query = ebeanServer.find(Game.class);
+		Query<Game> query = Ebean.find(Game.class);
 		List<Game> games = query.findList();
 	    return games;
 	}
 	
 	public static List<Game> findByDate(String date) {
-	  	Query<Game> query = ebeanServer.find(Game.class);
+	  	Query<Game> query = Ebean.find(Game.class);
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
 	    query.where().ilike("date", date + "%");
@@ -174,10 +190,14 @@ public class Game extends Model {
 	    return games;
 	}
 	
-	public static List<Long> findIdsByDate(String date) {
-	  	Query<Game> query = ebeanServer.find(Game.class);
+	public static List<Long> findIdsByDate(String date, ProcessingType processingType) {
+	  	Query<Game> query;
+	  	if (processingType.equals(ProcessingType.batch))
+	  		query = ebeanServer.find(Game.class);
+	  	else
+	  		query = Ebean.find(Game.class);
+	  	
 	    query.where().ilike("date", date + "%");
-	    
 	    List<Game> games = query.findList();
 	    List<Long> gameIds = null;
 	    if (games.size() > 0) {
@@ -190,8 +210,7 @@ public class Game extends Model {
 	}
 	
 	public static Game findByDateTeam(String date, String teamKey) {
-		//Returns only box score of team queried
-	  	Query<Game> query = ebeanServer.find(Game.class);
+	  	Query<Game> query = Ebean.find(Game.class);
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
 	    query.where().ilike("t0.date", date + "%");
@@ -201,8 +220,12 @@ public class Game extends Model {
 	    return game;
 	}
 	
-	public static Long findIdByDateTeam(String date, String teamKey) {
-	  	Query<Game> query = ebeanServer.find(Game.class);
+	public static Long findIdByDateTeam(String date, String teamKey, ProcessingType processingType) {
+	  	Query<Game> query;
+	  	if (processingType.equals(ProcessingType.batch))
+	  		query = ebeanServer.find(Game.class);
+	  	else
+	  		query = Ebean.find(Game.class);
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
 	    query.where().ilike("t0.date", date + "%");
@@ -213,13 +236,13 @@ public class Game extends Model {
 	}
 
 	public static Page<Game> page(int page, int pageSize) {
-    	Query<Game> query = ebeanServer.find(Game.class);
+    	Query<Game> query = Ebean.find(Game.class);
     	Page<Game> p = query.findPagingList(pageSize).getPage(page);
     	return p;
     }
 	
 	public static Page<Game> pageByDate(int page, int pageSize, String gameDate) {
-	  	Query<Game> query = ebeanServer.find(Game.class);
+	  	Query<Game> query = Ebean.find(Game.class);
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
 	    query.where().ilike("date", gameDate + "%");

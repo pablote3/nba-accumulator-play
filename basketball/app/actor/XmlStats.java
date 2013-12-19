@@ -15,6 +15,7 @@ import json.XmlStat;
 import models.entity.BoxScore;
 import models.entity.BoxScore.Result;
 import models.entity.Game;
+import models.entity.Game.ProcessingType;
 import models.entity.Game.Status;
 import util.DateTime;
 import actor.ActorApi.CompleteGame;
@@ -35,6 +36,7 @@ public class XmlStats extends UntypedActor {
 	private String accessToken;
 	private String userAgentName;
 	private String urlBoxScore;
+	private ProcessingType processingType;
 	private ActorRef listener;
 	
 	public XmlStats(ActorRef listener) {
@@ -46,6 +48,7 @@ public class XmlStats extends UntypedActor {
 			accessToken = "Bearer " + ((ServiceProps) message).accessToken;
 			userAgentName = ((ServiceProps) message).userAgentName;
 			urlBoxScore = ((ServiceProps) message).urlBoxScore;
+			processingType = Game.ProcessingType.valueOf(((ServiceProps) message).processType);
 			getSender().tell(InitializeComplete, getSelf());
 		}
 		else if(message instanceof ScheduleGame) {
@@ -77,7 +80,7 @@ public class XmlStats extends UntypedActor {
 	    	        XmlStat xmlStat = mapper.readValue(baseJson, XmlStat.class);
 	    	        
 	    	        game.setStatus(Status.completed);
-	    	        game.setGameOfficials(GameJsonHelper.getGameOfficials(xmlStat.officials));
+	    	        game.setGameOfficials(GameJsonHelper.getGameOfficials(xmlStat.officials, processingType));
 	    	      
 	    	        awayBoxScore.setPeriodScores(GameJsonHelper.getPeriodScores(xmlStat.away_period_scores));
 	    	        GameJsonHelper.getBoxScoreStats(awayBoxScore, xmlStat.away_totals);

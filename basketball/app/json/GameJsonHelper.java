@@ -4,19 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import models.entity.BoxScore;
+import models.entity.Game.ProcessingType;
 import models.entity.GameOfficial;
 import models.entity.Official;
 import models.entity.PeriodScore;
 
 public class GameJsonHelper {
    
-	public static List<GameOfficial> getGameOfficials(Official[] officials) {
+	public static List<GameOfficial> getGameOfficials(Official[] officials, ProcessingType processingType) {
     	List<GameOfficial> gameOfficials = new ArrayList<GameOfficial>();
 	    GameOfficial gameOfficial;
 	    Official official;
 	    
         for (int i = 0; i < officials.length; i++) {
-      	  official = Official.findByName(officials[i].getLastName(), officials[i].getFirstName());
+      	  official = Official.findByName(officials[i].getLastName(), officials[i].getFirstName(), processingType);
       	  gameOfficial = new GameOfficial();
       	  gameOfficial.setOfficial(official);
       	  gameOfficials.add(gameOfficial);

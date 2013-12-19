@@ -20,14 +20,16 @@ public interface ActorApi {
 		public final String userAgentName;
 		public final String urlBoxScore;
 		public final String delay;
+		public final String processType;
 		
-		public ServiceProps(String date, String team, String accessToken, String userAgentName, String urlBoxScore, String delay) {
+		public ServiceProps(String date, String team, String accessToken, String userAgentName, String urlBoxScore, String delay, String processType) {
 			this.date = date;
 			this.team = team;
 			this.accessToken = accessToken;
 			this.userAgentName = userAgentName;
 			this.urlBoxScore = urlBoxScore;
 			this.delay = delay;
+			this.processType = processType;
 		}			
 		public String toString() {
 			return String.format("%s(%s)", getClass().getSimpleName(), date, team);
