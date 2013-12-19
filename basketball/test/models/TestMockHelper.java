@@ -7,18 +7,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import models.entity.BoxScore;
-import models.entity.BoxScore.Location;
-import models.entity.BoxScore.Result;
-import models.entity.Game;
-import models.entity.Game.SeasonType;
-import models.entity.Game.Status;
-import models.entity.Team.Conference;
-import models.entity.Team.Division;
-import models.entity.GameOfficial;
-import models.entity.Official;
-import models.entity.PeriodScore;
-import models.entity.Team;
+import models.BoxScore.Location;
+import models.BoxScore.Result;
+import models.Game.SeasonType;
+import models.Game.Status;
+import models.Team.Conference;
+import models.Team.Division;
 
 public class TestMockHelper {
 

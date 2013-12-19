@@ -1,9 +1,9 @@
 package json;
 
-import models.entity.BoxScore;
-import models.entity.Game;
-import models.entity.Official;
-import models.entity.Team;
+import models.BoxScore;
+import models.Game;
+import models.Official;
+import models.Team;
 
 public class XmlStat {
 	public Team away_team;

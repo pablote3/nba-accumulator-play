@@ -9,7 +9,6 @@ import java.util.List;
 import javax.persistence.PersistenceException;
 
 
-import models.entity.Team;
 
 import org.junit.Test;
 

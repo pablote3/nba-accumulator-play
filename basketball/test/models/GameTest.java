@@ -10,13 +10,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import models.entity.BoxScore;
-import models.entity.BoxScore.Location;
-import models.entity.Game;
-import models.entity.Game.ProcessingType;
-import models.entity.Game.SeasonType;
-import models.entity.Game.Status;
-import models.entity.Team;
+import models.BoxScore.Location;
+import models.Game.ProcessingType;
+import models.Game.SeasonType;
+import models.Game.Status;
 
 import org.junit.Test;
 

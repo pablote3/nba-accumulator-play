@@ -1,4 +1,4 @@
-package models.entity;
+package models;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
-import models.entity.Game.ProcessingType;
+import models.Game.ProcessingType;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;

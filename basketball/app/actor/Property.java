@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
-import models.entity.Game;
+import models.Game;
 
 import util.FileIO;
 import actor.ActorApi.PropertyException;

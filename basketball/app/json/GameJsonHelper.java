@@ -3,11 +3,11 @@ package json;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.entity.BoxScore;
-import models.entity.Game.ProcessingType;
-import models.entity.GameOfficial;
-import models.entity.Official;
-import models.entity.PeriodScore;
+import models.BoxScore;
+import models.GameOfficial;
+import models.Official;
+import models.PeriodScore;
+import models.Game.ProcessingType;
 
 public class GameJsonHelper {
    

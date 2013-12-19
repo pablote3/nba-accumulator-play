@@ -1,4 +1,4 @@
-@(id: Long, teamForm: Form[models.entity.Team])
+@(id: Long, teamForm: Form[models.Team])
 
 @import helper._
 
@@ -26,13 +26,13 @@
             )
             @helper.select(
 				teamForm("conference"), 
- 				options(models.entity.Team.Conference.values().toSeq.map(_.toString)), 
+ 				options(models.Team.Conference.values().toSeq.map(_.toString)), 
  				'_label -> "Conference",
  				'_showConstraints -> false
  			)
             @helper.select(
 				teamForm("division"), 
- 				options(models.entity.Team.Division.values().toSeq.map(_.toString)), 
+ 				options(models.Team.Division.values().toSeq.map(_.toString)), 
  				'_label -> "Division",
  				'_showConstraints -> false
  			)

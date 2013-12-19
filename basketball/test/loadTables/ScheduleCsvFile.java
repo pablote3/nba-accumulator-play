@@ -15,10 +15,12 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
-import models.entity.*;
-import models.entity.BoxScore.Location;
-import models.entity.Game.SeasonType;
-import models.entity.Game.Status;
+import models.BoxScore;
+import models.BoxScore.Location;
+import models.Game;
+import models.Game.SeasonType;
+import models.Game.Status;
+import models.Team;
 
 import org.junit.Ignore;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package models.entity;
+package models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.TableGenerator;
 
-import models.entity.Game.ProcessingType;
+import models.Game.ProcessingType;
 
 import play.db.ebean.Model;
 import services.EbeanServerService;

@@ -1,7 +1,7 @@
 package controllers;
 
 import static play.data.Form.form;
-import models.entity.Team;
+import models.Team;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;

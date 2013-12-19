@@ -1,4 +1,4 @@
-package models.entity;
+package models;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;

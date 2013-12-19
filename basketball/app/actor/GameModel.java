@@ -6,9 +6,9 @@ import static actor.ActorApi.WorkStart;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.entity.BoxScore;
-import models.entity.Game;
-import models.entity.Game.ProcessingType;
+import models.BoxScore;
+import models.Game;
+import models.Game.ProcessingType;
 import actor.ActorApi.CompleteGame;
 import actor.ActorApi.GameId;
 import actor.ActorApi.GameIds;

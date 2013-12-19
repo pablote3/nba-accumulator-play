@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
-import models.entity.Official;
+import models.Official;
 
 import org.junit.Ignore;
 import org.junit.Test;

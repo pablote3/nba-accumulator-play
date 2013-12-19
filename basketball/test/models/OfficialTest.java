@@ -8,8 +8,7 @@ import java.util.List;
 
 import javax.persistence.PersistenceException;
 
-import models.entity.Official;
-import models.entity.Game.ProcessingType;
+import models.Game.ProcessingType;
 
 import org.junit.Test;
 

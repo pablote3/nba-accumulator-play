@@ -2,7 +2,7 @@ package actor;
 
 import java.util.List;
 
-import models.entity.Game;
+import models.Game;
 
 public interface ActorApi {
 	public static final Object Start = "Start";

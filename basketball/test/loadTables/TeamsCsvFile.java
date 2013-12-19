@@ -10,9 +10,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import models.entity.*;
-import models.entity.Team.Conference;
-import models.entity.Team.Division;
+import models.Team;
+import models.Team.Conference;
+import models.Team.Division;
 
 import org.junit.Ignore;
 import org.junit.Test;

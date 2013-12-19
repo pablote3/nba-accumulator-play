@@ -15,14 +15,14 @@ import java.util.zip.GZIPInputStream;
 import json.GameJsonHelper;
 import json.XmlStat;
 
-import models.entity.BoxScore;
-import models.entity.BoxScore.Location;
-import models.entity.BoxScore.Result;
-import models.entity.Game;
-import models.entity.Game.ProcessingType;
-import models.entity.Game.SeasonType;
-import models.entity.Game.Status;
-import models.entity.Team;
+import models.BoxScore;
+import models.Game;
+import models.Team;
+import models.BoxScore.Location;
+import models.BoxScore.Result;
+import models.Game.ProcessingType;
+import models.Game.SeasonType;
+import models.Game.Status;
 
 import org.junit.Ignore;
 import org.junit.Test;
