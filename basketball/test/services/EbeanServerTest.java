@@ -54,6 +54,7 @@ public class EbeanServerTest {
         assertThat(row.getInteger("count")).isEqualTo(31);
     }
     
+	@Ignore
     @Test
     public void invokeEbeanServerUsingTeamFinder() {
 		Team team = Team.findByKey("key", "sacramento-kings");
