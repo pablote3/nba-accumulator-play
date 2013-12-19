@@ -19,6 +19,7 @@ import models.entity.BoxScore;
 import models.entity.BoxScore.Location;
 import models.entity.BoxScore.Result;
 import models.entity.Game;
+import models.entity.Game.ProcessingType;
 import models.entity.Game.SeasonType;
 import models.entity.Game.Status;
 import models.entity.Team;
@@ -85,10 +86,10 @@ public class GameJsonUrl {
 				            Game.create(scheduleGame);
 				            Long gameId = scheduleGame.getId();
 				              
-				    		Game completeGame = Game.findById(gameId);
+				    		Game completeGame = Game.findById(gameId, ProcessingType.online);
 
 				    		completeGame.setStatus(Status.completed);	              
-			      		  	completeGame.setGameOfficials(GameJsonHelper.getGameOfficials(xmlStats.officials));
+			      		  	completeGame.setGameOfficials(GameJsonHelper.getGameOfficials(xmlStats.officials, ProcessingType.online));
 			      		  	
 			      		  	awayBoxScore = completeGame.getBoxScores().get(0);
 			      		  	awayBoxScore.setPeriodScores(GameJsonHelper.getPeriodScores(xmlStats.away_period_scores));
@@ -108,7 +109,7 @@ public class GameJsonUrl {
 			      		  	}
 			              
 			      		  	completeGame.update();
-			      		  	Game createGame = Game.findById(gameId);
+			      		  	Game createGame = Game.findById(gameId, ProcessingType.online);
 			              
 				            assertThat(createGame.getSeasonType()).isEqualTo(SeasonType.post);
 				            assertThat(createGame.getGameOfficials().size()).isEqualTo(3);
@@ -129,7 +130,7 @@ public class GameJsonUrl {
 				              		}
 				              	}
 			        	  	}
-				            Game.delete(createGame.getId());
+				            Game.delete(createGame.getId(), ProcessingType.online);
 			    		    baseJson.close(); 
 			    		} 
 		        	}

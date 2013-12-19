@@ -17,18 +17,30 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+import models.entity.Game.ProcessingType;
+
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import services.EbeanServerService;
+import services.EbeanServerServiceImpl;
+import services.InjectorModule;
 import util.DateTime;
 
 import com.avaje.ebean.Ebean;
+import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.Page;
 import com.avaje.ebean.Query;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 @Entity
 public class Official extends Model {
 	private static final long serialVersionUID = 1L;
+	
+	private static Injector injector = Guice.createInjector(new InjectorModule());
+	private static EbeanServerService service = injector.getInstance(EbeanServerServiceImpl.class);	
+	private static EbeanServer ebeanServer = service.createEbeanServer();
 
 	@Id
 	@TableGenerator(name="table_gen", table="seq_table", pkColumnName="seq_name", valueColumnName="seq_count", pkColumnValue="official_seq", initialValue=1)
@@ -151,6 +163,21 @@ public class Official extends Model {
 		query.where().eq("lastName", lastName);
 		query.where().eq("firstName", firstName);
 		Official official = query.findUnique();
+	    return official;
+	}
+	
+	public static Official findByName(String lastName, String firstName, ProcessingType processingType) {
+		Official official;
+		Query<Official> query; 
+		if (processingType.equals(ProcessingType.batch)) {
+			query = ebeanServer.find(Official.class);
+			query.where().eq("lastName", lastName);
+			query.where().eq("firstName", firstName);
+			official = query.findUnique();
+		}
+		else {
+			official = findByName(lastName, firstName);
+		}
 	    return official;
 	}
 	

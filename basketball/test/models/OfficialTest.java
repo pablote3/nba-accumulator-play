@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.PersistenceException;
 
 import models.entity.Official;
+import models.entity.Game.ProcessingType;
 
 import org.junit.Test;
 
@@ -44,6 +45,13 @@ public class OfficialTest {
               assertThat(official.getActive()).isTrue();
           }
         });
+    }
+    
+    @Test
+    public void findOfficialByNameBatch() {
+    	Official official = Official.findByName("Garretson", "Ron", ProcessingType.batch);
+        assertThat(official.getNumber()).isEqualTo("10");
+        assertThat(official.getActive()).isTrue();
     }
     
     @Test

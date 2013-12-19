@@ -13,6 +13,7 @@ import java.util.Locale;
 import models.entity.BoxScore;
 import models.entity.BoxScore.Location;
 import models.entity.Game;
+import models.entity.Game.ProcessingType;
 import models.entity.Game.SeasonType;
 import models.entity.Game.Status;
 import models.entity.Team;
@@ -37,13 +38,19 @@ public class GameTest {
     }
     
     @Test
-    public void findGameIdsDate() {
+    public void findGameIdsDateOnline() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  List<Long> games = Game.findIdsByDate("2012-10-31");     
+        	  List<Long> games = Game.findIdsByDate("2012-10-31", ProcessingType.online);     
               assertThat(games.size()).isEqualTo(9);
           }
         });
+    }
+    
+    @Test
+    public void findGameIdsDateBatch() {
+    	List<Long> games = Game.findIdsByDate("2012-10-31", ProcessingType.batch);     
+        assertThat(games.size()).isEqualTo(9);
     }
     
     @Test
@@ -61,11 +68,32 @@ public class GameTest {
     }
     
     @Test
-    public void findGameIdByDateTeam() {
+    public void findGameIdByDateTeamOnline() {
         running(fakeApplication(), new Runnable() {
             public void run() {
-          	  Long gameId = Game.findIdByDateTeam("2012-10-31", "sacramento-kings");
-          	  Game game = Game.findById(gameId);
+          	  Long gameId = Game.findIdByDateTeam("2012-10-31", "sacramento-kings", ProcessingType.online);
+          	  Game game = Game.findById(gameId, ProcessingType.online);
+          	  
+          	  assertThat(game.getBoxScores().size()).isEqualTo(2);
+          	  for (int i = 0; i < game.getBoxScores().size(); i++) {
+          		  BoxScore boxScore = game.getBoxScores().get(i);
+          		  if (boxScore.getLocation().equals(Location.away)) {
+          			  assertThat(boxScore.getTeam().getAbbr()).isEqualTo("SAC");
+          		  }
+          		  else if (boxScore.getLocation().equals(Location.home)) {
+          			  assertThat(boxScore.getTeam().getAbbr()).isEqualTo("CHI");
+          		  }
+          	  }
+            }
+        });
+    }
+    
+    @Test
+    public void findGameIdByDateTeamBatch() {
+        running(fakeApplication(), new Runnable() {
+            public void run() {
+          	  Long gameId = Game.findIdByDateTeam("2012-10-31", "sacramento-kings", ProcessingType.batch);
+          	  Game game = Game.findById(gameId, ProcessingType.batch);
           	  
           	  assertThat(game.getBoxScores().size()).isEqualTo(2);
           	  for (int i = 0; i < game.getBoxScores().size(); i++) {
@@ -98,7 +126,7 @@ public class GameTest {
 		    Game.create(game);
 		    Long gameId = game.getId();
 		    
-		    Game createGame = Game.findById(gameId);
+		    Game createGame = Game.findById(gameId, ProcessingType.online);
 		    assertThat(createGame.getSeasonType()).isEqualTo(SeasonType.pre);
 		    assertThat(createGame.getBoxScores().size()).isEqualTo(2);
       	  	for (int i = 0; i < createGame.getBoxScores().size(); i++) {
@@ -110,7 +138,7 @@ public class GameTest {
       	  			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("NOP");
       	  		}
       	  	}
-            Game.delete(gameId);		    
+            Game.delete(gameId, ProcessingType.online);		    
 		  }
 		});
 	}
@@ -135,7 +163,7 @@ public class GameTest {
 		    Game.create(game);
 		    Long gameId = game.getId();
 		    
-		    Game createGame = Game.findById(gameId);
+		    Game createGame = Game.findById(gameId, ProcessingType.online);
             assertThat(createGame.getSeasonType()).isEqualTo(SeasonType.pre);
             assertThat(createGame.getGameOfficials().size()).isEqualTo(3);
             if (createGame.getGameOfficials().size() > 0)
@@ -156,7 +184,7 @@ public class GameTest {
             		assertThat(boxScore.getTeam().getAbbr()).isEqualTo("TOR");
             	}
             }
-            Game.delete(gameId);	
+            Game.delete(gameId, ProcessingType.online);	
 		  }
 		});
 	}
@@ -178,7 +206,7 @@ public class GameTest {
   		    Game.create(scheduleGame);
   		    Long gameId = scheduleGame.getId();
 
-  		    Game completeGame = Game.findById(gameId);  		    
+  		    Game completeGame = Game.findById(gameId, ProcessingType.online);  		    
   		    completeGame.setStatus(Status.completed);
   		    completeGame.setGameOfficials(TestMockHelper.getGameOfficials());
   		    
@@ -194,9 +222,9 @@ public class GameTest {
 				}
 			}
 
-  		    completeGame.update();
+  		    Game.update(completeGame, ProcessingType.online);
   		    
-  		    Game updateGame = Game.findById(gameId);
+  		    Game updateGame = Game.findById(gameId, ProcessingType.online);
             assertThat(updateGame.getSeasonType()).isEqualTo(SeasonType.pre);
             assertThat(updateGame.getBoxScores().size()).isEqualTo(2);
             if (updateGame.getGameOfficials().size() > 0)
@@ -217,7 +245,7 @@ public class GameTest {
                     	assertThat(boxScore.getPeriodScores().get(0).getScore()).isEqualTo((short)25);
             	}
             }
-            Game.delete(updateGame.getId());	
+            Game.delete(updateGame.getId(), ProcessingType.online);	
 		  }
 		});
 	}

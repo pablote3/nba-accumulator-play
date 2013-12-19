@@ -16,6 +16,7 @@ import models.entity.BoxScore;
 import models.entity.BoxScore.Location;
 import models.entity.BoxScore.Result;
 import models.entity.Game;
+import models.entity.Game.ProcessingType;
 import models.entity.Game.SeasonType;
 import models.entity.Game.Status;
 import models.entity.Team;
@@ -47,7 +48,7 @@ public class GameJsonFile {
 	              game.setDate(xmlStats.event_information.getDate());
 	              game.setStatus(Status.completed);
 	              game.setSeasonType(xmlStats.event_information.getSeasonType());	              
-	              game.setGameOfficials(GameJsonHelper.getGameOfficials(xmlStats.officials));
+	              game.setGameOfficials(GameJsonHelper.getGameOfficials(xmlStats.officials, ProcessingType.online));
 	              
 	              BoxScore homeBoxScore = new BoxScore();
 	              homeBoxScore.setLocation(Location.home);
@@ -76,7 +77,7 @@ public class GameJsonFile {
 	              Game.create(game);
 	              Long gameId = game.getId();
 
-	              Game createGame = Game.findById(gameId);
+	              Game createGame = Game.findById(gameId, ProcessingType.online);
 			    
 	              assertThat(createGame.getSeasonType()).isEqualTo(SeasonType.post);
 	              if (createGame.getGameOfficials().size() > 0) {
@@ -95,7 +96,7 @@ public class GameJsonFile {
 	              		  }
 	              	  }
         	  	  }
-	              Game.delete(createGame.getId());
+	              Game.delete(createGame.getId(), ProcessingType.online);
       	      } catch (FileNotFoundException e) {
       	          e.printStackTrace();
       	      } catch (IOException e) {
@@ -137,9 +138,9 @@ public class GameJsonFile {
 	              Game.create(scheduleGame);
 	              Long gameId = scheduleGame.getId();
 	              
-	    		  Game completeGame = Game.findById(gameId);
+	    		  Game completeGame = Game.findById(gameId, ProcessingType.online);
 	      		  completeGame.setStatus(Status.completed);	              
-	              completeGame.setGameOfficials(GameJsonHelper.getGameOfficials(xmlStats.officials));
+	              completeGame.setGameOfficials(GameJsonHelper.getGameOfficials(xmlStats.officials, ProcessingType.online));
 	              
 	              awayBoxScore = completeGame.getBoxScores().get(0);
 	              awayBoxScore.setPeriodScores(GameJsonHelper.getPeriodScores(xmlStats.away_period_scores));
@@ -160,7 +161,7 @@ public class GameJsonFile {
 	              
 	              completeGame.update();
 	              
-	              Game createGame = Game.findById(gameId);
+	              Game createGame = Game.findById(gameId, ProcessingType.online);
 
 	              assertThat(createGame.getSeasonType()).isEqualTo(SeasonType.post);
 	              assertThat(createGame.getGameOfficials().size()).isEqualTo(3);
@@ -181,7 +182,7 @@ public class GameJsonFile {
 	              		  }
 	              	  }
         	  	  }
-	              Game.delete(createGame.getId());
+	              Game.delete(createGame.getId(), ProcessingType.online);
       	      } catch (FileNotFoundException e) {
       	          e.printStackTrace();
       	      } catch (IOException e) {
