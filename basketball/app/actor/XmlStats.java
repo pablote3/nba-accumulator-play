@@ -11,12 +11,13 @@ import java.util.zip.GZIPInputStream;
 
 import json.GameJsonHelper;
 import json.XmlStat;
-
 import models.entity.BoxScore;
 import models.entity.BoxScore.Result;
 import models.entity.Game;
 import models.entity.Game.ProcessingType;
 import models.entity.Game.Status;
+import models.entity.GameOfficial;
+import models.entity.PeriodScore;
 import util.DateTime;
 import actor.ActorApi.CompleteGame;
 import actor.ActorApi.ScheduleGame;
@@ -80,11 +81,27 @@ public class XmlStats extends UntypedActor {
 	    	        XmlStat xmlStat = mapper.readValue(baseJson, XmlStat.class);
 	    	        
 	    	        game.setStatus(Status.completed);
+	    	        
+	    	        if (game.getGameOfficials().size() > 0) {
+	    	        	for (int i = 0; i < game.getGameOfficials().size(); i++) {
+							GameOfficial.delete(game.getGameOfficials().get(i), ProcessingType.batch);
+						}
+	    	        }
 	    	        game.setGameOfficials(GameJsonHelper.getGameOfficials(xmlStat.officials, processingType));
-	    	      
+	    	        
+	    	        if (awayBoxScore.getPeriodScores().size() > 0) {
+	    	        	for (int i = 0; i < awayBoxScore.getPeriodScores().size(); i++) {
+							PeriodScore.delete(awayBoxScore.getPeriodScores().get(i), ProcessingType.batch);
+						}
+	    	        }	    	        
 	    	        awayBoxScore.setPeriodScores(GameJsonHelper.getPeriodScores(xmlStat.away_period_scores));
 	    	        GameJsonHelper.getBoxScoreStats(awayBoxScore, xmlStat.away_totals);
 	    	        
+	    	        if (homeBoxScore.getPeriodScores().size() > 0) {
+	    	        	for (int i = 0; i < homeBoxScore.getPeriodScores().size(); i++) {
+							PeriodScore.delete(homeBoxScore.getPeriodScores().get(i), ProcessingType.batch);
+						}
+	    	        }	 
 	    	        homeBoxScore.setPeriodScores(GameJsonHelper.getPeriodScores(xmlStat.home_period_scores));
 	    	        GameJsonHelper.getBoxScoreStats(homeBoxScore, xmlStat.home_totals); 
 	    	        

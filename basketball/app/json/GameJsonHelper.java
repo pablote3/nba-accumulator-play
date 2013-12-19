@@ -17,10 +17,10 @@ public class GameJsonHelper {
 	    Official official;
 	    
         for (int i = 0; i < officials.length; i++) {
-      	  official = Official.findByName(officials[i].getLastName(), officials[i].getFirstName(), processingType);
-      	  gameOfficial = new GameOfficial();
-      	  gameOfficial.setOfficial(official);
-      	  gameOfficials.add(gameOfficial);
+        	official = Official.findByName(officials[i].getLastName(), officials[i].getFirstName(), processingType);
+        	gameOfficial = new GameOfficial();
+        	gameOfficial.setOfficial(official);
+        	gameOfficials.add(gameOfficial);
         }
     	return gameOfficials;
     }
@@ -30,9 +30,9 @@ public class GameJsonHelper {
 	    PeriodScore periodScore;
 
         for (int i = 0; i < scores.length; i++) {
-      	periodScore = new PeriodScore();
-      	periodScore.setQuarter((short)(i+1));
-      	periodScore.setScore((short)scores[i]);
+        	periodScore = new PeriodScore();
+      		periodScore.setQuarter((short)(i+1));
+      		periodScore.setScore((short)scores[i]);
 			periodScores.add(periodScore);
         }
 	    return periodScores;
