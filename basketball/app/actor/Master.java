@@ -32,8 +32,7 @@ public class Master extends UntypedActor {
 			gameController.tell(WorkStart, getSelf());	
 		} 
 		else if (message.equals(WorkComplete)) {
-			// Stops this actor and all its supervised children
-			//getContext().stop(getSelf());
+
 			listener.tell(Finish, getSelf());
 		} 
 		else {
