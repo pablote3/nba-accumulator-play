@@ -1,6 +1,8 @@
+import java.util.concurrent.TimeUnit;
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
+import scala.concurrent.duration.Duration;
 import actor.Listener;
 import actor.Master;
 import static actor.ActorApi.Start;
@@ -25,5 +27,9 @@ import com.typesafe.config.ConfigFactory;
 			listener = system.actorOf(Props.create(Listener.class), "listener");
 			master = system.actorOf(Props.create(Master.class, listener), "master");
 			master.tell(Start, listener);
+			
+//		    system.scheduler().schedule(Duration.create(0, TimeUnit.MILLISECONDS),
+//                    Duration.create(10, TimeUnit.SECONDS), master, "tick",
+//                    system.dispatcher());
 		}  
 }
