@@ -11,6 +11,7 @@ public interface ActorApi {
 	public static final Object WorkStart = "WorkStart";
 	public static final Object NextGame = "NextGame";
 	public static final Object WorkComplete = "WorkComplete";
+	public static final Object Wait = "Wait";
 	public static final Object Finish = "Finish";
 	
 	public static class ServiceProps {

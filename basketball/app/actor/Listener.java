@@ -1,5 +1,6 @@
 package actor;
 
+import static actor.ActorApi.Wait;
 import static actor.ActorApi.Finish;
 import actor.ActorApi.ModelException;
 import actor.ActorApi.PropertyException;
@@ -20,13 +21,17 @@ public class Listener extends UntypedActor {
 			XmlStatsException pe = (XmlStatsException) message;
 			System.out.println("XmlStats Exception " + pe.getMessage());
 		}
+		else if (message.equals(Wait)) {
+			System.out.println("Online Mission Compete");	
+		}
 		else if (message.equals(Finish)) {
-			System.out.println("Mission Compete");
+			System.out.println("Batch Mission Compete");
+			getContext().system().shutdown();
+			System.exit(0);
 		}
 		else {
 			unhandled(message);
 		}
-		getContext().system().shutdown();
-		System.exit(0);
+
 	}
 }
