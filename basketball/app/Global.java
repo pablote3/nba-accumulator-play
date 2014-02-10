@@ -1,11 +1,9 @@
-import java.util.concurrent.TimeUnit;
+import static actor.ActorApi.Start;
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
-import scala.concurrent.duration.Duration;
 import actor.Listener;
 import actor.Master;
-import static actor.ActorApi.Start;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
