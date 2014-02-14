@@ -38,14 +38,14 @@ public class GameJsonUrl {
     static final String ACCEPT_ENCODING = "Accept-encoding";
     static final String GZIP = "gzip";
     
-    @Ignore
+    
     @Test
     public void updateGame() {
         running(fakeApplication(), new Runnable() {
         	public void run() {
 		        InputStream baseJson = null;
 		        try {
-					Properties props = FileIO.loadProperties(FileIO.getPropertyPath("config.basketball") + "\\properties\\service.properties");
+					Properties props = FileIO.loadProperties(FileIO.getPropertyPath("config.basketball") + "//properties//service.properties");
 		        	if (props != null) {
 		            	String urlBoxScore = props.getProperty("xmlstats.urlBoxScore");
 		            	String event = "20120621-oklahoma-city-thunder-at-miami-heat.json";

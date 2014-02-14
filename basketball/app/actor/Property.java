@@ -26,7 +26,7 @@ public class Property extends UntypedActor {
 		if (props == null) {
 			try {
 				String path = FileIO.getPropertyPath("config.basketball");
-				props = FileIO.loadProperties(path + "\\properties\\service.properties");
+				props = FileIO.loadProperties(path + "//properties//service.properties");
 				
 				if (!util.DateTime.isDate(props.getProperty("game.date")))
 					throw new PropertyException("InvalidDate - game.date");
