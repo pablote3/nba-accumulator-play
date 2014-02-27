@@ -4,14 +4,16 @@ import static org.fest.assertions.Assertions.assertThat;
 import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.running;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import json.GameJsonHelper;
 import json.XmlStat;
-
 import models.BoxScore;
 import models.Game;
 import models.Team;
@@ -22,8 +24,6 @@ import models.Game.SeasonType;
 import models.Game.Status;
 
 import org.junit.Test;
-
-import util.FileIO;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,8 +36,9 @@ public class GameJsonFile {
           public void run() {
         	  InputStream baseJson; 
         	  try {
-	              String path = FileIO.getPropertyPath("config.basketball");
-	              baseJson = new FileInputStream(path + "//test//GameJson.txt");
+        		  Path path =  Paths.get(System.getProperty("config.test")).resolve("GameJson.txt");
+        		  File file = path.toFile();
+	              baseJson = new FileInputStream(file);
 		        
 	              ObjectMapper mapper = new ObjectMapper();
 	              mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -112,8 +113,9 @@ public class GameJsonFile {
           public void run() {
         	  InputStream baseJson; 
         	  try {
-	              String path = FileIO.getPropertyPath("config.basketball");
-	              baseJson = new FileInputStream(path + "//test//GameJson.txt");
+        		  Path path =  Paths.get(System.getProperty("config.test")).resolve("GameJson.txt");
+        		  File file = path.toFile();
+	              baseJson = new FileInputStream(file);
 		        
 	              ObjectMapper mapper = new ObjectMapper();
 	              mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

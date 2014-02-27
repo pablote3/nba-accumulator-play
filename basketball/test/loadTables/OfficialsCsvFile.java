@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,16 +21,14 @@ import models.Official;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import util.FileIO;
-
 public class OfficialsCsvFile {
 	@Ignore
 	@Test
 	public void createOfficial() {
 	    running(fakeApplication(), new Runnable() {
 	        public void run() {
-			   	String path = FileIO.getPropertyPath("config.basketball");
-				File file = new File(path + "//load//Officials.csv");
+	        	Path path =  Paths.get(System.getProperty("config.load")).resolve("Officials.csv");
+				File file = path.toFile();
 				 
 				BufferedReader bufRdr = null;
 				try {

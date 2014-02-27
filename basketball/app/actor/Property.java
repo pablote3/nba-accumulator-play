@@ -2,20 +2,22 @@ package actor;
 
 import static actor.ActorApi.InitializeStart;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 import models.Game;
-
-import util.FileIO;
 import actor.ActorApi.PropertyException;
 import actor.ActorApi.ServiceProps;
 import akka.actor.ActorRef;
 import akka.actor.UntypedActor;
 
 public class Property extends UntypedActor {
-	private Properties props;
+	private Properties properties;
 	private ActorRef listener;
 	
 	public Property(ActorRef listener) {
@@ -23,18 +25,22 @@ public class Property extends UntypedActor {
 	}
 	
 	private Properties getProperties() throws PropertyException {
-		if (props == null) {
+		if (properties == null) {
 			try {
-				String path = FileIO.getPropertyPath("config.basketball");
-				props = FileIO.loadProperties(path + "//properties//service.properties");
+        		Path path =  Paths.get(System.getProperty("config.properties")).resolve("service.properties");
+        		File file = path.toFile();
+				properties = new Properties();
+				FileInputStream in = new FileInputStream(file);
+				properties.load(in);
+				in.close();
 				
-				if (!util.DateTime.isDate(props.getProperty("game.date")))
+				if (!util.DateTime.isDate(properties.getProperty("game.date")))
 					throw new PropertyException("InvalidDate - game.date");
 				
-				if (!util.Numeric.isNumber(props.getProperty("xmlstats.delay")))
+				if (!util.Numeric.isNumber(properties.getProperty("xmlstats.delay")))
 					throw new PropertyException("InvalidNumber - xmlstats.delay");
 				
-				Game.ProcessingType.valueOf(props.getProperty("aggregator.processType"));
+				Game.ProcessingType.valueOf(properties.getProperty("aggregator.processType"));
 			}
 			catch (FileNotFoundException e) {
 				throw new PropertyException("FileNotFoundException");
@@ -46,7 +52,7 @@ public class Property extends UntypedActor {
 				throw new PropertyException("IllegalArgumentException");
 			}
 		}
-		return props;
+		return properties;
 	}
 
 	public void onReceive(Object message) {

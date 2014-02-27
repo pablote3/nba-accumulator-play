@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,8 +27,6 @@ import models.Team;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import util.FileIO;
-
 public class ScheduleCsvFile {
 	@Ignore
 	@Test
@@ -35,9 +35,9 @@ public class ScheduleCsvFile {
 	        public void run() {
 	        	//entire nba schedule from www.LiveFanChat.com
 	        	//need to replace ,, with , , prior to execution for parsing to work correctly
-			   	String path = FileIO.getPropertyPath("config.basketball");
-				File file = new File(path + "//load//nba-complete-2012-2013.csv");
-				 
+	        	Path path =  Paths.get(System.getProperty("config.load")).resolve("nba-complete-2012-2013.csv");
+				File file = path.toFile();
+
 				BufferedReader bufRdr = null;
 				try {
 					bufRdr = new BufferedReader(new FileReader(file));
