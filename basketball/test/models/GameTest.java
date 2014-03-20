@@ -264,11 +264,11 @@ public class GameTest {
         	  
         	  String sql 
         	  		= "select g.id, g.date, g.status " +
-            		  "from Game g " +
-            		  "inner join Box_Score bs1 on bs1.game_id = g.id " +
-            		  "inner join Team t1 on t1.id = bs1.team_id " + 
-            		  "inner join Box_Score bs2 on bs2.game_id = g.id and bs2.id <> bs1.id " +
-            		  "inner join Team t2 on t2.id = bs2.team_id ";
+            		  "from game g " +
+            		  "inner join box_score bs1 on bs1.game_id = g.id " +
+            		  "inner join team t1 on t1.id = bs1.team_id " + 
+            		  "inner join box_score bs2 on bs2.game_id = g.id and bs2.id <> bs1.id " +
+            		  "inner join team t2 on t2.id = bs2.team_id ";
         	  
         	  RawSql rawSql =
         			RawSqlBuilder
