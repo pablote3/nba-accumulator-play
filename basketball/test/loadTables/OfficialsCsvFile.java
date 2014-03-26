@@ -27,6 +27,7 @@ public class OfficialsCsvFile {
 	public void createOfficial() {
 	    running(fakeApplication(), new Runnable() {
 	        public void run() {
+	        	//http://www.basketball-reference.com/referees/
 	        	Path path =  Paths.get(System.getProperty("config.load")).resolve("Officials.csv");
 				File file = path.toFile();
 				 

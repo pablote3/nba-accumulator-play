@@ -18,7 +18,6 @@ import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 import models.Game.ProcessingType;
-
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import services.EbeanServerService;
@@ -63,28 +62,18 @@ public class Player extends Model {
 	}
 	
 	@OneToMany(mappedBy="player", fetch=FetchType.LAZY)
-	private List<BoxScorePlayer> boxScorePlayers = new ArrayList<BoxScorePlayer>();
-	public List<BoxScorePlayer> getBoxScorePlayers()  {
-		return boxScorePlayers;
+	private List<RosterPlayer> rosterPlayers = new ArrayList<RosterPlayer>();
+	public List<RosterPlayer> getRosterPlayers()  {
+		return rosterPlayers;
 	}
-	public void setBoxScorePlayers(List<BoxScorePlayer> boxScorePlayers)  {
-		this.boxScorePlayers = boxScorePlayers;
+	public void setRosterPlayers(List<RosterPlayer> rosterPlayers)  {
+		this.rosterPlayers = rosterPlayers;
 	}
-	public void addBoxScorePlayer(BoxScorePlayer boxScorePlayer)  {
-		this.getBoxScorePlayers().add(boxScorePlayer);
+	public void addRosterPlayer(RosterPlayer rosterPlayer)  {
+		this.getRosterPlayers().add(rosterPlayer);
 	}
-	public void removeBoxScorePlayer(BoxScorePlayer boxScorePlayer)  {
-		this.getBoxScorePlayers().remove(boxScorePlayer);
-	}
-	
-	@Required
-	@Column(name="number", length=2, nullable=false)
-	private String number;
-	public String getNumber() {
-		return number;
-	}
-	public void setNumber(String number) {
-		this.number = number;
+	public void removeRosterPlayer(RosterPlayer rosterPlayer)  {
+		this.getRosterPlayers().remove(rosterPlayer);
 	}
 	
 	@Required
@@ -110,17 +99,42 @@ public class Player extends Model {
 	}
 	
 	@Required
-	@Column(name="firstGame", nullable=false)
-	@Temporal(TemporalType.DATE)
-	private Date firstGame;
-	public Date getFirstGame() {
-		return firstGame;
+	@Column(name="displayName", length=70, nullable=false)
+	@JsonProperty("display_name")
+	private String displayName;
+	public String getDisplayName() {
+		return displayName;
 	}
-	public void setFirstGame(Date firstGame) {
-		this.firstGame = firstGame;
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
-	public String getFirstGameDisplay() {
-		return DateTime.getDisplayDateShort(firstGame);
+
+	@Required
+	@Column(name="active", nullable=false)
+	private boolean active;
+	public boolean getActive() {
+		return active;
+	}
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
+	@Column(name="height", nullable=true)
+	private Short height;
+	public Short getHeight() {
+		return height;
+	}
+	public void setHeight(Short height) {
+		this.height = height;
+	}
+	
+	@Column(name="weight", nullable=true)
+	private Short weight;
+	public Short getWeight() {
+		return weight;
+	}
+	public void setWeight(Short weight) {
+		this.weight = weight;
 	}
 	
 	@Required
@@ -136,17 +150,17 @@ public class Player extends Model {
 	public String getBirthDateDisplay() {
 		return DateTime.getDisplayDateShort(birthDate);
 	}
-		
-	@Required
-	@Column(name="active", nullable=false)
-	private boolean active;
-	public boolean getActive() {
-		return active;
-	}
-	public void setActive(boolean active) {
-		this.active = active;
-	}
 	
+	@Required
+	@Column(name="birthPlace", length=25, nullable=false)
+	private String birthPlace;
+	public String getBirthPlace() {
+		return birthPlace;
+	}
+	public void setBirthPlace(String birthPlace) {
+		this.birthPlace = birthPlace;
+	}
+		
 	public static Player findById(Long id) {
 		Player player = Ebean.find(Player.class, id);
 		return player;
@@ -215,7 +229,6 @@ public class Player extends Model {
 	public String toString() {
 		return new StringBuffer()
 			.append("  id:" + this.id)
-			.append("  number:" + this.number)
 			.append("  lastName:" + this.lastName)
 			.append("  firstName:" + this.firstName)
 			.append("  active:" + this.active)

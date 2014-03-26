@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -62,6 +63,21 @@ public class Team extends Model {
 	}
 	public void removeBoxScore(BoxScore boxScore)  {
 		this.getBoxScores().remove(boxScore);
+	}
+	
+	@OneToMany(mappedBy="team", cascade=CascadeType.ALL)
+	private List<RosterPlayer> rosterPlayers = new ArrayList<RosterPlayer>();
+	public List<RosterPlayer> getRosterPlayers()  {
+		return rosterPlayers;
+	}
+	public void setRosterPlayers(List<RosterPlayer> rosterPlayers)  {
+		this.rosterPlayers = rosterPlayers;
+	}
+	public void addRosterPlayer(RosterPlayer rosterPlayer)  {
+		this.getRosterPlayers().add(rosterPlayer);
+	}
+	public void removeRosterPlayer(RosterPlayer rosterPlayer)  {
+		this.getRosterPlayers().remove(rosterPlayer);
 	}
 
 	@Required

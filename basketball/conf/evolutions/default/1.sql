@@ -31,6 +31,33 @@ create table box_score (
   constraint pk_box_score primary key (id))
 ;
 
+create table box_score_player (
+  id                        bigint auto_increment not null,
+  boxScore_id               bigint,
+  rosterPlayer_id           bigint,
+  position                  varchar(5) not null,
+  minutes                   smallint,
+  points                    smallint,
+  assists                   smallint,
+  turnovers                 smallint,
+  steals                    smallint,
+  blocks                    smallint,
+  fieldGoalAttempts         smallint,
+  fieldGoalMade             smallint,
+  fieldGoalPercent          float,
+  threePointAttempts        smallint,
+  threePointMade            smallint,
+  threePointPercent         float,
+  freeThrowAttempts         smallint,
+  freeThrowMade             smallint,
+  freeThrowPercent          float,
+  reboundsOffense           smallint,
+  reboundsDefense           smallint,
+  personalFouls             smallint,
+  constraint ck_box_score_player_position check (position in ('C','PG','SG','PF','SF')),
+  constraint pk_box_score_player primary key (id))
+;
+
 create table game (
   id                        bigint auto_increment not null,
   date                      datetime not null,
@@ -68,6 +95,34 @@ create table period_score (
   constraint pk_period_score primary key (id))
 ;
 
+create table player (
+  id                        bigint auto_increment not null,
+  lastName                  varchar(35) not null,
+  firstName                 varchar(35) not null,
+  displayName               varchar(70) not null,
+  active                    tinyint(1) default 0 not null,
+  height                    smallint,
+  weight                    smallint,
+  birthDate                 datetime not null,
+  birthPlace                varchar(25) not null,
+  last_update               datetime not null,
+  constraint pk_player primary key (id))
+;
+
+create table roster_player (
+  id                        bigint auto_increment not null,
+  team_id                   bigint,
+  player_id                 bigint,
+  lastName                  varchar(35) not null,
+  firstName                 varchar(35) not null,
+  fromDate                  datetime not null,
+  toDate                    datetime not null,
+  position                  varchar(5) not null,
+  number                    varchar(2) not null,
+  constraint ck_roster_player_position check (position in ('C','PG','SG','PF','SF')),
+  constraint pk_roster_player primary key (id))
+;
+
 create table team (
   id                        bigint auto_increment not null,
   team_key                  varchar(35) not null,
@@ -90,12 +145,20 @@ alter table box_score add constraint fk_box_score_team_1 foreign key (team_id) r
 create index ix_box_score_team_1 on box_score (team_id);
 alter table box_score add constraint fk_box_score_game_2 foreign key (game_id) references game (id) on delete restrict on update restrict;
 create index ix_box_score_game_2 on box_score (game_id);
-alter table game_official add constraint fk_game_official_game_3 foreign key (game_id) references game (id) on delete restrict on update restrict;
-create index ix_game_official_game_3 on game_official (game_id);
-alter table game_official add constraint fk_game_official_official_4 foreign key (official_id) references official (id) on delete restrict on update restrict;
-create index ix_game_official_official_4 on game_official (official_id);
-alter table period_score add constraint fk_period_score_boxScore_5 foreign key (boxscore_id) references box_score (id) on delete restrict on update restrict;
-create index ix_period_score_boxScore_5 on period_score (boxscore_id);
+alter table box_score_player add constraint fk_box_score_player_boxScore_3 foreign key (boxScore_id) references box_score (id) on delete restrict on update restrict;
+create index ix_box_score_player_boxScore_3 on box_score_player (boxScore_id);
+alter table box_score_player add constraint fk_box_score_player_rosterPlayer_4 foreign key (rosterPlayer_id) references roster_player (id) on delete restrict on update restrict;
+create index ix_box_score_player_rosterPlayer_4 on box_score_player (rosterPlayer_id);
+alter table game_official add constraint fk_game_official_game_5 foreign key (game_id) references game (id) on delete restrict on update restrict;
+create index ix_game_official_game_5 on game_official (game_id);
+alter table game_official add constraint fk_game_official_official_6 foreign key (official_id) references official (id) on delete restrict on update restrict;
+create index ix_game_official_official_6 on game_official (official_id);
+alter table period_score add constraint fk_period_score_boxScore_7 foreign key (boxscore_id) references box_score (id) on delete restrict on update restrict;
+create index ix_period_score_boxScore_7 on period_score (boxscore_id);
+alter table roster_player add constraint fk_roster_player_team_8 foreign key (team_id) references team (id) on delete restrict on update restrict;
+create index ix_roster_player_team_8 on roster_player (team_id);
+alter table roster_player add constraint fk_roster_player_player_9 foreign key (player_id) references player (id) on delete restrict on update restrict;
+create index ix_roster_player_player_9 on roster_player (player_id);
 
 
 
@@ -105,6 +168,8 @@ SET FOREIGN_KEY_CHECKS=0;
 
 drop table box_score;
 
+drop table box_score_player;
+
 drop table game;
 
 drop table game_official;
@@ -112,6 +177,10 @@ drop table game_official;
 drop table official;
 
 drop table period_score;
+
+drop table player;
+
+drop table roster_player;
 
 drop table team;
 

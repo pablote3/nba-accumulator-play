@@ -29,7 +29,7 @@ public class GameOfficial extends Model {
 	private static EbeanServer ebeanServer = service.createEbeanServer();
 
 	@Id
-	@TableGenerator(name="table_gen", table="seq_table", pkColumnName="seq_name", valueColumnName="seq_count", pkColumnValue="game_official_seq", initialValue=1)
+	@TableGenerator(name="table_gen", table="seq_table", pkColumnName="seq_name", valueColumnName="seq_count", pkColumnValue="gameOfficial_seq", initialValue=1)
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="table_gen")
 	private Long id;
 	public Long getId() {

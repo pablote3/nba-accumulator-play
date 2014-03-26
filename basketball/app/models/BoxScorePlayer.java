@@ -55,13 +55,13 @@ public class BoxScorePlayer extends Model {
 	}
 	
 	@ManyToOne
-	@JoinColumn(name="player_id", referencedColumnName="id", nullable=false)
-	private Player player;
-	public Player getPlayer() {
-		return player;
+	@JoinColumn(name="rosterPlayer_id", referencedColumnName="id", nullable=false)
+	private RosterPlayer rosterPlayer;
+	public RosterPlayer getRosterPlayer() {
+		return rosterPlayer;
 	}
-	public void setPlayer(Player player) {
-		this.player = player;
+	public void setRosterPlayer(RosterPlayer rosterPlayer) {
+		this.rosterPlayer = rosterPlayer;
 	}
 	
 	@Required
