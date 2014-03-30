@@ -20,7 +20,7 @@ public class OfficialTest {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	  List<Official> officials = Official.findAll();
-        	  assertThat(officials.size()).isEqualTo(61);
+        	  assertThat(officials.size()).isEqualTo(63);
           }
         });
     }
@@ -30,7 +30,7 @@ public class OfficialTest {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	  List<Official> officials = Official.findActive(true);
-        	  assertThat(officials.size()).isEqualTo(61);
+        	  assertThat(officials.size()).isEqualTo(63);
           }
         });
     }
@@ -115,7 +115,7 @@ public class OfficialTest {
         running(fakeApplication(), new Runnable() {
            public void run() {
                Page<Official> officials = Official.page(0, 15, "firstName", "ASC", "");
-               assertThat(officials.getTotalRowCount()).isEqualTo(61);
+               assertThat(officials.getTotalRowCount()).isEqualTo(63);
                assertThat(officials.getList().size()).isEqualTo(15);
            }
         });

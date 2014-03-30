@@ -78,6 +78,25 @@ public class TestMockHelper {
   	  return official;
 	}
 	
+	protected static Player getPlayer() {
+	  Player player = new Player();
+	  player.setLastName("Webber");
+	  player.setFirstName("Chris");
+	  player.setDisplayName("Chris Webber");
+	  player.setActive(false);
+	  player.setHeight((short)82);
+	  player.setWeight((short)245);
+	  Date date = null;
+	  try {
+	  	  date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("1973-03-01");
+	  } catch (ParseException e) {
+	  	  e.printStackTrace();
+	  }
+	  player.setBirthDate(date);
+	  player.setBirthPlace("Detroit, Michigan, USA");
+	  return player;
+	}
+	
 	protected static Team getTeam() {
         Team team = new Team();
         team.setKey("seattle-supersonics");
