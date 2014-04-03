@@ -184,7 +184,7 @@ public class Game extends Model {
 	  	Query<Game> query = Ebean.find(Game.class);
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
-	    query.where().ilike("date", date + "%");
+	  	query.where().between("date", date + " 00:00:00", date + " 23:59:59");
 	
 	    List<Game> games = query.findList();
 	    return games;
@@ -197,7 +197,7 @@ public class Game extends Model {
 	  	else
 	  		query = Ebean.find(Game.class);
 	  	
-	    query.where().ilike("date", date + "%");
+	  	query.where().between("date", date + " 00:00:00", date + " 23:59:59");
 	    List<Game> games = query.findList();
 	    List<Long> gameIds = null;
 	    if (games.size() > 0) {
@@ -213,7 +213,7 @@ public class Game extends Model {
 	  	Query<Game> query = Ebean.find(Game.class);
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
-	    query.where().ilike("t0.date", date + "%");
+	  	query.where().between("t0.date", date + " 00:00:00", date + " 23:59:59");
 	    query.where().eq("t2.team_key", teamKey);
 	
 	    Game game = query.findUnique();
@@ -228,7 +228,7 @@ public class Game extends Model {
 	  		query = Ebean.find(Game.class);
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
-	    query.where().ilike("t0.date", date + "%");
+	  	query.where().between("t0.date", date + " 00:00:00", date + " 23:59:59");
 	    query.where().eq("t2.team_key", teamKey);
 	
 	    Game game = query.findUnique();
@@ -241,11 +241,11 @@ public class Game extends Model {
     	return p;
     }
 	
-	public static Page<Game> pageByDate(int page, int pageSize, String gameDate) {
+	public static Page<Game> pageByDate(int page, int pageSize, String date) {
 	  	Query<Game> query = Ebean.find(Game.class);
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
-	    query.where().ilike("date", gameDate + "%");
+	    query.where().between("date", date + " 00:00:00", date + " 23:59:59");
 	
 	    return query.findPagingList(pageSize).getPage(page);
     }
