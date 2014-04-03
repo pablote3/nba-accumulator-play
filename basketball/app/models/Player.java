@@ -120,6 +120,7 @@ public class Player extends Model {
 	}
 	
 	@Column(name="height", nullable=true)
+	@JsonProperty("height_in")
 	private Short height;
 	public Short getHeight() {
 		return height;
@@ -129,6 +130,7 @@ public class Player extends Model {
 	}
 	
 	@Column(name="weight", nullable=true)
+	@JsonProperty("weight_lb")
 	private Short weight;
 	public Short getWeight() {
 		return weight;
@@ -140,6 +142,7 @@ public class Player extends Model {
 	@Required
 	@Column(name="birthDate", nullable=false)
 	@Temporal(TemporalType.DATE)
+	@JsonProperty("birthdate")
 	private Date birthDate;
 	public Date getBirthDate() {
 		return birthDate;
@@ -153,6 +156,7 @@ public class Player extends Model {
 	
 	@Required
 	@Column(name="birthPlace", length=25, nullable=false)
+	@JsonProperty("birthplace")
 	private String birthPlace;
 	public String getBirthPlace() {
 		return birthPlace;

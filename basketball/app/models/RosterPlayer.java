@@ -91,28 +91,6 @@ public class RosterPlayer extends Model {
 	}
 	
 	@Required
-	@Column(name="lastName", length=35, nullable=false)
-	@JsonProperty("last_name")
-	private String lastName;
-	public String getLastName() {
-		return lastName;
-	}
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	@Required
-	@Column(name="firstName", length=35, nullable=false)
-	@JsonProperty("first_name")
-	private String firstName;
-	public String getFirstName() {
-		return firstName;
-	}
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-	
-	@Required
 	@Column(name="fromDate", nullable=false)
 	@Temporal(TemporalType.DATE)
 	private Date fromDate;
@@ -143,6 +121,7 @@ public class RosterPlayer extends Model {
 	@Required
 	@Enumerated(EnumType.STRING)
 	@Column(name="position", length=5, nullable=false)
+	@JsonProperty("position")
 	private Position position;
 	public Position getPosition() {
 		return position;
@@ -160,6 +139,7 @@ public class RosterPlayer extends Model {
 	
 	@Required
 	@Column(name="number", length=2, nullable=false)
+	@JsonProperty("uniform_number")
 	private String number;
 	public String getNumber() {
 		return number;
@@ -186,25 +166,54 @@ public class RosterPlayer extends Model {
 	    return rosterPlayers;
 	}
 	
-	public static RosterPlayer findByName(String lastName, String firstName) {
+	public static List<RosterPlayer> findByName(String lastName, String firstName) {
 		Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
 		query.where().eq("lastName", lastName);
 		query.where().eq("firstName", firstName);
-		RosterPlayer rosterPlayer = query.findUnique();
+		List<RosterPlayer> rosterPlayer = query.findList();
 	    return rosterPlayer;
 	}
 	
-	public static RosterPlayer findByName(String lastName, String firstName, ProcessingType processingType) {
-		RosterPlayer rosterPlayer;
+	public static List<RosterPlayer> findByName(String lastName, String firstName, ProcessingType processingType) {
+		List<RosterPlayer>  rosterPlayer;
 		Query<RosterPlayer> query; 
 		if (processingType.equals(ProcessingType.batch)) {
 			query = ebeanServer.find(RosterPlayer.class);
 			query.where().eq("lastName", lastName);
 			query.where().eq("firstName", firstName);
-			rosterPlayer = query.findUnique();
+			rosterPlayer = query.findList();
 		}
 		else {
 			rosterPlayer = findByName(lastName, firstName);
+		}
+	    return rosterPlayer;
+	}
+	
+	public static List<RosterPlayer> findByDate(String date) {
+		Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
+//	  	query.fetch("boxScores");
+//	  	query.fetch("boxScores.team");
+	    query.where().gt("fromDate", date + " 00:00:00");
+	    query.where().lt("toDate", date + " 23:59:59");
+	    
+	    List<RosterPlayer> rosterPlayer = query.findList();
+	    return rosterPlayer;
+	}
+	
+	public static List<RosterPlayer> findByDate(String date, ProcessingType processingType) {
+		List<RosterPlayer> rosterPlayer;
+		Query<RosterPlayer> query; 
+		if (processingType.equals(ProcessingType.batch)) {
+			query = ebeanServer.find(RosterPlayer.class);
+//		  	query.fetch("boxScores");
+//		  	query.fetch("boxScores.team");
+		    query.where().gt("fromDate", date + " 00:00:00");
+		    query.where().lt("toDate", date + " 23:59:59");
+		    
+		    rosterPlayer = query.findList();
+		}
+		else {
+			rosterPlayer = findByDate(date);
 		}
 	    return rosterPlayer;
 	}
@@ -230,8 +239,8 @@ public class RosterPlayer extends Model {
 		return new StringBuffer()
 			.append("  id:" + this.id)
 			.append("  number:" + this.number)
-			.append("  lastName:" + this.lastName)
-			.append("  firstName:" + this.firstName)
+			.append("  lastName:" + this.player.getLastName())
+			.append("  firstName:" + this.player.getFirstName())
 			.toString();
 	}
 }
