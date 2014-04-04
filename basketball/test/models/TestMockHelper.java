@@ -11,6 +11,7 @@ import models.BoxScore.Location;
 import models.BoxScore.Result;
 import models.Game.SeasonType;
 import models.Game.Status;
+import models.RosterPlayer.Position;
 import models.Team.Conference;
 import models.Team.Division;
 
@@ -96,6 +97,23 @@ public class TestMockHelper {
 	  player.setBirthPlace("Detroit, Michigan, USA");
 	  return player;
 	}
+	
+	protected static RosterPlayer getRosterPlayer() {
+		  RosterPlayer rosterPlayer = new RosterPlayer();
+		  rosterPlayer.setNumber("4");
+		  rosterPlayer.setPosition(Position.powerForward);
+		  Date fromDate = null;
+		  Date toDate = null;
+		  try {
+		  	  fromDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2014-03-01");
+		  	  toDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2014-03-10");
+		  } catch (ParseException e) {
+		  	  e.printStackTrace();
+		  }
+		  rosterPlayer.setFromDate(fromDate);
+		  rosterPlayer.setToDate(toDate);
+		  return rosterPlayer;
+		}
 	
 	protected static Team getTeam() {
         Team team = new Team();

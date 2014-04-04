@@ -19,7 +19,6 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import models.Game.ProcessingType;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import services.EbeanServerService;
@@ -166,55 +165,47 @@ public class RosterPlayer extends Model {
 	    return rosterPlayers;
 	}
 	
-	public static List<RosterPlayer> findByName(String lastName, String firstName) {
-		Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
-		query.where().eq("lastName", lastName);
-		query.where().eq("firstName", firstName);
-		List<RosterPlayer> rosterPlayer = query.findList();
-	    return rosterPlayer;
-	}
-	
-	public static List<RosterPlayer> findByName(String lastName, String firstName, ProcessingType processingType) {
-		List<RosterPlayer>  rosterPlayer;
-		Query<RosterPlayer> query; 
-		if (processingType.equals(ProcessingType.batch)) {
-			query = ebeanServer.find(RosterPlayer.class);
-			query.where().eq("lastName", lastName);
-			query.where().eq("firstName", firstName);
-			rosterPlayer = query.findList();
-		}
-		else {
-			rosterPlayer = findByName(lastName, firstName);
-		}
-	    return rosterPlayer;
-	}
-	
 	public static List<RosterPlayer> findByDate(String date) {
 		Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
-//	  	query.fetch("boxScores");
-//	  	query.fetch("boxScores.team");
 	    query.where().gt("fromDate", date + " 00:00:00");
-	    query.where().lt("toDate", date + " 23:59:59");
-	    
+	    query.where().lt("toDate", date + " 23:59:59");	    
 	    List<RosterPlayer> rosterPlayer = query.findList();
 	    return rosterPlayer;
 	}
 	
-	public static List<RosterPlayer> findByDate(String date, ProcessingType processingType) {
-		List<RosterPlayer> rosterPlayer;
-		Query<RosterPlayer> query; 
-		if (processingType.equals(ProcessingType.batch)) {
-			query = ebeanServer.find(RosterPlayer.class);
-//		  	query.fetch("boxScores");
-//		  	query.fetch("boxScores.team");
-		    query.where().gt("fromDate", date + " 00:00:00");
-		    query.where().lt("toDate", date + " 23:59:59");
-		    
-		    rosterPlayer = query.findList();
-		}
-		else {
-			rosterPlayer = findByDate(date);
-		}
+	public static List<RosterPlayer> findByPlayerName(String lastName, String firstName) {
+		Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
+		query.fetch("player");
+		query.where().eq("t1.lastName", lastName);
+		query.where().eq("t1.firstName", firstName);
+		List<RosterPlayer> rosterPlayer = query.findList();
+	    return rosterPlayer;
+	}
+	
+	public static RosterPlayer findByDatePlayerName(String date, String lastName, String firstName) {
+		Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
+		query.fetch("player");
+		query.where().between("t0.date", date + " 00:00:00", date + " 23:59:59");
+		query.where().eq("t1.lastName", lastName);
+		query.where().eq("t1.firstName", firstName);
+		RosterPlayer rosterPlayer = query.findUnique();
+	    return rosterPlayer;
+	}
+	
+	public static List<RosterPlayer> findByTeam(String teamKey) {
+	  	Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
+	  	query.fetch("team");
+	    query.where().eq("t1.team_key", teamKey);
+	    List <RosterPlayer> rosterPlayer = query.findList();
+	    return rosterPlayer;
+	}
+	
+	public static List<RosterPlayer> findByDateTeam(String date, String teamKey) {
+	  	Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
+	  	query.fetch("team");
+	  	query.where().between("t0.date", date + " 00:00:00", date + " 23:59:59");
+	    query.where().eq("t1.team_key", teamKey);
+	    List<RosterPlayer> rosterPlayer = query.findList();
 	    return rosterPlayer;
 	}
 	

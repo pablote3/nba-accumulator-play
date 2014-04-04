@@ -10,6 +10,8 @@ import javax.persistence.PersistenceException;
 
 import org.junit.Test;
 
+import com.avaje.ebean.Page;
+
 public class PlayerTest {    
     @Test
     public void findPlayersAll() {
@@ -91,25 +93,25 @@ public class PlayerTest {
         });
     }
 
-//    @Test
-//    public void paginationPlayers() {
-//        running(fakeApplication(), new Runnable() {
-//           public void run() {
-//               Page<Player> players = Player.page(0, 15, "firstName", "ASC", "");
-//               assertThat(players.getTotalRowCount()).isEqualTo(63);
-//               assertThat(players.getList().size()).isEqualTo(15);
-//           }
-//        });
-//    }
-//    
-//    @Test
-//    public void pagnationPlayersFilter() {
-//        running(fakeApplication(), new Runnable() {
-//           public void run() {
-//               Page<Player> players = Player.page(0, 15, "lastName", "ASC", "Crawford");
-//               assertThat(players.getTotalRowCount()).isEqualTo(2);
-//               assertThat(players.getList().size()).isEqualTo(2);
-//           }
-//        });
-//    }
+    @Test
+    public void paginationPlayers() {
+        running(fakeApplication(), new Runnable() {
+           public void run() {
+               Page<Player> players = Player.page(0, 15, "firstName", "ASC", "");
+               assertThat(players.getTotalRowCount()).isEqualTo(63);
+               assertThat(players.getList().size()).isEqualTo(15);
+           }
+        });
+    }
+    
+    @Test
+    public void pagnationPlayersFilter() {
+        running(fakeApplication(), new Runnable() {
+           public void run() {
+               Page<Player> players = Player.page(0, 15, "lastName", "ASC", "Crawford");
+               assertThat(players.getTotalRowCount()).isEqualTo(2);
+               assertThat(players.getList().size()).isEqualTo(2);
+           }
+        });
+    }
 }
