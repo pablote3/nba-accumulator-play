@@ -167,8 +167,8 @@ public class RosterPlayer extends Model {
 	
 	public static List<RosterPlayer> findByDate(String date) {
 		Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
-	    query.where().gt("fromDate", date + " 00:00:00");
-	    query.where().lt("toDate", date + " 23:59:59");	    
+	    query.where().lt("fromDate", date + " 00:00:00");
+	    query.where().gt("toDate", date + " 23:59:59");	    
 	    List<RosterPlayer> rosterPlayer = query.findList();
 	    return rosterPlayer;
 	}
@@ -204,8 +204,8 @@ public class RosterPlayer extends Model {
 	public static List<RosterPlayer> findByDateTeam(String date, String teamKey) {
 	  	Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
 	  	query.fetch("team");
-	    query.where().gt("fromDate", date + " 00:00:00");
-	    query.where().lt("toDate", date + " 23:59:59");	 
+	    query.where().lt("fromDate", date + " 00:00:00");
+	    query.where().gt("toDate", date + " 23:59:59");	 
 	    query.where().eq("t1.team_key", teamKey);
 	    List<RosterPlayer> rosterPlayer = query.findList();
 	    return rosterPlayer;
