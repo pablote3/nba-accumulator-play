@@ -105,8 +105,8 @@ public class TestMockHelper {
 		  Date fromDate = null;
 		  Date toDate = null;
 		  try {
-		  	  fromDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2014-03-01");
-		  	  toDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2014-03-10");
+		  	  fromDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2014-03-11");
+		  	  toDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2014-03-20");
 		  } catch (ParseException e) {
 		  	  e.printStackTrace();
 		  }
