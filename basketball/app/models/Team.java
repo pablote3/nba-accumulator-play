@@ -65,7 +65,7 @@ public class Team extends Model {
 		this.getBoxScores().remove(boxScore);
 	}
 	
-	@OneToMany(mappedBy="team", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="team", fetch=FetchType.LAZY)
 	private List<RosterPlayer> rosterPlayers = new ArrayList<RosterPlayer>();
 	public List<RosterPlayer> getRosterPlayers()  {
 		return rosterPlayers;
