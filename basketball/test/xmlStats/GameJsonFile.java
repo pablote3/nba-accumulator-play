@@ -25,6 +25,8 @@ import models.Game.Status;
 
 import org.junit.Test;
 
+import util.DateTime;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -56,12 +58,14 @@ public class GameJsonFile {
 	              homeBoxScore.setTeam(Team.findByKey("key", xmlStats.home_team.getKey()));
 	              homeBoxScore.setPeriodScores(GameJsonHelper.getPeriodScores(xmlStats.home_period_scores));
 	              GameJsonHelper.getBoxScoreStats(homeBoxScore, xmlStats.home_totals);
+	              homeBoxScore.setBoxScorePlayers(GameJsonHelper.getBoxScorePlayers(xmlStats.home_stats, DateTime.getFindDateShort(game.getDate()), ProcessingType.online));
 	              
 	              BoxScore awayBoxScore = new BoxScore();
 	              awayBoxScore.setLocation(Location.away);
 	              awayBoxScore.setTeam(Team.findByKey("key", xmlStats.away_team.getKey()));
 	              awayBoxScore.setPeriodScores(GameJsonHelper.getPeriodScores(xmlStats.away_period_scores));
 	              GameJsonHelper.getBoxScoreStats(awayBoxScore, xmlStats.away_totals);
+	              awayBoxScore.setBoxScorePlayers(GameJsonHelper.getBoxScorePlayers(xmlStats.away_stats, DateTime.getFindDateShort(game.getDate()), ProcessingType.online));
 
 	              if (xmlStats.away_totals.getPoints() > xmlStats.home_totals.getPoints()) {
 	            	  homeBoxScore.setResult(Result.loss);
