@@ -97,14 +97,14 @@ create table period_score (
 
 create table player (
   id                        bigint auto_increment not null,
-  lastName                  varchar(35) not null,
-  firstName                 varchar(35) not null,
-  displayName               varchar(70) not null,
+  last_name                 varchar(35) not null,
+  first_name                varchar(35) not null,
+  display_name              varchar(70) not null,
   active                    tinyint(1) default 0 not null,
   height                    smallint,
   weight                    smallint,
-  birthDate                 datetime not null,
-  birthPlace                varchar(25) not null,
+  birthdate                 datetime not null,
+  birthplace                varchar(25) not null,
   last_update               datetime not null,
   constraint pk_player primary key (id))
 ;
@@ -113,8 +113,6 @@ create table roster_player (
   id                        bigint auto_increment not null,
   team_id                   bigint,
   player_id                 bigint,
-  lastName                  varchar(35) not null,
-  firstName                 varchar(35) not null,
   fromDate                  datetime not null,
   toDate                    datetime not null,
   position                  varchar(5) not null,

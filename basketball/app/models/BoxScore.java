@@ -70,6 +70,21 @@ public class BoxScore extends Model {
 		this.getPeriodScores().remove(periodScore);
 	}
 	
+	@OneToMany(mappedBy="boxScore", cascade=CascadeType.ALL)
+	private List<BoxScorePlayer> boxScorePlayers = new ArrayList<BoxScorePlayer>();
+	public List<BoxScorePlayer> getBoxScorePlayers()  {
+		return boxScorePlayers;
+	}
+	public void setBoxScorePlayers(List<BoxScorePlayer> boxScorePlayers)  {
+		this.boxScorePlayers = boxScorePlayers;
+	}
+	public void addBoxScorePlayer(BoxScorePlayer boxScorePlayer)  {
+		this.getBoxScorePlayers().add(boxScorePlayer);
+	}
+	public void removeBoxScorePlayer(BoxScorePlayer boxScorePlayer)  {
+		this.getBoxScorePlayers().remove(boxScorePlayer);
+	}
+	
 	@Required
 	@Enumerated(EnumType.STRING)
 	@Column(name="location", length=5, nullable=false)

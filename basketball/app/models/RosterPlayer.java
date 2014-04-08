@@ -19,6 +19,7 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import models.Game.ProcessingType;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import services.EbeanServerService;
@@ -191,6 +192,24 @@ public class RosterPlayer extends Model {
 		query.where().eq("t1.first_Name", firstName);
 		RosterPlayer rosterPlayer = query.findUnique();
 	    return rosterPlayer;
+	}
+	
+	public static RosterPlayer findByDatePlayerName(String date, String lastName, String firstName, ProcessingType processingType) {
+		RosterPlayer rosterPlayer;
+	  	Query<RosterPlayer> query;
+	  	if (processingType.equals(ProcessingType.batch)) {
+	  		query = ebeanServer.find(RosterPlayer.class);
+	  		query.fetch("player");
+	  		query.where().lt("fromDate", date + " 00:00:00");
+	  		query.where().gt("toDate", date + " 23:59:59");	 
+	  		query.where().eq("t1.last_Name", lastName);
+	  		query.where().eq("t1.first_Name", firstName);
+	  		rosterPlayer = query.findUnique();
+	  	}
+	  	else
+	  		rosterPlayer = findByDatePlayerName(date, lastName, firstName);
+	    
+		return rosterPlayer;
 	}
 	
 	public static List<RosterPlayer> findByTeam(String teamKey) {
