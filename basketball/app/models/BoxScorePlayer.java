@@ -91,6 +91,16 @@ public class BoxScorePlayer extends Model {
 		this.minutes = minutes;
 	}
 	
+	@Column(name="starter", nullable=false)
+	@JsonProperty("is_starter")
+	private boolean starter;
+	public boolean getStarter() {
+		return starter;
+	}
+	public void setStarter(boolean starter) {
+		this.starter = starter;
+	}
+	
 	@Column(name="points", nullable=true)
 	private Short points;
 	public Short getPoints() {
