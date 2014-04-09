@@ -37,6 +37,7 @@ create table box_score_player (
   rosterPlayer_id           bigint,
   position                  varchar(5) not null,
   minutes                   smallint,
+  starter                   tinyint(1) default 0 not null,
   points                    smallint,
   assists                   smallint,
   turnovers                 smallint,
