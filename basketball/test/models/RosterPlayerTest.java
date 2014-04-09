@@ -106,52 +106,52 @@ public class RosterPlayerTest {
         });
     }
     
-//    @Test
-//    public void updateRosterPlayer() {
-//        running(fakeApplication(), new Runnable() {
-//          public void run() {
-//        	  RosterPlayer rosterPlayer = TestMockHelper.getRosterPlayer();
-//        	  rosterPlayer.setPlayer(TestMockHelper.getPlayer());
-//        	  rosterPlayer.setTeam(TestMockHelper.getTeam());
-//        	  
-//        	  RosterPlayer.create(rosterPlayer);
-//        	  Long rosterPlayerId = rosterPlayer.getId();
-//        	  
-//        	  RosterPlayer createRosterPlayer = RosterPlayer.findById(rosterPlayerId);
-//        	  createRosterPlayer.setPosition(Position.center);
-//        	  createRosterPlayer.getPlayer().setActive(true);
-//        	  createRosterPlayer.update();
-//              
-//        	  RosterPlayer updateRosterPlayer = RosterPlayer.findById(rosterPlayerId);
-//        	  assertThat(updateRosterPlayer.getPosition()).isEqualTo(Position.center);
-//              assertThat(updateRosterPlayer.getPlayer().getActive()).isTrue();
-//              RosterPlayer.delete(updateRosterPlayer.getId());
-//          }
-//        });
-//    }
-//    
-//    @Test
-//    public void updateRosterPlayerValidation() {
-//        running(fakeApplication(), new Runnable() {
-//          public void run() {
-//       		  try {
-//            	  RosterPlayer rosterPlayer = TestMockHelper.getRosterPlayer();
-//            	  rosterPlayer.setPlayer(TestMockHelper.getPlayer());
-//            	  rosterPlayer.setTeam(TestMockHelper.getTeam());
-//            	  
-//            	  RosterPlayer.create(rosterPlayer);
-//            	  Long rosterPlayerId = rosterPlayer.getId();
-//            	  
-//            	  RosterPlayer createRosterPlayer = RosterPlayer.findById(rosterPlayerId);
-//       			  createRosterPlayer.getPlayer().setFirstName(null);
-//       			  createRosterPlayer.update();
-//       		  } catch (PersistenceException e) {
-//       			  assertThat(e.getCause().getMessage().equalsIgnoreCase("Column 'first_name' cannot be null"));
-//       		  }
-//          }
-//        });
-//    }
-//
+    @Test
+    public void updateRosterPlayer() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  RosterPlayer rosterPlayer = TestMockHelper.getRosterPlayer();
+        	  rosterPlayer.setPlayer(Player.findByName("Webber", "Chris"));
+        	  rosterPlayer.setTeam(Team.findByKey("key", "sacramento-kings"));
+        	  
+        	  RosterPlayer.create(rosterPlayer);
+        	  Long rosterPlayerId = rosterPlayer.getId();
+        	  
+        	  RosterPlayer createRosterPlayer = RosterPlayer.findById(rosterPlayerId);
+        	  createRosterPlayer.setPosition(Position.center);
+        	  //createRosterPlayer.getPlayer().setActive(true);
+        	  createRosterPlayer.update();
+              
+        	  RosterPlayer updateRosterPlayer = RosterPlayer.findById(rosterPlayerId);
+        	  assertThat(updateRosterPlayer.getPosition()).isEqualTo(Position.center);
+              //assertThat(updateRosterPlayer.getPlayer().getActive()).isTrue();
+              RosterPlayer.delete(updateRosterPlayer.getId());
+          }
+        });
+    }
+    
+    @Test
+    public void updateRosterPlayerValidation() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+       		  try {
+       			  RosterPlayer rosterPlayer = TestMockHelper.getRosterPlayer();
+       			  rosterPlayer.setPlayer(Player.findByName("Webber", "Chris"));
+       			  rosterPlayer.setTeam(Team.findByKey("key", "sacramento-kings"));
+            	  
+            	  RosterPlayer.create(rosterPlayer);
+            	  Long rosterPlayerId = rosterPlayer.getId();
+            	  
+            	  RosterPlayer createRosterPlayer = RosterPlayer.findById(rosterPlayerId);
+       			  createRosterPlayer.getPlayer().setFirstName(null);
+       			  createRosterPlayer.update();
+       		  } catch (PersistenceException e) {
+       			  assertThat(e.getCause().getMessage().equalsIgnoreCase("Column 'first_name' cannot be null"));
+       		  }
+          }
+        });
+    }
+
 //    @Test
 //    public void paginationRosterPlayers() {
 //        running(fakeApplication(), new Runnable() {
