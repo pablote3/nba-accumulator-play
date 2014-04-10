@@ -6,7 +6,7 @@ import models.Game;
 import models.Official;
 import models.Team;
 
-public class XmlStat {
+public class XmlStatsBoxScore {
 	public Team away_team;
 	public Team home_team;
 	public Game event_information;
