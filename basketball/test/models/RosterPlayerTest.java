@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.persistence.PersistenceException;
 
+import models.Game.ProcessingType;
 import models.RosterPlayer.Position;
 
 import org.junit.Test;
@@ -51,7 +52,7 @@ public class RosterPlayerTest {
     public void findRosterPlayerDatePlayerName() {
         running(fakeApplication(), new Runnable() {
           public void run() {  	  
-        	  RosterPlayer rosterPlayer = RosterPlayer.findByDatePlayerName("2014-03-02", "Webber", "Chris");
+        	  RosterPlayer rosterPlayer = RosterPlayer.findByDatePlayerName("2014-03-02", "Webber", "Chris", ProcessingType.online);
         	  assertThat(rosterPlayer.getNumber()).isEqualTo("4");
               assertThat(rosterPlayer.getPlayer().getFirstName()).isEqualTo("Chris");
               assertThat(rosterPlayer.getPlayer().getLastName()).isEqualTo("Webber");
@@ -134,19 +135,22 @@ public class RosterPlayerTest {
     public void updateRosterPlayerValidation() {
         running(fakeApplication(), new Runnable() {
           public void run() {
+        	  Long rosterPlayerId = null;
        		  try {
        			  RosterPlayer rosterPlayer = TestMockHelper.getRosterPlayer();
        			  rosterPlayer.setPlayer(Player.findByName("Webber", "Chris"));
        			  rosterPlayer.setTeam(Team.findByKey("key", "sacramento-kings"));
             	  
             	  RosterPlayer.create(rosterPlayer);
-            	  Long rosterPlayerId = rosterPlayer.getId();
+            	  rosterPlayerId = rosterPlayer.getId();
             	  
             	  RosterPlayer createRosterPlayer = RosterPlayer.findById(rosterPlayerId);
        			  createRosterPlayer.getPlayer().setFirstName(null);
        			  createRosterPlayer.update();
        		  } catch (PersistenceException e) {
        			  assertThat(e.getCause().getMessage().equalsIgnoreCase("Column 'first_name' cannot be null"));
+       		  } finally {
+       			  RosterPlayer.delete(rosterPlayerId);
        		  }
           }
         });
