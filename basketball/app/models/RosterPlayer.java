@@ -183,31 +183,19 @@ public class RosterPlayer extends Model {
 	    return rosterPlayer;
 	}
 	
-	public static RosterPlayer findByDatePlayerName(String date, String lastName, String firstName) {
-		Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
-		query.fetch("player");
-	    query.where().lt("fromDate", date + " 00:00:00");
-	    query.where().gt("toDate", date + " 23:59:59");	 
-		query.where().eq("t1.last_Name", lastName);
-		query.where().eq("t1.first_Name", firstName);
-		RosterPlayer rosterPlayer = query.findUnique();
-	    return rosterPlayer;
-	}
-	
 	public static RosterPlayer findByDatePlayerName(String date, String lastName, String firstName, ProcessingType processingType) {
 		RosterPlayer rosterPlayer;
 	  	Query<RosterPlayer> query;
-	  	if (processingType.equals(ProcessingType.batch)) {
+	  	if (processingType.equals(ProcessingType.batch)) 
 	  		query = ebeanServer.find(RosterPlayer.class);
-	  		query.fetch("player");
-	  		query.where().lt("fromDate", date + " 00:00:00");
-	  		query.where().gt("toDate", date + " 23:59:59");	 
-	  		query.where().eq("t1.last_Name", lastName);
-	  		query.where().eq("t1.first_Name", firstName);
-	  		rosterPlayer = query.findUnique();
-	  	}
-	  	else
-	  		rosterPlayer = findByDatePlayerName(date, lastName, firstName);
+  		else
+  			query = Ebean.find(RosterPlayer.class);	
+	  	query.fetch("player");
+	  	query.where().lt("fromDate", date + " 00:00:00");
+	  	query.where().gt("toDate", date + " 23:59:59");	 
+	  	query.where().eq("t1.last_Name", lastName);
+	  	query.where().eq("t1.first_Name", firstName);
+	  	rosterPlayer = query.findUnique();
 	    
 		return rosterPlayer;
 	}
