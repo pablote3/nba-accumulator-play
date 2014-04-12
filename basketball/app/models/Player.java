@@ -35,10 +35,9 @@ import com.google.inject.Injector;
 
 @Entity
 public class Player extends Model {
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 1L;	
 	private static Injector injector = Guice.createInjector(new InjectorModule());
-	private static EbeanServerService service = injector.getInstance(EbeanServerServiceImpl.class);	
+	private static EbeanServerService service = injector.getInstance(EbeanServerService.class);	
 	private static EbeanServer ebeanServer = service.createEbeanServer();
 
 	@Id
