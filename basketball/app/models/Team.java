@@ -30,7 +30,7 @@ public class Team extends Model {
 	private static final long serialVersionUID = 1L;
   
 	@Id
-	@TableGenerator(name="table_gen", table="sequence_table", pkColumnName="seq_name", valueColumnName="seq_count", pkColumnValue="team_seq")
+	@TableGenerator(name="table_gen", table="sequence_table", pkColumnName="seq_name", valueColumnName="seq_count", pkColumnValue="team_seq", initialValue=1)
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="table_gen")
 	private Long id;
 	public Long getId() {
