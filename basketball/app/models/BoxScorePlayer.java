@@ -21,7 +21,6 @@ import services.InjectorModule;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.annotation.EnumValue;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -92,7 +91,6 @@ public class BoxScorePlayer extends Model {
 	}
 	
 	@Column(name="starter", nullable=false)
-	@JsonProperty("is_starter")
 	private boolean starter;
 	public boolean getStarter() {
 		return starter;
@@ -147,7 +145,6 @@ public class BoxScorePlayer extends Model {
 	}
 	
 	@Column(name="fieldGoalAttempts", nullable=true)
-	@JsonProperty("field_goals_attempted")
 	private Short fieldGoalAttempts;
 	public Short getFieldGoalAttempts() {
 		return fieldGoalAttempts;
@@ -156,7 +153,6 @@ public class BoxScorePlayer extends Model {
 		this.fieldGoalAttempts = fieldGoalAttempts;
 	}	
 	@Column(name="fieldGoalMade", nullable=true)
-	@JsonProperty("field_goals_made")
 	private Short fieldGoalMade;
 	public Short getFieldGoalMade() {
 		return fieldGoalMade;
@@ -165,7 +161,6 @@ public class BoxScorePlayer extends Model {
 		this.fieldGoalMade = fieldGoalMade;
 	}	
 	@Column(name="fieldGoalPercent", nullable=true)
-	@JsonProperty("field_goal_percentage")
 	private Float fieldGoalPercent;
 	public Float getFieldGoalPercent() {
 		return fieldGoalPercent;
@@ -175,7 +170,6 @@ public class BoxScorePlayer extends Model {
 	}
 	
 	@Column(name="threePointAttempts", nullable=true)
-	@JsonProperty("three_point_field_goals_attempted")
 	private Short threePointAttempts;
 	public Short getThreePointAttempts() {
 		return threePointAttempts;
@@ -184,7 +178,6 @@ public class BoxScorePlayer extends Model {
 		this.threePointAttempts = threePointAttempts;
 	}	
 	@Column(name="threePointMade", nullable=true)
-	@JsonProperty("three_point_field_goals_made")
 	private Short threePointMade;
 	public Short getThreePointMade() {
 		return threePointMade;
@@ -193,7 +186,6 @@ public class BoxScorePlayer extends Model {
 		this.threePointMade = threePointMade;
 	}	
 	@Column(name="threePointPercent", nullable=true)
-	@JsonProperty("three_point_percentage")
 	private Float threePointPercent;
 	public Float getThreePointPercent() {
 		return threePointPercent;
@@ -203,7 +195,6 @@ public class BoxScorePlayer extends Model {
 	}
 	
 	@Column(name="freeThrowAttempts", nullable=true)
-	@JsonProperty("free_throws_attempted")
 	private Short freeThrowAttempts;
 	public Short getFreeThrowAttempts() {
 		return freeThrowAttempts;
@@ -212,7 +203,6 @@ public class BoxScorePlayer extends Model {
 		this.freeThrowAttempts = freeThrowAttempts;
 	}	
 	@Column(name="freeThrowMade", nullable=true)
-	@JsonProperty("free_throws_made")
 	private Short freeThrowMade;
 	public Short getFreeThrowMade() {
 		return freeThrowMade;
@@ -221,7 +211,6 @@ public class BoxScorePlayer extends Model {
 		this.freeThrowMade = freeThrowMade;
 	}	
 	@Column(name="freeThrowPercent", nullable=true)
-	@JsonProperty("free_throw_percentage")
 	private Float freeThrowPercent;
 	public Float getFreeThrowPercent() {
 		return freeThrowPercent;
@@ -231,7 +220,6 @@ public class BoxScorePlayer extends Model {
 	}
 	
 	@Column(name="reboundsOffense", nullable=true)
-	@JsonProperty("offensive_rebounds")
 	private Short reboundsOffense;
 	public Short getReboundsOffense() {
 		return reboundsOffense;
@@ -241,7 +229,6 @@ public class BoxScorePlayer extends Model {
 	}
 	
 	@Column(name="reboundsDefense", nullable=true)
-	@JsonProperty("defensive_rebounds")
 	private Short reboundsDefense;
 	public Short getReboundsDefense() {
 		return reboundsDefense;
@@ -251,7 +238,6 @@ public class BoxScorePlayer extends Model {
 	}
 	
 	@Column(name="personalFouls", nullable=true)
-	@JsonProperty("personal_fouls")
 	private Short personalFouls;
 	public Short getPersonalFouls() {
 		return personalFouls;
