@@ -1,4 +1,4 @@
-package json;
+package json.xmlStats;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +10,9 @@ import models.GameOfficial;
 import models.Official;
 import models.PeriodScore;
 import models.RosterPlayer;
+import models.BoxScorePlayer.Position;
 
-public class GameJsonHelper {
+public class JsonHelper {
    
 	public static List<PeriodScore> getPeriodScores(int[] scores) {
     	List<PeriodScore> periodScores = new ArrayList<PeriodScore>();	    
@@ -61,42 +62,43 @@ public class GameJsonHelper {
     	return gameOfficials;
     }
 	
-	public static List<BoxScorePlayer> getBoxScorePlayers(BoxScorePlayer[] players, String date, ProcessingType processingType) {
+	public static List<BoxScorePlayer> getBoxScorePlayers(BoxScorePlayerDTO[] players, String date, ProcessingType processingType) {
     	List<BoxScorePlayer> boxScorePlayers = new ArrayList<BoxScorePlayer>();
-    	BoxScorePlayer statsBoxScorePlayer;
+    	BoxScorePlayerDTO statsBoxScorePlayerDTO;
 	    BoxScorePlayer boxScorePlayer;
 	    RosterPlayer rosterPlayer;
 	    
         for (int i = 0; i < players.length; i++) {
-        	statsBoxScorePlayer = players[i];
-        	String lastName = statsBoxScorePlayer.getRosterPlayer().getPlayer().getLastName();
-        	String firstName = statsBoxScorePlayer.getRosterPlayer().getPlayer().getFirstName();
+        	statsBoxScorePlayerDTO = players[i];
+        	String lastName = statsBoxScorePlayerDTO.getLast_name();
+        	String firstName = statsBoxScorePlayerDTO.getFirst_name();
         	rosterPlayer = RosterPlayer.findByDatePlayerName(date, lastName, firstName, processingType);
-        	if (rosterPlayer != null) {       		
-        		boxScorePlayer = new BoxScorePlayer();
-        		boxScorePlayer.setRosterPlayer(rosterPlayer);
-        		boxScorePlayer.setPosition(statsBoxScorePlayer.getPosition());
-        		boxScorePlayer.setMinutes(statsBoxScorePlayer.getMinutes());
-        		boxScorePlayer.setStarter(statsBoxScorePlayer.getStarter());
-                boxScorePlayer.setPoints(statsBoxScorePlayer.getPoints());
-                boxScorePlayer.setAssists(statsBoxScorePlayer.getAssists());
-                boxScorePlayer.setTurnovers(statsBoxScorePlayer.getTurnovers());
-                boxScorePlayer.setSteals(statsBoxScorePlayer.getSteals());
-                boxScorePlayer.setBlocks(statsBoxScorePlayer.getBlocks());
-                boxScorePlayer.setFieldGoalAttempts(statsBoxScorePlayer.getFieldGoalAttempts());
-                boxScorePlayer.setFieldGoalMade(statsBoxScorePlayer.getFieldGoalMade());
-                boxScorePlayer.setFieldGoalPercent(statsBoxScorePlayer.getFieldGoalPercent());
-                boxScorePlayer.setThreePointAttempts(statsBoxScorePlayer.getThreePointAttempts());
-                boxScorePlayer.setThreePointMade(statsBoxScorePlayer.getThreePointMade());
-                boxScorePlayer.setThreePointPercent(statsBoxScorePlayer.getThreePointPercent());
-                boxScorePlayer.setFreeThrowAttempts(statsBoxScorePlayer.getFreeThrowAttempts());
-                boxScorePlayer.setFreeThrowMade(statsBoxScorePlayer.getFreeThrowMade());
-                boxScorePlayer.setFreeThrowPercent(statsBoxScorePlayer.getFreeThrowPercent());
-                boxScorePlayer.setReboundsOffense(statsBoxScorePlayer.getReboundsOffense());
-                boxScorePlayer.setReboundsDefense(statsBoxScorePlayer.getReboundsDefense());
-                boxScorePlayer.setPersonalFouls(statsBoxScorePlayer.getPersonalFouls());       		
-        		boxScorePlayers.add(boxScorePlayer);
+        	if (rosterPlayer == null) {
+
         	}
+        	boxScorePlayer = new BoxScorePlayer();
+        	boxScorePlayer.setRosterPlayer(rosterPlayer);
+        	boxScorePlayer.setPosition(Position.valueOf(statsBoxScorePlayerDTO.getPosition()));
+        	boxScorePlayer.setMinutes(statsBoxScorePlayerDTO.getMinutes());
+        	boxScorePlayer.setStarter(statsBoxScorePlayerDTO.getStarter());
+            boxScorePlayer.setPoints(statsBoxScorePlayerDTO.getPoints());
+            boxScorePlayer.setAssists(statsBoxScorePlayerDTO.getAssists());
+            boxScorePlayer.setTurnovers(statsBoxScorePlayerDTO.getTurnovers());
+            boxScorePlayer.setSteals(statsBoxScorePlayerDTO.getSteals());
+            boxScorePlayer.setBlocks(statsBoxScorePlayerDTO.getBlocks());
+            boxScorePlayer.setFieldGoalAttempts(statsBoxScorePlayerDTO.getFieldGoalAttempts());
+            boxScorePlayer.setFieldGoalMade(statsBoxScorePlayerDTO.getFieldGoalMade());
+            boxScorePlayer.setFieldGoalPercent(statsBoxScorePlayerDTO.getFieldGoalPercent());
+            boxScorePlayer.setThreePointAttempts(statsBoxScorePlayerDTO.getThreePointAttempts());
+            boxScorePlayer.setThreePointMade(statsBoxScorePlayerDTO.getThreePointMade());
+            boxScorePlayer.setThreePointPercent(statsBoxScorePlayerDTO.getThreePointPercent());
+            boxScorePlayer.setFreeThrowAttempts(statsBoxScorePlayerDTO.getFreeThrowAttempts());
+            boxScorePlayer.setFreeThrowMade(statsBoxScorePlayerDTO.getFreeThrowMade());
+            boxScorePlayer.setFreeThrowPercent(statsBoxScorePlayerDTO.getFreeThrowPercent());
+            boxScorePlayer.setReboundsOffense(statsBoxScorePlayerDTO.getReboundsOffense());
+            boxScorePlayer.setReboundsDefense(statsBoxScorePlayerDTO.getReboundsDefense());
+            boxScorePlayer.setPersonalFouls(statsBoxScorePlayerDTO.getPersonalFouls());       		
+        	boxScorePlayers.add(boxScorePlayer);
         }
     	return boxScorePlayers;
     }

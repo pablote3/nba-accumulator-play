@@ -1,12 +1,11 @@
-package json;
+package json.xmlStats;
 
 import models.BoxScore;
-import models.BoxScorePlayer;
 import models.Game;
 import models.Official;
 import models.Team;
 
-public class XmlStatsBoxScore {
+public class NBABoxScore {
 	public Team away_team;
 	public Team home_team;
 	public Game event_information;
@@ -14,7 +13,7 @@ public class XmlStatsBoxScore {
 	public int[] home_period_scores;
 	public BoxScore away_totals;
 	public BoxScore home_totals;
-	public BoxScorePlayer[] away_stats;
-	public BoxScorePlayer[] home_stats;
+	public BoxScorePlayerDTO[] away_stats;
+	public BoxScorePlayerDTO[] home_stats;
 	public Official[] officials;
 }
