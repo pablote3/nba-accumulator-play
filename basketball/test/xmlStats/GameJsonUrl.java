@@ -16,8 +16,8 @@ import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.zip.GZIPInputStream;
 
-import json.GameJsonHelper;
-import json.XmlStat;
+import json.xmlStats.JsonHelper;
+import json.xmlStats.NBABoxScore;
 import models.BoxScore;
 import models.Game;
 import models.Team;
@@ -72,7 +72,7 @@ public class GameJsonUrl {
 		            if (baseJson != null) {
 		            	ObjectMapper mapper = new ObjectMapper();
 		    	        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		    	        XmlStat xmlStats = mapper.readValue(baseJson, XmlStat.class);
+		    	        NBABoxScore xmlStats = mapper.readValue(baseJson, NBABoxScore.class);
 			    	        
 			            Game scheduleGame = new Game();
 			            scheduleGame.setDate(xmlStats.event_information.getDate());
@@ -94,15 +94,15 @@ public class GameJsonUrl {
 				              
 			    		Game completeGame = Game.findById(gameId, ProcessingType.online);
 			    		completeGame.setStatus(Status.completed);	              
-		      		  	completeGame.setGameOfficials(GameJsonHelper.getGameOfficials(xmlStats.officials, ProcessingType.online));
+		      		  	completeGame.setGameOfficials(JsonHelper.getGameOfficials(xmlStats.officials, ProcessingType.online));
 		      		  	
 		      		  	awayBoxScore = completeGame.getBoxScores().get(0);
-		      		  	awayBoxScore.setPeriodScores(GameJsonHelper.getPeriodScores(xmlStats.away_period_scores));
-		      		  	GameJsonHelper.getBoxScoreStats(awayBoxScore, xmlStats.away_totals);
+		      		  	awayBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStats.away_period_scores));
+		      		  	JsonHelper.getBoxScoreStats(awayBoxScore, xmlStats.away_totals);
 		              
 		      		  	homeBoxScore = completeGame.getBoxScores().get(1);
-		      		  	homeBoxScore.setPeriodScores(GameJsonHelper.getPeriodScores(xmlStats.home_period_scores));
-		      		  	GameJsonHelper.getBoxScoreStats(homeBoxScore, xmlStats.home_totals);              
+		      		  	homeBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStats.home_period_scores));
+		      		  	JsonHelper.getBoxScoreStats(homeBoxScore, xmlStats.home_totals);              
 		      		  	if (xmlStats.away_totals.getPoints() > xmlStats.home_totals.getPoints()) {
 		      		  		homeBoxScore.setResult(Result.loss);
 		      		  		awayBoxScore.setResult(Result.win);

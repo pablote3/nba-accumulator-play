@@ -12,8 +12,8 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import json.GameJsonHelper;
-import json.XmlStat;
+import json.xmlStats.JsonHelper;
+import json.xmlStats.NBABoxScore;
 import models.BoxScore;
 import models.Game;
 import models.Team;
@@ -23,6 +23,7 @@ import models.Game.ProcessingType;
 import models.Game.SeasonType;
 import models.Game.Status;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import util.DateTime;
@@ -45,27 +46,27 @@ public class GameJsonFile {
 	              ObjectMapper mapper = new ObjectMapper();
 	              mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	            
-	              XmlStat xmlStats = mapper.readValue(baseJson, XmlStat.class);
+	              NBABoxScore xmlStats = mapper.readValue(baseJson, NBABoxScore.class);
               
 	              Game game = new Game();
 	              game.setDate(xmlStats.event_information.getDate());
 	              game.setStatus(Status.completed);
 	              game.setSeasonType(xmlStats.event_information.getSeasonType());	              
-	              game.setGameOfficials(GameJsonHelper.getGameOfficials(xmlStats.officials, ProcessingType.online));
+	              game.setGameOfficials(JsonHelper.getGameOfficials(xmlStats.officials, ProcessingType.online));
 	              
 	              BoxScore homeBoxScore = new BoxScore();
 	              homeBoxScore.setLocation(Location.home);
 	              homeBoxScore.setTeam(Team.findByKey("key", xmlStats.home_team.getKey()));
-	              homeBoxScore.setPeriodScores(GameJsonHelper.getPeriodScores(xmlStats.home_period_scores));
-	              GameJsonHelper.getBoxScoreStats(homeBoxScore, xmlStats.home_totals);
-	              homeBoxScore.setBoxScorePlayers(GameJsonHelper.getBoxScorePlayers(xmlStats.home_stats, DateTime.getFindDateShort(game.getDate()), ProcessingType.online));
+	              homeBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStats.home_period_scores));
+	              JsonHelper.getBoxScoreStats(homeBoxScore, xmlStats.home_totals);
+	              homeBoxScore.setBoxScorePlayers(JsonHelper.getBoxScorePlayers(xmlStats.home_stats, DateTime.getFindDateShort(game.getDate()), ProcessingType.online));
 	              
 	              BoxScore awayBoxScore = new BoxScore();
 	              awayBoxScore.setLocation(Location.away);
 	              awayBoxScore.setTeam(Team.findByKey("key", xmlStats.away_team.getKey()));
-	              awayBoxScore.setPeriodScores(GameJsonHelper.getPeriodScores(xmlStats.away_period_scores));
-	              GameJsonHelper.getBoxScoreStats(awayBoxScore, xmlStats.away_totals);
-	              awayBoxScore.setBoxScorePlayers(GameJsonHelper.getBoxScorePlayers(xmlStats.away_stats, DateTime.getFindDateShort(game.getDate()), ProcessingType.online));
+	              awayBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStats.away_period_scores));
+	              JsonHelper.getBoxScoreStats(awayBoxScore, xmlStats.away_totals);
+	              awayBoxScore.setBoxScorePlayers(JsonHelper.getBoxScorePlayers(xmlStats.away_stats, DateTime.getFindDateShort(game.getDate()), ProcessingType.online));
 
 	              if (xmlStats.away_totals.getPoints() > xmlStats.home_totals.getPoints()) {
 	            	  homeBoxScore.setResult(Result.loss);
@@ -111,6 +112,7 @@ public class GameJsonFile {
         });
     }
     
+    @Ignore
     @Test
     public void updateGame() {
         running(fakeApplication(), new Runnable() {
@@ -124,7 +126,7 @@ public class GameJsonFile {
 	              ObjectMapper mapper = new ObjectMapper();
 	              mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	            
-	              XmlStat xmlStats = mapper.readValue(baseJson, XmlStat.class);
+	              NBABoxScore xmlStats = mapper.readValue(baseJson, NBABoxScore.class);
               
 	              Game scheduleGame = new Game();
 	              scheduleGame.setDate(xmlStats.event_information.getDate());
@@ -146,15 +148,15 @@ public class GameJsonFile {
 	              
 	    		  Game completeGame = Game.findById(gameId, ProcessingType.online);
 	      		  completeGame.setStatus(Status.completed);	              
-	              completeGame.setGameOfficials(GameJsonHelper.getGameOfficials(xmlStats.officials, ProcessingType.online));
+	              completeGame.setGameOfficials(JsonHelper.getGameOfficials(xmlStats.officials, ProcessingType.online));
 	              
 	              awayBoxScore = completeGame.getBoxScores().get(0);
-	              awayBoxScore.setPeriodScores(GameJsonHelper.getPeriodScores(xmlStats.away_period_scores));
-	              GameJsonHelper.getBoxScoreStats(awayBoxScore, xmlStats.away_totals);   
+	              awayBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStats.away_period_scores));
+	              JsonHelper.getBoxScoreStats(awayBoxScore, xmlStats.away_totals);   
 	              
 	              homeBoxScore = completeGame.getBoxScores().get(1);
-	              homeBoxScore.setPeriodScores(GameJsonHelper.getPeriodScores(xmlStats.home_period_scores));
-	              GameJsonHelper.getBoxScoreStats(homeBoxScore, xmlStats.home_totals);     
+	              homeBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStats.home_period_scores));
+	              JsonHelper.getBoxScoreStats(homeBoxScore, xmlStats.home_totals);     
 
 	              if (awayBoxScore.getPoints() > homeBoxScore.getPoints()) {
 	            	  homeBoxScore.setResult(Result.loss);
