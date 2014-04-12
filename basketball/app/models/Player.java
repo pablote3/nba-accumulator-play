@@ -21,7 +21,6 @@ import models.Game.ProcessingType;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import services.EbeanServerService;
-import services.EbeanServerServiceImpl;
 import services.InjectorModule;
 import util.DateTime;
 
