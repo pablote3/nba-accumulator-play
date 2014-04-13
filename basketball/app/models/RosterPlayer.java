@@ -174,7 +174,7 @@ public class RosterPlayer extends Model {
 	    return rosterPlayer;
 	}
 	
-	public static List<RosterPlayer> findByPlayerName(String lastName, String firstName) {
+	public static List<RosterPlayer> findByPlayer(String lastName, String firstName) {
 		Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
 		query.fetch("player");
 		query.where().eq("t1.last_Name", lastName);
@@ -183,7 +183,7 @@ public class RosterPlayer extends Model {
 	    return rosterPlayer;
 	}
 	
-	public static RosterPlayer findByDatePlayerName(String date, String lastName, String firstName, ProcessingType processingType) {
+	public static RosterPlayer findByDatePlayer(String date, String lastName, String firstName, ProcessingType processingType) {
 		RosterPlayer rosterPlayer;
 	  	Query<RosterPlayer> query;
 	  	if (processingType.equals(ProcessingType.batch)) 

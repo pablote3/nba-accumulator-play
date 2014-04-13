@@ -40,7 +40,7 @@ public class RosterPlayerTest {
     public void findRosterPlayersPlayerName() {
         running(fakeApplication(), new Runnable() {
           public void run() {  	  
-        	  List<RosterPlayer> rosterPlayers = RosterPlayer.findByPlayerName("Webber", "Chris");
+        	  List<RosterPlayer> rosterPlayers = RosterPlayer.findByPlayer("Webber", "Chris");
         	  assertThat(rosterPlayers.size()).isEqualTo(1);
         	  assertThat(rosterPlayers.get(0).getNumber()).isEqualTo("4");
         	  assertThat(rosterPlayers.get(0).getTeam().getKey()).isEqualTo("sacramento-kings");
@@ -52,7 +52,7 @@ public class RosterPlayerTest {
     public void findRosterPlayerDatePlayerName() {
         running(fakeApplication(), new Runnable() {
           public void run() {  	  
-        	  RosterPlayer rosterPlayer = RosterPlayer.findByDatePlayerName("2014-03-02", "Webber", "Chris", ProcessingType.online);
+        	  RosterPlayer rosterPlayer = RosterPlayer.findByDatePlayer("2014-03-02", "Webber", "Chris", ProcessingType.online);
         	  assertThat(rosterPlayer.getNumber()).isEqualTo("4");
               assertThat(rosterPlayer.getPlayer().getFirstName()).isEqualTo("Chris");
               assertThat(rosterPlayer.getPlayer().getLastName()).isEqualTo("Webber");
