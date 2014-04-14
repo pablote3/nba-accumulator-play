@@ -9,6 +9,7 @@ import java.util.Locale;
 
 import models.BoxScore.Location;
 import models.BoxScore.Result;
+import models.Game.ProcessingType;
 import models.Game.SeasonType;
 import models.Game.Status;
 import models.RosterPlayer.Position;
@@ -46,17 +47,17 @@ public class TestMockHelper {
 	    GameOfficial gameOfficial;
 	    Official official;
 	    
-	    official = Official.findByName("Brown", "Tony");
+	    official = Official.findByName("Brown", "Tony", ProcessingType.online);
 	  	gameOfficial = new GameOfficial();
 	  	gameOfficial.setOfficial(official);
 	  	gameOfficials.add(gameOfficial);
 	  	
-	  	official = Official.findByName("Davis", "Marc");
+	  	official = Official.findByName("Davis", "Marc", ProcessingType.online);
 	  	gameOfficial = new GameOfficial();
 	  	gameOfficial.setOfficial(official);
 	  	gameOfficials.add(gameOfficial);
     	
-	    official = Official.findByName("Palmer", "Violet");
+	    official = Official.findByName("Palmer", "Violet", ProcessingType.online);
 	  	gameOfficial = new GameOfficial();
 	  	gameOfficial.setOfficial(official);
 	  	gameOfficials.add(gameOfficial);
@@ -79,41 +80,41 @@ public class TestMockHelper {
   	  return official;
 	}
 	
-	protected static Player getPlayer() {
+	protected static Player getPlayer(boolean active) {
 	  Player player = new Player();
-	  player.setLastName("Webber");
+	  player.setLastName("Mullin");
 	  player.setFirstName("Chris");
-	  player.setDisplayName("Chris Webber");
-	  player.setActive(false);
-	  player.setHeight((short)82);
-	  player.setWeight((short)245);
+	  player.setDisplayName("Chris Mullin");
+	  player.setActive(active);
+	  player.setHeight((short)79);
+	  player.setWeight((short)215);
 	  Date date = null;
 	  try {
-	  	  date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("1973-03-01");
+	  	  date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("1963-07-30");
 	  } catch (ParseException e) {
 	  	  e.printStackTrace();
 	  }
 	  player.setBirthDate(date);
-	  player.setBirthPlace("Detroit, Michigan, USA");
+	  player.setBirthPlace("Brooklyn, New York, USA");
 	  return player;
 	}
 	
-	protected static RosterPlayer getRosterPlayer() {
-		  RosterPlayer rosterPlayer = new RosterPlayer();
-		  rosterPlayer.setNumber("4");
-		  rosterPlayer.setPosition(Position.powerForward);
-		  Date fromDate = null;
-		  Date toDate = null;
-		  try {
-		  	  fromDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2014-03-11");
-		  	  toDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2014-03-20");
-		  } catch (ParseException e) {
-		  	  e.printStackTrace();
-		  }
-		  rosterPlayer.setFromDate(fromDate);
-		  rosterPlayer.setToDate(toDate);
-		  return rosterPlayer;
-		}
+	protected static RosterPlayer getRosterPlayer(String startDate, String endDate) {
+	  RosterPlayer rosterPlayer = new RosterPlayer();
+	  rosterPlayer.setNumber("10");
+	  rosterPlayer.setPosition(Position.pointGuard);
+	  Date fromDate = null;
+	  Date toDate = null;
+	  try {
+	  	  fromDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(startDate);
+	  	  toDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(endDate);
+	  } catch (ParseException e) {
+	  	  e.printStackTrace();
+	  }
+	  rosterPlayer.setFromDate(fromDate);
+	  rosterPlayer.setToDate(toDate);
+	  return rosterPlayer;
+	}
 	
 	protected static Team getTeam() {
         Team team = new Team();
