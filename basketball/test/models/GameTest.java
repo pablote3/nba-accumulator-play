@@ -87,23 +87,19 @@ public class GameTest {
     
     @Test
     public void findGameIdByDateTeamBatch() {
-        running(fakeApplication(), new Runnable() {
-            public void run() {
-          	  Long gameId = Game.findIdByDateTeam("2012-10-31", "sacramento-kings", ProcessingType.batch);
-          	  Game game = Game.findById(gameId, ProcessingType.batch);
+    	Long gameId = Game.findIdByDateTeam("2012-10-31", "sacramento-kings", ProcessingType.batch);
+   	  	Game game = Game.findById(gameId, ProcessingType.batch);
           	  
-          	  assertThat(game.getBoxScores().size()).isEqualTo(2);
-          	  for (int i = 0; i < game.getBoxScores().size(); i++) {
-          		  BoxScore boxScore = game.getBoxScores().get(i);
-          		  if (boxScore.getLocation().equals(Location.away)) {
-          			  assertThat(boxScore.getTeam().getAbbr()).isEqualTo("SAC");
-          		  }
-          		  else if (boxScore.getLocation().equals(Location.home)) {
-          			  assertThat(boxScore.getTeam().getAbbr()).isEqualTo("CHI");
-          		  }
-          	  }
-            }
-        });
+   	  	assertThat(game.getBoxScores().size()).isEqualTo(2);
+   	  	for (int i = 0; i < game.getBoxScores().size(); i++) {
+   	  		BoxScore boxScore = game.getBoxScores().get(i);
+   	  		if (boxScore.getLocation().equals(Location.away)) {
+   	  			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("SAC");
+   	  		}
+   	  		else if (boxScore.getLocation().equals(Location.home)) {
+   	  			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("CHI");
+   	  		}
+   	  	}
     }
     
     @Test
