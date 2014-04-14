@@ -182,10 +182,10 @@ public class Player extends Model {
 	}
 	
 	public static List<Player> findActive(boolean active) {
-		Query<Player> query = Ebean.find(Player.class);
-		query.where().eq("active", active);
-		List<Player> players = query.findList();
-	    return players;
+			Query<Player> query = Ebean.find(Player.class);
+			query.where().eq("active", active);
+			List<Player> players = query.findList();
+		    return players;
 	}
 	
 	public static Player findByName(String lastName, String firstName, ProcessingType processingType) {
