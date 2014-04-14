@@ -39,7 +39,7 @@ public class OfficialTest {
     public void findOfficialByName() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Official official = Official.findByName("Garretson", "Ron");
+        	  Official official = Official.findByName("Garretson", "Ron", ProcessingType.online);
               assertThat(official.getNumber()).isEqualTo("10");
               assertThat(official.getActive()).isTrue();
           }
@@ -71,7 +71,7 @@ public class OfficialTest {
           public void run() {
         	  Official.create(TestMockHelper.getOfficial());
               
-        	  Official createOfficial = Official.findByName("Hansen", "Chris");
+        	  Official createOfficial = Official.findByName("Hansen", "Chris", ProcessingType.online);
               assertThat(createOfficial.getNumber()).isEqualTo("99");
               assertThat(createOfficial.getActive()).isFalse();
               Official.delete(createOfficial.getId());
@@ -83,11 +83,11 @@ public class OfficialTest {
     public void updateOfficial() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Official official = Official.findByName("Palmer", "Violet");
+        	  Official official = Official.findByName("Palmer", "Violet", ProcessingType.online);
         	  official.setActive(false);
         	  official.update();
               
-        	  Official updateOfficial = Official.findByName("Palmer", "Violet");
+        	  Official updateOfficial = Official.findByName("Palmer", "Violet", ProcessingType.online);
               assertThat(updateOfficial.getActive()).isFalse();
               updateOfficial.setActive(true);
               updateOfficial.update();
@@ -100,7 +100,7 @@ public class OfficialTest {
         running(fakeApplication(), new Runnable() {
           public void run() {
        		  try {
-       			  Official official = Official.findByName("Palmer", "Violet");
+       			  Official official = Official.findByName("Palmer", "Violet", ProcessingType.online);
 				  official.setFirstName(null);
 				  official.update();
        		  } catch (PersistenceException e) {

@@ -16,7 +16,7 @@ import com.avaje.ebean.Page;
 
 public class TeamTest {    
     @Test
-    public void findTeamsAll() {
+    public void findAll() {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	  List<Team> teams = Team.findAll();
@@ -25,46 +25,44 @@ public class TeamTest {
         });
     }
     
-	@Test
-    public void findTeamsActive() {
-        running(fakeApplication(), new Runnable() {
-          public void run() {
-        	  List<Team> teams = Team.findActive(true);
-        	  assertThat(teams.size()).isEqualTo(30);
-          }
-        });
-    }
-	
-	@Test
-    public void findTeamsFilter() {
-        running(fakeApplication(), new Runnable() {
-          public void run() {
-        	  List<Team> teams = Team.findFilter("new");
-        	  assertThat(teams.size()).isEqualTo(3);
-          }
-        });
-    }
-	
     @Test
-    public void findTeamFinderKey() {
-        running(fakeApplication(), new Runnable() {
-          public void run() {
-              Team team = Team.findByKey("key", "new-orleans-pelicans");
-              assertThat(team.getFullName()).isEqualTo("New Orleans Pelicans");
-              assertThat(team.getAbbr()).isEqualTo("NOP");
-              assertThat(team.getActive()).isTrue();
-          }
-        });
-    }
-    
-    @Test
-    public void findTeamFinderShortName() {
+    public void findByKey() {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	  Team team1 = Team.findByKey("shortName", "Pelicans");
               assertThat(team1.getFullName()).isEqualTo("New Orleans Pelicans");
               assertThat(team1.getAbbr()).isEqualTo("NOP");
               assertThat(team1.getActive()).isTrue();
+          }
+        });
+    }
+    
+	@Test
+    public void findByActive() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  List<Team> teams = Team.findByActive(true);
+        	  assertThat(teams.size()).isEqualTo(30);
+          }
+        });
+    }
+	
+	@Test
+    public void findByAbbr() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  Team team = Team.findByAbbr("SA");
+        	  assertThat(team.getFullName()).isEqualTo("San Antonio Spurs");
+          }
+        });
+    }
+	
+	@Test
+    public void findWithFilter() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  List<Team> teams = Team.findFilter("new");
+        	  assertThat(teams.size()).isEqualTo(3);
           }
         });
     }

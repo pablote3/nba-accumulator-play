@@ -18,7 +18,6 @@ import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 import models.Game.ProcessingType;
-
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import services.EbeanServerService;
@@ -158,26 +157,16 @@ public class Official extends Model {
 	    return officials;
 	}
 	
-	public static Official findByName(String lastName, String firstName) {
-		Query<Official> query = Ebean.find(Official.class);
-		query.where().eq("lastName", lastName);
-		query.where().eq("firstName", firstName);
-		Official official = query.findUnique();
-	    return official;
-	}
-	
 	public static Official findByName(String lastName, String firstName, ProcessingType processingType) {
 		Official official;
 		Query<Official> query; 
-		if (processingType.equals(ProcessingType.batch)) {
+		if (processingType.equals(ProcessingType.batch))
 			query = ebeanServer.find(Official.class);
-			query.where().eq("lastName", lastName);
-			query.where().eq("firstName", firstName);
-			official = query.findUnique();
-		}
-		else {
-			official = findByName(lastName, firstName);
-		}
+		else
+			query = Ebean.find(Official.class);
+		query.where().eq("lastName", lastName);
+		query.where().eq("firstName", firstName);
+		official = query.findUnique();
 	    return official;
 	}
 	

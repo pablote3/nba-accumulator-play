@@ -213,9 +213,13 @@ public class Team extends Model {
 		Query<Team> query = Ebean.find(Team.class);
 		List<Team> teams = query.findList();
 	    return teams;
+	}	
+	
+	public static Team findByAbbr(String abbr) {
+		return findByKey("abbr", abbr);
 	}
 	
-	public static List<Team> findActive(boolean active) {
+	public static List<Team> findByActive(boolean active) {
 		Query<Team> query = Ebean.find(Team.class);
 		query.where().eq("active", active);
 		List<Team> teams = query.findList();
