@@ -240,6 +240,13 @@ public class RosterPlayer extends Model {
 	public static void create(RosterPlayer rosterPlayer) {
 		rosterPlayer.save();
 	}
+	
+	public static void update(RosterPlayer rosterPlayer, ProcessingType processingType) {
+		if (processingType.equals(ProcessingType.batch))
+			ebeanServer.update(rosterPlayer);
+		else
+			Ebean.update(rosterPlayer);
+	}
 	  
 	public static void delete(Long id) {
 		RosterPlayer rosterPlayer = RosterPlayer.findById(id);
