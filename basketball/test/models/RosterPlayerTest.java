@@ -101,7 +101,7 @@ public class RosterPlayerTest {
         	  rosterPlayer.setTeam(Team.findByAbbr("GS"));
         	  RosterPlayer.create(rosterPlayer);
         	  
-        	  RosterPlayer createRosterPlayer = RosterPlayer.findByDateTeamPlayer("2014-04-05", "GS", player.getLastName(), player.getFirstName(), ProcessingType.batch);
+        	  RosterPlayer createRosterPlayer = RosterPlayer.findByDateTeamPlayer("2014-04-04", "GS", player.getLastName(), player.getFirstName(), ProcessingType.batch);
               assertThat(createRosterPlayer.getNumber()).isEqualTo("10");
               assertThat(createRosterPlayer.getPlayer().getActive()).isTrue();
               assertThat(createRosterPlayer.getPlayer().getBirthPlace()).isEqualTo("Brooklyn, New York, USA");

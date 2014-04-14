@@ -168,7 +168,7 @@ public class RosterPlayer extends Model {
 	
 	public static List<RosterPlayer> findByDate(String date) {
 		Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
-	    query.where().lt("fromDate", date + " 00:00:00");
+	    query.where().lt("fromDate", date + " 00:00:01");
 	    query.where().gt("toDate", date + " 23:59:59");	    
 	    List<RosterPlayer> rosterPlayer = query.findList();
 	    return rosterPlayer;
@@ -191,7 +191,7 @@ public class RosterPlayer extends Model {
   		else
   			query = Ebean.find(RosterPlayer.class);	
 	  	query.fetch("player");
-	  	query.where().lt("fromDate", date + " 00:00:00");
+	  	query.where().lt("fromDate", date + " 00:00:01");
 	  	query.where().gt("toDate", date + " 23:59:59");	 
 	  	query.where().eq("t1.last_Name", lastName);
 	  	query.where().eq("t1.first_Name", firstName);
@@ -209,7 +209,7 @@ public class RosterPlayer extends Model {
   			query = Ebean.find(RosterPlayer.class);	
 	  	query.fetch("player");
 	  	query.fetch("team");
-	  	query.where().lt("fromDate", date + " 00:00:00");
+	  	query.where().lt("fromDate", date + " 00:00:01");
 	  	query.where().gt("toDate", date + " 23:59:59");	 
 	  	query.where().eq("t1.last_Name", lastName);
 	  	query.where().eq("t1.first_Name", firstName);
@@ -230,7 +230,7 @@ public class RosterPlayer extends Model {
 	public static List<RosterPlayer> findByDateTeam(String date, String teamKey) {
 	  	Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
 	  	query.fetch("team");
-	    query.where().lt("fromDate", date + " 00:00:00");
+	    query.where().lt("fromDate", date + " 00:00:01");
 	    query.where().gt("toDate", date + " 23:59:59");	 
 	    query.where().eq("t1.team_key", teamKey);
 	    List<RosterPlayer> rosterPlayer = query.findList();
