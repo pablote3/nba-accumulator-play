@@ -188,31 +188,30 @@ public class Player extends Model {
 	    return players;
 	}
 	
-	public static Player findByName(String lastName, String firstName) {
-		Query<Player> query = Ebean.find(Player.class);
-		query.where().eq("lastName", lastName);
-		query.where().eq("firstName", firstName);
-		Player player = query.findUnique();
-	    return player;
-	}
-	
 	public static Player findByName(String lastName, String firstName, ProcessingType processingType) {
 		Player player;
 		Query<Player> query; 
-		if (processingType.equals(ProcessingType.batch)) {
-			query = ebeanServer.find(Player.class);
-			query.where().eq("lastName", lastName);
-			query.where().eq("firstName", firstName);
-			player = query.findUnique();
-		}
-		else {
-			player = findByName(lastName, firstName);
-		}
+	  	if (processingType.equals(ProcessingType.batch)) 
+	  		query = ebeanServer.find(Player.class);
+  		else
+  			query = Ebean.find(Player.class);	
+
+		query = ebeanServer.find(Player.class);
+		query.where().eq("lastName", lastName);
+		query.where().eq("firstName", firstName);
+		player = query.findUnique();
 	    return player;
 	}
 	
 	public static void create(Player player) {
 		player.save();
+	}
+	
+	public static void update(Player player, ProcessingType processingType) {
+		if (processingType.equals(ProcessingType.batch))
+			ebeanServer.update(player);
+		else
+			Ebean.update(player);
 	}
 	  
 	public static void delete(Long id) {
