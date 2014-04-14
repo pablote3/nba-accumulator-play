@@ -8,13 +8,15 @@ import java.util.List;
 
 import javax.persistence.PersistenceException;
 
+import models.Game.ProcessingType;
+
 import org.junit.Test;
 
 import com.avaje.ebean.Page;
 
 public class PlayerTest {    
     @Test
-    public void findPlayersAll() {
+    public void findAll() {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	  List<Player> players = Player.findAll();
@@ -24,7 +26,7 @@ public class PlayerTest {
     }
     
 	@Test
-    public void findPlayersActive() {
+    public void findActive() {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	  List<Player> players = Player.findActive(true);
@@ -34,10 +36,10 @@ public class PlayerTest {
     }
 
     @Test
-    public void findPlayerByName() {
+    public void findByName() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Player player = Player.findByName("Webber", "Chris");
+        	  Player player = Player.findByName("Webber", "Chris", ProcessingType.online);
         	  assertThat(player.getActive()).isFalse();
         	  assertThat(player.getWeight()).isEqualTo((short)245);
           }
@@ -48,13 +50,13 @@ public class PlayerTest {
     public void createPlayer() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Player player = TestMockHelper.getPlayer();
+        	  Player player = TestMockHelper.getPlayer(true);
         	  Player.create(player);
         	  Long playerId = player.getId();
               
         	  Player createPlayer = Player.findById(playerId);
-              assertThat(createPlayer.getActive()).isFalse();
-              assertThat(createPlayer.getWeight()).isEqualTo((short)245);
+              assertThat(createPlayer.getActive()).isTrue();
+              assertThat(createPlayer.getWeight()).isEqualTo((short)215);
               Player.delete(playerId);
           }
         });
@@ -64,11 +66,11 @@ public class PlayerTest {
     public void updatePlayer() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Player player = Player.findByName("Webber", "Chris");
+        	  Player player = Player.findByName("Webber", "Chris", ProcessingType.online);
         	  player.setActive(true);
         	  player.update();
         	  
-        	  Player updatePlayer = Player.findByName("Webber", "Chris");
+        	  Player updatePlayer = Player.findByName("Webber", "Chris", ProcessingType.online);
               assertThat(updatePlayer.getActive()).isTrue();
               assertThat(updatePlayer.getWeight()).isEqualTo((short)245);
 
@@ -83,7 +85,7 @@ public class PlayerTest {
         running(fakeApplication(), new Runnable() {
           public void run() {
        		  try {
-            	  Player player = Player.findByName("Webber", "Chris");
+            	  Player player = Player.findByName("Webber", "Chris", ProcessingType.online);
 				  player.setFirstName(null);
 				  player.update();
        		  } catch (PersistenceException e) {

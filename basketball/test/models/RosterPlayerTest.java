@@ -17,17 +17,17 @@ import com.avaje.ebean.Page;
 
 public class RosterPlayerTest {
     @Test
-    public void findRosterPlayersAll() {
+    public void findAll() {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	  List<RosterPlayer> rosterPlayers = RosterPlayer.findAll();
-        	  assertThat(rosterPlayers.size()).isEqualTo(2);
+        	  assertThat(rosterPlayers.size()).isEqualTo(3);
           }
         });
     }
     
     @Test
-    public void findRosterPlayersDate() {
+    public void findDate() {
         running(fakeApplication(), new Runnable() {
           public void run() {  	  
         	  List<RosterPlayer> rosterPlayers = RosterPlayer.findByDate("2014-03-02");
@@ -37,7 +37,7 @@ public class RosterPlayerTest {
     }
     
 	@Test
-    public void findRosterPlayersTeam() {
+    public void findTeam() {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	  List<RosterPlayer> rosterPlayers = RosterPlayer.findByTeam("sacramento-kings");
@@ -51,17 +51,17 @@ public class RosterPlayerTest {
     }
     
     @Test
-    public void findRosterPlayerPlayer() {
+    public void findPlayer() {
         running(fakeApplication(), new Runnable() {
           public void run() {  	  
         	  List<RosterPlayer> rosterPlayers = RosterPlayer.findByPlayer("Webber", "Chris");
-        	  assertThat(rosterPlayers.size()).isEqualTo(2);
+        	  assertThat(rosterPlayers.size()).isEqualTo(3);
           }
         });
     }
     
     @Test
-    public void findRosterPlayerDatePlayer() {
+    public void findDatePlayer() {
         running(fakeApplication(), new Runnable() {
           public void run() {  	  
         	  List<RosterPlayer> rosterPlayers = RosterPlayer.findByDatePlayer("2014-03-02", "Webber", "Chris", ProcessingType.online);
@@ -72,7 +72,7 @@ public class RosterPlayerTest {
 
 	
 	@Test
-    public void findRosterDateTeamPlayer() {
+    public void findDateTeamPlayer() {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	  RosterPlayer rosterPlayer = RosterPlayer.findByDateTeamPlayer("2014-03-02", "SAC", "Webber", "Chris", ProcessingType.online);
@@ -86,49 +86,56 @@ public class RosterPlayerTest {
     }
     
     @Test
-    public void createRosterPlayerExistingPlayer() {
+    public void createPlayerExistsActivate() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  RosterPlayer rosterPlayer = TestMockHelper.getRosterPlayer();
-        	  rosterPlayer.setPlayer(Player.findByName("Webber", "Chris"));
-        	  rosterPlayer.setTeam(Team.findByKey("key", "sacramento-kings"));
+        	  Player player = TestMockHelper.getPlayer(false);
+        	  Player.create(player);
+        	  Long playerId = player.getId();
         	  
+        	  player.setActive(true);
+        	  Player.update(player, ProcessingType.online);
+
+        	  RosterPlayer rosterPlayer = TestMockHelper.getRosterPlayer("2014-04-04", "9999-12-31");
+        	  rosterPlayer.setPlayer(player);
+        	  rosterPlayer.setTeam(Team.findByAbbr("GS"));
         	  RosterPlayer.create(rosterPlayer);
-        	  Long rosterPlayerId = rosterPlayer.getId();
         	  
-        	  RosterPlayer createRosterPlayer = RosterPlayer.findById(rosterPlayerId);
-              assertThat(createRosterPlayer.getNumber()).isEqualTo("4");
-              assertThat(createRosterPlayer.getPlayer().getActive()).isFalse();
-              assertThat(createRosterPlayer.getPlayer().getFirstName()).isEqualTo("Chris");
-              assertThat(rosterPlayer.getTeam().getKey()).isEqualTo("sacramento-kings");
+        	  RosterPlayer createRosterPlayer = RosterPlayer.findByDateTeamPlayer("2014-04-05", "GS", player.getLastName(), player.getFirstName(), ProcessingType.batch);
+              assertThat(createRosterPlayer.getNumber()).isEqualTo("10");
+              assertThat(createRosterPlayer.getPlayer().getActive()).isTrue();
+              assertThat(createRosterPlayer.getPlayer().getBirthPlace()).isEqualTo("Brooklyn, New York, USA");
+              assertThat(rosterPlayer.getTeam().getKey()).isEqualTo("golden-state-warriors");
+              
               RosterPlayer.delete(createRosterPlayer.getId());
+              Player.delete(playerId);
           }
         });
     }
     
-    @Test
-    public void updateRosterPlayer() {
-        running(fakeApplication(), new Runnable() {
-          public void run() {
-        	  RosterPlayer rosterPlayer = TestMockHelper.getRosterPlayer();
-        	  rosterPlayer.setPlayer(Player.findByName("Webber", "Chris"));
-        	  rosterPlayer.setTeam(Team.findByKey("key", "sacramento-kings"));
-        	  
-        	  RosterPlayer.create(rosterPlayer);
-        	  Long rosterPlayerId = rosterPlayer.getId();
-        	  
-        	  RosterPlayer createRosterPlayer = RosterPlayer.findById(rosterPlayerId);
-        	  createRosterPlayer.setPosition(Position.center);
-        	  //createRosterPlayer.getPlayer().setActive(true);
-        	  createRosterPlayer.update();
-              
-        	  RosterPlayer updateRosterPlayer = RosterPlayer.findById(rosterPlayerId);
-        	  assertThat(updateRosterPlayer.getPosition()).isEqualTo(Position.center);
-              //assertThat(updateRosterPlayer.getPlayer().getActive()).isTrue();
-              RosterPlayer.delete(updateRosterPlayer.getId());
-          }
-        });
-    }
+//    @Test
+//    public void updateRosterPlayer() {
+//        running(fakeApplication(), new Runnable() {
+//          public void run() {
+//        	  RosterPlayer rosterPlayer = TestMockHelper.getRosterPlayer();
+//        	  rosterPlayer.setPlayer(Player.findByName("Webber", "Chris"));
+//        	  rosterPlayer.setTeam(Team.findByKey("key", "sacramento-kings"));
+//        	  
+//        	  RosterPlayer.create(rosterPlayer);
+//        	  Long rosterPlayerId = rosterPlayer.getId();
+//        	  
+//        	  RosterPlayer createRosterPlayer = RosterPlayer.findById(rosterPlayerId);
+//        	  createRosterPlayer.setPosition(Position.center);
+//        	  //createRosterPlayer.getPlayer().setActive(true);
+//        	  createRosterPlayer.update();
+//              
+//        	  RosterPlayer updateRosterPlayer = RosterPlayer.findById(rosterPlayerId);
+//        	  assertThat(updateRosterPlayer.getPosition()).isEqualTo(Position.center);
+//              //assertThat(updateRosterPlayer.getPlayer().getActive()).isTrue();
+//              RosterPlayer.delete(updateRosterPlayer.getId());
+//          }
+//        });
+//    }
     
     @Test
     public void updateRosterPlayerValidation() {
@@ -136,8 +143,8 @@ public class RosterPlayerTest {
           public void run() {
         	  Long rosterPlayerId = null;
        		  try {
-       			  RosterPlayer rosterPlayer = TestMockHelper.getRosterPlayer();
-       			  rosterPlayer.setPlayer(Player.findByName("Webber", "Chris"));
+       			  RosterPlayer rosterPlayer = TestMockHelper.getRosterPlayer("2014-04-04", "9999-12-31");
+       			  rosterPlayer.setPlayer(Player.findByName("Webber", "Chris", ProcessingType.online));
        			  rosterPlayer.setTeam(Team.findByKey("key", "sacramento-kings"));
             	  
             	  RosterPlayer.create(rosterPlayer);
