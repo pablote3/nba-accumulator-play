@@ -21,7 +21,7 @@ public class RosterPlayerTest {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	  List<RosterPlayer> rosterPlayers = RosterPlayer.findAll();
-        	  assertThat(rosterPlayers.size()).isEqualTo(1);
+        	  assertThat(rosterPlayers.size()).isEqualTo(2);
           }
         });
     }
@@ -32,32 +32,6 @@ public class RosterPlayerTest {
           public void run() {  	  
         	  List<RosterPlayer> rosterPlayers = RosterPlayer.findByDate("2014-03-02");
         	  assertThat(rosterPlayers.size()).isEqualTo(1);
-          }
-        });
-    }
-    
-    @Test
-    public void findRosterPlayersPlayerName() {
-        running(fakeApplication(), new Runnable() {
-          public void run() {  	  
-        	  List<RosterPlayer> rosterPlayers = RosterPlayer.findByPlayer("Webber", "Chris");
-        	  assertThat(rosterPlayers.size()).isEqualTo(1);
-        	  assertThat(rosterPlayers.get(0).getNumber()).isEqualTo("4");
-        	  assertThat(rosterPlayers.get(0).getTeam().getKey()).isEqualTo("sacramento-kings");
-          }
-        });
-    }
-    
-    @Test
-    public void findRosterPlayerDatePlayerName() {
-        running(fakeApplication(), new Runnable() {
-          public void run() {  	  
-        	  RosterPlayer rosterPlayer = RosterPlayer.findByDatePlayer("2014-03-02", "Webber", "Chris", ProcessingType.online);
-        	  assertThat(rosterPlayer.getNumber()).isEqualTo("4");
-              assertThat(rosterPlayer.getPlayer().getFirstName()).isEqualTo("Chris");
-              assertThat(rosterPlayer.getPlayer().getLastName()).isEqualTo("Webber");
-              assertThat(rosterPlayer.getPlayer().getActive()).isFalse();
-              assertThat(rosterPlayer.getTeam().getKey()).isEqualTo("sacramento-kings");
           }
         });
     }
@@ -75,13 +49,38 @@ public class RosterPlayerTest {
           }
         });
     }
+    
+    @Test
+    public void findRosterPlayerPlayer() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {  	  
+        	  List<RosterPlayer> rosterPlayers = RosterPlayer.findByPlayer("Webber", "Chris");
+        	  assertThat(rosterPlayers.size()).isEqualTo(2);
+          }
+        });
+    }
+    
+    @Test
+    public void findRosterPlayerDatePlayer() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {  	  
+        	  List<RosterPlayer> rosterPlayers = RosterPlayer.findByDatePlayer("2014-03-02", "Webber", "Chris", ProcessingType.online);
+        	  assertThat(rosterPlayers.size()).isEqualTo(1);
+          }
+        });
+    }    
+
 	
 	@Test
-    public void findRosterPlayersTeamDate() {
+    public void findRosterDateTeamPlayer() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  List<RosterPlayer> rosterPlayers = RosterPlayer.findByDateTeam("2014-03-02", "sacramento-kings");
-        	  assertThat(rosterPlayers.size()).isEqualTo(1);
+        	  RosterPlayer rosterPlayer = RosterPlayer.findByDateTeamPlayer("2014-03-02", "SAC", "Webber", "Chris", ProcessingType.online);
+        	  assertThat(rosterPlayer.getNumber()).isEqualTo("4");
+              assertThat(rosterPlayer.getPlayer().getFirstName()).isEqualTo("Chris");
+              assertThat(rosterPlayer.getPlayer().getLastName()).isEqualTo("Webber");
+              assertThat(rosterPlayer.getPlayer().getActive()).isFalse();
+              assertThat(rosterPlayer.getTeam().getKey()).isEqualTo("sacramento-kings");
           }
         });
     }

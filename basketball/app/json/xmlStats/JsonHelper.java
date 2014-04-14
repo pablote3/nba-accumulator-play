@@ -72,7 +72,8 @@ public class JsonHelper {
         	statsBoxScorePlayerDTO = players[i];
         	String lastName = statsBoxScorePlayerDTO.getLast_name();
         	String firstName = statsBoxScorePlayerDTO.getFirst_name();
-        	rosterPlayer = RosterPlayer.findByDatePlayer(date, lastName, firstName, processingType);
+        	String teamAbbr = statsBoxScorePlayerDTO.getTeam_abbreviation();
+        	rosterPlayer = RosterPlayer.findByDateTeamPlayer(date, teamAbbr, lastName, firstName, processingType);
         	if (rosterPlayer == null) {
         		
         	}
