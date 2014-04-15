@@ -169,7 +169,7 @@ public class RosterPlayer extends Model {
 	public static List<RosterPlayer> findByDate(String date) {
 		Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
 	    query.where().lt("fromDate", date + " 00:00:01");
-	    query.where().gt("toDate", date + " 23:59:59");	    
+	    query.where().gt("toDate", date + " 23:59:58");	    
 	    List<RosterPlayer> rosterPlayer = query.findList();
 	    return rosterPlayer;
 	}
@@ -192,7 +192,7 @@ public class RosterPlayer extends Model {
   			query = Ebean.find(RosterPlayer.class);	
 	  	query.fetch("player");
 	  	query.where().lt("fromDate", date + " 00:00:01");
-	  	query.where().gt("toDate", date + " 23:59:59");	 
+	  	query.where().gt("toDate", date + " 23:59:58");	 
 	  	query.where().eq("t1.last_Name", lastName);
 	  	query.where().eq("t1.first_Name", firstName);
 	  	rosterPlayer = query.findList();
@@ -210,7 +210,7 @@ public class RosterPlayer extends Model {
 	  	query.fetch("player");
 	  	query.fetch("team");
 	  	query.where().lt("fromDate", date + " 00:00:01");
-	  	query.where().gt("toDate", date + " 23:59:59");	 
+	  	query.where().gt("toDate", date + " 23:59:58");	 
 	  	query.where().eq("t1.last_Name", lastName);
 	  	query.where().eq("t1.first_Name", firstName);
 	  	query.where().eq("t2.abbr", teamAbbr);
@@ -231,17 +231,19 @@ public class RosterPlayer extends Model {
 	  	Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
 	  	query.fetch("team");
 	    query.where().lt("fromDate", date + " 00:00:01");
-	    query.where().gt("toDate", date + " 23:59:59");	 
+	    query.where().gt("toDate", date + " 23:59:58");	 
 	    query.where().eq("t1.team_key", teamKey);
 	    List<RosterPlayer> rosterPlayer = query.findList();
 	    return rosterPlayer;
 	}
 	
 	public static void create(RosterPlayer rosterPlayer) {
+		rosterPlayer.setToDate(DateTime.createDateMaxTime(rosterPlayer.getToDate()));
 		rosterPlayer.save();
 	}
 	
 	public static void update(RosterPlayer rosterPlayer, ProcessingType processingType) {
+		rosterPlayer.setToDate(DateTime.createDateMaxTime(rosterPlayer.getToDate()));
 		if (processingType.equals(ProcessingType.batch))
 			ebeanServer.update(rosterPlayer);
 		else
