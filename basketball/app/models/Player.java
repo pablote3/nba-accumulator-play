@@ -138,7 +138,7 @@ public class Player extends Model {
 	}
 	
 	@Required
-	@Column(name="birthdate", nullable=false)
+	@Column(name="birthdate", nullable=true)
 	@Temporal(TemporalType.DATE)
 	@JsonProperty("birthdate")
 	private Date birthDate;
@@ -153,7 +153,7 @@ public class Player extends Model {
 	}
 	
 	@Required
-	@Column(name="birthplace", length=25, nullable=false)
+	@Column(name="birthplace", length=25, nullable=true)
 	@JsonProperty("birthplace")
 	private String birthPlace;
 	public String getBirthPlace() {
