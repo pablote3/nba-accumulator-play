@@ -2,6 +2,7 @@ package util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -47,5 +48,13 @@ public class DateTime {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	static public Date createDateMaxTime(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.HOUR_OF_DAY, 23);
+		cal.add(Calendar.MINUTE, 59);
+		cal.add(Calendar.SECOND, 59);
+		return cal.getTime();
 	}
 }

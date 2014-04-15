@@ -59,6 +59,12 @@ public class DateTimeTest {
     public void displayDateNaked() {
     	Date date = parseDate("2013-03-30 19:00:00");
         assertThat(DateTime.getFindDateNaked(date)).isEqualTo("20130330");
+    }   
+    
+    @Test
+    public void createDateMaxTime() {
+    	Date date = parseDate("2013-03-30 00:00:00");
+        assertThat(DateTime.createDateMaxTime(date)).isEqualTo(parseDate("2013-03-30 23:59:59"));
     }
     
     public Date parseDate(String stringDate) {
