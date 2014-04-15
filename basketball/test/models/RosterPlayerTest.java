@@ -4,16 +4,17 @@ import static org.fest.assertions.Assertions.assertThat;
 import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.running;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.persistence.PersistenceException;
 
 import models.Game.ProcessingType;
-import models.RosterPlayer.Position;
 
 import org.junit.Test;
-
-import com.avaje.ebean.Page;
 
 public class RosterPlayerTest {
     @Test
@@ -64,8 +65,11 @@ public class RosterPlayerTest {
     public void findDatePlayer() {
         running(fakeApplication(), new Runnable() {
           public void run() {  	  
-        	  List<RosterPlayer> rosterPlayers = RosterPlayer.findByDatePlayer("2014-03-02", "Webber", "Chris", ProcessingType.online);
-        	  assertThat(rosterPlayers.size()).isEqualTo(1);
+        	  List<RosterPlayer> rosterPlayersMin = RosterPlayer.findByDatePlayer("2014-03-01", "Webber", "Chris", ProcessingType.online);
+        	  assertThat(rosterPlayersMin.size()).isEqualTo(1);
+        	  
+        	  List<RosterPlayer> rosterPlayersMax = RosterPlayer.findByDatePlayer("2014-03-10", "Webber", "Chris", ProcessingType.online);
+        	  assertThat(rosterPlayersMax.size()).isEqualTo(1);
           }
         });
     }    
@@ -91,7 +95,6 @@ public class RosterPlayerTest {
           public void run() {
         	  Player player = TestMockHelper.getPlayer(false);
         	  Player.create(player);
-        	  Long playerId = player.getId();
         	  
         	  player.setActive(true);
         	  Player.update(player, ProcessingType.online);
@@ -105,37 +108,55 @@ public class RosterPlayerTest {
               assertThat(createRosterPlayer.getNumber()).isEqualTo("10");
               assertThat(createRosterPlayer.getPlayer().getActive()).isTrue();
               assertThat(createRosterPlayer.getPlayer().getBirthPlace()).isEqualTo("Brooklyn, New York, USA");
-              assertThat(rosterPlayer.getTeam().getKey()).isEqualTo("golden-state-warriors");
+              assertThat(createRosterPlayer.getTeam().getKey()).isEqualTo("golden-state-warriors");
               
               RosterPlayer.delete(createRosterPlayer.getId());
-              Player.delete(playerId);
+              Player.delete(player.getId());
           }
         });
     }
     
-//    @Test
-//    public void updateRosterPlayer() {
-//        running(fakeApplication(), new Runnable() {
-//          public void run() {
-//        	  RosterPlayer rosterPlayer = TestMockHelper.getRosterPlayer();
-//        	  rosterPlayer.setPlayer(Player.findByName("Webber", "Chris"));
-//        	  rosterPlayer.setTeam(Team.findByKey("key", "sacramento-kings"));
-//        	  
-//        	  RosterPlayer.create(rosterPlayer);
-//        	  Long rosterPlayerId = rosterPlayer.getId();
-//        	  
-//        	  RosterPlayer createRosterPlayer = RosterPlayer.findById(rosterPlayerId);
-//        	  createRosterPlayer.setPosition(Position.center);
-//        	  //createRosterPlayer.getPlayer().setActive(true);
-//        	  createRosterPlayer.update();
-//              
-//        	  RosterPlayer updateRosterPlayer = RosterPlayer.findById(rosterPlayerId);
-//        	  assertThat(updateRosterPlayer.getPosition()).isEqualTo(Position.center);
-//              //assertThat(updateRosterPlayer.getPlayer().getActive()).isTrue();
-//              RosterPlayer.delete(updateRosterPlayer.getId());
-//          }
-//        });
-//    }
+    @Test
+    public void updatePlayerExistsInactivate() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  Player player = TestMockHelper.getPlayer(true);
+        	  Player.create(player);
+        	  
+        	  player.setActive(false);
+        	  Player.update(player, ProcessingType.online);
+        	  
+        	  RosterPlayer rosterPlayer = TestMockHelper.getRosterPlayer("2014-04-04", "9999-12-31");
+        	  rosterPlayer.setPlayer(player);
+        	  rosterPlayer.setTeam(Team.findByAbbr("GS"));
+        	  RosterPlayer.create(rosterPlayer);
+        	  
+        	  RosterPlayer createRosterPlayer = RosterPlayer.findByDateTeamPlayer("2014-04-04", "GS", player.getLastName(), player.getFirstName(), ProcessingType.batch);
+        	  
+        	  Date toDate = null;
+        	  try {
+        	  	  toDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2014-04-15");
+        	  } catch (ParseException e) {
+        	  	  e.printStackTrace();
+        	  }
+        	  createRosterPlayer.setToDate(toDate);
+        	  RosterPlayer.update(createRosterPlayer, ProcessingType.online);
+        	  
+        	  RosterPlayer expiredRosterPlayer = RosterPlayer.findByDateTeamPlayer("2014-04-16", "GS", player.getLastName(), player.getFirstName(), ProcessingType.batch);
+        	  assertThat(expiredRosterPlayer).isNull();
+        	  
+        	  RosterPlayer updateRosterPlayer = RosterPlayer.findByDateTeamPlayer("2014-04-15", "GS", player.getLastName(), player.getFirstName(), ProcessingType.batch);
+        	  
+              assertThat(updateRosterPlayer.getNumber()).isEqualTo("10");
+              assertThat(updateRosterPlayer.getPlayer().getActive()).isFalse();
+              assertThat(updateRosterPlayer.getPlayer().getBirthPlace()).isEqualTo("Brooklyn, New York, USA");
+              assertThat(updateRosterPlayer.getTeam().getKey()).isEqualTo("golden-state-warriors");
+              
+              RosterPlayer.delete(updateRosterPlayer.getId());
+              Player.delete(player.getId());
+          }
+        });
+    }
     
     @Test
     public void updateRosterPlayerValidation() {
