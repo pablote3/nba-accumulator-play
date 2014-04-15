@@ -162,22 +162,28 @@ public class RosterPlayerTest {
     public void updateRosterPlayerValidation() {
         running(fakeApplication(), new Runnable() {
           public void run() {
+        	  Long playerId = null;
         	  Long rosterPlayerId = null;
        		  try {
-       			  RosterPlayer rosterPlayer = TestMockHelper.getRosterPlayer("2014-04-04", "9999-12-31");
-       			  rosterPlayer.setPlayer(Player.findByName("Webber", "Chris", ProcessingType.online));
-       			  rosterPlayer.setTeam(Team.findByKey("key", "sacramento-kings"));
+            	  Player player = TestMockHelper.getPlayer(true);
+            	  Player.create(player);
+            	  playerId = player.getId();
             	  
+            	  RosterPlayer rosterPlayer = TestMockHelper.getRosterPlayer("2014-04-04", "9999-12-31");
+            	  rosterPlayer.setPlayer(player);
+            	  rosterPlayer.setTeam(Team.findByAbbr("GS"));
             	  RosterPlayer.create(rosterPlayer);
             	  rosterPlayerId = rosterPlayer.getId();
             	  
-            	  RosterPlayer createRosterPlayer = RosterPlayer.findById(rosterPlayerId);
-       			  createRosterPlayer.getPlayer().setFirstName(null);
+            	  RosterPlayer createRosterPlayer = RosterPlayer.findByDateTeamPlayer("2014-04-04", "GS", player.getLastName(), player.getFirstName(), ProcessingType.batch);
+
+            	  createRosterPlayer.getPlayer().setFirstName(null);
        			  createRosterPlayer.update();
        		  } catch (PersistenceException e) {
        			  assertThat(e.getCause().getMessage().equalsIgnoreCase("Column 'first_name' cannot be null"));
        		  } finally {
        			  RosterPlayer.delete(rosterPlayerId);
+       			  Player.delete(playerId);
        		  }
           }
         });
