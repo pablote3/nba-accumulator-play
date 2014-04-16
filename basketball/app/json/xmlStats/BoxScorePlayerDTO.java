@@ -146,10 +146,10 @@ public class BoxScorePlayerDTO {
 	public void setTeam_abbreviation(String team_abbreviation) {
 		this.team_abbreviation = team_abbreviation;
 	}
-	public Boolean getStarter() {
+	public boolean getIs_starter() {
 		return is_starter;
 	}
-	public void setStarter(Boolean is_starter) {
+	public void setIs_starter(boolean is_starter) {
 		this.is_starter = is_starter;
 	}
 	public Float getFieldGoalPercent() {
