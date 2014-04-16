@@ -102,7 +102,7 @@ public class TestMockHelper {
 	protected static RosterPlayer getRosterPlayer(String startDate, String endDate) {
 	  RosterPlayer rosterPlayer = new RosterPlayer();
 	  rosterPlayer.setNumber("10");
-	  rosterPlayer.setPosition(Position.pointGuard);
+	  rosterPlayer.setPosition(Position.PG);
 	  Date fromDate = null;
 	  Date toDate = null;
 	  try {
