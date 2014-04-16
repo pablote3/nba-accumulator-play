@@ -55,7 +55,7 @@ create table box_score_player (
   reboundsOffense           smallint,
   reboundsDefense           smallint,
   personalFouls             smallint,
-  constraint ck_box_score_player_position check (position in ('C','PG','SG','PF','SF')),
+  constraint ck_box_score_player_position check (position in ('SF','SG','C','PF','PG')),
   constraint pk_box_score_player primary key (id))
 ;
 
@@ -104,8 +104,8 @@ create table player (
   active                    tinyint(1) default 0 not null,
   height                    smallint,
   weight                    smallint,
-  birthdate                 datetime not null,
-  birthplace                varchar(25) not null,
+  birthdate                 datetime,
+  birthplace                varchar(25),
   last_update               datetime not null,
   constraint pk_player primary key (id))
 ;
@@ -117,8 +117,8 @@ create table roster_player (
   fromDate                  datetime not null,
   toDate                    datetime not null,
   position                  varchar(5) not null,
-  number                    varchar(2) not null,
-  constraint ck_roster_player_position check (position in ('C','PG','SG','PF','SF')),
+  number                    varchar(2),
+  constraint ck_roster_player_position check (position in ('SF','SG','C','PF','PG')),
   constraint pk_roster_player primary key (id))
 ;
 
