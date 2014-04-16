@@ -1,16 +1,22 @@
 package json.xmlStats;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import models.BoxScore;
 import models.BoxScorePlayer;
+import models.BoxScorePlayer.Position;
 import models.Game.ProcessingType;
 import models.GameOfficial;
 import models.Official;
 import models.PeriodScore;
+import models.Player;
 import models.RosterPlayer;
-import models.BoxScorePlayer.Position;
+import models.Team;
 
 public class JsonHelper {
    
@@ -75,13 +81,36 @@ public class JsonHelper {
         	String teamAbbr = statsBoxScorePlayerDTO.getTeam_abbreviation();
         	rosterPlayer = RosterPlayer.findByDateTeamPlayer(date, teamAbbr, lastName, firstName, processingType);
         	if (rosterPlayer == null) {
-        		
+        		Player player = Player.findByName(lastName, firstName, processingType);
+        		if (player == null) {
+        			player = new Player();
+        			player.setLastName(lastName);
+        			player.setFirstName(firstName);
+        			player.setDisplayName(statsBoxScorePlayerDTO.getDisplay_name());
+        			player.setActive(true);
+              		Player.create(player);
+        		}
+        		rosterPlayer = new RosterPlayer();
+        		rosterPlayer.setPosition(RosterPlayer.Position.valueOf(statsBoxScorePlayerDTO.getPosition()));
+        		Date fromDate = null;
+        		Date toDate = null;
+        		try {
+        			fromDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(date);
+        			toDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("9999-12-31");
+        		} catch (ParseException e) {
+        			e.printStackTrace();
+        		}
+        		rosterPlayer.setFromDate(fromDate);
+        		rosterPlayer.setToDate(toDate);
+        		rosterPlayer.setPlayer(player);
+          		rosterPlayer.setTeam(Team.findByAbbr(teamAbbr));
+          		RosterPlayer.create(rosterPlayer);
         	}
         	boxScorePlayer = new BoxScorePlayer();
         	boxScorePlayer.setRosterPlayer(rosterPlayer);
         	boxScorePlayer.setPosition(Position.valueOf(statsBoxScorePlayerDTO.getPosition()));
         	boxScorePlayer.setMinutes(statsBoxScorePlayerDTO.getMinutes());
-        	boxScorePlayer.setStarter(statsBoxScorePlayerDTO.getStarter());
+        	boxScorePlayer.setStarter(statsBoxScorePlayerDTO.getIs_starter());
             boxScorePlayer.setPoints(statsBoxScorePlayerDTO.getPoints());
             boxScorePlayer.setAssists(statsBoxScorePlayerDTO.getAssists());
             boxScorePlayer.setTurnovers(statsBoxScorePlayerDTO.getTurnovers());
