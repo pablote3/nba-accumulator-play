@@ -93,12 +93,16 @@ public class GameJsonFile {
 	              		  if (boxScore.getLocation().equals(Location.away)) {
 	              			  assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)36);
 	              			  assertThat(boxScore.getPeriodScores().get(0).getScore()).isEqualTo((short)26);
-	              			  assertThat(boxScore.getTeam().getAbbr()).isEqualTo("OKC");	              			  
+	              			  assertThat(boxScore.getTeam().getAbbr()).isEqualTo("OKC");
+	              			  assertThat(boxScore.getBoxScorePlayers().get(0).getRosterPlayer().getPlayer().getLastName()).isEqualTo("Durant");
+	              			  assertThat(boxScore.getBoxScorePlayers().get(0).getPoints()).isEqualTo((short)32);
 	              		  }
 	              		  else {
 	              			  assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)40);
 	              			  assertThat(boxScore.getPeriodScores().get(0).getScore()).isEqualTo((short)31);
 	              			  assertThat(boxScore.getTeam().getAbbr()).isEqualTo("MIA");
+	              			  assertThat(boxScore.getBoxScorePlayers().get(1).getRosterPlayer().getPlayer().getLastName()).isEqualTo("Wade");
+	              			  assertThat(boxScore.getBoxScorePlayers().get(1).getPoints()).isEqualTo((short)20);
 	              		  }
 	              	  }
         	  	  }
