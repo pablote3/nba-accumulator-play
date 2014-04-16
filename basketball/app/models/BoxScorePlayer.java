@@ -74,11 +74,11 @@ public class BoxScorePlayer extends Model {
 		this.position = position;
 	}
 	public enum Position {
-        @EnumValue("PG") pointGuard,
-        @EnumValue("SG") shootingGuard,
-        @EnumValue("SF") smallForward,
-        @EnumValue("PF") powerForward,
-        @EnumValue("C") center
+        @EnumValue("PG") PG,
+        @EnumValue("SG") SG,
+        @EnumValue("SF") SF,
+        @EnumValue("PF") PF,
+        @EnumValue("C") C
     }
 	
 	@Column(name="minutes", nullable=true)

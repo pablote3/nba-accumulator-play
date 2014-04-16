@@ -138,7 +138,7 @@ public class RosterPlayer extends Model {
     }
 	
 	@Required
-	@Column(name="number", length=2, nullable=false)
+	@Column(name="number", length=2, nullable=true)
 	@JsonProperty("uniform_number")
 	private String number;
 	public String getNumber() {
