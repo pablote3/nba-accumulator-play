@@ -16,18 +16,17 @@ import java.util.ArrayList;
 import json.xmlStats.JsonHelper;
 import json.xmlStats.NBABoxScore;
 import models.BoxScore;
-import models.BoxScorePlayer;
-import models.Game;
-import models.Player;
-import models.RosterPlayer;
-import models.Team;
 import models.BoxScore.Location;
 import models.BoxScore.Result;
+import models.BoxScorePlayer;
+import models.Game;
 import models.Game.ProcessingType;
 import models.Game.SeasonType;
 import models.Game.Status;
+import models.Player;
+import models.RosterPlayer;
+import models.Team;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import util.DateTime;
