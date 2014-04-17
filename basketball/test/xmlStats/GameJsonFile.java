@@ -11,11 +11,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import json.xmlStats.JsonHelper;
 import json.xmlStats.NBABoxScore;
 import models.BoxScore;
+import models.BoxScorePlayer;
 import models.Game;
+import models.Player;
+import models.RosterPlayer;
 import models.Team;
 import models.BoxScore.Location;
 import models.BoxScore.Result;
@@ -106,8 +110,30 @@ public class GameJsonFile {
 	              		  }
 	              	  }
         	  	  }
+
+	              ArrayList<Long> playerIds = new ArrayList<Long>();
+	              ArrayList<Long> rosterPlayerIds = new ArrayList<Long>();
+	              
+	              for (int i = 0; i < createGame.getBoxScores().size(); i++) {
+	            	  BoxScore bs = createGame.getBoxScores().get(i);
+	            	  for (int j = 0; j < bs.getBoxScorePlayers().size(); j++) {
+	            		  BoxScorePlayer bsp = bs.getBoxScorePlayers().get(j);
+	            		  playerIds.add(bsp.getRosterPlayer().getPlayer().getId());
+	            		  rosterPlayerIds.add(bsp.getRosterPlayer().getId());
+	            	  }
+	              }
+	              
 	              Game.delete(createGame.getId(), ProcessingType.online);
-      	      } catch (FileNotFoundException e) {
+	              
+	              for (int i = 0; i < rosterPlayerIds.size(); i++) {
+	            	  RosterPlayer.delete(rosterPlayerIds.get(i));
+	              }
+	              
+	              for (int i = 0; i < playerIds.size(); i++) {
+	            	  Player.delete(playerIds.get(i));
+	              }
+
+        	  } catch (FileNotFoundException e) {
       	          e.printStackTrace();
       	      } catch (IOException e) {
       	          e.printStackTrace();
