@@ -13,13 +13,17 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.zip.GZIPInputStream;
 
 import json.xmlStats.JsonHelper;
 import json.xmlStats.NBABoxScore;
 import models.BoxScore;
+import models.BoxScorePlayer;
 import models.Game;
+import models.Player;
+import models.RosterPlayer;
 import models.Team;
 import models.BoxScore.Location;
 import models.BoxScore.Result;
@@ -29,6 +33,8 @@ import models.Game.Status;
 
 import org.junit.Ignore;
 import org.junit.Test;
+
+import util.DateTime;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -99,10 +105,13 @@ public class GameJsonUrl {
 		      		  	awayBoxScore = completeGame.getBoxScores().get(0);
 		      		  	awayBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStats.away_period_scores));
 		      		  	JsonHelper.getBoxScoreStats(awayBoxScore, xmlStats.away_totals);
+		      		  	awayBoxScore.setBoxScorePlayers(JsonHelper.getBoxScorePlayers(xmlStats.away_stats, DateTime.getFindDateShort(xmlStats.event_information.getDate()), ProcessingType.online));
 		              
 		      		  	homeBoxScore = completeGame.getBoxScores().get(1);
 		      		  	homeBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStats.home_period_scores));
-		      		  	JsonHelper.getBoxScoreStats(homeBoxScore, xmlStats.home_totals);              
+		      		  	JsonHelper.getBoxScoreStats(homeBoxScore, xmlStats.home_totals);
+		      		  	homeBoxScore.setBoxScorePlayers(JsonHelper.getBoxScorePlayers(xmlStats.home_stats, DateTime.getFindDateShort(xmlStats.event_information.getDate()), ProcessingType.online));
+		      		  	
 		      		  	if (xmlStats.away_totals.getPoints() > xmlStats.home_totals.getPoints()) {
 		      		  		homeBoxScore.setResult(Result.loss);
 		      		  		awayBoxScore.setResult(Result.win);
@@ -110,7 +119,7 @@ public class GameJsonUrl {
 		      		  	else {
 		      		  		homeBoxScore.setResult(Result.win);
 		      		  		awayBoxScore.setResult(Result.loss);
-		      		  	}
+		      		  	}		      		  	
 			              
 		      		  	completeGame.update();
 		      		  	Game createGame = Game.findById(gameId, ProcessingType.online);
@@ -125,16 +134,42 @@ public class GameJsonUrl {
 			              		if (boxScore.getLocation().equals(Location.away)) {
 			              			assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)36);
 			              			assertThat(boxScore.getPeriodScores().get(0).getScore()).isEqualTo((short)26);
-			              			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("OKC");	              			  
+			              			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("OKC");
+			              			assertThat(boxScore.getBoxScorePlayers().get(0).getRosterPlayer().getPlayer().getLastName()).isEqualTo("Durant");
+			              			assertThat(boxScore.getBoxScorePlayers().get(0).getRosterPlayer().getTeam().getAbbr()).isEqualTo("OKC");
+			              			assertThat(boxScore.getBoxScorePlayers().get(0).getPoints()).isEqualTo((short)32);
 			              		}
 			              		else {
 			              			assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)40);
 			              			assertThat(boxScore.getPeriodScores().get(0).getScore()).isEqualTo((short)31);
 			              			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("MIA");
+			              			assertThat(boxScore.getBoxScorePlayers().get(1).getRosterPlayer().getPlayer().getLastName()).isEqualTo("Wade");
+			              			assertThat(boxScore.getBoxScorePlayers().get(1).getRosterPlayer().getTeam().getAbbr()).isEqualTo("MIA");
+			              			assertThat(boxScore.getBoxScorePlayers().get(1).getPoints()).isEqualTo((short)20);
 			              		}
 			              	}
 		        	  	}
-			            Game.delete(createGame.getId(), ProcessingType.online);
+			              ArrayList<Long> playerIds = new ArrayList<Long>();
+			              ArrayList<Long> rosterPlayerIds = new ArrayList<Long>();
+			              
+			              for (int i = 0; i < createGame.getBoxScores().size(); i++) {
+			            	  BoxScore bs = createGame.getBoxScores().get(i);
+			            	  for (int j = 0; j < bs.getBoxScorePlayers().size(); j++) {
+			            		  BoxScorePlayer bsp = bs.getBoxScorePlayers().get(j);
+			            		  playerIds.add(bsp.getRosterPlayer().getPlayer().getId());
+			            		  rosterPlayerIds.add(bsp.getRosterPlayer().getId());
+			            	  }
+			              }
+			              
+			              Game.delete(createGame.getId(), ProcessingType.online);
+			              
+			              for (int i = 0; i < rosterPlayerIds.size(); i++) {
+			            	  RosterPlayer.delete(rosterPlayerIds.get(i));
+			              }
+			              
+			              for (int i = 0; i < playerIds.size(); i++) {
+			            	  Player.delete(playerIds.get(i));
+			              }
 		    		    baseJson.close(); 
 		    		} 
 		        }
