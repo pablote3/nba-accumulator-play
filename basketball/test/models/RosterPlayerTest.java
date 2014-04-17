@@ -22,7 +22,7 @@ public class RosterPlayerTest {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	  List<RosterPlayer> rosterPlayers = RosterPlayer.findAll();
-        	  assertThat(rosterPlayers.size()).isEqualTo(7);
+        	  assertThat(rosterPlayers.size()).isEqualTo(3);
           }
         });
     }
@@ -32,7 +32,7 @@ public class RosterPlayerTest {
         running(fakeApplication(), new Runnable() {
           public void run() {  	  
         	  List<RosterPlayer> rosterPlayers = RosterPlayer.findByDate("2014-03-02");
-        	  assertThat(rosterPlayers.size()).isEqualTo(5);
+        	  assertThat(rosterPlayers.size()).isEqualTo(1);
           }
         });
     }
