@@ -96,6 +96,7 @@ public class XmlStats extends UntypedActor {
 	    	        }	    	        
 	    	        awayBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStat.away_period_scores));
 	    	        JsonHelper.getBoxScoreStats(awayBoxScore, xmlStat.away_totals);
+	    	        awayBoxScore.setBoxScorePlayers(JsonHelper.getBoxScorePlayers(xmlStat.away_stats, DateTime.getFindDateShort(xmlStat.event_information.getDate()), ProcessingType.batch));
 	    	        
 	    	        if (homeBoxScore.getPeriodScores().size() > 0) {
 	    	        	for (int i = 0; i < homeBoxScore.getPeriodScores().size(); i++) {
@@ -103,7 +104,8 @@ public class XmlStats extends UntypedActor {
 						}
 	    	        }	 
 	    	        homeBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStat.home_period_scores));
-	    	        JsonHelper.getBoxScoreStats(homeBoxScore, xmlStat.home_totals); 
+	    	        JsonHelper.getBoxScoreStats(homeBoxScore, xmlStat.home_totals);
+	    	        homeBoxScore.setBoxScorePlayers(JsonHelper.getBoxScorePlayers(xmlStat.home_stats, DateTime.getFindDateShort(xmlStat.event_information.getDate()), ProcessingType.batch));
 	    	        
 	    		  	if (xmlStat.away_totals.getPoints() > xmlStat.home_totals.getPoints()) {
 	    		  		homeBoxScore.setResult(Result.loss);

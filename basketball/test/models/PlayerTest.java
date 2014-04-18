@@ -47,11 +47,27 @@ public class PlayerTest {
     }
     
     @Test
-    public void createPlayer() {
+    public void createPlayerOnline() {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	  Player player = TestMockHelper.getPlayer(true);
-        	  Player.create(player);
+        	  Player.create(player, ProcessingType.online);
+        	  Long playerId = player.getId();
+              
+        	  Player createPlayer = Player.findById(playerId);
+              assertThat(createPlayer.getActive()).isTrue();
+              assertThat(createPlayer.getWeight()).isEqualTo((short)215);
+              Player.delete(playerId);
+          }
+        });
+    }
+    
+    @Test
+    public void createPlayerBatch() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  Player player = TestMockHelper.getPlayer(true);
+        	  Player.create(player, ProcessingType.batch);
         	  Long playerId = player.getId();
               
         	  Player createPlayer = Player.findById(playerId);

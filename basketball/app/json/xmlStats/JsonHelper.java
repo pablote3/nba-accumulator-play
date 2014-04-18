@@ -88,7 +88,7 @@ public class JsonHelper {
         			player.setFirstName(firstName);
         			player.setDisplayName(statsBoxScorePlayerDTO.getDisplay_name());
         			player.setActive(true);
-              		Player.create(player);
+              		Player.create(player, processingType);
         		}
         		rosterPlayer = new RosterPlayer();
         		rosterPlayer.setPosition(RosterPlayer.Position.valueOf(statsBoxScorePlayerDTO.getPosition()));
@@ -103,8 +103,8 @@ public class JsonHelper {
         		rosterPlayer.setFromDate(fromDate);
         		rosterPlayer.setToDate(toDate);
         		rosterPlayer.setPlayer(player);
-          		rosterPlayer.setTeam(Team.findByAbbr(teamAbbr));
-          		RosterPlayer.create(rosterPlayer);
+          		rosterPlayer.setTeam(Team.findByAbbr(teamAbbr, processingType));
+          		RosterPlayer.create(rosterPlayer, processingType);
         	}
         	boxScorePlayer = new BoxScorePlayer();
         	boxScorePlayer.setRosterPlayer(rosterPlayer);

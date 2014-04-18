@@ -10,6 +10,9 @@ import javax.persistence.PersistenceException;
 
 
 
+
+import models.Game.ProcessingType;
+
 import org.junit.Test;
 
 import com.avaje.ebean.Page;
@@ -48,10 +51,20 @@ public class TeamTest {
     }
 	
 	@Test
-    public void findByAbbr() {
+    public void findByAbbrOnline() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Team team = Team.findByAbbr("SA");
+        	  Team team = Team.findByAbbr("SA", ProcessingType.online);
+        	  assertThat(team.getFullName()).isEqualTo("San Antonio Spurs");
+          }
+        });
+    }
+	
+	@Test
+    public void findByAbbrBatch() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  Team team = Team.findByAbbr("SA", ProcessingType.batch);
         	  assertThat(team.getFullName()).isEqualTo("San Antonio Spurs");
           }
         });

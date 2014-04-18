@@ -237,9 +237,12 @@ public class RosterPlayer extends Model {
 	    return rosterPlayer;
 	}
 	
-	public static void create(RosterPlayer rosterPlayer) {
+	public static void create(RosterPlayer rosterPlayer, ProcessingType processingType) {
 		rosterPlayer.setToDate(DateTime.createDateMaxTime(rosterPlayer.getToDate()));
-		rosterPlayer.save();
+		if (processingType.equals(ProcessingType.batch))
+			ebeanServer.save(rosterPlayer);
+		else
+			Ebean.save(rosterPlayer);
 	}
 	
 	public static void update(RosterPlayer rosterPlayer, ProcessingType processingType) {

@@ -203,8 +203,11 @@ public class Player extends Model {
 	    return player;
 	}
 	
-	public static void create(Player player) {
-		player.save();
+	public static void create(Player player, ProcessingType processingType) {
+		if (processingType.equals(ProcessingType.batch))
+			ebeanServer.save(player);
+		else
+			Ebean.save(player);
 	}
 	
 	public static void update(Player player, ProcessingType processingType) {

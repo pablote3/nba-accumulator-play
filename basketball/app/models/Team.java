@@ -16,18 +16,27 @@ import javax.persistence.OneToMany;
 import javax.persistence.TableGenerator;
 import javax.persistence.Version;
 
+import models.Game.ProcessingType;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import services.EbeanServerService;
+import services.InjectorModule;
 
 import com.avaje.ebean.Ebean;
+import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.Page;
 import com.avaje.ebean.Query;
 import com.avaje.ebean.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 @Entity
 public class Team extends Model {
 	private static final long serialVersionUID = 1L;
+	private static Injector injector = Guice.createInjector(new InjectorModule());
+	private static EbeanServerService service = injector.getInstance(EbeanServerService.class);	
+	private static EbeanServer ebeanServer = service.createEbeanServer();
   
 	@Id
 	@TableGenerator(name="table_gen", table="sequence_table", pkColumnName="seq_name", valueColumnName="seq_count", pkColumnValue="team_seq", initialValue=1)
@@ -215,8 +224,17 @@ public class Team extends Model {
 	    return teams;
 	}	
 	
-	public static Team findByAbbr(String abbr) {
-		return findByKey("abbr", abbr);
+	public static Team findByAbbr(String abbr, ProcessingType processingType) {
+		Team team;
+		Query<Team> query; 
+	  	if (processingType.equals(ProcessingType.batch)) 
+	  		query = ebeanServer.find(Team.class);
+  		else
+  			query = Ebean.find(Team.class);	
+
+		query.where().eq("abbr", abbr);
+		team = query.findUnique();
+		return team;
 	}
 	
 	public static List<Team> findByActive(boolean active) {
