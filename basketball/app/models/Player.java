@@ -106,16 +106,6 @@ public class Player extends Model {
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
-
-	@Required
-	@Column(name="active", nullable=false)
-	private boolean active;
-	public boolean getActive() {
-		return active;
-	}
-	public void setActive(boolean active) {
-		this.active = active;
-	}
 	
 	@Column(name="height", nullable=true)
 	@JsonProperty("height_in")
@@ -153,7 +143,7 @@ public class Player extends Model {
 	}
 	
 	@Required
-	@Column(name="birthplace", length=25, nullable=true)
+	@Column(name="birthplace", length=35, nullable=true)
 	@JsonProperty("birthplace")
 	private String birthPlace;
 	public String getBirthPlace() {
@@ -235,7 +225,7 @@ public class Player extends Model {
 			.append("  id:" + this.id)
 			.append("  lastName:" + this.lastName)
 			.append("  firstName:" + this.firstName)
-			.append("  active:" + this.active)
+			.append("  birthDate:" + this.birthDate)
 			.toString();
 	}
 }
