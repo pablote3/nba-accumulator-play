@@ -85,7 +85,6 @@ public class TestMockHelper {
 	  player.setLastName("Mullin");
 	  player.setFirstName("Chris");
 	  player.setDisplayName("Chris Mullin");
-	  player.setActive(active);
 	  player.setHeight((short)79);
 	  player.setWeight((short)215);
 	  Date date = null;

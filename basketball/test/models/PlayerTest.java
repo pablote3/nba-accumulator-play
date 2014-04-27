@@ -24,24 +24,19 @@ public class PlayerTest {
           }
         });
     }
-    
-	@Test
-    public void findActive() {
-        running(fakeApplication(), new Runnable() {
-          public void run() {
-        	  List<Player> players = Player.findActive(true);
-        	  assertThat(players.size()).isGreaterThanOrEqualTo(0);
-          }
-        });
-    }
 
     @Test
     public void findByName() {
         running(fakeApplication(), new Runnable() {
-          public void run() {
-        	  Player player = Player.findByName("Webber", "Chris", ProcessingType.online);
-        	  assertThat(player.getActive()).isFalse();
-        	  assertThat(player.getWeight()).isEqualTo((short)245);
+          public void run() {        	  
+        	  Player player = TestMockHelper.getPlayer(true);
+        	  Player.create(player, ProcessingType.online);
+        	  Long playerId = player.getId();
+        	  
+        	  Player createPlayer = Player.findByName("Mullin", "Chris", ProcessingType.online);
+        	  assertThat(createPlayer.getBirthDateShort()).isEqualTo("1963-07-30");
+        	  assertThat(createPlayer.getWeight()).isEqualTo((short)215);
+        	  Player.delete(playerId);
           }
         });
     }
@@ -55,7 +50,7 @@ public class PlayerTest {
         	  Long playerId = player.getId();
               
         	  Player createPlayer = Player.findById(playerId);
-              assertThat(createPlayer.getActive()).isTrue();
+        	  assertThat(player.getBirthDateShort()).isEqualTo("1963-07-30");
               assertThat(createPlayer.getWeight()).isEqualTo((short)215);
               Player.delete(playerId);
           }
@@ -71,7 +66,7 @@ public class PlayerTest {
         	  Long playerId = player.getId();
               
         	  Player createPlayer = Player.findById(playerId);
-              assertThat(createPlayer.getActive()).isTrue();
+        	  assertThat(player.getBirthDateShort()).isEqualTo("1963-07-30");
               assertThat(createPlayer.getWeight()).isEqualTo((short)215);
               Player.delete(playerId);
           }
@@ -82,16 +77,18 @@ public class PlayerTest {
     public void updatePlayer() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Player player = Player.findByName("Webber", "Chris", ProcessingType.online);
-        	  player.setActive(true);
-        	  player.update();
+        	  Player player = TestMockHelper.getPlayer(true);
+        	  Player.create(player, ProcessingType.online);
+        	  Long playerId = player.getId();
         	  
-        	  Player updatePlayer = Player.findByName("Webber", "Chris", ProcessingType.online);
-              assertThat(updatePlayer.getActive()).isTrue();
-              assertThat(updatePlayer.getWeight()).isEqualTo((short)245);
-
-        	  player.setActive(false);
-        	  player.update();
+        	  Player createPlayer = Player.findByName("Mullin", "Chris", ProcessingType.online);
+        	  createPlayer.setWeight((short)345);
+        	  createPlayer.update();
+        	  
+        	  Player updatePlayer = Player.findByName("Mullin", "Chris", ProcessingType.online);
+        	  assertThat(player.getBirthDateShort()).isEqualTo("1963-07-30");
+              assertThat(updatePlayer.getWeight()).isEqualTo((short)345);
+              Player.delete(playerId);
           }
         });
     }
@@ -100,12 +97,19 @@ public class PlayerTest {
     public void updatePlayerValidation() {
         running(fakeApplication(), new Runnable() {
           public void run() {
+        	  Long playerId = null;
        		  try {
-            	  Player player = Player.findByName("Webber", "Chris", ProcessingType.online);
-				  player.setFirstName(null);
-				  player.update();
+            	  Player player = TestMockHelper.getPlayer(true);
+            	  Player.create(player, ProcessingType.online);
+            	  playerId = player.getId();
+            	  
+            	  Player createPlayer = Player.findByName("Mullin", "Chris", ProcessingType.online);
+				  createPlayer.setFirstName(null);
+				  createPlayer.update();
        		  } catch (PersistenceException e) {
        			  assertThat(e.getCause().getMessage().equalsIgnoreCase("Column 'first_name' cannot be null"));
+       		  } finally {
+       			Player.delete(playerId);
        		  }
           }
         });

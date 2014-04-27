@@ -101,11 +101,10 @@ create table player (
   last_name                 varchar(35) not null,
   first_name                varchar(35) not null,
   display_name              varchar(70) not null,
-  active                    tinyint(1) default 0 not null,
   height                    smallint,
   weight                    smallint,
   birthdate                 datetime,
-  birthplace                varchar(25),
+  birthplace                varchar(35),
   last_update               datetime not null,
   constraint pk_player primary key (id))
 ;

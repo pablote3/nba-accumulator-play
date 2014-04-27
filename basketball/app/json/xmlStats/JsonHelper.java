@@ -87,7 +87,6 @@ public class JsonHelper {
         			player.setLastName(lastName);
         			player.setFirstName(firstName);
         			player.setDisplayName(boxScorePlayerDTO.getDisplay_name());
-        			player.setActive(true);
               		Player.create(player, processingType);
         		}
         		rosterPlayer = new RosterPlayer();
