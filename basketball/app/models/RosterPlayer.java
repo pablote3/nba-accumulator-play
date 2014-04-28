@@ -166,6 +166,14 @@ public class RosterPlayer extends Model {
 	    return rosterPlayers;
 	}
 	
+	public static List<RosterPlayer> findByTeam(String teamKey) {
+	  	Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
+	  	query.fetch("team");
+	    query.where().eq("t1.team_key", teamKey);
+	    List <RosterPlayer> rosterPlayer = query.findList();
+	    return rosterPlayer;
+	}
+	
 	public static List<RosterPlayer> findByDate(String date) {
 		Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
 	    query.where().lt("fromDate", date + " 00:00:01");
@@ -174,12 +182,13 @@ public class RosterPlayer extends Model {
 	    return rosterPlayer;
 	}
 	
-	public static List<RosterPlayer> findByPlayerName(String lastName, String firstName) {
-		Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
-		query.fetch("player");
-		query.where().eq("t1.last_Name", lastName);
-		query.where().eq("t1.first_Name", firstName);
-		List<RosterPlayer> rosterPlayer = query.findList();
+	public static List<RosterPlayer> findByDateTeam(String date, String teamKey) {
+	  	Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
+	  	query.fetch("team");
+	    query.where().lt("fromDate", date + " 00:00:01");
+	    query.where().gt("toDate", date + " 23:59:58");	 
+	    query.where().eq("t1.team_key", teamKey);
+	    List<RosterPlayer> rosterPlayer = query.findList();
 	    return rosterPlayer;
 	}
 	
@@ -195,12 +204,11 @@ public class RosterPlayer extends Model {
 	  	query.where().gt("toDate", date + " 23:59:58");	 
 	  	query.where().eq("t1.last_Name", lastName);
 	  	query.where().eq("t1.first_Name", firstName);
-	  	rosterPlayer = query.findList();
-	    
+	  	rosterPlayer = query.findList();	    
 		return rosterPlayer;
 	}
 	
-	public static RosterPlayer findByDateTeamPlayerName(String date, String teamAbbr, String lastName, String firstName, ProcessingType processingType) {
+	public static RosterPlayer findByDatePlayerNameTeam(String date, String teamAbbr, String lastName, String firstName, ProcessingType processingType) {
 		RosterPlayer rosterPlayer;
 	  	Query<RosterPlayer> query;
 	  	if (processingType.equals(ProcessingType.batch)) 
@@ -214,26 +222,18 @@ public class RosterPlayer extends Model {
 	  	query.where().eq("t1.last_Name", lastName);
 	  	query.where().eq("t1.first_Name", firstName);
 	  	query.where().eq("t2.abbr", teamAbbr);
-	  	rosterPlayer = query.findUnique();
-	    
+	  	rosterPlayer = query.findUnique();	    
 		return rosterPlayer;
 	}
 	
-	public static List<RosterPlayer> findByTeam(String teamKey) {
-	  	Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
-	  	query.fetch("team");
-	    query.where().eq("t1.team_key", teamKey);
-	    List <RosterPlayer> rosterPlayer = query.findList();
-	    return rosterPlayer;
-	}
-	
-	public static List<RosterPlayer> findByDateTeam(String date, String teamKey) {
-	  	Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
-	  	query.fetch("team");
-	    query.where().lt("fromDate", date + " 00:00:01");
-	    query.where().gt("toDate", date + " 23:59:58");	 
-	    query.where().eq("t1.team_key", teamKey);
-	    List<RosterPlayer> rosterPlayer = query.findList();
+	public static RosterPlayer findByDatePlayerNameBirthDate(String lastName, String firstName) {
+		Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
+		query.fetch("player");
+		query.where().eq("t1.last_Name", lastName);
+		query.where().eq("t1.first_Name", firstName);
+		query.orderBy("fromDate");
+		query.setMaxRows(1);
+		RosterPlayer rosterPlayer = query.findUnique();
 	    return rosterPlayer;
 	}
 	

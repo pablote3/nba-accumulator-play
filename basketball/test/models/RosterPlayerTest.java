@@ -52,17 +52,7 @@ public class RosterPlayerTest {
     }
     
     @Test
-    public void findPlayerName() {
-        running(fakeApplication(), new Runnable() {
-          public void run() {  	  
-        	  List<RosterPlayer> rosterPlayers = RosterPlayer.findByPlayerName("Jones", "Tim");
-        	  assertThat(rosterPlayers.size()).isEqualTo(6);
-          }
-        });
-    }
-    
-    @Test
-    public void findDatePlayer() {
+    public void findDatePlayerName() {
         running(fakeApplication(), new Runnable() {
           public void run() {  	  
         	  List<RosterPlayer> rosterPlayersMin = RosterPlayer.findByDatePlayerName("2014-03-01", "Jones", "Tim", ProcessingType.online);
@@ -76,10 +66,10 @@ public class RosterPlayerTest {
 
 	
 	@Test
-    public void findDateTeamPlayerName() {
+    public void findDateTeamPlayerName_NotNull() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  RosterPlayer rosterPlayer = RosterPlayer.findByDateTeamPlayerName("2014-02-02", "SAC", "Jones", "Tim", ProcessingType.online);
+        	  RosterPlayer rosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-02-02", "Jones", "Tim", "SAC", ProcessingType.online);
               assertThat(rosterPlayer.getPlayer().getFirstName()).isEqualTo("Tim");
               assertThat(rosterPlayer.getPlayer().getLastName()).isEqualTo("Jones");
               assertThat(rosterPlayer.getPlayer().getBirthDateShort()).isEqualTo("1975-01-01");
@@ -87,6 +77,26 @@ public class RosterPlayerTest {
           }
         });
     }
+	
+	@Test
+    public void findDateTeamPlayerName_Null() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  RosterPlayer rosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-02-02", "Jones", "Tim", "GS", ProcessingType.online);
+              assertThat(rosterPlayer).isNull();
+          }
+        });
+    }
+	
+//    @Test
+//    public void findLatestPlayerNameBirthDateBySeason() {
+//        running(fakeApplication(), new Runnable() {
+//          public void run() {  	  
+//        	  RosterPlayer rosterPlayer = RosterPlayer.findLatestPlayerNameBirthDateBySeason("Jones", "Tim");
+//        	  assertThat(rosterPlayer.getFromDate()).isEqualTo("2014-01-01");
+//          }
+//        });
+//    }
     
     @Test
     public void createRosterPlayer() {
@@ -100,7 +110,7 @@ public class RosterPlayerTest {
         	  rosterPlayer.setTeam(Team.findByAbbr("GS", ProcessingType.online));
         	  RosterPlayer.create(rosterPlayer, ProcessingType.online);
         	  
-        	  RosterPlayer createRosterPlayer = RosterPlayer.findByDateTeamPlayerName("2014-04-04", "GS", player.getLastName(), player.getFirstName(), ProcessingType.online);
+        	  RosterPlayer createRosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-04-04", player.getLastName(), player.getFirstName(), "GS", ProcessingType.online);
               assertThat(createRosterPlayer.getNumber()).isEqualTo("10");
               assertThat(createRosterPlayer.getPlayer().getBirthPlace()).isEqualTo("Brooklyn, New York, USA");
               assertThat(createRosterPlayer.getTeam().getKey()).isEqualTo("golden-state-warriors");
@@ -123,7 +133,7 @@ public class RosterPlayerTest {
         	  rosterPlayer.setTeam(Team.findByAbbr("GS", ProcessingType.online));
         	  RosterPlayer.create(rosterPlayer, ProcessingType.online);
         	  
-        	  RosterPlayer createRosterPlayer = RosterPlayer.findByDateTeamPlayerName("2014-04-04", "GS", player.getLastName(), player.getFirstName(), ProcessingType.online);
+        	  RosterPlayer createRosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-04-04", player.getLastName(), player.getFirstName(), "GS", ProcessingType.online);
         	  
         	  Date toDate = null;
         	  try {
@@ -134,10 +144,10 @@ public class RosterPlayerTest {
         	  createRosterPlayer.setToDate(toDate);
         	  RosterPlayer.update(createRosterPlayer, ProcessingType.online);
         	  
-        	  RosterPlayer expiredRosterPlayer = RosterPlayer.findByDateTeamPlayerName("2014-04-16", "GS", player.getLastName(), player.getFirstName(), ProcessingType.online);
+        	  RosterPlayer expiredRosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-04-16", player.getLastName(), player.getFirstName(), "GS", ProcessingType.online);
         	  assertThat(expiredRosterPlayer).isNull();
         	  
-        	  RosterPlayer updateRosterPlayer = RosterPlayer.findByDateTeamPlayerName("2014-04-15", "GS", player.getLastName(), player.getFirstName(), ProcessingType.online);
+        	  RosterPlayer updateRosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-04-15", player.getLastName(), player.getFirstName(), "GS", ProcessingType.online);
         	  
               assertThat(updateRosterPlayer.getNumber()).isEqualTo("10");
               assertThat(updateRosterPlayer.getPlayer().getBirthPlace()).isEqualTo("Brooklyn, New York, USA");
@@ -166,7 +176,7 @@ public class RosterPlayerTest {
             	  RosterPlayer.create(rosterPlayer, ProcessingType.online);
             	  rosterPlayerId = rosterPlayer.getId();
             	  
-            	  RosterPlayer createRosterPlayer = RosterPlayer.findByDateTeamPlayerName("2014-04-04", "GS", player.getLastName(), player.getFirstName(), ProcessingType.online);
+            	  RosterPlayer createRosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-04-04", player.getLastName(), player.getFirstName(), "GS", ProcessingType.online);
 
             	  createRosterPlayer.getPlayer().setFirstName(null);
        			  createRosterPlayer.update();
