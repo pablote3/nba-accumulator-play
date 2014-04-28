@@ -208,7 +208,7 @@ public class RosterPlayer extends Model {
 		return rosterPlayer;
 	}
 	
-	public static RosterPlayer findByDatePlayerNameTeam(String date, String teamAbbr, String lastName, String firstName, ProcessingType processingType) {
+	public static RosterPlayer findByDatePlayerNameTeam(String gameDate, String lastName, String firstName, String teamAbbr, ProcessingType processingType) {
 		RosterPlayer rosterPlayer;
 	  	Query<RosterPlayer> query;
 	  	if (processingType.equals(ProcessingType.batch)) 
@@ -217,8 +217,8 @@ public class RosterPlayer extends Model {
   			query = Ebean.find(RosterPlayer.class);	
 	  	query.fetch("player");
 	  	query.fetch("team");
-	  	query.where().lt("fromDate", date + " 00:00:01");
-	  	query.where().gt("toDate", date + " 23:59:58");	 
+	  	query.where().lt("fromDate", gameDate + " 00:00:01");
+	  	query.where().gt("toDate", gameDate + " 23:59:58");	 
 	  	query.where().eq("t1.last_Name", lastName);
 	  	query.where().eq("t1.first_Name", firstName);
 	  	query.where().eq("t2.abbr", teamAbbr);
@@ -226,14 +226,23 @@ public class RosterPlayer extends Model {
 		return rosterPlayer;
 	}
 	
-	public static RosterPlayer findByDatePlayerNameBirthDate(String lastName, String firstName) {
-		Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
+	public static RosterPlayer findLatestByPlayerNameBirthDateSeason(String gameDate, String lastName, String firstName, String birthDate, ProcessingType processingType) {
+		RosterPlayer rosterPlayer;
+	  	Query<RosterPlayer> query;
+	  	if (processingType.equals(ProcessingType.batch)) 
+	  		query = ebeanServer.find(RosterPlayer.class);
+  		else
+  			query = Ebean.find(RosterPlayer.class);	
 		query.fetch("player");
+	  	query.fetch("team");
+	  	query.where().lt("fromDate", gameDate + " 00:00:01");
+	  	query.where().gt("fromDate", DateTime.getDateMinSeason(DateTime.createDateFromString(gameDate)));	 
 		query.where().eq("t1.last_Name", lastName);
 		query.where().eq("t1.first_Name", firstName);
-		query.orderBy("fromDate");
+		query.where().eq("t1.birthdate", birthDate);
+		query.orderBy("fromDate desc");
 		query.setMaxRows(1);
-		RosterPlayer rosterPlayer = query.findUnique();
+		rosterPlayer = query.findUnique();
 	    return rosterPlayer;
 	}
 	

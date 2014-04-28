@@ -16,6 +16,8 @@ import models.Game.ProcessingType;
 
 import org.junit.Test;
 
+import util.DateTime;
+
 public class RosterPlayerTest {
     @Test
     public void findAll() {
@@ -45,7 +47,7 @@ public class RosterPlayerTest {
         	  assertThat(rosterPlayers.size()).isEqualTo(3);
               assertThat(rosterPlayers.get(0).getPlayer().getFirstName()).isEqualTo("Tim");
               assertThat(rosterPlayers.get(0).getPlayer().getLastName()).isEqualTo("Jones");
-              assertThat(rosterPlayers.get(0).getPlayer().getBirthDateShort()).isEqualTo("1975-01-01");
+              assertThat(DateTime.getFindDateShort(rosterPlayers.get(0).getPlayer().getBirthDate())).isEqualTo("1975-01-01");
               assertThat(rosterPlayers.get(0).getTeam().getKey()).isEqualTo("sacramento-kings");
           }
         });
@@ -72,7 +74,7 @@ public class RosterPlayerTest {
         	  RosterPlayer rosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-02-02", "Jones", "Tim", "SAC", ProcessingType.online);
               assertThat(rosterPlayer.getPlayer().getFirstName()).isEqualTo("Tim");
               assertThat(rosterPlayer.getPlayer().getLastName()).isEqualTo("Jones");
-              assertThat(rosterPlayer.getPlayer().getBirthDateShort()).isEqualTo("1975-01-01");
+              assertThat(DateTime.getFindDateShort(rosterPlayer.getPlayer().getBirthDate())).isEqualTo("1975-01-01");
               assertThat(rosterPlayer.getTeam().getKey()).isEqualTo("sacramento-kings");
           }
         });
@@ -88,15 +90,78 @@ public class RosterPlayerTest {
         });
     }
 	
-//    @Test
-//    public void findLatestPlayerNameBirthDateBySeason() {
-//        running(fakeApplication(), new Runnable() {
-//          public void run() {  	  
-//        	  RosterPlayer rosterPlayer = RosterPlayer.findLatestPlayerNameBirthDateBySeason("Jones", "Tim");
-//        	  assertThat(rosterPlayer.getFromDate()).isEqualTo("2014-01-01");
-//          }
-//        });
-//    }
+    @Test
+    public void findLatestPlayerNameBirthDateSeason_BirthDate1() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {  	  
+        	  RosterPlayer rosterPlayer = RosterPlayer.findLatestByPlayerNameBirthDateSeason("2014-02-02", "Jones", "Tim", "1975-01-01", ProcessingType.online);
+        	  assertThat(DateTime.getFindDateShort(rosterPlayer.getFromDate())).isEqualTo("2014-02-01");
+        	  assertThat(rosterPlayer.getTeam().getAbbr()).isEqualTo("SAC");
+          }
+        });
+    }
+    
+    @Test
+    public void findLatestPlayerNameBirthDateSeason_BirthDate2() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {  	  
+        	  RosterPlayer rosterPlayer = RosterPlayer.findLatestByPlayerNameBirthDateSeason("2014-02-02", "Jones", "Tim", "1972-05-01", ProcessingType.online);
+        	  assertThat(DateTime.getFindDateShort(rosterPlayer.getFromDate())).isEqualTo("2013-11-01");
+        	  assertThat(rosterPlayer.getTeam().getAbbr()).isEqualTo("LAL");
+          }
+        });
+    }
+    
+    @Test
+    public void findLatestPlayerNameBirthDateSeason_PreviousSeason() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {  	  
+        	  RosterPlayer rosterPlayer = RosterPlayer.findLatestByPlayerNameBirthDateSeason("2012-11-12", "Jones", "Tim", "1972-05-01", ProcessingType.online);
+        	  assertThat(DateTime.getFindDateShort(rosterPlayer.getFromDate())).isEqualTo("2012-10-30");
+        	  assertThat(rosterPlayer.getTeam().getAbbr()).isEqualTo("SAC");
+          }
+        });
+    }
+    
+    @Test
+    public void findLatestPlayerNameBirthDateSeason_NullPointer_GameDate() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {  	  
+        	  RosterPlayer rosterPlayer = RosterPlayer.findLatestByPlayerNameBirthDateSeason("2014-12-31", "Jones", "Tim", "1975-01-01", ProcessingType.online);
+        	  assertThat(rosterPlayer).isNull();
+          }
+        });
+    }
+    
+    @Test
+    public void findLatestPlayerNameBirthDateSeason_NullPointer_LastName() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {  	  
+        	  RosterPlayer rosterPlayer = RosterPlayer.findLatestByPlayerNameBirthDateSeason("2014-02-02", "Bones", "Tim", "1975-01-01", ProcessingType.online);
+        	  assertThat(rosterPlayer).isNull();
+          }
+        });
+    }
+    
+    @Test
+    public void findLatestPlayerNameBirthDateSeason_NullPointer_FirstName() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {  	  
+        	  RosterPlayer rosterPlayer = RosterPlayer.findLatestByPlayerNameBirthDateSeason("2014-02-02", "Jones", "Slim", "1975-01-01", ProcessingType.online);
+        	  assertThat(rosterPlayer).isNull();
+          }
+        });
+    }
+    
+    @Test
+    public void findLatestPlayerNameBirthDateSeason_NullPointer_BirthDate() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {  	  
+        	  RosterPlayer rosterPlayer = RosterPlayer.findLatestByPlayerNameBirthDateSeason("2014-02-02", "Jones", "Tim", "1975-05-29", ProcessingType.online);
+        	  assertThat(rosterPlayer).isNull();
+          }
+        });
+    }
     
     @Test
     public void createRosterPlayer() {
