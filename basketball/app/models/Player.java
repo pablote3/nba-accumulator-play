@@ -138,9 +138,6 @@ public class Player extends Model {
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
-	public String getBirthDateShort() {
-		return DateTime.getFindDateShort(birthDate);
-	}
 	
 	@Required
 	@Column(name="birthplace", length=35, nullable=true)

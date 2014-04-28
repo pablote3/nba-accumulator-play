@@ -12,6 +12,8 @@ import models.Game.ProcessingType;
 
 import org.junit.Test;
 
+import util.DateTime;
+
 import com.avaje.ebean.Page;
 
 public class PlayerTest {    
@@ -34,7 +36,7 @@ public class PlayerTest {
         	  Long playerId = player.getId();
         	  
         	  Player createPlayer = Player.findByName("Mullin", "Chris", ProcessingType.online);
-        	  assertThat(createPlayer.getBirthDateShort()).isEqualTo("1963-07-30");
+        	  assertThat(DateTime.getFindDateShort(createPlayer.getBirthDate())).isEqualTo("1963-07-30");
         	  assertThat(createPlayer.getWeight()).isEqualTo((short)215);
         	  Player.delete(playerId);
           }
@@ -50,7 +52,7 @@ public class PlayerTest {
         	  Long playerId = player.getId();
               
         	  Player createPlayer = Player.findById(playerId);
-        	  assertThat(player.getBirthDateShort()).isEqualTo("1963-07-30");
+        	  assertThat(DateTime.getFindDateShort(player.getBirthDate())).isEqualTo("1963-07-30");
               assertThat(createPlayer.getWeight()).isEqualTo((short)215);
               Player.delete(playerId);
           }
@@ -66,7 +68,7 @@ public class PlayerTest {
         	  Long playerId = player.getId();
               
         	  Player createPlayer = Player.findById(playerId);
-        	  assertThat(player.getBirthDateShort()).isEqualTo("1963-07-30");
+        	  assertThat(DateTime.getFindDateShort(player.getBirthDate())).isEqualTo("1963-07-30");
               assertThat(createPlayer.getWeight()).isEqualTo((short)215);
               Player.delete(playerId);
           }
@@ -86,7 +88,7 @@ public class PlayerTest {
         	  createPlayer.update();
         	  
         	  Player updatePlayer = Player.findByName("Mullin", "Chris", ProcessingType.online);
-        	  assertThat(player.getBirthDateShort()).isEqualTo("1963-07-30");
+        	  assertThat(DateTime.getFindDateShort(player.getBirthDate())).isEqualTo("1963-07-30");
               assertThat(updatePlayer.getWeight()).isEqualTo((short)345);
               Player.delete(playerId);
           }
