@@ -168,7 +168,22 @@ public class Player extends Model {
 	    return players;
 	}
 	
-	public static Player findByName(String lastName, String firstName, ProcessingType processingType) {
+	public static List<Player> findByName(String lastName, String firstName, ProcessingType processingType) {
+		List<Player> players;
+		Query<Player> query; 
+	  	if (processingType.equals(ProcessingType.batch)) 
+	  		query = ebeanServer.find(Player.class);
+  		else
+  			query = Ebean.find(Player.class);	
+
+		query = ebeanServer.find(Player.class);
+		query.where().eq("lastName", lastName);
+		query.where().eq("firstName", firstName);
+		players = query.findList();
+	    return players;
+	}
+	
+	public static Player findByNameBirthDate(String lastName, String firstName, String birthDate, ProcessingType processingType) {
 		Player player;
 		Query<Player> query; 
 	  	if (processingType.equals(ProcessingType.batch)) 
@@ -179,6 +194,7 @@ public class Player extends Model {
 		query = ebeanServer.find(Player.class);
 		query.where().eq("lastName", lastName);
 		query.where().eq("firstName", firstName);
+		query.where().eq("birthdate", birthDate);
 		player = query.findUnique();
 	    return player;
 	}
@@ -197,9 +213,11 @@ public class Player extends Model {
 			Ebean.update(player);
 	}
 	  
-	public static void delete(Long id) {
-		Player player = Player.findById(id);
-	  	player.delete();
+	public static void delete(Player player, ProcessingType processingType) {
+		if (processingType.equals(ProcessingType.batch))
+			ebeanServer.delete(player);
+		else
+			Ebean.delete(player);
 	}
 	
     public static Page<Player> page(int page, int pageSize, String sortBy, String order, String filter) {
