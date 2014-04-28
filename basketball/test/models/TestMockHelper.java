@@ -80,16 +80,16 @@ public class TestMockHelper {
   	  return official;
 	}
 	
-	protected static Player getPlayer(boolean active) {
+	protected static Player getPlayer(String birthDate) {
 	  Player player = new Player();
-	  player.setLastName("Mullin");
-	  player.setFirstName("Chris");
-	  player.setDisplayName("Chris Mullin");
+	  player.setLastName("Jones");
+	  player.setFirstName("Tim");
+	  player.setDisplayName("Tim Jones");
 	  player.setHeight((short)79);
 	  player.setWeight((short)215);
 	  Date date = null;
 	  try {
-	  	  date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("1963-07-30");
+	  	  date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(birthDate);
 	  } catch (ParseException e) {
 	  	  e.printStackTrace();
 	  }
@@ -98,8 +98,10 @@ public class TestMockHelper {
 	  return player;
 	}
 	
-	protected static RosterPlayer getRosterPlayer(String startDate, String endDate) {
+	protected static RosterPlayer getRosterPlayer(Player player, Team team, String startDate, String endDate) {
 	  RosterPlayer rosterPlayer = new RosterPlayer();
+	  rosterPlayer.setPlayer(player);
+	  rosterPlayer.setTeam(team);
 	  rosterPlayer.setNumber("10");
 	  rosterPlayer.setPosition(Position.PG);
 	  Date fromDate = null;

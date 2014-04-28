@@ -262,9 +262,11 @@ public class RosterPlayer extends Model {
 			Ebean.update(rosterPlayer);
 	}
 	  
-	public static void delete(Long id) {
-		RosterPlayer rosterPlayer = RosterPlayer.findById(id);
-	  	rosterPlayer.delete();
+	public static void delete(RosterPlayer rosterPlayer, ProcessingType processingType) {
+		if (processingType.equals(ProcessingType.batch))
+			ebeanServer.delete(rosterPlayer);
+		else
+			Ebean.delete(rosterPlayer);
 	}
 	
     public static Page<RosterPlayer> page(int page, int pageSize, String sortBy, String order, String filter) {
