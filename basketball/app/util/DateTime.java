@@ -57,4 +57,30 @@ public class DateTime {
 		cal.add(Calendar.SECOND, 59);
 		return cal.getTime();
 	}
+	static public Date getDateMinSeason(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		if (cal.get(Calendar.MONTH) <= 5 && cal.get(Calendar.DATE) <= 30)
+			cal.set(Calendar.YEAR, cal.get(Calendar.YEAR) - 1);
+
+		cal.set(Calendar.MONTH, 6);
+		cal.set(Calendar.DATE, 1);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		return cal.getTime();
+	}	
+	static public Date getDateMaxSeason(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		if (cal.get(Calendar.MONTH) >= 6 && cal.get(Calendar.DATE) >= 1)
+			cal.set(Calendar.YEAR, cal.get(Calendar.YEAR) + 1);
+
+		cal.set(Calendar.MONTH, 5);
+		cal.set(Calendar.DATE, 30);
+		cal.set(Calendar.HOUR_OF_DAY, 23);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND, 59);
+		return cal.getTime();
+	}
 }

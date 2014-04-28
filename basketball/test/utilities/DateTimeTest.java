@@ -67,6 +67,30 @@ public class DateTimeTest {
         assertThat(DateTime.createDateMaxTime(date)).isEqualTo(parseDate("2013-03-30 23:59:59"));
     }
     
+    @Test
+    public void createDateMinSeason_Min() {
+    	Date date = parseDate("2013-07-01 00:00:00");
+        assertThat(DateTime.getDateMinSeason(date)).isEqualTo(parseDate("2013-07-01 00:00:00"));
+    }
+    
+    @Test
+    public void createDateMinSeason_Max() {
+    	Date date = parseDate("2013-06-30 23:59:59");
+        assertThat(DateTime.getDateMinSeason(date)).isEqualTo(parseDate("2012-07-01 00:00:00"));
+    }
+    
+    @Test
+    public void createDateMaxSeason_Min() {
+    	Date date = parseDate("2013-07-01 00:00:00");
+        assertThat(DateTime.getDateMaxSeason(date)).isEqualTo(parseDate("2014-06-30 23:59:59"));
+    }
+    
+    @Test
+    public void createDateMaxSeason_Max() {
+    	Date date = parseDate("2013-06-30 23:59:59");
+        assertThat(DateTime.getDateMaxSeason(date)).isEqualTo(parseDate("2013-06-30 23:59:59"));
+    }
+    
     public Date parseDate(String stringDate) {
     	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.ENGLISH); 
     	Date date = null;
