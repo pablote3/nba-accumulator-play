@@ -149,26 +149,26 @@ public class GameJsonUrl {
 			              		}
 			              	}
 		        	  	}
-			              ArrayList<Long> playerIds = new ArrayList<Long>();
-			              ArrayList<Long> rosterPlayerIds = new ArrayList<Long>();
+			              ArrayList<Player> players = new ArrayList<Player>();
+			              ArrayList<RosterPlayer> rosterPlayers = new ArrayList<RosterPlayer>();
 			              
 			              for (int i = 0; i < createGame.getBoxScores().size(); i++) {
 			            	  BoxScore bs = createGame.getBoxScores().get(i);
 			            	  for (int j = 0; j < bs.getBoxScorePlayers().size(); j++) {
 			            		  BoxScorePlayer bsp = bs.getBoxScorePlayers().get(j);
-			            		  playerIds.add(bsp.getRosterPlayer().getPlayer().getId());
-			            		  rosterPlayerIds.add(bsp.getRosterPlayer().getId());
+			            		  players.add(bsp.getRosterPlayer().getPlayer());
+			            		  rosterPlayers.add(bsp.getRosterPlayer());
 			            	  }
 			              }
 			              
 			              Game.delete(createGame.getId(), ProcessingType.online);
 			              
-			              for (int i = 0; i < rosterPlayerIds.size(); i++) {
-			            	  RosterPlayer.delete(rosterPlayerIds.get(i));
+			              for (int i = 0; i < rosterPlayers.size(); i++) {
+			            	  RosterPlayer.delete(rosterPlayers.get(i), ProcessingType.online);
 			              }
 			              
-			              for (int i = 0; i < playerIds.size(); i++) {
-			            	  Player.delete(playerIds.get(i));
+			              for (int i = 0; i < players.size(); i++) {
+			            	  Player.delete(players.get(i), ProcessingType.online);
 			              }
 		    		    baseJson.close(); 
 		    		} 
