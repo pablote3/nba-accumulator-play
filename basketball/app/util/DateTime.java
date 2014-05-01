@@ -52,9 +52,17 @@ public class DateTime {
 	static public Date createDateMaxTime(Date date) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
-		cal.add(Calendar.HOUR_OF_DAY, 23);
-		cal.add(Calendar.MINUTE, 59);
-		cal.add(Calendar.SECOND, 59);
+		cal.set(Calendar.HOUR_OF_DAY, 23);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND, 59);
+		return cal.getTime();
+	}
+	static public Date createDateMinTime(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
 		return cal.getTime();
 	}
 	static public Date getDateMinSeason(Date date) {
