@@ -27,6 +27,10 @@ public class DateTime {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 		return simpleDateFormat.format(date);
 	}
+	static public String getFindDateTimeShort(Date date) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+		return simpleDateFormat.format(date);
+	}
 	static public String getFindDateNaked(Date date) {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
 		return simpleDateFormat.format(date);
@@ -40,7 +44,7 @@ public class DateTime {
 			return false;
 		}
 	}
-	static public Date createDateFromString(String date) {
+	static public Date createDateFromStringDate(String date) {
 		try {
 			return new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(date);
 		} 
@@ -49,6 +53,16 @@ public class DateTime {
 			return null;
 		}
 	}
+    static public Date createDateFromStringDateTime(String stringDate) {
+    	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.ENGLISH); 
+    	Date date = null;
+		try {
+			date = simpleDateFormat.parse(stringDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return date;
+    }
 	static public Date createDateMaxTime(Date date) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);

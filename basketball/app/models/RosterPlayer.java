@@ -236,7 +236,7 @@ public class RosterPlayer extends Model {
 		query.fetch("player");
 	  	query.fetch("team");
 	  	query.where().lt("fromDate", gameDate + " 00:00:01");
-	  	query.where().gt("fromDate", DateTime.getDateMinSeason(DateTime.createDateFromString(gameDate)));	 
+	  	query.where().gt("fromDate", DateTime.getDateMinSeason(DateTime.createDateFromStringDate(gameDate)));	 
 		query.where().eq("t1.last_Name", lastName);
 		query.where().eq("t1.first_Name", firstName);
 		query.where().eq("t1.birthdate", birthDate);
