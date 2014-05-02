@@ -17,15 +17,17 @@ public interface ActorApi {
 	public static class ServiceProps {
 		public final String date;
 		public final String team;
+		public final String size;
 		public final String accessToken;
 		public final String userAgentName;
 		public final String urlBoxScore;
 		public final String delay;
 		public final String processType;
 		
-		public ServiceProps(String date, String team, String accessToken, String userAgentName, String urlBoxScore, String delay, String processType) {
+		public ServiceProps(String date, String team, String size, String accessToken, String userAgentName, String urlBoxScore, String delay, String processType) {
 			this.date = date;
 			this.team = team;
+			this.size = size;
 			this.accessToken = accessToken;
 			this.userAgentName = userAgentName;
 			this.urlBoxScore = urlBoxScore;
@@ -33,7 +35,7 @@ public interface ActorApi {
 			this.processType = processType;
 		}			
 		public String toString() {
-			return String.format("%s(%s)", getClass().getSimpleName(), date, team);
+			return String.format("%s(%s)", getClass().getSimpleName(), date, team, size);
 		}
 	}
 	

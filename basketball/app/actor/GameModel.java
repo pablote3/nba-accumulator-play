@@ -3,12 +3,13 @@ package actor;
 import static actor.ActorApi.NextGame;
 import static actor.ActorApi.WorkStart;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import models.BoxScore;
 import models.Game;
 import models.Game.ProcessingType;
+import util.DateTime;
 import actor.ActorApi.CompleteGame;
 import actor.ActorApi.GameId;
 import actor.ActorApi.GameIds;
@@ -25,6 +26,7 @@ public class GameModel extends UntypedActor {
 	private ActorRef gameController;
 	private String propDate;
 	private String propTeam;
+	private String propSize;
 	private ProcessingType processingType;
 	
 	public GameModel(ActorRef listener) {
@@ -34,8 +36,9 @@ public class GameModel extends UntypedActor {
 
 	public void onReceive(Object message) {
 		if (message instanceof ServiceProps) {
-			propDate = ((ServiceProps) message).date;
-			propTeam = ((ServiceProps) message).team;		
+			propDate = ((ServiceProps) message).date == null ? DateTime.getFindDateShort(new Date()) : ((ServiceProps) message).date;
+			propTeam = ((ServiceProps) message).team;
+			propSize = ((ServiceProps) message).size == null ? propSize = "0" : ((ServiceProps) message).size;
 			processingType = Game.ProcessingType.valueOf(((ServiceProps) message).processType);
 			xmlStats.tell(message, getSender());
 		}
@@ -44,17 +47,13 @@ public class GameModel extends UntypedActor {
 			gameController = getSender();
 			try {
 				if (propTeam == null) {
-					games = Game.findIdsByDate(propDate, processingType);
-					if (games == null) {
-						throw new NullPointerException();
-					}
+					games = Game.findIdsByDateSize(propDate, propSize, processingType);
 				}
 				else {
-					games = new ArrayList<Long>();
-					Long id = Game.findIdByDateTeam(propDate, propTeam, processingType);
-					if (id != null) {
-						games.add(id);
-					}
+					games = Game.findIdsByDateTeamSize(propDate, propTeam, propSize, processingType);
+				}
+				if (games == null) {
+					throw new NullPointerException();
 				}
 			} catch (NullPointerException e) {
 				getContext().stop(getSelf());

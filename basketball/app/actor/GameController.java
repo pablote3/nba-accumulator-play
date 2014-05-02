@@ -29,7 +29,7 @@ public class GameController extends UntypedActor {
 	public void onReceive(Object message) {
 		if (message instanceof ServiceProps) {
 			master = getSender();
-			nbrSecondsDelay = util.Numeric.createIntFromString(((ServiceProps) message).delay);
+			nbrSecondsDelay = Integer.parseInt(((ServiceProps) message).delay);
 			gameModel.tell(message, getSender());
 		}
 		else if (message.equals(WorkStart)) {

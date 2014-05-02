@@ -34,10 +34,13 @@ public class Property extends UntypedActor {
 				properties.load(in);
 				in.close();
 				
-				if (!util.DateTime.isDate(properties.getProperty("game.date")))
+				if (properties.getProperty("game.date") != null && !util.DateTime.isDate(properties.getProperty("game.date")))
 					throw new PropertyException("InvalidDate - game.date");
 				
-				if (!util.Numeric.isNumber(properties.getProperty("xmlstats.delay")))
+				if (properties.getProperty("xmlstats.size") != null && !util.Numeric.isValidNumber(properties.getProperty("xmlstats.size")))
+					throw new PropertyException("InvalidNumber - xmlstats.size");
+				
+				if (properties.getProperty("xmlstats.delay") != null && !util.Numeric.isValidNumber(properties.getProperty("xmlstats.delay")))
 					throw new PropertyException("InvalidNumber - xmlstats.delay");
 				
 				Game.ProcessingType.valueOf(properties.getProperty("aggregator.processType"));
@@ -62,12 +65,13 @@ public class Property extends UntypedActor {
 				props = getProperties();
 				String date = props.getProperty("game.date");
 				String team = props.getProperty("game.team");
+				String size = props.getProperty("game.size");
 				String processType = props.getProperty("aggregator.processType");
 				String accessToken = props.getProperty("xmlstats.accessToken");
 				String userAgentName = props.getProperty("xmlstats.userAgentName");
 				String urlBoxScore = props.getProperty("xmlstats.urlBoxScore");
 				String delay = props.getProperty("xmlstats.delay");
-				ServiceProps serviceProps = new ServiceProps(date, team, accessToken, userAgentName, urlBoxScore, delay, processType);
+				ServiceProps serviceProps = new ServiceProps(date, team, size, accessToken, userAgentName, urlBoxScore, delay, processType);
 				getSender().tell(serviceProps, getSelf());
 				getContext().stop(getSelf());
 			} 
