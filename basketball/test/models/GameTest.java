@@ -35,19 +35,35 @@ public class GameTest {
     }
     
     @Test
-    public void findGameIdsDateOnline() {
+    public void findGameIdsDateSizeOnline_Season() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  List<Long> games = Game.findIdsByDate("2012-10-31", ProcessingType.online);     
-              assertThat(games.size()).isEqualTo(9);
+        	  List<Long> games = Game.findIdsByDateSize("2012-10-30", "0", ProcessingType.online);     
+              assertThat(games.size()).isEqualTo(1230);
           }
         });
     }
     
     @Test
-    public void findGameIdsDateBatch() {
-    	List<Long> games = Game.findIdsByDate("2012-10-31", ProcessingType.batch);     
-        assertThat(games.size()).isEqualTo(9);
+    public void findGameIdsDateSizeOnline_Game() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  List<Long> games = Game.findIdsByDateSize("2012-10-31", "1", ProcessingType.online);     
+              assertThat(games.size()).isEqualTo(1);
+          }
+        });
+    }
+    
+    @Test
+    public void findGameIdsDateSizeBatch_Season() {
+    	List<Long> games = Game.findIdsByDateSize("2012-10-30", "0", ProcessingType.batch);     
+        assertThat(games.size()).isEqualTo(1230);
+    }
+    
+    @Test
+    public void findGameIdsDateSizeBatch_Game() {
+    	List<Long> games = Game.findIdsByDateSize("2012-10-30", "1", ProcessingType.batch);     
+        assertThat(games.size()).isEqualTo(1);
     }
     
     @Test
@@ -65,11 +81,12 @@ public class GameTest {
     }
     
     @Test
-    public void findGameIdByDateTeamOnline() {
+    public void findGameIdByDateTeamOnline_Game() {
         running(fakeApplication(), new Runnable() {
             public void run() {
-          	  Long gameId = Game.findIdByDateTeam("2012-10-31", "sacramento-kings", ProcessingType.online);
-          	  Game game = Game.findById(gameId, ProcessingType.online);
+          	  List<Long> games = Game.findIdsByDateTeamSize("2012-10-31", "sacramento-kings", "1", ProcessingType.online);
+          	  assertThat(games.size()).isEqualTo(1);
+          	  Game game = Game.findById(games.get(0), ProcessingType.online);
           	  
           	  assertThat(game.getBoxScores().size()).isEqualTo(2);
           	  for (int i = 0; i < game.getBoxScores().size(); i++) {
@@ -86,20 +103,45 @@ public class GameTest {
     }
     
     @Test
-    public void findGameIdByDateTeamBatch() {
-    	Long gameId = Game.findIdByDateTeam("2012-10-31", "sacramento-kings", ProcessingType.batch);
-   	  	Game game = Game.findById(gameId, ProcessingType.batch);
+    public void findGameIdByDateTeamOnline_Season() {
+        running(fakeApplication(), new Runnable() {
+            public void run() {
+          	  List<Long> games = Game.findIdsByDateTeamSize("2012-10-30", "sacramento-kings", "0", ProcessingType.online);
+          	  assertThat(games.size()).isEqualTo(82);
+            }
+        });
+    }
+    
+    @Test
+    public void findGameIdByDateTeamBatch_Game() {
+        running(fakeApplication(), new Runnable() {
+            public void run() {
+          	  List<Long> games = Game.findIdsByDateTeamSize("2012-10-31", "sacramento-kings", "1", ProcessingType.batch);
+          	  assertThat(games.size()).isEqualTo(1);
+          	  Game game = Game.findById(games.get(0), ProcessingType.batch);
           	  
-   	  	assertThat(game.getBoxScores().size()).isEqualTo(2);
-   	  	for (int i = 0; i < game.getBoxScores().size(); i++) {
-   	  		BoxScore boxScore = game.getBoxScores().get(i);
-   	  		if (boxScore.getLocation().equals(Location.away)) {
-   	  			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("SAC");
-   	  		}
-   	  		else if (boxScore.getLocation().equals(Location.home)) {
-   	  			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("CHI");
-   	  		}
-   	  	}
+          	  assertThat(game.getBoxScores().size()).isEqualTo(2);
+          	  for (int i = 0; i < game.getBoxScores().size(); i++) {
+          		  BoxScore boxScore = game.getBoxScores().get(i);
+          		  if (boxScore.getLocation().equals(Location.away)) {
+          			  assertThat(boxScore.getTeam().getAbbr()).isEqualTo("SAC");
+          		  }
+          		  else if (boxScore.getLocation().equals(Location.home)) {
+          			  assertThat(boxScore.getTeam().getAbbr()).isEqualTo("CHI");
+          		  }
+          	  }
+            }
+        });
+    }
+    
+    @Test
+    public void findGameIdByDateTeamBatch_Season() {
+        running(fakeApplication(), new Runnable() {
+            public void run() {
+          	  List<Long> games = Game.findIdsByDateTeamSize("2012-10-30", "sacramento-kings", "0", ProcessingType.batch);
+          	  assertThat(games.size()).isEqualTo(82);
+            }
+        });
     }
     
     @Test

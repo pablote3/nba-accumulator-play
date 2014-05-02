@@ -190,15 +190,22 @@ public class Game extends Model {
 	    return games;
 	}
 	
-	public static List<Long> findIdsByDate(String date, ProcessingType processingType) {
+	public static List<Long> findIdsByDateSize(String propDate, String propSize, ProcessingType processingType) {
 	  	Query<Game> query;
 	  	if (processingType.equals(ProcessingType.batch))
 	  		query = ebeanServer.find(Game.class);
 	  	else
 	  		query = Ebean.find(Game.class);
 	  	
-	  	query.where().between("date", date + " 00:00:00", date + " 23:59:59");
+	  	int maxRows = Integer.parseInt(propSize);
+	  	if (maxRows > 0)
+		  	query.setMaxRows(maxRows);
+
+	  	Date maxDate = DateTime.getDateMaxSeason(DateTime.createDateFromStringDate(propDate));
+
+	  	query.where().between("date", propDate + " 00:00:00", DateTime.getFindDateTimeShort(maxDate));
 	    List<Game> games = query.findList();
+	    
 	    List<Long> gameIds = null;
 	    if (games.size() > 0) {
 	    	gameIds = new ArrayList<Long>();
@@ -220,19 +227,34 @@ public class Game extends Model {
 	    return game;
 	}
 	
-	public static Long findIdByDateTeam(String date, String teamKey, ProcessingType processingType) {
+	public static List<Long> findIdsByDateTeamSize(String propDate, String propTeam, String propSize, ProcessingType processingType) {
 	  	Query<Game> query;
 	  	if (processingType.equals(ProcessingType.batch))
 	  		query = ebeanServer.find(Game.class);
 	  	else
 	  		query = Ebean.find(Game.class);
+	  	
+	  	int maxRows = Integer.parseInt(propSize);
+	  	if (maxRows > 0)
+		  	query.setMaxRows(maxRows);
+	  	
+	  	Date maxDate = DateTime.getDateMaxSeason(DateTime.createDateFromStringDate(propDate));
+	  	
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
-	  	query.where().between("t0.date", date + " 00:00:00", date + " 23:59:59");
-	    query.where().eq("t2.team_key", teamKey);
-	
-	    Game game = query.findUnique();
-		return game.getId();
+	  	query.where().between("t0.date", propDate + " 00:00:00", DateTime.getFindDateTimeShort(maxDate));
+	    query.where().eq("t2.team_key", propTeam);
+	    query.orderBy("t0.date asc");
+	    List<Game> games = query.findList();
+	    
+	    List<Long> gameIds = null;
+	    if (games.size() > 0) {
+	    	gameIds = new ArrayList<Long>();
+		    for (int i = 0; i < games.size(); i++) {
+				gameIds.add(games.get(i).getId());
+			}
+	    }
+		return gameIds;
 	}
 
 	public static Page<Game> page(int page, int pageSize) {
