@@ -84,7 +84,7 @@ public class GameTest {
     public void findGameIdByDateTeamOnline_Game() {
         running(fakeApplication(), new Runnable() {
             public void run() {
-          	  List<Long> games = Game.findIdsByDateTeamSize("2012-10-31", "sacramento-kings", "1", ProcessingType.online);
+          	  List<Long> games = Game.findIdsByDateTeamSize("2012-10-31", "sacramento-kings", "1", ProcessingType.batch);
           	  assertThat(games.size()).isEqualTo(1);
           	  Game game = Game.findById(games.get(0), ProcessingType.online);
           	  

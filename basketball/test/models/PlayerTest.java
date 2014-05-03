@@ -15,8 +15,6 @@ import org.junit.Test;
 
 import util.DateTime;
 
-import com.avaje.ebean.Page;
-
 public class PlayerTest {    
     @Test
     public void findAll() {
@@ -25,7 +23,7 @@ public class PlayerTest {
         	  List<Player> createPlayers = createPlayers();
         	  
         	  List<Player> players = Player.findAll();
-        	  assertThat(players.size()).isEqualTo(2);
+        	  assertThat(players.size()).isGreaterThan(2);
         	  
         	  for (int i = 0; i < createPlayers.size(); i++) {
         		  Player.delete(createPlayers.get(i), ProcessingType.online);
@@ -93,47 +91,45 @@ public class PlayerTest {
         Player.delete(createPlayer, ProcessingType.batch);
     }
     
-//    @Test
-//    public void updatePlayer() {
-//        running(fakeApplication(), new Runnable() {
-//          public void run() {
-//        	  Player player = TestMockHelper.getPlayer("1975-01-01");
-//        	  Player.create(player, ProcessingType.online);
-//        	  Long playerId = player.getId();
-//        	  
-//        	  Player createPlayer = Player.findByName("Jones", "Tim", ProcessingType.online);
-//        	  createPlayer.setWeight((short)345);
-//        	  createPlayer.update();
-//        	  
-//        	  Player updatePlayer = Player.findByName("Jones", "Tim", ProcessingType.online);
-//        	  assertThat(DateTime.getFindDateShort(player.getBirthDate())).isEqualTo("1975-01-01");
-//              assertThat(updatePlayer.getWeight()).isEqualTo((short)345);
-//              Player.delete(playerId);
-//          }
-//        });
-//    }
-//    
-//    @Test
-//    public void updatePlayerValidation() {
-//        running(fakeApplication(), new Runnable() {
-//          public void run() {
-//        	  Long playerId = null;
-//       		  try {
-//            	  Player player = TestMockHelper.getPlayer("1975-01-01");
-//            	  Player.create(player, ProcessingType.online);
-//            	  playerId = player.getId();
-//            	  
-//            	  Player createPlayer = Player.findByName("Jones", "Tim", ProcessingType.online);
-//				  createPlayer.setFirstName(null);
-//				  createPlayer.update();
-//       		  } catch (PersistenceException e) {
-//       			  assertThat(e.getCause().getMessage().equalsIgnoreCase("Column 'first_name' cannot be null"));
-//       		  } finally {
-//       			Player.delete(playerId);
-//       		  }
-//          }
-//        });
-//    }
+    @Test
+    public void updatePlayer() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  Player player = TestMockHelper.getPlayer("1975-01-01");
+        	  Player.create(player, ProcessingType.online);
+        	  
+        	  Player createPlayer = Player.findByNameBirthDate("Jones", "Tim", "1975-01-01", ProcessingType.online);
+        	  createPlayer.setWeight((short)345);
+        	  createPlayer.update();
+        	  
+        	  Player updatePlayer = Player.findByNameBirthDate("Jones", "Tim", "1975-01-01", ProcessingType.online);
+        	  assertThat(DateTime.getFindDateShort(player.getBirthDate())).isEqualTo("1975-01-01");
+              assertThat(updatePlayer.getWeight()).isEqualTo((short)345);
+              Player.delete(createPlayer, ProcessingType.online);
+          }
+        });
+    }
+    
+    @Test
+    public void updatePlayerValidation() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  Player createPlayer = null;
+       		  try {
+            	  Player player = TestMockHelper.getPlayer("1975-01-01");
+            	  Player.create(player, ProcessingType.online);
+            	  
+            	  createPlayer = Player.findByNameBirthDate("Jones", "Tim", "1975-01-01", ProcessingType.online);
+				  createPlayer.setFirstName(null);
+				  createPlayer.update();
+       		  } catch (PersistenceException e) {
+       			  assertThat(e.getCause().getMessage().equalsIgnoreCase("Column 'first_name' cannot be null"));
+       		  } finally {
+       			  Player.delete(createPlayer, ProcessingType.online);
+       		  }
+          }
+        });
+    }
 
 //    @Test
 //    public void paginationPlayers() {
