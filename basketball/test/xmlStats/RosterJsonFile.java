@@ -45,7 +45,10 @@ public class RosterJsonFile {
 	              List<Player> players = JsonHelper.getPlayers(xmlStats.players);
 	              
 	              for (int i = 0; i < players.size(); i++) {
-					Player.create(players.get(i), ProcessingType.online);
+	            	Player searchPlayer = Player.findByNameBirthDate(players.get(i).getLastName(), players.get(i).getFirstName(), DateTime.getFindDateShort(players.get(i).getBirthDate()), ProcessingType.online);
+	            	if (searchPlayer == null) {
+	            		Player.create(players.get(i), ProcessingType.online);
+	            	}
 					Player createPlayer = Player.findByNameBirthDate(players.get(i).getLastName(), players.get(i).getFirstName(), DateTime.getFindDateShort(players.get(i).getBirthDate()), ProcessingType.online);
 					assertThat(createPlayer.getBirthPlace()).isEqualTo(players.get(i).getBirthPlace());
 	              }
