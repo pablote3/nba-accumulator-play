@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import util.DateTime;
 import models.BoxScore;
 import models.BoxScorePlayer;
 import models.BoxScorePlayer.Position;
@@ -18,6 +17,7 @@ import models.PeriodScore;
 import models.Player;
 import models.RosterPlayer;
 import models.Team;
+import util.DateTime;
 
 public class JsonHelper {
    
@@ -75,7 +75,6 @@ public class JsonHelper {
 	    BoxScorePlayer boxScorePlayer;
 	    RosterPlayer rosterPlayer;
 	    
-	    boolean rosterComplete = true;
         for (int i = 0; i < boxScorePlayerDTOs.length; i++) {
         	boxScorePlayerDTO = boxScorePlayerDTOs[i];
         	String lastName = boxScorePlayerDTO.getLast_name();
@@ -83,41 +82,9 @@ public class JsonHelper {
         	String teamAbbr = boxScorePlayerDTO.getTeam_abbreviation();
         	rosterPlayer = RosterPlayer.findByDatePlayerNameTeam(gameDate, lastName, firstName, teamAbbr, processingType);
         	if (rosterPlayer == null) {
-        		rosterComplete = false;
-        		break;
+        		return null;
         	}        	
-        }
-        
-        if (!rosterComplete) {
-        	for (int j = 0; j < boxScorePlayerDTOs.length; j++) {
-        		boxScorePlayerDTO = boxScorePlayerDTOs[j];
-            	String lastName = boxScorePlayerDTO.getLast_name();
-            	String firstName = boxScorePlayerDTO.getFirst_name();
-            	String teamAbbr = boxScorePlayerDTO.getTeam_abbreviation();
-        		Player player = Player.findByNameBirthDate(lastName, firstName, "2014-03-01", processingType);
-        		if (player == null) {
-        			player = new Player();
-        			player.setLastName(lastName);
-        			player.setFirstName(firstName);
-        			player.setDisplayName(boxScorePlayerDTO.getDisplay_name());
-              		Player.create(player, processingType);
-        		}
-        		rosterPlayer = new RosterPlayer();
-        		rosterPlayer.setPosition(RosterPlayer.Position.valueOf(boxScorePlayerDTO.getPosition()));
-        		Date fromDate = null;
-        		Date toDate = null;
-        		try {
-        			fromDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(gameDate);
-        			toDate = DateTime.getDateMaxSeason(new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(gameDate));
-        		} catch (ParseException e) {
-        			e.printStackTrace();
-        		}
-        		rosterPlayer.setFromDate(fromDate);
-        		rosterPlayer.setToDate(toDate);
-        		rosterPlayer.setPlayer(player);
-          		rosterPlayer.setTeam(Team.findByAbbr(teamAbbr, processingType));
-          		RosterPlayer.create(rosterPlayer, processingType);
-
+        	else {
 	        	boxScorePlayer = new BoxScorePlayer();
 	        	boxScorePlayer.setRosterPlayer(rosterPlayer);
 	        	boxScorePlayer.setPosition(Position.valueOf(boxScorePlayerDTO.getPosition()));

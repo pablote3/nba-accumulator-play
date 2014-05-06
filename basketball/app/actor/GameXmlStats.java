@@ -7,19 +7,22 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import json.xmlStats.JsonHelper;
 import json.xmlStats.NBABoxScore;
 import models.BoxScore;
-import models.Game;
-import models.GameOfficial;
-import models.PeriodScore;
 import models.BoxScore.Result;
+import models.BoxScorePlayer;
+import models.Game;
 import models.Game.ProcessingType;
 import models.Game.Status;
+import models.GameOfficial;
+import models.PeriodScore;
 import util.DateTime;
 import actor.ActorApi.CompleteGame;
+import actor.ActorApi.IncompleteRosterException;
 import actor.ActorApi.ScheduleGame;
 import actor.ActorApi.ServiceProps;
 import actor.ActorApi.XmlStatsException;
@@ -29,7 +32,7 @@ import akka.actor.UntypedActor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class XmlStats extends UntypedActor {
+public class GameXmlStats extends UntypedActor {
     static final String AUTHORIZATION = "Authorization";
     static final String USER_AGENT = "User-agent";
     static final String ACCEPT_ENCODING = "Accept-encoding";
@@ -40,7 +43,7 @@ public class XmlStats extends UntypedActor {
 	private ProcessingType processingType;
 	private ActorRef listener;
 	
-	public XmlStats(ActorRef listener) {
+	public GameXmlStats(ActorRef listener) {
 		this.listener = listener;
 	}
 
@@ -84,28 +87,37 @@ public class XmlStats extends UntypedActor {
 	    	        
 	    	        if (game.getGameOfficials().size() > 0) {
 	    	        	for (int i = 0; i < game.getGameOfficials().size(); i++) {
-							GameOfficial.delete(game.getGameOfficials().get(i), ProcessingType.batch);
+							GameOfficial.delete(game.getGameOfficials().get(i), processingType);
 						}
 	    	        }
 	    	        game.setGameOfficials(JsonHelper.getGameOfficials(xmlStatsBoxScore.officials, processingType));
 	    	        
 	    	        if (awayBoxScore.getPeriodScores().size() > 0) {
 	    	        	for (int i = 0; i < awayBoxScore.getPeriodScores().size(); i++) {
-							PeriodScore.delete(awayBoxScore.getPeriodScores().get(i), ProcessingType.batch);
+							PeriodScore.delete(awayBoxScore.getPeriodScores().get(i), processingType);
 						}
 	    	        }	    	        
 	    	        awayBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStatsBoxScore.away_period_scores));
 	    	        JsonHelper.getBoxScoreStats(awayBoxScore, xmlStatsBoxScore.away_totals);
-	    	        awayBoxScore.setBoxScorePlayers(JsonHelper.getBoxScorePlayers(xmlStatsBoxScore.away_stats, DateTime.getFindDateShort(xmlStatsBoxScore.event_information.getDate()), ProcessingType.batch));
+	    	        List<BoxScorePlayer> awayBoxScorePlayers = JsonHelper.getBoxScorePlayers(xmlStatsBoxScore.away_stats, DateTime.getFindDateShort(xmlStatsBoxScore.event_information.getDate()), processingType);
+
+	    	        if (awayBoxScorePlayers != null)
+	    	        	awayBoxScore.setBoxScorePlayers(awayBoxScorePlayers);
+	    	        else
+	    	        	throw new IncompleteRosterException(DateTime.getFindDateShort(game.getDate()), awayBoxScore.getTeam().getKey());
 	    	        
 	    	        if (homeBoxScore.getPeriodScores().size() > 0) {
 	    	        	for (int i = 0; i < homeBoxScore.getPeriodScores().size(); i++) {
-							PeriodScore.delete(homeBoxScore.getPeriodScores().get(i), ProcessingType.batch);
+							PeriodScore.delete(homeBoxScore.getPeriodScores().get(i), processingType);
 						}
 	    	        }	 
 	    	        homeBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStatsBoxScore.home_period_scores));
-	    	        JsonHelper.getBoxScoreStats(homeBoxScore, xmlStatsBoxScore.home_totals);
-	    	        homeBoxScore.setBoxScorePlayers(JsonHelper.getBoxScorePlayers(xmlStatsBoxScore.home_stats, DateTime.getFindDateShort(xmlStatsBoxScore.event_information.getDate()), ProcessingType.batch));
+	    	        JsonHelper.getBoxScoreStats(homeBoxScore, xmlStatsBoxScore.home_totals);	    	        
+	    	        List<BoxScorePlayer> homeBoxScorePlayers = JsonHelper.getBoxScorePlayers(xmlStatsBoxScore.home_stats, DateTime.getFindDateShort(xmlStatsBoxScore.event_information.getDate()), processingType);
+	    	        if (homeBoxScorePlayers != null)
+	    	        	homeBoxScore.setBoxScorePlayers(homeBoxScorePlayers);
+	    	        else
+	    	        	throw new IncompleteRosterException(DateTime.getFindDateShort(game.getDate()), homeBoxScore.getTeam().getKey());
 	    	        
 	    		  	if (xmlStatsBoxScore.away_totals.getPoints() > xmlStatsBoxScore.home_totals.getPoints()) {
 	    		  		homeBoxScore.setResult(Result.loss);
@@ -124,6 +136,9 @@ public class XmlStats extends UntypedActor {
 			} 
 			catch (IOException e) {
 				listener.tell(new XmlStatsException("IOException"), getSelf());
+			}
+			catch (IncompleteRosterException e) {
+				getSender().tell(e, getSelf());
 			}
 			catch (Exception e) {
 				System.out.println("Exception");

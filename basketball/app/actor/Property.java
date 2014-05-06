@@ -70,8 +70,9 @@ public class Property extends UntypedActor {
 				String accessToken = props.getProperty("xmlstats.accessToken");
 				String userAgentName = props.getProperty("xmlstats.userAgentName");
 				String urlBoxScore = props.getProperty("xmlstats.urlBoxScore");
+				String urlRoster = props.getProperty("xmlstats.urlRoster");
 				String delay = props.getProperty("xmlstats.delay");
-				ServiceProps serviceProps = new ServiceProps(date, team, size, accessToken, userAgentName, urlBoxScore, delay, processType);
+				ServiceProps serviceProps = new ServiceProps(date, team, size, accessToken, userAgentName, urlBoxScore, urlRoster, delay, processType);
 				getSender().tell(serviceProps, getSelf());
 				getContext().stop(getSelf());
 			} 

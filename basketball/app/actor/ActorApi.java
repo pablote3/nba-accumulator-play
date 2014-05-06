@@ -21,16 +21,18 @@ public interface ActorApi {
 		public final String accessToken;
 		public final String userAgentName;
 		public final String urlBoxScore;
+		public final String urlRoster;
 		public final String delay;
 		public final String processType;
 		
-		public ServiceProps(String date, String team, String size, String accessToken, String userAgentName, String urlBoxScore, String delay, String processType) {
+		public ServiceProps(String date, String team, String size, String accessToken, String userAgentName, String urlBoxScore, String urlRoster, String delay, String processType) {
 			this.date = date;
 			this.team = team;
 			this.size = size;
 			this.accessToken = accessToken;
 			this.userAgentName = userAgentName;
 			this.urlBoxScore = urlBoxScore;
+			this.urlRoster = urlRoster;
 			this.delay = delay;
 			this.processType = processType;
 		}			
@@ -60,6 +62,22 @@ public interface ActorApi {
 		
 		public XmlStatsException(String msg) {
 			super(msg);
+		}
+	}
+	
+	public static class IncompleteRosterException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+		
+		public final String date;
+		public final String team;
+		
+		public IncompleteRosterException(String date, String team) {
+			this.date = date;
+			this.team = team;
+		}
+		
+		public String toString() {
+			return String.format("%s(%s)", getClass().getSimpleName(), date, team);
 		}
 	}
 	

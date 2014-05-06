@@ -8,13 +8,15 @@ import java.util.List;
 
 import actor.ActorApi.GameId;
 import actor.ActorApi.GameIds;
+import actor.ActorApi.IncompleteRosterException;
 import actor.ActorApi.ServiceProps;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 
-public class GameController extends UntypedActor {
+public class Controller extends UntypedActor {
 	private final ActorRef gameModel;
+	private final ActorRef rosterModel;
 	private ActorRef master;
 	private int nbrSecondsDelay;
 	private List<Long> ids;
@@ -22,15 +24,17 @@ public class GameController extends UntypedActor {
 	private Long id;
 	private GameId gid;
 
-	public GameController(ActorRef listener) {
+	public Controller(ActorRef listener) {
 		gameModel = getContext().actorOf(Props.create(GameModel.class, listener), "gameModel");
+		rosterModel = getContext().actorOf(Props.create(RosterModel.class, listener), "rosterModel");
 	}
 
 	public void onReceive(Object message) {
 		if (message instanceof ServiceProps) {
 			master = getSender();
 			nbrSecondsDelay = Integer.parseInt(((ServiceProps) message).delay);
-			gameModel.tell(message, getSender());
+			gameModel.tell(message, master);
+			rosterModel.tell(message, master);
 		}
 		else if (message.equals(WorkStart)) {
 			gameModel.tell(message, getSelf());
@@ -57,6 +61,9 @@ public class GameController extends UntypedActor {
 			else {
 				master.tell(WorkComplete, getSelf());
 			}
+		}
+		else if(message instanceof IncompleteRosterException) {
+			rosterModel.tell(message, getSelf());
 		}
 		else {
 			unhandled(message);

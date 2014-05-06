@@ -16,12 +16,13 @@ import akka.actor.UntypedActor;
 
 public class Master extends UntypedActor {
 	private ActorRef listener;
-	private final ActorRef gameController;
+	private final ActorRef controller;
 	private ProcessingType processingType;
+	int synchThreadCount = 0;
 	
 	public Master(ActorRef listener) {
 		this.listener = listener;
-		gameController = getContext().actorOf(Props.create(GameController.class, listener), "gameController");
+		controller = getContext().actorOf(Props.create(Controller.class, listener), "controller");
 	}
 
 	public void onReceive(Object message) {
@@ -31,10 +32,13 @@ public class Master extends UntypedActor {
 		}
 		else if (message instanceof ServiceProps) {
 			processingType = Game.ProcessingType.valueOf(((ServiceProps) message).processType);
-			gameController.tell(message, getSelf());	
+			controller.tell(message, getSelf());	
 		}
 		else if (message.equals(InitializeComplete)) {
-			gameController.tell(WorkStart, getSelf());	
+			if (synchThreadCount == 0)
+				synchThreadCount++;
+			else
+				controller.tell(WorkStart, getSelf());	
 		} 
 		else if (message.equals(WorkComplete)) {
 			if (processingType.equals(ProcessingType.batch))
