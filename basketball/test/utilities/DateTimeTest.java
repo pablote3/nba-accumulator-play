@@ -88,4 +88,18 @@ public class DateTimeTest {
     	Date maxDate = DateTime.getDateMaxSeason(date);
         assertThat(maxDate).isEqualTo(DateTime.createDateFromStringDateTime("2013-06-30 23:59:59"));
     }
+    
+    @Test
+    public void createSeasonFromDate_Max() {
+    	Date date = DateTime.createDateFromStringDate("2013-06-30");
+    	String season = DateTime.getSeason(date);
+        assertThat(season).isEqualTo("2012_13");
+    }
+    
+    @Test
+    public void createSeasonFromDate_Min() {
+    	Date date = DateTime.createDateFromStringDate("2013-07-01");
+    	String season = DateTime.getSeason(date);
+        assertThat(season).isEqualTo("2013_14");
+    }
 }

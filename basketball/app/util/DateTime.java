@@ -35,6 +35,17 @@ public class DateTime {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
 		return simpleDateFormat.format(date);
 	}
+	static public String getSeason(Date date) {
+		Date minDate = getDateMinSeason(date);
+		SimpleDateFormat sdfMin = new SimpleDateFormat("yyyy", Locale.ENGLISH);
+		String minYear = sdfMin.format(minDate);
+		
+		Date maxDate = getDateMaxSeason(date);
+		SimpleDateFormat sdfMax = new SimpleDateFormat("yy", Locale.ENGLISH);
+		String maxYear = sdfMax.format(maxDate);
+		
+		return minYear + "_" + maxYear; 
+	}
 	static public boolean isDate(String date)  {
 		try {
 			new SimpleDateFormat("yyyy-MM-dd").parse(date);
