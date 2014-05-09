@@ -44,7 +44,7 @@ public class DateTime {
 		SimpleDateFormat sdfMax = new SimpleDateFormat("yy", Locale.ENGLISH);
 		String maxYear = sdfMax.format(maxDate);
 		
-		return minYear + "_" + maxYear; 
+		return minYear + "-" + maxYear; 
 	}
 	static public boolean isDate(String date)  {
 		try {

@@ -100,6 +100,6 @@ public class DateTimeTest {
     public void createSeasonFromDate_Min() {
     	Date date = DateTime.createDateFromStringDate("2013-07-01");
     	String season = DateTime.getSeason(date);
-        assertThat(season).isEqualTo("2013_14");
+        assertThat(season).isEqualTo("2013-14");
     }
 }
