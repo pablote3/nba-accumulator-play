@@ -2,11 +2,15 @@ package actor;
 
 import static actor.ActorApi.InitializeComplete;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
@@ -17,6 +21,7 @@ import models.BoxScore.Result;
 import models.BoxScorePlayer;
 import models.Game;
 import models.Game.ProcessingType;
+import models.Game.Source;
 import models.Game.Status;
 import models.GameOfficial;
 import models.PeriodScore;
@@ -40,7 +45,9 @@ public class GameXmlStats extends UntypedActor {
 	private String accessToken;
 	private String userAgentName;
 	private String urlBoxScore;
+	private String fileBoxScore;
 	private ProcessingType processingType;
+	private Source source;
 	private ActorRef listener;
 	
 	public GameXmlStats(ActorRef listener) {
@@ -52,12 +59,12 @@ public class GameXmlStats extends UntypedActor {
 			accessToken = "Bearer " + ((ServiceProps) message).accessToken;
 			userAgentName = ((ServiceProps) message).userAgentName;
 			urlBoxScore = ((ServiceProps) message).urlBoxScore;
+			fileBoxScore = ((ServiceProps) message).fileBoxScore;
 			processingType = Game.ProcessingType.valueOf(((ServiceProps) message).processType);
+			source = Game.Source.valueOf(((ServiceProps) message).source);
 			getSender().tell(InitializeComplete, getSelf());
 		}
 		else if(message instanceof ScheduleGame) {
-			URL url;
-			InputStream baseJson = null;
 			Game game = ((ScheduleGame)message).game;
 			BoxScore awayBoxScore = game.getBoxScores().get(0);
 			BoxScore homeBoxScore = game.getBoxScores().get(1);
@@ -65,72 +72,81 @@ public class GameXmlStats extends UntypedActor {
 			String urlDate = DateTime.getFindDateNaked(game.getDate());
 			String urlAwayTeam = awayBoxScore.getTeam().getKey();
 			String urlHomeTeam = homeBoxScore.getTeam().getKey();			
-			String urlEvent = urlDate + "-" + urlAwayTeam + "-at-" + urlHomeTeam + ".json";
-						
+			String event = urlDate + "-" + urlAwayTeam + "-at-" + urlHomeTeam + ".json";
+			InputStream baseJson = null;
+
 			try {
-				url = new URL(urlBoxScore + urlEvent);
-				URLConnection connection = url.openConnection();
-				connection.setRequestProperty(AUTHORIZATION, accessToken);
-				connection.setRequestProperty(USER_AGENT, userAgentName);
-				connection.setRequestProperty(ACCEPT_ENCODING, GZIP);
-				baseJson = connection.getInputStream();
-				String encoding = connection.getContentEncoding();
-				if (GZIP.equals(encoding)) {
-					baseJson = new GZIPInputStream(baseJson);
+				if (source.equals(Source.file)) {
+					Path path =  Paths.get(fileBoxScore).resolve(event);
+					File file = path.toFile();
+					baseJson = new FileInputStream(file);
 				}
-	            if (baseJson != null) {
-	            	ObjectMapper mapper = new ObjectMapper();
-	    	        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-	    	        NBABoxScore xmlStatsBoxScore = mapper.readValue(baseJson, NBABoxScore.class);
-	    	        
-	    	        game.setStatus(Status.completed);
-	    	        
-	    	        if (game.getGameOfficials().size() > 0) {
-	    	        	for (int i = 0; i < game.getGameOfficials().size(); i++) {
+				else {
+					URL url = new URL(urlBoxScore + event);
+					URLConnection connection = url.openConnection();
+					connection.setRequestProperty(AUTHORIZATION, accessToken);
+					connection.setRequestProperty(USER_AGENT, userAgentName);
+					connection.setRequestProperty(ACCEPT_ENCODING, GZIP);
+					baseJson = connection.getInputStream();
+					String encoding = connection.getContentEncoding();
+					if (GZIP.equals(encoding)) {
+						baseJson = new GZIPInputStream(baseJson);
+					}
+				}				
+
+		        if (baseJson != null) {
+		           	ObjectMapper mapper = new ObjectMapper();
+		    	    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		    	    NBABoxScore xmlStatsBoxScore = mapper.readValue(baseJson, NBABoxScore.class);
+		    	        
+		    	    game.setStatus(Status.completed);
+		    	        
+		    	    if (game.getGameOfficials().size() > 0) {
+		    	      	for (int i = 0; i < game.getGameOfficials().size(); i++) {
 							GameOfficial.delete(game.getGameOfficials().get(i), processingType);
 						}
-	    	        }
-	    	        game.setGameOfficials(JsonHelper.getGameOfficials(xmlStatsBoxScore.officials, processingType));
-	    	        
-	    	        if (awayBoxScore.getPeriodScores().size() > 0) {
-	    	        	for (int i = 0; i < awayBoxScore.getPeriodScores().size(); i++) {
+		    	    }
+		    	    game.setGameOfficials(JsonHelper.getGameOfficials(xmlStatsBoxScore.officials, processingType));
+		    	        
+		    	    if (awayBoxScore.getPeriodScores().size() > 0) {
+		    	        for (int i = 0; i < awayBoxScore.getPeriodScores().size(); i++) {
 							PeriodScore.delete(awayBoxScore.getPeriodScores().get(i), processingType);
 						}
-	    	        }	    	        
-	    	        awayBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStatsBoxScore.away_period_scores));
-	    	        JsonHelper.getBoxScoreStats(awayBoxScore, xmlStatsBoxScore.away_totals);
-	    	        List<BoxScorePlayer> awayBoxScorePlayers = JsonHelper.getBoxScorePlayers(xmlStatsBoxScore.away_stats, DateTime.getFindDateShort(xmlStatsBoxScore.event_information.getDate()), processingType);
-
-	    	        if (awayBoxScorePlayers != null)
-	    	        	awayBoxScore.setBoxScorePlayers(awayBoxScorePlayers);
-	    	        else
-	    	        	throw new IncompleteRosterException(DateTime.getFindDateShort(game.getDate()), awayBoxScore.getTeam().getKey());
-	    	        
-	    	        if (homeBoxScore.getPeriodScores().size() > 0) {
-	    	        	for (int i = 0; i < homeBoxScore.getPeriodScores().size(); i++) {
+		    	    }	    	        
+		    	    awayBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStatsBoxScore.away_period_scores));
+		    	    JsonHelper.getBoxScoreStats(awayBoxScore, xmlStatsBoxScore.away_totals);
+		    	    List<BoxScorePlayer> awayBoxScorePlayers = JsonHelper.getBoxScorePlayers(xmlStatsBoxScore.away_stats, DateTime.getFindDateShort(xmlStatsBoxScore.event_information.getDate()), processingType);
+	
+		    	    if (awayBoxScorePlayers != null)
+		    	    	awayBoxScore.setBoxScorePlayers(awayBoxScorePlayers);
+		    	    else
+		    	    	throw new IncompleteRosterException(DateTime.getFindDateShort(game.getDate()), awayBoxScore.getTeam().getKey());
+		    	        
+		    	    if (homeBoxScore.getPeriodScores().size() > 0) {
+		    	        for (int i = 0; i < homeBoxScore.getPeriodScores().size(); i++) {
 							PeriodScore.delete(homeBoxScore.getPeriodScores().get(i), processingType);
 						}
-	    	        }	 
-	    	        homeBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStatsBoxScore.home_period_scores));
-	    	        JsonHelper.getBoxScoreStats(homeBoxScore, xmlStatsBoxScore.home_totals);	    	        
-	    	        List<BoxScorePlayer> homeBoxScorePlayers = JsonHelper.getBoxScorePlayers(xmlStatsBoxScore.home_stats, DateTime.getFindDateShort(xmlStatsBoxScore.event_information.getDate()), processingType);
-	    	        if (homeBoxScorePlayers != null)
-	    	        	homeBoxScore.setBoxScorePlayers(homeBoxScorePlayers);
-	    	        else
-	    	        	throw new IncompleteRosterException(DateTime.getFindDateShort(game.getDate()), homeBoxScore.getTeam().getKey());
-	    	        
-	    		  	if (xmlStatsBoxScore.away_totals.getPoints() > xmlStatsBoxScore.home_totals.getPoints()) {
-	    		  		homeBoxScore.setResult(Result.loss);
-	    		  		awayBoxScore.setResult(Result.win);
-	    		  	}
-	    		  	else {
-	    		  		homeBoxScore.setResult(Result.win);
-	    		  		awayBoxScore.setResult(Result.loss);
-	    		  	}
-	    		  	CompleteGame cg = new CompleteGame(game);
-	    		  	getSender().tell(cg, getSelf());
-	            }
-			} 
+		    	    }	 
+		    	    homeBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStatsBoxScore.home_period_scores));
+		    	    JsonHelper.getBoxScoreStats(homeBoxScore, xmlStatsBoxScore.home_totals);	    	        
+		    	    List<BoxScorePlayer> homeBoxScorePlayers = JsonHelper.getBoxScorePlayers(xmlStatsBoxScore.home_stats, DateTime.getFindDateShort(xmlStatsBoxScore.event_information.getDate()), processingType);
+		    	    if (homeBoxScorePlayers != null)
+		    	    	homeBoxScore.setBoxScorePlayers(homeBoxScorePlayers);
+		    	    else
+		    	    	throw new IncompleteRosterException(DateTime.getFindDateShort(game.getDate()), homeBoxScore.getTeam().getKey());
+		    	        
+		    		if (xmlStatsBoxScore.away_totals.getPoints() > xmlStatsBoxScore.home_totals.getPoints()) {
+		    		  	homeBoxScore.setResult(Result.loss);
+		    		  	awayBoxScore.setResult(Result.win);
+		    		}
+		    		else {
+		    		  	homeBoxScore.setResult(Result.win);
+		    		  	awayBoxScore.setResult(Result.loss);
+		    		}
+		    		CompleteGame cg = new CompleteGame(game);
+		    		getSender().tell(cg, getSelf());
+				}
+			}
 			catch (MalformedURLException e) {
 				listener.tell(new XmlStatsException("MalformedURLException"), getSelf());
 			} 

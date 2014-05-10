@@ -21,20 +21,26 @@ public interface ActorApi {
 		public final String accessToken;
 		public final String userAgentName;
 		public final String urlBoxScore;
+		public final String fileBoxScore;
 		public final String urlRoster;
+		public final String fileRoster;
 		public final String delay;
 		public final String processType;
+		public final String source;
 		
-		public ServiceProps(String date, String team, String size, String accessToken, String userAgentName, String urlBoxScore, String urlRoster, String delay, String processType) {
+		public ServiceProps(String date, String team, String size, String accessToken, String userAgentName, String urlBoxScore, String fileBoxScore, String urlRoster, String fileRoster, String delay, String processType, String source) {
 			this.date = date;
 			this.team = team;
 			this.size = size;
 			this.accessToken = accessToken;
 			this.userAgentName = userAgentName;
 			this.urlBoxScore = urlBoxScore;
+			this.fileBoxScore = fileBoxScore;
 			this.urlRoster = urlRoster;
+			this.fileRoster = fileRoster;
 			this.delay = delay;
 			this.processType = processType;
+			this.source = source;
 		}			
 		public String toString() {
 			return String.format("%s(%s)", getClass().getSimpleName(), date, team, size);
@@ -72,6 +78,20 @@ public interface ActorApi {
 		public final String team;
 		
 		public IncompleteRosterException(String date, String team) {
+			this.date = date;
+			this.team = team;
+		}
+		
+		public String toString() {
+			return String.format("%s(%s)", getClass().getSimpleName(), date, team);
+		}
+	}
+	
+	public static class UpdateRoster {
+		public final String date;
+		public final String team;
+		
+		public UpdateRoster(String date, String team) {
 			this.date = date;
 			this.team = team;
 		}
