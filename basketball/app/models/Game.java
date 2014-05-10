@@ -149,6 +149,11 @@ public class Game extends Model {
         @EnumValue("Online") online
     }
 	
+	public enum Source {
+        @EnumValue("File") file,
+        @EnumValue("API") api
+    }
+	
 	public static void create(Game game) {
 	  	game.save();
 	}
