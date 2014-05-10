@@ -1,11 +1,7 @@
 package json.xmlStats;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import models.BoxScore;
 import models.BoxScorePlayer;
@@ -16,7 +12,6 @@ import models.Official;
 import models.PeriodScore;
 import models.Player;
 import models.RosterPlayer;
-import models.Team;
 import util.DateTime;
 
 public class JsonHelper {
