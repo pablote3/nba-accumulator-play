@@ -1,8 +1,8 @@
 package actor;
 
-import static actor.ActorApi.WorkStart;
 import static actor.ActorApi.NextGame;
 import static actor.ActorApi.WorkComplete;
+import static actor.ActorApi.WorkStart;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import actor.ActorApi.GameId;
 import actor.ActorApi.GameIds;
 import actor.ActorApi.IncompleteRosterException;
 import actor.ActorApi.ServiceProps;
+import actor.ActorApi.UpdateRoster;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
@@ -63,7 +64,16 @@ public class Controller extends UntypedActor {
 			}
 		}
 		else if(message instanceof IncompleteRosterException) {
-			rosterModel.tell(message, getSelf());
+			String gameDate = ((IncompleteRosterException) message).date;
+			String gameTeam = ((IncompleteRosterException) message).team;
+		
+			if (gameDate != null && gameTeam != null) {
+				UpdateRoster updateRoster = new UpdateRoster(gameDate, gameTeam);
+				rosterModel.tell(updateRoster, getSelf());
+			}
+			else {
+				throw new NullPointerException();
+			}
 		}
 		else {
 			unhandled(message);
