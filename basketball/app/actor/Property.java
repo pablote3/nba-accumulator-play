@@ -67,12 +67,15 @@ public class Property extends UntypedActor {
 				String team = props.getProperty("game.team");
 				String size = props.getProperty("game.size");
 				String processType = props.getProperty("aggregator.processType");
+				String source = props.getProperty("aggregator.source");
 				String accessToken = props.getProperty("xmlstats.accessToken");
 				String userAgentName = props.getProperty("xmlstats.userAgentName");
 				String urlBoxScore = props.getProperty("xmlstats.urlBoxScore");
+				String fileBoxScore = props.getProperty("xmlstats.fileBoxScore");
 				String urlRoster = props.getProperty("xmlstats.urlRoster");
+				String fileRoster = props.getProperty("xmlstats.fileRoster");
 				String delay = props.getProperty("xmlstats.delay");
-				ServiceProps serviceProps = new ServiceProps(date, team, size, accessToken, userAgentName, urlBoxScore, urlRoster, delay, processType);
+				ServiceProps serviceProps = new ServiceProps(date, team, size, accessToken, userAgentName, urlBoxScore, fileBoxScore, urlRoster, fileRoster, delay, processType, source);
 				getSender().tell(serviceProps, getSelf());
 				getContext().stop(getSelf());
 			} 
