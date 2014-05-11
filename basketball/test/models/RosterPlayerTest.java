@@ -130,7 +130,7 @@ public class RosterPlayerTest {
         	  Set<Player> createPlayers = new HashSet<Player>();
         	  Player deletePlayer;    
         	  
-        	  RosterPlayer rosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-02-02", "Jones", "Tim", "SAC", ProcessingType.online);
+        	  RosterPlayer rosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-02-02", "Jones", "Tim", "sacramento-kings", ProcessingType.online);
               assertThat(rosterPlayer.getPlayer().getFirstName()).isEqualTo("Tim");
               assertThat(rosterPlayer.getPlayer().getLastName()).isEqualTo("Jones");
               assertThat(DateTime.getFindDateShort(rosterPlayer.getPlayer().getBirthDate())).isEqualTo("1975-01-01");
@@ -156,7 +156,7 @@ public class RosterPlayerTest {
         	  Set<Player> createPlayers = new HashSet<Player>();
         	  Player deletePlayer;  
         	  
-        	  RosterPlayer rosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-02-02", "Jones", "Tim", "GS", ProcessingType.online);
+        	  RosterPlayer rosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-02-02", "Jones", "Tim", "golden-state-warriors", ProcessingType.online);
               assertThat(rosterPlayer).isNull();
               
         	  for (int i = 0; i < createRosterPlayers.size(); i++) {
@@ -346,7 +346,7 @@ public class RosterPlayerTest {
         	  RosterPlayer rosterPlayer = TestMockHelper.getRosterPlayer(player, team, "2014-04-04", "9999-12-31");
         	  RosterPlayer.create(rosterPlayer, ProcessingType.online);
         	  
-        	  RosterPlayer createRosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-04-04", player.getLastName(), player.getFirstName(), "GS", ProcessingType.online);
+        	  RosterPlayer createRosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-04-04", player.getLastName(), player.getFirstName(), "golden-state-warriors", ProcessingType.online);
               assertThat(createRosterPlayer.getNumber()).isEqualTo("10");
               assertThat(createRosterPlayer.getPlayer().getBirthPlace()).isEqualTo("Brooklyn, New York, USA");
               assertThat(createRosterPlayer.getTeam().getKey()).isEqualTo("golden-state-warriors");
@@ -368,7 +368,7 @@ public class RosterPlayerTest {
         	  RosterPlayer rosterPlayer = TestMockHelper.getRosterPlayer(player, team, "2014-04-04", "9999-12-31");
         	  RosterPlayer.create(rosterPlayer, ProcessingType.online);
         	  
-        	  RosterPlayer createRosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-04-04", player.getLastName(), player.getFirstName(), "GS", ProcessingType.online);
+        	  RosterPlayer createRosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-04-04", player.getLastName(), player.getFirstName(), "golden-state-warriors", ProcessingType.online);
         	  
         	  Date toDate = null;
         	  try {
@@ -379,10 +379,10 @@ public class RosterPlayerTest {
         	  createRosterPlayer.setToDate(toDate);
         	  RosterPlayer.update(createRosterPlayer, ProcessingType.online);
         	  
-        	  RosterPlayer expiredRosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-04-16", player.getLastName(), player.getFirstName(), "GS", ProcessingType.online);
+        	  RosterPlayer expiredRosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-04-16", player.getLastName(), player.getFirstName(), "golden-state-warriors", ProcessingType.online);
         	  assertThat(expiredRosterPlayer).isNull();
         	  
-        	  RosterPlayer updateRosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-04-15", player.getLastName(), player.getFirstName(), "GS", ProcessingType.online);
+        	  RosterPlayer updateRosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-04-15", player.getLastName(), player.getFirstName(), "golden-state-warriors", ProcessingType.online);
         	  
               assertThat(updateRosterPlayer.getNumber()).isEqualTo("10");
               assertThat(updateRosterPlayer.getPlayer().getBirthPlace()).isEqualTo("Brooklyn, New York, USA");
@@ -408,7 +408,7 @@ public class RosterPlayerTest {
             	  rosterPlayer = TestMockHelper.getRosterPlayer(player, team, "2014-04-04", "9999-12-31");
             	  RosterPlayer.create(rosterPlayer, ProcessingType.online);
             	  
-            	  RosterPlayer createRosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-04-04", player.getLastName(), player.getFirstName(), "GS", ProcessingType.online);
+            	  RosterPlayer createRosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2014-04-04", player.getLastName(), player.getFirstName(), "golden-state-warriors", ProcessingType.online);
 
             	  createRosterPlayer.getPlayer().setFirstName(null);
        			  createRosterPlayer.update();

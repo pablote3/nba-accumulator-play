@@ -27,6 +27,7 @@ import models.Player;
 import models.RosterPlayer;
 import models.Team;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import util.DateTime;
@@ -35,7 +36,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class GameJsonFile {
-
+	@Ignore
     @Test
     public void createGame() {
         running(fakeApplication(), new Runnable() {
