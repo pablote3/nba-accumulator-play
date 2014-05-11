@@ -21,6 +21,7 @@ import models.Game;
 import models.Game.Source;
 import models.Player;
 import util.DateTime;
+import actor.ActorApi.ActiveRoster;
 import actor.ActorApi.ServiceProps;
 import actor.ActorApi.UpdateRoster;
 import actor.ActorApi.XmlStatsException;
@@ -85,12 +86,10 @@ public class RosterXmlStats extends UntypedActor {
 				if (baseJson != null) {
 				  	ObjectMapper mapper = new ObjectMapper();
 				    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-				    Roster xmlStatsRoster = mapper.readValue(baseJson, Roster.class);
-				    
-				    List<Player> activeRoster = JsonHelper.getPlayers(xmlStatsRoster.players);
-	    
-
-//	    		  	getSender().tell(cg, getSelf());
+				    Roster xmlStatsRoster = mapper.readValue(baseJson, Roster.class);				    
+				    List<Player> activePlayers = JsonHelper.getPlayers(xmlStatsRoster.players);
+				    ActiveRoster activeRoster = new ActiveRoster(activePlayers);
+	    		  	getSender().tell(activeRoster, getSelf());
 				}
 			} 
 			catch (FileNotFoundException e) {
