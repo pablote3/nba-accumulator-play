@@ -93,7 +93,7 @@ public class DateTimeTest {
     public void createSeasonFromDate_Max() {
     	Date date = DateTime.createDateFromStringDate("2013-06-30");
     	String season = DateTime.getSeason(date);
-        assertThat(season).isEqualTo("2012_13");
+        assertThat(season).isEqualTo("2012-13");
     }
     
     @Test
