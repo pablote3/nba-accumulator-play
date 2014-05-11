@@ -3,6 +3,7 @@ package actor;
 import java.util.List;
 
 import models.Game;
+import models.Player;
 
 public interface ActorApi {
 	public static final Object Start = "Start";
@@ -130,6 +131,14 @@ public interface ActorApi {
 		
 		public CompleteGame(Game game) {
 			this.game = game;
+		}
+	}
+	
+	public static class ActiveRoster {
+		public final List<Player> players;
+		
+		public ActiveRoster(List<Player> players) {
+			this.players = players;
 		}
 	}
 }
