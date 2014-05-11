@@ -51,6 +51,26 @@ public class TeamTest {
     }
 	
 	@Test
+    public void findByTeamKeyOnline() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  Team team = Team.findByTeamKey("san-antonio-spurs", ProcessingType.online);
+        	  assertThat(team.getFullName()).isEqualTo("San Antonio Spurs");
+          }
+        });
+    }
+	
+	@Test
+    public void findByTeamKeyBatch() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  Team team = Team.findByTeamKey("san-antonio-spurs", ProcessingType.batch);
+        	  assertThat(team.getFullName()).isEqualTo("San Antonio Spurs");
+          }
+        });
+    }
+	
+	@Test
     public void findByAbbrOnline() {
         running(fakeApplication(), new Runnable() {
           public void run() {

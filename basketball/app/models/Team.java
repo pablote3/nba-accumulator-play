@@ -237,6 +237,20 @@ public class Team extends Model {
 		return team;
 	}
 	
+	
+	public static Team findByTeamKey(String teamKey, ProcessingType processingType) {
+		Team team;
+		Query<Team> query; 
+	  	if (processingType.equals(ProcessingType.batch)) 
+	  		query = ebeanServer.find(Team.class);
+  		else
+  			query = Ebean.find(Team.class);	
+
+		query.where().eq("team_key", teamKey);
+		team = query.findUnique();
+		return team;
+	}
+	
 	public static List<Team> findByActive(boolean active) {
 		Query<Team> query = Ebean.find(Team.class);
 		query.where().eq("active", active);
