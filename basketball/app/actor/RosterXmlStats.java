@@ -18,10 +18,11 @@ import java.util.zip.GZIPInputStream;
 import json.xmlStats.JsonHelper;
 import json.xmlStats.Roster;
 import models.Game;
+import models.Game.ProcessingType;
 import models.Game.Source;
-import models.Player;
+import models.RosterPlayer;
 import util.DateTime;
-import actor.ActorApi.ActiveRoster;
+import actor.ActorApi.ActiveRosterPlayers;
 import actor.ActorApi.ServiceProps;
 import actor.ActorApi.UpdateRoster;
 import actor.ActorApi.XmlStatsException;
@@ -40,6 +41,7 @@ public class RosterXmlStats extends UntypedActor {
 	private String userAgentName;
 	private String urlRoster;
 	private String fileRoster;
+	private ProcessingType processingType;
 	private Source source;
 	private ActorRef listener;
 	
@@ -53,6 +55,7 @@ public class RosterXmlStats extends UntypedActor {
 			userAgentName = ((ServiceProps) message).userAgentName;
 			urlRoster = ((ServiceProps) message).urlRoster;
 			fileRoster = ((ServiceProps) message).fileRoster;
+			processingType = Game.ProcessingType.valueOf(((ServiceProps) message).processType);
 			source = Game.Source.valueOf(((ServiceProps) message).source);
 			getSender().tell(InitializeComplete, getSelf());
 		}
@@ -87,9 +90,9 @@ public class RosterXmlStats extends UntypedActor {
 				  	ObjectMapper mapper = new ObjectMapper();
 				    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 				    Roster xmlStatsRoster = mapper.readValue(baseJson, Roster.class);				    
-				    List<Player> activePlayers = JsonHelper.getPlayers(xmlStatsRoster.players);
-				    ActiveRoster activeRoster = new ActiveRoster(activePlayers);
-	    		  	getSender().tell(activeRoster, getSelf());
+				    List<RosterPlayer> rosterPlayers = JsonHelper.getRosterPlayers(xmlStatsRoster, processingType);
+				    ActiveRosterPlayers activeRosterPlayers = new ActiveRosterPlayers(rosterPlayers);
+				    getSender().tell(activeRosterPlayers, getSelf());
 				}
 			} 
 			catch (FileNotFoundException e) {

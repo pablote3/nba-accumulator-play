@@ -22,7 +22,6 @@ import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import services.EbeanServerService;
 import services.InjectorModule;
-import util.DateTime;
 
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.EbeanServer;

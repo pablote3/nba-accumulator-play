@@ -208,7 +208,7 @@ public class RosterPlayer extends Model {
 		return rosterPlayer;
 	}
 	
-	public static RosterPlayer findByDatePlayerNameTeam(String gameDate, String lastName, String firstName, String teamAbbr, ProcessingType processingType) {
+	public static RosterPlayer findByDatePlayerNameTeam(String gameDate, String lastName, String firstName, String teamKey, ProcessingType processingType) {
 		RosterPlayer rosterPlayer;
 	  	Query<RosterPlayer> query;
 	  	if (processingType.equals(ProcessingType.batch)) 
@@ -221,7 +221,7 @@ public class RosterPlayer extends Model {
 	  	query.where().gt("toDate", gameDate + " 23:59:58");	 
 	  	query.where().eq("t1.last_Name", lastName);
 	  	query.where().eq("t1.first_Name", firstName);
-	  	query.where().eq("t2.abbr", teamAbbr);
+	  	query.where().eq("t2.team_key", teamKey);
 	  	rosterPlayer = query.findUnique();	    
 		return rosterPlayer;
 	}

@@ -26,22 +26,22 @@ public class BoxScorePlayerDTO {
 	private Float three_point_percentage;
 	private Float free_throw_percentage;
     
-	public String getLast_name() {
+	public String getLastName() {
 		return last_name;
 	}
-	public void setLast_name(String last_name) {
+	public void setLastName(String last_name) {
 		this.last_name = last_name;
 	}
-	public String getFirst_name() {
+	public String getFirstName() {
 		return first_name;
 	}
-	public void setFirst_name(String first_name) {
+	public void setFirstName(String first_name) {
 		this.first_name = first_name;
 	}
-	public String getDisplay_name() {
+	public String getDisplayName() {
 		return display_name;
 	}
-	public void setDisplay_name(String display_name) {
+	public void setDisplayName(String display_name) {
 		this.display_name = display_name;
 	}
 	public String getPosition() {
@@ -140,16 +140,16 @@ public class BoxScorePlayerDTO {
 	public void setPersonalFouls(Short personal_fouls) {
 		this.personal_fouls = personal_fouls;
 	}
-	public String getTeam_abbreviation() {
+	public String getTeamAbbreviation() {
 		return team_abbreviation;
 	}
-	public void setTeam_abbreviation(String team_abbreviation) {
+	public void setTeamAbbreviation(String team_abbreviation) {
 		this.team_abbreviation = team_abbreviation;
 	}
-	public boolean getIs_starter() {
+	public boolean getIsStarter() {
 		return is_starter;
 	}
-	public void setIs_starter(boolean is_starter) {
+	public void setIsStarter(boolean is_starter) {
 		this.is_starter = is_starter;
 	}
 	public Float getFieldGoalPercent() {

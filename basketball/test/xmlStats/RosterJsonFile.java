@@ -17,6 +17,7 @@ import json.xmlStats.JsonHelper;
 import json.xmlStats.Roster;
 import models.Game.ProcessingType;
 import models.Player;
+import models.RosterPlayer;
 
 import org.junit.Test;
 
@@ -40,22 +41,26 @@ public class RosterJsonFile {
 	              ObjectMapper mapper = new ObjectMapper();
 	              mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	            
-	              Roster xmlStats = mapper.readValue(baseJson, Roster.class);
+	              Roster xmlStatsRoster = mapper.readValue(baseJson, Roster.class);
 	              
-	              List<Player> players = JsonHelper.getPlayers(xmlStats.players);
+	              List<RosterPlayer> rosterPlayers = JsonHelper.getRosterPlayers(xmlStatsRoster, ProcessingType.online);
 	              
-	              for (int i = 0; i < players.size(); i++) {
-	            	Player searchPlayer = Player.findByNameBirthDate(players.get(i).getLastName(), players.get(i).getFirstName(), DateTime.getFindDateShort(players.get(i).getBirthDate()), ProcessingType.online);
+	              for (int i = 0; i < rosterPlayers.size(); i++) {
+	            	RosterPlayer rosterPlayer = rosterPlayers.get(i);
+	            	Player player = rosterPlayer.getPlayer();
+	            	Player searchPlayer = Player.findByNameBirthDate(player.getLastName(), player.getFirstName(), DateTime.getFindDateShort(player.getBirthDate()), ProcessingType.online);
 	            	if (searchPlayer == null) {
-	            		Player.create(players.get(i), ProcessingType.online);
+	            		Player.create(player, ProcessingType.online);
+	            		RosterPlayer.create(rosterPlayer, ProcessingType.online);
 	            	}
-					Player createPlayer = Player.findByNameBirthDate(players.get(i).getLastName(), players.get(i).getFirstName(), DateTime.getFindDateShort(players.get(i).getBirthDate()), ProcessingType.online);
-					assertThat(createPlayer.getBirthPlace()).isEqualTo(players.get(i).getBirthPlace());
+					Player createPlayer = Player.findByNameBirthDate(player.getLastName(), player.getFirstName(), DateTime.getFindDateShort(player.getBirthDate()), ProcessingType.online);
+					assertThat(createPlayer.getBirthPlace()).isEqualTo(player.getBirthPlace());
 	              }
 	              
-//	              for (int j = 0; j < players.size(); j++) {
-//	            	  Player.delete(players.get(j), ProcessingType.online);
-//	              }
+	              for (int j = 0; j < rosterPlayers.size(); j++) {
+	            	  RosterPlayer.delete(rosterPlayers.get(j), ProcessingType.online);
+	            	  Player.delete(rosterPlayers.get(j).getPlayer(), ProcessingType.online);
+	              }
 
         	  } catch (FileNotFoundException e) {
       	          e.printStackTrace();

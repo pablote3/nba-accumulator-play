@@ -5,13 +5,14 @@ import java.util.List;
 
 import models.BoxScore;
 import models.BoxScorePlayer;
-import models.BoxScorePlayer.Position;
+import models.RosterPlayer.Position;
 import models.Game.ProcessingType;
 import models.GameOfficial;
 import models.Official;
 import models.PeriodScore;
 import models.Player;
 import models.RosterPlayer;
+import models.Team;
 import util.DateTime;
 
 public class JsonHelper {
@@ -72,9 +73,9 @@ public class JsonHelper {
 	    
         for (int i = 0; i < boxScorePlayerDTOs.length; i++) {
         	boxScorePlayerDTO = boxScorePlayerDTOs[i];
-        	String lastName = boxScorePlayerDTO.getLast_name();
-        	String firstName = boxScorePlayerDTO.getFirst_name();
-        	String teamAbbr = boxScorePlayerDTO.getTeam_abbreviation();
+        	String lastName = boxScorePlayerDTO.getLastName();
+        	String firstName = boxScorePlayerDTO.getFirstName();
+        	String teamAbbr = boxScorePlayerDTO.getTeamAbbreviation();
         	rosterPlayer = RosterPlayer.findByDatePlayerNameTeam(gameDate, lastName, firstName, teamAbbr, processingType);
         	if (rosterPlayer == null) {
         		return null;
@@ -82,9 +83,9 @@ public class JsonHelper {
         	else {
 	        	boxScorePlayer = new BoxScorePlayer();
 	        	boxScorePlayer.setRosterPlayer(rosterPlayer);
-	        	boxScorePlayer.setPosition(Position.valueOf(boxScorePlayerDTO.getPosition()));
+	        	boxScorePlayer.setPosition(BoxScorePlayer.Position.valueOf(boxScorePlayerDTO.getPosition()));
 	        	boxScorePlayer.setMinutes(boxScorePlayerDTO.getMinutes());
-	        	boxScorePlayer.setStarter(boxScorePlayerDTO.getIs_starter());
+	        	boxScorePlayer.setStarter(boxScorePlayerDTO.getIsStarter());
 	            boxScorePlayer.setPoints(boxScorePlayerDTO.getPoints());
 	            boxScorePlayer.setAssists(boxScorePlayerDTO.getAssists());
 	            boxScorePlayer.setTurnovers(boxScorePlayerDTO.getTurnovers());
@@ -108,21 +109,28 @@ public class JsonHelper {
     	return boxScorePlayers;
     }
 	
-	public static List<Player> getPlayers(Player[] playerDTOs) {
-    	List<Player> players = new ArrayList<Player>();	    
+	public static List<RosterPlayer> getRosterPlayers(Roster xmlStatsRoster, ProcessingType processingType) {
+		RosterPlayerDTO[] rosterPlayerDTOs = xmlStatsRoster.players;
+		Team team = Team.findByTeamKey(xmlStatsRoster.team.getKey(), processingType);
+    	List<RosterPlayer> rosterPlayers = new ArrayList<RosterPlayer>();	    
 	    Player player;
-
-        for (int i = 0; i < playerDTOs.length; i++) {
+	    RosterPlayer rosterPlayer;
+        for (int i = 0; i < rosterPlayerDTOs.length; i++) {
         	player = new Player();
-        	player.setLastName(playerDTOs[i].getLastName());
-        	player.setFirstName(playerDTOs[i].getFirstName());
-        	player.setDisplayName(playerDTOs[i].getDisplayName());
-        	player.setHeight(playerDTOs[i].getHeight());
-        	player.setWeight(playerDTOs[i].getWeight());
-        	player.setBirthDate(DateTime.createDateMinTime(playerDTOs[i].getBirthDate()));
-        	player.setBirthPlace(playerDTOs[i].getBirthPlace());
-        	players.add(player);
+        	player.setLastName(rosterPlayerDTOs[i].getLast_name());
+        	player.setFirstName(rosterPlayerDTOs[i].getFirst_name());
+        	player.setDisplayName(rosterPlayerDTOs[i].getDisplay_name());
+        	player.setHeight(rosterPlayerDTOs[i].getHeight_in());
+        	player.setWeight(rosterPlayerDTOs[i].getWeight_lb());
+        	player.setBirthDate(DateTime.createDateMinTime(rosterPlayerDTOs[i].getBirthdate()));
+        	player.setBirthPlace(rosterPlayerDTOs[i].getBirthplace());
+        	rosterPlayer = new RosterPlayer();
+        	rosterPlayer.setPlayer(player);
+        	rosterPlayer.setTeam(team);
+        	rosterPlayer.setNumber(rosterPlayerDTOs[i].getUniform_number());
+        	rosterPlayer.setPosition(Position.valueOf(rosterPlayerDTOs[i].getPosition()));
+        	rosterPlayers.add(rosterPlayer);
         }
-	    return players;
+	    return rosterPlayers;
     }
 }
