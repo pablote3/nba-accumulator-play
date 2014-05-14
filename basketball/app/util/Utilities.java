@@ -1,7 +1,7 @@
 package util;
 
 
-public class Numeric {
+public class Utilities {
 	static public boolean isValidNumber(String number)  {
 		try {
 			if (Integer.parseInt(number) >= 0)

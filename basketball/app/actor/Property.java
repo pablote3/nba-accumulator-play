@@ -37,10 +37,10 @@ public class Property extends UntypedActor {
 				if (properties.getProperty("game.date") != null && !util.DateTime.isDate(properties.getProperty("game.date")))
 					throw new PropertyException("InvalidDate - game.date");
 				
-				if (properties.getProperty("xmlstats.size") != null && !util.Numeric.isValidNumber(properties.getProperty("xmlstats.size")))
+				if (properties.getProperty("xmlstats.size") != null && !util.Utilities.isValidNumber(properties.getProperty("xmlstats.size")))
 					throw new PropertyException("InvalidNumber - xmlstats.size");
 				
-				if (properties.getProperty("xmlstats.delay") != null && !util.Numeric.isValidNumber(properties.getProperty("xmlstats.delay")))
+				if (properties.getProperty("xmlstats.delay") != null && !util.Utilities.isValidNumber(properties.getProperty("xmlstats.delay")))
 					throw new PropertyException("InvalidNumber - xmlstats.delay");
 				
 				Game.ProcessingType.valueOf(properties.getProperty("aggregator.processType"));
