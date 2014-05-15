@@ -23,7 +23,7 @@ public class PlayerTest {
         	  List<Player> createPlayers = createPlayers();
         	  
         	  List<Player> players = Player.findAll();
-        	  assertThat(players.size()).isGreaterThan(2);
+        	  assertThat(players.size()).isGreaterThanOrEqualTo(2);
         	  
         	  for (int i = 0; i < createPlayers.size(); i++) {
         		  Player.delete(createPlayers.get(i), ProcessingType.online);
