@@ -139,7 +139,7 @@ public class Player extends Model {
 	}
 	
 	@Required
-	@Column(name="birthplace", length=35, nullable=true)
+	@Column(name="birthplace", length=50, nullable=true)
 	@JsonProperty("birthplace")
 	private String birthPlace;
 	public String getBirthPlace() {
