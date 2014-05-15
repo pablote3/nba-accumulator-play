@@ -17,6 +17,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import models.Game.ProcessingType;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
@@ -235,4 +238,28 @@ public class Player extends Model {
 			.append("  birthDate:" + this.birthDate)
 			.toString();
 	}
+	
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31).
+            append(lastName).
+            append(firstName).
+            append(birthDate).
+            toHashCode();
+    }
+
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if (obj == this)
+            return true;
+        if (!(obj instanceof Player))
+            return false;
+
+        Player player = (Player) obj;
+        return new EqualsBuilder().
+            append(lastName, player.lastName).
+            append(firstName, player.firstName).
+            append(birthDate, player.birthDate).
+            isEquals();
+    }
 }
