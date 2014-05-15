@@ -11,12 +11,12 @@ import models.Game;
 import models.Game.ProcessingType;
 import util.DateTime;
 import actor.ActorApi.CompleteGame;
-import actor.ActorApi.GameId;
 import actor.ActorApi.GameIds;
 import actor.ActorApi.IncompleteRosterException;
 import actor.ActorApi.ModelException;
 import actor.ActorApi.ScheduleGame;
 import actor.ActorApi.ServiceProps;
+import actor.ActorApi.WorkGame;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
@@ -64,9 +64,9 @@ public class GameModel extends UntypedActor {
 			GameIds ids = new GameIds(games);
 			getSender().tell(ids, getSelf());
 		}
-		else if(message instanceof GameId) {
-			GameId gameId = (GameId)message;			
-			Game game = Game.findById(gameId.game, processingType);
+		else if(message instanceof WorkGame) {
+			WorkGame workGame = (WorkGame)message;			
+			Game game = Game.findById(workGame.gameId, processingType);
 			ScheduleGame sg = new ScheduleGame(game);
 			gameXmlStats.tell(sg, getSelf());
 		}

@@ -77,8 +77,10 @@ public interface ActorApi {
 		
 		public final String date;
 		public final String team;
+		public final Long gameId;
 		
-		public IncompleteRosterException(String date, String team) {
+		public IncompleteRosterException(Long gameId, String date, String team) {
+			this.gameId = gameId;
 			this.date = date;
 			this.team = team;
 		}
@@ -89,10 +91,12 @@ public interface ActorApi {
 	}
 	
 	public static class UpdateRoster {
+		public final Long gameId;
 		public final String date;
 		public final String team;
 		
-		public UpdateRoster(String date, String team) {
+		public UpdateRoster(Long gameId, String date, String team) {
+			this.gameId = gameId;
 			this.date = date;
 			this.team = team;
 		}
@@ -110,11 +114,19 @@ public interface ActorApi {
 		}			
 	}
 	
-	public static class GameId {
-		public final Long game;
+	public static class WorkGame {
+		public final Long gameId;
 		
-		public GameId(Long game) {
-			this.game = game;
+		public WorkGame(Long gameId) {
+			this.gameId = gameId;
+		}
+	}
+	
+	public static class RepeatGame {
+		public final Long gameId;
+		
+		public RepeatGame(Long gameId) {
+			this.gameId = gameId;
 		}
 	}
 	

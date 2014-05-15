@@ -120,7 +120,7 @@ public class GameXmlStats extends UntypedActor {
 		    	    if (awayBoxScorePlayers != null)
 		    	    	awayBoxScore.setBoxScorePlayers(awayBoxScorePlayers);
 		    	    else
-		    	    	throw new IncompleteRosterException(DateTime.getFindDateShort(game.getDate()), awayBoxScore.getTeam().getKey());
+		    	    	throw new IncompleteRosterException(game.getId(), DateTime.getFindDateShort(game.getDate()), awayBoxScore.getTeam().getKey());
 		    	        
 		    	    if (homeBoxScore.getPeriodScores().size() > 0) {
 		    	        for (int i = 0; i < homeBoxScore.getPeriodScores().size(); i++) {
@@ -133,7 +133,7 @@ public class GameXmlStats extends UntypedActor {
 		    	    if (homeBoxScorePlayers != null)
 		    	    	homeBoxScore.setBoxScorePlayers(homeBoxScorePlayers);
 		    	    else
-		    	    	throw new IncompleteRosterException(DateTime.getFindDateShort(game.getDate()), homeBoxScore.getTeam().getKey());
+		    	    	throw new IncompleteRosterException(game.getId(), DateTime.getFindDateShort(game.getDate()), homeBoxScore.getTeam().getKey());
 		    	        
 		    		if (xmlStatsBoxScore.away_totals.getPoints() > xmlStatsBoxScore.home_totals.getPoints()) {
 		    		  	homeBoxScore.setResult(Result.loss);

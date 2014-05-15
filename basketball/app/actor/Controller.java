@@ -6,7 +6,8 @@ import static actor.ActorApi.WorkStart;
 
 import java.util.List;
 
-import actor.ActorApi.GameId;
+import actor.ActorApi.RepeatGame;
+import actor.ActorApi.WorkGame;
 import actor.ActorApi.GameIds;
 import actor.ActorApi.IncompleteRosterException;
 import actor.ActorApi.ServiceProps;
@@ -22,8 +23,6 @@ public class Controller extends UntypedActor {
 	private int nbrSecondsDelay;
 	private List<Long> ids;
 	private int i = 0;
-	private Long id;
-	private GameId gid;
 
 	public Controller(ActorRef listener) {
 		gameModel = getContext().actorOf(Props.create(GameModel.class, listener), "gameModel");
@@ -47,28 +46,27 @@ public class Controller extends UntypedActor {
 		}
 		else if (message.equals(NextGame)) {
 			if (i < ids.size()) {
-				try {
-				    Thread.sleep(nbrSecondsDelay);
-				} 
-				catch(InterruptedException ex) {
-				    Thread.currentThread().interrupt();
-				}
-				
-				id = ids.get(i);
-				gid = new GameId(id);
-				gameModel.tell(gid, getSelf());
+				sleep();
+				gameModel.tell(new WorkGame(ids.get(i)), getSelf());
 				i++;
 			}
 			else {
 				master.tell(WorkComplete, getSelf());
 			}
 		}
+		else if (message instanceof RepeatGame) {
+			sleep();
+			Long gameId = ((RepeatGame)message).gameId;
+			gameModel.tell(new WorkGame(gameId), getSelf());
+		}
 		else if(message instanceof IncompleteRosterException) {
+			Long gameId = ((IncompleteRosterException) message).gameId;
 			String gameDate = ((IncompleteRosterException) message).date;
 			String gameTeam = ((IncompleteRosterException) message).team;
 		
-			if (gameDate != null && gameTeam != null) {
-				UpdateRoster updateRoster = new UpdateRoster(gameDate, gameTeam);
+			if (gameId != null && gameDate != null && gameTeam != null) {
+				sleep();
+				UpdateRoster updateRoster = new UpdateRoster(gameId, gameDate, gameTeam);
 				rosterModel.tell(updateRoster, getSelf());
 			}
 			else {
@@ -77,6 +75,15 @@ public class Controller extends UntypedActor {
 		}
 		else {
 			unhandled(message);
+		}
+	}
+
+	private void sleep() {
+		try {
+		    Thread.sleep(nbrSecondsDelay);
+		} 
+		catch(InterruptedException ex) {
+		    Thread.currentThread().interrupt();
 		}
 	}
 }
