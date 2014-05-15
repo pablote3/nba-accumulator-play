@@ -52,16 +52,16 @@ public class RosterModel extends UntypedActor {
 
 			//activate new roster players
 			System.out.println("Activate Players for " + rosterTeamKey + " on " + rosterDate);
-			RosterPlayer rosterPlayer;
+			RosterPlayer latestRosterPlayer;
 			Player player;
 			for (int i = 0; i < xmlStatsRosterPlayers.size(); i++) {
 				RosterPlayer xmlStatsRosterPlayer = xmlStatsRosterPlayers.get(i);
 				Player xmlStatsPlayer = xmlStatsRosterPlayer.getPlayer();
-				rosterPlayer = RosterPlayer.findByDatePlayerNameTeam(rosterDate, xmlStatsPlayer.getLastName(), xmlStatsPlayer.getFirstName(), rosterTeamKey, processingType);
-				if (rosterPlayer == null) {
+				latestRosterPlayer = RosterPlayer.findByDatePlayerNameTeam(rosterDate, xmlStatsPlayer.getLastName(), xmlStatsPlayer.getFirstName(), rosterTeamKey, processingType);
+				if (latestRosterPlayer == null) {
 					//player is not on current team roster
-					rosterPlayer = RosterPlayer.findLatestByPlayerNameBirthDateSeason(rosterDate, xmlStatsPlayer.getLastName(), xmlStatsPlayer.getFirstName(), DateTime.getFindDateShort(xmlStatsPlayer.getBirthDate()), processingType);
-					if (rosterPlayer == null) {
+					latestRosterPlayer = RosterPlayer.findLatestByPlayerNameBirthDateSeason(rosterDate, xmlStatsPlayer.getLastName(), xmlStatsPlayer.getFirstName(), DateTime.getFindDateShort(xmlStatsPlayer.getBirthDate()), processingType);
+					if (latestRosterPlayer == null) {
 						//player is not on any roster for current season
 						player = Player.findByNameBirthDate(xmlStatsPlayer.getLastName(), xmlStatsPlayer.getFirstName(), DateTime.getFindDateShort(xmlStatsPlayer.getBirthDate()), processingType);
 						if (player == null) {
@@ -106,8 +106,8 @@ public class RosterModel extends UntypedActor {
 					output.append(Utilities.padString("  Player is on current team roster -", 40));
 					output.append(" name = " + Utilities.padString(xmlStatsPlayer.getFirstName() + " " + xmlStatsPlayer.getLastName(), 35));
 					output.append(" dob = " + DateTime.getFindDateShort(xmlStatsPlayer.getBirthDate()));
-					output.append(" fromDate = " + DateTime.getFindDateShort(rosterPlayer.getFromDate()));
-					output.append(" toDate = " + DateTime.getFindDateShort(rosterPlayer.getToDate()));
+					output.append(" fromDate = " + DateTime.getFindDateShort(latestRosterPlayer.getFromDate()));
+					output.append(" toDate = " + DateTime.getFindDateShort(latestRosterPlayer.getToDate()));
 					System.out.println(output.toString());
 				}
 			}
@@ -115,16 +115,41 @@ public class RosterModel extends UntypedActor {
 			//terminate inactive roster players
 			System.out.println("Terminate Players for " + rosterTeamKey + " on " + rosterDate);
 			List<RosterPlayer> latestRoster = RosterPlayer.findByDateTeam(rosterDate, rosterTeamKey, processingType);
+			boolean foundPlayerOnRoster;
 			for (int i = 0; i < latestRoster.size(); i++) {
-				RosterPlayer activeRosterPlayer = latestRoster.get(i);
-				Player activePlayer = activeRosterPlayer.getPlayer();
+				latestRosterPlayer = latestRoster.get(i);
+				player = latestRosterPlayer.getPlayer();
+				foundPlayerOnRoster = false;
+				RosterPlayer xmlStatsRosterPlayer = null;
+				Player xmlStatsPlayer = null;
 				for (int j = 0; i < xmlStatsRosterPlayers.size(); j++) {
-					RosterPlayer xmlStatsRosterPlayer = xmlStatsRosterPlayers.get(j);
-					Player xmlStatsPlayer = xmlStatsRosterPlayer.getPlayer();
-					if (activePlayer.equals(xmlStatsPlayer)) {
+					xmlStatsRosterPlayer = xmlStatsRosterPlayers.get(j);
+					xmlStatsPlayer = xmlStatsRosterPlayer.getPlayer();
+					if (player.equals(xmlStatsPlayer)) {
 						//player is on current team roster
-						
+						StringBuffer output = new StringBuffer();
+						output.append(Utilities.padString("  Player is on current team roster -", 40));
+						output.append(" name = " + Utilities.padString(xmlStatsPlayer.getFirstName() + " " + xmlStatsPlayer.getLastName(), 35));
+						output.append(" dob = " + DateTime.getFindDateShort(xmlStatsPlayer.getBirthDate()));
+						output.append(" fromDate = " + DateTime.getFindDateShort(latestRosterPlayer.getFromDate()));
+						output.append(" toDate = " + DateTime.getFindDateShort(latestRosterPlayer.getToDate()));
+						System.out.println(output.toString());
+						foundPlayerOnRoster = true;
+						break;
 					}
+				}
+				if (!foundPlayerOnRoster) {
+					//player is not on current team roster
+					latestRosterPlayer.setToDate(DateTime.createDateFromStringDate(rosterDate));
+					RosterPlayer.update(latestRosterPlayer, processingType);
+					
+					StringBuffer output = new StringBuffer();
+					output.append(Utilities.padString("  Player is not on current team roster -", 40));
+					output.append(" name = " + Utilities.padString(xmlStatsPlayer.getFirstName() + " " + xmlStatsPlayer.getLastName(), 35));
+					output.append(" dob = " + DateTime.getFindDateShort(xmlStatsPlayer.getBirthDate()));
+					output.append(" fromDate = " + DateTime.getFindDateShort(latestRosterPlayer.getFromDate()));
+					output.append(" toDate = " + DateTime.getFindDateShort(latestRosterPlayer.getToDate()));
+					System.out.println(output.toString());
 				}
 			}
 			controller.tell(new RepeatGame(gameId), getSelf());
