@@ -72,7 +72,7 @@ public class RosterModel extends UntypedActor {
 							RosterPlayer.create(activeRosterPlayer, processingType);
 							
 							StringBuffer output = new StringBuffer();
-							output.append(Utilities.padString("  Player does not exist -", 36));
+							output.append(Utilities.padString("  Player does not exist -", 40));
 							output.append(" name = " + Utilities.padString(activePlayer.getFirstName() + " " + activePlayer.getLastName(), 35));
 							output.append(" dob = " + DateTime.getFindDateShort(activePlayer.getBirthDate()));
 							output.append(" fromDate = " + rosterDate);
@@ -87,7 +87,7 @@ public class RosterModel extends UntypedActor {
 							RosterPlayer.create(activeRosterPlayer, processingType);
 							
 							StringBuffer output = new StringBuffer();
-							output.append(Utilities.padString("  Player does exist -", 36));
+							output.append(Utilities.padString("  Player does exist, not on any roster -", 40));
 							output.append(" name = " + Utilities.padString(activePlayer.getFirstName() + " " + activePlayer.getLastName(), 35));
 							output.append(" dob = " + DateTime.getFindDateShort(activePlayer.getBirthDate()));
 							output.append(" fromDate = " + rosterDate);
@@ -103,7 +103,7 @@ public class RosterModel extends UntypedActor {
 				else {
 					//player is on current team roster
 					StringBuffer output = new StringBuffer();
-					output.append(Utilities.padString("  Player is on current team roster -", 36));
+					output.append(Utilities.padString("  Player is on current team roster -", 40));
 					output.append(" name = " + Utilities.padString(activePlayer.getFirstName() + " " + activePlayer.getLastName(), 35));
 					output.append(" dob = " + DateTime.getFindDateShort(activePlayer.getBirthDate()));
 					output.append(" fromDate = " + DateTime.getFindDateShort(rosterPlayer.getFromDate()));
@@ -113,9 +113,20 @@ public class RosterModel extends UntypedActor {
 			}
 			
 			//terminate inactive roster players
-			List<RosterPlayer> latestRoster = RosterPlayer.findByDateTeam(rosterDate, rosterTeamKey);
-			System.out.println(latestRoster);
-
+			System.out.println("Terminate Players for " + rosterTeamKey + " on " + rosterDate);
+			List<RosterPlayer> latestRoster = RosterPlayer.findByDateTeam(rosterDate, rosterTeamKey, processingType);
+			for (int i = 0; i < latestRoster.size(); i++) {
+				RosterPlayer activeRosterPlayer = latestRoster.get(i);
+				Player activePlayer = activeRosterPlayer.getPlayer();
+				for (int j = 0; i < rosterPlayers.size(); j++) {
+					RosterPlayer xmlStatsRosterPlayer = rosterPlayers.get(i);
+					Player xmlStatsPlayer = xmlStatsRosterPlayer.getPlayer();
+					if (activePlayer.equals(xmlStatsPlayer)) {
+						//player is on current team roster
+						
+					}
+				}
+			}
 			controller.tell(new RepeatGame(gameId), getSelf());
 		}
 		else {
