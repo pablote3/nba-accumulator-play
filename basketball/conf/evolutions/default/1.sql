@@ -104,7 +104,7 @@ create table player (
   height                    smallint,
   weight                    smallint,
   birthdate                 datetime,
-  birthplace                varchar(35),
+  birthplace                varchar(50),
   last_update               datetime not null,
   constraint pk_player primary key (id))
 ;
