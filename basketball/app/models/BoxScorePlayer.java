@@ -78,7 +78,9 @@ public class BoxScorePlayer extends Model {
         @EnumValue("SG") SG,
         @EnumValue("SF") SF,
         @EnumValue("PF") PF,
-        @EnumValue("C") C
+        @EnumValue("C") C,
+        @EnumValue("G") G,
+        @EnumValue("F") F
     }
 	
 	@Column(name="minutes", nullable=true)
