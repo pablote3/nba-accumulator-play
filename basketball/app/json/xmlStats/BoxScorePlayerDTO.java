@@ -26,22 +26,22 @@ public class BoxScorePlayerDTO {
 	private Float three_point_percentage;
 	private Float free_throw_percentage;
     
-	public String getLastName() {
+	public String getLast_name() {
 		return last_name;
 	}
-	public void setLastName(String last_name) {
+	public void setLast_name(String last_name) {
 		this.last_name = last_name;
 	}
-	public String getFirstName() {
+	public String getFirst_name() {
 		return first_name;
 	}
-	public void setFirstName(String first_name) {
+	public void setFirst_name(String first_name) {
 		this.first_name = first_name;
 	}
-	public String getDisplayName() {
+	public String getDisplay_name() {
 		return display_name;
 	}
-	public void setDisplayName(String display_name) {
+	public void setDisplay_name(String display_name) {
 		this.display_name = display_name;
 	}
 	public String getPosition() {
@@ -86,88 +86,88 @@ public class BoxScorePlayerDTO {
 	public void setBlocks(Short blocks) {
 		this.blocks = blocks;
 	}
-	public Short getFieldGoalAttempts() {
+	public Short getField_goals_attempted() {
 		return field_goals_attempted;
 	}
-	public void setFieldGoalAttempts(Short field_goals_attempted) {
+	public void setField_goals_attempted(Short field_goals_attempted) {
 		this.field_goals_attempted = field_goals_attempted;
 	}
-	public Short getFieldGoalMade() {
+	public Short getField_goals_made() {
 		return field_goals_made;
 	}
-	public void setFieldGoalMade(Short field_goals_made) {
+	public void setField_goals_made(Short field_goals_made) {
 		this.field_goals_made = field_goals_made;
 	}
-	public Short getThreePointAttempts() {
+	public Short getThree_point_field_goals_attempted() {
 		return three_point_field_goals_attempted;
 	}
-	public void setThreePointAttempts(Short three_point_field_goals_attempted) {
+	public void setThree_point_field_goals_attempted(Short three_point_field_goals_attempted) {
 		this.three_point_field_goals_attempted = three_point_field_goals_attempted;
 	}
-	public Short getThreePointMade() {
+	public Short getThree_point_field_goals_made() {
 		return three_point_field_goals_made;
 	}
-	public void setThreePointMade(Short three_point_field_goals_made) {
+	public void setThree_point_field_goals_made(Short three_point_field_goals_made) {
 		this.three_point_field_goals_made = three_point_field_goals_made;
 	}
-	public Short getFreeThrowAttempts() {
+	public Short getFree_throws_attempted() {
 		return free_throws_attempted;
 	}
-	public void setFreeThrowAttempts(Short free_throws_attempted) {
+	public void setFree_throws_attempted(Short free_throws_attempted) {
 		this.free_throws_attempted = free_throws_attempted;
 	}
-	public Short getFreeThrowMade() {
+	public Short getFree_throws_made() {
 		return free_throws_made;
 	}
-	public void setFreeThrowMade(Short free_throws_made) {
+	public void setFree_throws_made(Short free_throws_made) {
 		this.free_throws_made = free_throws_made;
 	}
-	public Short getReboundsDefense() {
+	public Short getDefensive_rebounds() {
 		return defensive_rebounds;
 	}
-	public void setReboundsDefense(Short defensive_rebounds) {
+	public void setDefensive_rebounds(Short defensive_rebounds) {
 		this.defensive_rebounds = defensive_rebounds;
 	}
-	public Short getReboundsOffense() {
+	public Short getOffensive_rebounds() {
 		return offensive_rebounds;
 	}
-	public void setReboundsOffense(Short offensive_rebounds) {
+	public void setOffensive_rebounds(Short offensive_rebounds) {
 		this.offensive_rebounds = offensive_rebounds;
 	}
-	public Short getPersonalFouls() {
+	public Short getPersonal_fouls() {
 		return personal_fouls;
 	}
-	public void setPersonalFouls(Short personal_fouls) {
+	public void setPersonal_fouls(Short personal_fouls) {
 		this.personal_fouls = personal_fouls;
 	}
-	public String getTeamAbbreviation() {
+	public String getTeam_abbreviation() {
 		return team_abbreviation;
 	}
-	public void setTeamAbbreviation(String team_abbreviation) {
+	public void setTeam_abbreviation(String team_abbreviation) {
 		this.team_abbreviation = team_abbreviation;
 	}
-	public boolean getIsStarter() {
+	public boolean getIs_starter() {
 		return is_starter;
 	}
-	public void setIsStarter(boolean is_starter) {
+	public void setIs_starter(boolean is_starter) {
 		this.is_starter = is_starter;
 	}
-	public Float getFieldGoalPercent() {
+	public Float getField_goal_percentage() {
 		return field_goal_percentage;
 	}
-	public void setFieldGoalPercent(Float field_goal_percentage) {
+	public void setField_goal_percentage(Float field_goal_percentage) {
 		this.field_goal_percentage = field_goal_percentage;
 	}
-	public Float getThreePointPercent() {
+	public Float getThree_point_percentage() {
 		return three_point_percentage;
 	}
-	public void setThreePointPercent(Float three_point_percentage) {
+	public void setThree_point_percentage(Float three_point_percentage) {
 		this.three_point_percentage = three_point_percentage;
 	}
-	public Float getFreeThrowPercent() {
+	public Float getFree_throw_percentage() {
 		return free_throw_percentage;
 	}
-	public void setFreeThrowPercent(Float free_throw_percentage) {
+	public void setFree_throw_percentage(Float free_throw_percentage) {
 		this.free_throw_percentage = free_throw_percentage;
 	}
 }
