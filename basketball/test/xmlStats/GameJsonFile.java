@@ -43,7 +43,7 @@ public class GameJsonFile {
           public void run() {
         	  InputStream baseJson; 
         	  try {
-        		  Path path =  Paths.get(System.getProperty("config.test")).resolve("20120621-oklahoma-city-thunder-at-miami-heat.json");
+        		  Path path =  Paths.get(System.getProperty("config.nbaBoxScore")).resolve("20120621-oklahoma-city-thunder-at-miami-heat.json");
         		  File file = path.toFile();
 	              baseJson = new FileInputStream(file);
 		        
