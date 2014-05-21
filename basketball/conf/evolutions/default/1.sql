@@ -55,7 +55,7 @@ create table box_score_player (
   reboundsOffense           smallint,
   reboundsDefense           smallint,
   personalFouls             smallint,
-  constraint ck_box_score_player_position check (position in ('SF','SG','C','PF','PG')),
+  constraint ck_box_score_player_position check (position in ('F','SF','G','SG','C','PF','PG')),
   constraint pk_box_score_player primary key (id))
 ;
 
@@ -117,7 +117,7 @@ create table roster_player (
   toDate                    datetime not null,
   position                  varchar(5) not null,
   number                    varchar(2),
-  constraint ck_roster_player_position check (position in ('SF','SG','C','PF','PG')),
+  constraint ck_roster_player_position check (position in ('F','SF','G','SG','C','PF','PG')),
   constraint pk_roster_player primary key (id))
 ;
 
