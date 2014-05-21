@@ -61,7 +61,7 @@ public class GameXmlStats extends UntypedActor {
 			urlBoxScore = ((ServiceProps) message).urlBoxScore;
 			fileBoxScore = ((ServiceProps) message).fileBoxScore;
 			processingType = Game.ProcessingType.valueOf(((ServiceProps) message).processType);
-			source = Game.Source.valueOf(((ServiceProps) message).source);
+			source = Game.Source.valueOf(((ServiceProps) message).sourceBoxScore);
 			getSender().tell(InitializeComplete, getSelf());
 		}
 		else if(message instanceof ScheduleGame) {

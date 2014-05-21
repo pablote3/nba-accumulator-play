@@ -56,7 +56,7 @@ public class RosterXmlStats extends UntypedActor {
 			urlRoster = ((ServiceProps) message).urlRoster;
 			fileRoster = ((ServiceProps) message).fileRoster;
 			processingType = Game.ProcessingType.valueOf(((ServiceProps) message).processType);
-			source = Game.Source.valueOf(((ServiceProps) message).source);
+			source = Game.Source.valueOf(((ServiceProps) message).sourceRoster);
 			getSender().tell(InitializeComplete, getSelf());
 		}
 		else if(message instanceof UpdateRoster) {
