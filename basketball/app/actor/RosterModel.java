@@ -76,8 +76,8 @@ public class RosterModel extends UntypedActor {
 							output.append(Utilities.padString("  Player does not exist -", 40));
 							output.append(" name = " + Utilities.padString(xmlStatsRosterPlayer.getPlayer().getFirstName() + " " + xmlStatsRosterPlayer.getPlayer().getLastName(), 35));
 							output.append(" dob = " + DateTime.getFindDateShort(xmlStatsRosterPlayer.getPlayer().getBirthDate()));
-							output.append(" fromDate = " + xmlStatsRosterPlayer.getFromDate());
-							output.append(" toDate = " + xmlStatsRosterPlayer.getToDate());
+							output.append(" fromDate = " + DateTime.getFindDateShort(xmlStatsRosterPlayer.getFromDate()));
+							output.append(" toDate = " + DateTime.getFindDateShort(xmlStatsRosterPlayer.getToDate()));
 							System.out.println(output.toString());
 						}
 						else {
