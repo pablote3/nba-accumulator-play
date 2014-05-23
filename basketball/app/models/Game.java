@@ -209,6 +209,7 @@ public class Game extends Model {
 	  	Date maxDate = DateTime.getDateMaxSeason(DateTime.createDateFromStringDate(propDate));
 
 	  	query.where().between("date", propDate + " 00:00:00", DateTime.getFindDateTimeShort(maxDate));
+	  	query.orderBy("t0.date asc");
 	    List<Game> games = query.findList();
 	    
 	    List<Long> gameIds = null;
