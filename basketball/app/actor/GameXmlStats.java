@@ -6,9 +6,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -74,13 +76,14 @@ public class GameXmlStats extends UntypedActor {
 			String urlAwayTeam = awayBoxScore.getTeam().getKey();
 			String urlHomeTeam = homeBoxScore.getTeam().getKey();			
 			String event = urlDate + "-" + urlAwayTeam + "-at-" + urlHomeTeam + ".json";
-			InputStream baseJson = null;
+			InputStream inputStreamJson = null;
+			InputStreamReader baseJson = null;
 
 			try {
 				if (source.equals(Source.file)) {
 					Path path =  Paths.get(fileBoxScore).resolve(event);
 					File file = path.toFile();
-					baseJson = new FileInputStream(file);
+					inputStreamJson = new FileInputStream(file);
 				}
 				else {
 					URL url = new URL(urlBoxScore + event);
@@ -88,13 +91,14 @@ public class GameXmlStats extends UntypedActor {
 					connection.setRequestProperty(AUTHORIZATION, accessToken);
 					connection.setRequestProperty(USER_AGENT, userAgentName);
 					connection.setRequestProperty(ACCEPT_ENCODING, GZIP);
-					baseJson = connection.getInputStream();
+					inputStreamJson = connection.getInputStream();
 					String encoding = connection.getContentEncoding();
 					if (GZIP.equals(encoding)) {
-						baseJson = new GZIPInputStream(baseJson);
+						inputStreamJson = new GZIPInputStream(inputStreamJson);
 					}
 				}				
 
+				baseJson = new InputStreamReader(inputStreamJson, StandardCharsets.UTF_8);
 		        if (baseJson != null) {
 		           	ObjectMapper mapper = new ObjectMapper();
 		    	    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
