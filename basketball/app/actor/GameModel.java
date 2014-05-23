@@ -9,7 +9,9 @@ import java.util.List;
 import models.BoxScore;
 import models.Game;
 import models.Game.ProcessingType;
+import models.Game.Status;
 import util.DateTime;
+import util.Utilities;
 import actor.ActorApi.CompleteGame;
 import actor.ActorApi.GameIds;
 import actor.ActorApi.IncompleteRosterException;
@@ -37,9 +39,9 @@ public class GameModel extends UntypedActor {
 
 	public void onReceive(Object message) {
 		if (message instanceof ServiceProps) {
-			propDate = ((ServiceProps) message).date == null ? DateTime.getFindDateShort(new Date()) : ((ServiceProps) message).date;
+			propDate = ((ServiceProps) message).date == null || ((ServiceProps) message).date.isEmpty() ? DateTime.getFindDateShort(new Date()) : ((ServiceProps) message).date;
 			propTeam = ((ServiceProps) message).team;
-			propSize = ((ServiceProps) message).size == null ? propSize = "0" : ((ServiceProps) message).size;
+			propSize = ((ServiceProps) message).size == null || ((ServiceProps) message).size.isEmpty() ? propSize = "0" : ((ServiceProps) message).size;
 			processingType = Game.ProcessingType.valueOf(((ServiceProps) message).processType);
 			gameXmlStats.tell(message, getSender());
 		}
@@ -47,7 +49,7 @@ public class GameModel extends UntypedActor {
 			List<Long> games = null;
 			controller = getSender();
 			try {
-				if (propTeam == null) {
+				if (propTeam == null || propTeam.isEmpty()) {
 					games = Game.findIdsByDateSize(propDate, propSize, processingType);
 				}
 				else {
@@ -67,8 +69,29 @@ public class GameModel extends UntypedActor {
 		else if(message instanceof WorkGame) {
 			WorkGame workGame = (WorkGame)message;			
 			Game game = Game.findById(workGame.gameId, processingType);
-			ScheduleGame sg = new ScheduleGame(game);
-			gameXmlStats.tell(sg, getSelf());
+			StringBuffer output;
+			
+			if (game.getStatus().equals(Status.scheduled) || game.getStatus().equals(Status.finished)) {
+				output = new StringBuffer();
+				output.append(Utilities.padString("  Finished Game Ready for Completion -", 40));
+				output.append(" " + DateTime.getFindDateNaked(game.getDate()));
+				output.append("-" + game.getBoxScores().get(0).getTeam().getKey() + "-at");
+				output.append("-" + game.getBoxScores().get(1).getTeam().getKey());
+				System.out.println(output.toString());
+				
+				ScheduleGame sg = new ScheduleGame(game);
+				gameXmlStats.tell(sg, getSelf());
+			}
+			else  {
+				output = new StringBuffer();
+				output.append(Utilities.padString("  " + game.getStatus() + " Not Eligible for Completion -", 40));
+				output.append(" " + DateTime.getFindDateNaked(game.getDate()));
+				output.append("-" + game.getBoxScores().get(0).getTeam().getKey() + "-at");
+				output.append("-" + game.getBoxScores().get(1).getTeam().getKey());
+				System.out.println(output.toString());
+				
+				controller.tell(NextGame, getSelf());
+			}
 		}
 		else if(message instanceof CompleteGame) {
 			Game game = ((CompleteGame)message).game;
