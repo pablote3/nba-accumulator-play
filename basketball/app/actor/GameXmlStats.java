@@ -26,6 +26,7 @@ import models.Game.Status;
 import models.GameOfficial;
 import models.PeriodScore;
 import util.DateTime;
+import util.Utilities;
 import actor.ActorApi.CompleteGame;
 import actor.ActorApi.IncompleteRosterException;
 import actor.ActorApi.ScheduleGame;
@@ -117,8 +118,10 @@ public class GameXmlStats extends UntypedActor {
 		    	    JsonHelper.getBoxScoreStats(awayBoxScore, xmlStatsBoxScore.away_totals);
 		    	    List<BoxScorePlayer> awayBoxScorePlayers = JsonHelper.getBoxScorePlayers(xmlStatsBoxScore.away_stats, DateTime.getFindDateShort(xmlStatsBoxScore.event_information.getDate()), processingType);
 	
-		    	    if (awayBoxScorePlayers != null)
+		    	    if (awayBoxScorePlayers != null) {
+		    	    	System.out.println("  Away Team " + awayBoxScore.getTeam().getShortName() + " Roster is Complete");	
 		    	    	awayBoxScore.setBoxScorePlayers(awayBoxScorePlayers);
+		    	    }
 		    	    else
 		    	    	throw new IncompleteRosterException(game.getId(), DateTime.getFindDateShort(game.getDate()), awayBoxScore.getTeam().getKey());
 		    	        
@@ -130,8 +133,10 @@ public class GameXmlStats extends UntypedActor {
 		    	    homeBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStatsBoxScore.home_period_scores));
 		    	    JsonHelper.getBoxScoreStats(homeBoxScore, xmlStatsBoxScore.home_totals);	    	        
 		    	    List<BoxScorePlayer> homeBoxScorePlayers = JsonHelper.getBoxScorePlayers(xmlStatsBoxScore.home_stats, DateTime.getFindDateShort(xmlStatsBoxScore.event_information.getDate()), processingType);
-		    	    if (homeBoxScorePlayers != null)
-		    	    	homeBoxScore.setBoxScorePlayers(homeBoxScorePlayers);
+		    	    if (homeBoxScorePlayers != null) {
+						System.out.println("  Home Team " + homeBoxScore.getTeam().getShortName() + " Roster is Complete");						
+						homeBoxScore.setBoxScorePlayers(homeBoxScorePlayers);
+		    	    }
 		    	    else
 		    	    	throw new IncompleteRosterException(game.getId(), DateTime.getFindDateShort(game.getDate()), homeBoxScore.getTeam().getKey());
 		    	        
