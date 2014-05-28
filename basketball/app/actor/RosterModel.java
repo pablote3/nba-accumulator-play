@@ -145,7 +145,7 @@ public class RosterModel extends UntypedActor {
 				foundPlayerOnRoster = false;
 				RosterPlayer xmlStatsRosterPlayer = null;
 				Player xmlStatsPlayer = null;
-				for (int j = 0; i < xmlStatsRosterPlayers.size(); j++) {
+				for (int j = 0; j < xmlStatsRosterPlayers.size(); j++) {
 					xmlStatsRosterPlayer = xmlStatsRosterPlayers.get(j);
 					xmlStatsPlayer = xmlStatsRosterPlayer.getPlayer();
 					if (player.equals(xmlStatsPlayer)) {
