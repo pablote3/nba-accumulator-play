@@ -28,7 +28,6 @@ import models.Game.Status;
 import models.GameOfficial;
 import models.PeriodScore;
 import util.DateTime;
-import util.Utilities;
 import actor.ActorApi.CompleteGame;
 import actor.ActorApi.IncompleteRosterException;
 import actor.ActorApi.ScheduleGame;
