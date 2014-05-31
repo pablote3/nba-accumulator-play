@@ -11,15 +11,15 @@ public class Listener extends UntypedActor {
 	public void onReceive(Object message) {
 		if (message instanceof PropertyException) {
 			PropertyException pe = (PropertyException) message;
-			System.out.println("Property Exception " + pe.getMessage());
+			System.out.println("Property Exception " + pe.getMessage() + " - " + getSender());
 		}
 		else if (message instanceof ModelException) {
 			ModelException pe = (ModelException) message;
-			System.out.println("Model Exception " + pe.getMessage());
+			System.out.println("Model Exception " + pe.getMessage() + " - " + getSender());
 		}
 		else if (message instanceof XmlStatsException) {
 			XmlStatsException pe = (XmlStatsException) message;
-			System.out.println("XmlStats Exception " + pe.getMessage());
+			System.out.println("XmlStats Exception " + pe.getMessage() + " - " + getSender());
 		}
 		else if (message.equals(Wait)) {
 			System.out.println("Online Mission Compete");	
