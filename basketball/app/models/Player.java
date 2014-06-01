@@ -77,7 +77,7 @@ public class Player extends Model {
 	}
 	
 	@Required
-	@Column(name="last_name", length=35, nullable=false)
+	@Column(name="last_name", length=25, nullable=false)
 	@JsonProperty("last_name")
 	private String lastName;
 	public String getLastName() {
@@ -88,7 +88,7 @@ public class Player extends Model {
 	}
 
 	@Required
-	@Column(name="first_name", length=35, nullable=false)
+	@Column(name="first_name", length=25, nullable=false)
 	@JsonProperty("first_name")
 	private String firstName;
 	public String getFirstName() {
@@ -99,7 +99,7 @@ public class Player extends Model {
 	}
 	
 	@Required
-	@Column(name="display_name", length=70, nullable=false)
+	@Column(name="display_name", length=50, nullable=false)
 	@JsonProperty("display_name")
 	private String displayName;
 	public String getDisplayName() {
