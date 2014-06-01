@@ -10,6 +10,7 @@ import models.RosterPlayer;
 import util.DateTime;
 import util.Utilities;
 import actor.ActorApi.ActiveRosterPlayers;
+import actor.ActorApi.ModelException;
 import actor.ActorApi.RepeatGame;
 import actor.ActorApi.ServiceProps;
 import actor.ActorApi.UpdateRoster;
@@ -38,11 +39,19 @@ public class RosterModel extends UntypedActor {
 		}
 		else if(message instanceof UpdateRoster) {
 			controller = getSender();
-			gameId = ((UpdateRoster)message).gameId;
-			rosterDate = ((UpdateRoster)message).date;
-			rosterTeamKey = ((UpdateRoster)message).team;
-		
-			rosterXmlStats.tell(message, getSelf());
+			if (gameId != null && gameId.equals(((UpdateRoster)message).gameId) &&
+					rosterTeamKey != null && rosterTeamKey.equals(((UpdateRoster)message).team))  {
+				getContext().stop(getSelf());
+				ModelException me = new ModelException("Multiple loops of UpdateRoster");
+				listener.tell(me, getSelf());
+			}
+			else {
+				gameId = ((UpdateRoster)message).gameId;
+				rosterDate = ((UpdateRoster)message).date;
+				rosterTeamKey = ((UpdateRoster)message).team;
+			
+				rosterXmlStats.tell(message, getSelf());
+			}
 		}
 		else if(message instanceof ActiveRosterPlayers) {
 			ActiveRosterPlayers activeRosterPlayers = (ActiveRosterPlayers) message;
@@ -125,13 +134,13 @@ public class RosterModel extends UntypedActor {
 				}
 				else {
 					//player is on current team roster
-					output = new StringBuffer();
-					output.append(Utilities.padString("  Player is on current team roster -", 40));
-					output.append(" name = " + Utilities.padString(latestRosterPlayer.getPlayer().getFirstName() + " " + latestRosterPlayer.getPlayer().getLastName(), 35));
-					output.append(" dob = " + DateTime.getFindDateShort(latestRosterPlayer.getPlayer().getBirthDate()));
-					output.append(" fromDate = " + DateTime.getFindDateShort(latestRosterPlayer.getFromDate()));
-					output.append(" toDate = " + DateTime.getFindDateShort(latestRosterPlayer.getToDate()));
-					System.out.println(output.toString());
+//					output = new StringBuffer();
+//					output.append(Utilities.padString("  Player is on current team roster -", 40));
+//					output.append(" name = " + Utilities.padString(latestRosterPlayer.getPlayer().getFirstName() + " " + latestRosterPlayer.getPlayer().getLastName(), 35));
+//					output.append(" dob = " + DateTime.getFindDateShort(latestRosterPlayer.getPlayer().getBirthDate()));
+//					output.append(" fromDate = " + DateTime.getFindDateShort(latestRosterPlayer.getFromDate()));
+//					output.append(" toDate = " + DateTime.getFindDateShort(latestRosterPlayer.getToDate()));
+//					System.out.println(output.toString());
 				}
 			}
 			
@@ -150,13 +159,13 @@ public class RosterModel extends UntypedActor {
 					xmlStatsPlayer = xmlStatsRosterPlayer.getPlayer();
 					if (player.equals(xmlStatsPlayer)) {
 						//player is on current team roster
-						output = new StringBuffer();
-						output.append(Utilities.padString("  Player is on current team roster -", 40));
-						output.append(" name = " + Utilities.padString(latestRosterPlayer.getPlayer().getFirstName() + " " + latestRosterPlayer.getPlayer().getLastName(), 35));
-						output.append(" dob = " + DateTime.getFindDateShort(latestRosterPlayer.getPlayer().getBirthDate()));
-						output.append(" fromDate = " + DateTime.getFindDateShort(latestRosterPlayer.getFromDate()));
-						output.append(" toDate = " + DateTime.getFindDateShort(latestRosterPlayer.getToDate()));
-						System.out.println(output.toString());
+//						output = new StringBuffer();
+//						output.append(Utilities.padString("  Player is on current team roster -", 40));
+//						output.append(" name = " + Utilities.padString(latestRosterPlayer.getPlayer().getFirstName() + " " + latestRosterPlayer.getPlayer().getLastName(), 35));
+//						output.append(" dob = " + DateTime.getFindDateShort(latestRosterPlayer.getPlayer().getBirthDate()));
+//						output.append(" fromDate = " + DateTime.getFindDateShort(latestRosterPlayer.getFromDate()));
+//						output.append(" toDate = " + DateTime.getFindDateShort(latestRosterPlayer.getToDate()));
+//						System.out.println(output.toString());
 						foundPlayerOnRoster = true;
 						break;
 					}
