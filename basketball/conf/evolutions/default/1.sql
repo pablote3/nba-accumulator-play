@@ -98,9 +98,9 @@ create table period_score (
 
 create table player (
   id                        bigint auto_increment not null,
-  last_name                 varchar(35) not null,
-  first_name                varchar(35) not null,
-  display_name              varchar(70) not null,
+  last_name                 varchar(25) not null,
+  first_name                varchar(25) not null,
+  display_name              varchar(50) not null,
   height                    smallint,
   weight                    smallint,
   birthdate                 datetime,
