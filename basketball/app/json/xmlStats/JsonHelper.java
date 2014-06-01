@@ -78,6 +78,7 @@ public class JsonHelper {
         	String teamKey = Team.findByAbbr(boxScorePlayerDTO.getTeam_abbreviation(), processingType).getKey();
         	rosterPlayer = RosterPlayer.findByDatePlayerNameTeam(gameDate, lastName, firstName, teamKey, processingType);
         	if (rosterPlayer == null) {
+        		System.out.println("Player not found " + firstName + " " + lastName + " on " + teamKey);
         		return null;
         	}        	
         	else {
