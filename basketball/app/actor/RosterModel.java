@@ -107,15 +107,15 @@ public class RosterModel extends UntypedActor {
 					}
 					else {
 						//player is on another roster for current season
-						latestRosterPlayer.setToDate(DateTime.createDateFromStringDate(rosterDate));
+						latestRosterPlayer.setToDate(DateTime.getDateMinusOneDay(DateTime.createDateFromStringDate(rosterDate)));
 						RosterPlayer.update(latestRosterPlayer, processingType);
 						
 						output = new StringBuffer();
-						output.append(Utilities.padString("  Player on another team roster - term -", 40));
+						output.append(Utilities.padString("  Player on another team -  " + latestRosterPlayer.getTeam().getAbbr() + " - term -", 40));
 						output.append(" name = " + Utilities.padString(latestRosterPlayer.getPlayer().getFirstName() + " " + latestRosterPlayer.getPlayer().getLastName(), 35));
 						output.append(" dob = " + DateTime.getFindDateShort(latestRosterPlayer.getPlayer().getBirthDate()));
 						output.append(" fromDate = " + DateTime.getFindDateShort(latestRosterPlayer.getFromDate()));
-						output.append(" toDate = " + DateTime.getFindDateShort(latestRosterPlayer.getToDate()));
+						output.append(" toDate = " + DateTime.getFindDateShort(DateTime.getDateMinusOneDay(DateTime.createDateFromStringDate(rosterDate))));
 						System.out.println(output.toString());
 						
 						xmlStatsRosterPlayer.setPlayer(latestRosterPlayer.getPlayer());
@@ -124,7 +124,7 @@ public class RosterModel extends UntypedActor {
 						RosterPlayer.create(xmlStatsRosterPlayer, processingType);
 						
 						output = new StringBuffer();
-						output.append(Utilities.padString("  Player on another team roster - add -", 40));
+						output.append(Utilities.padString("  Player on another team  - " + xmlStatsRosterPlayer.getTeam().getAbbr() + " - add - ", 40));
 						output.append(" name = " + Utilities.padString(xmlStatsRosterPlayer.getPlayer().getFirstName() + " " + xmlStatsRosterPlayer.getPlayer().getLastName(), 35));
 						output.append(" dob = " + DateTime.getFindDateShort(xmlStatsRosterPlayer.getPlayer().getBirthDate()));
 						output.append(" fromDate = " + DateTime.getFindDateShort(xmlStatsRosterPlayer.getFromDate()));
