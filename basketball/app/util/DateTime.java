@@ -116,4 +116,10 @@ public class DateTime {
 		cal.set(Calendar.SECOND, 59);
 		return cal.getTime();
 	}
+	static public Date getDateMinusOneDay(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.DAY_OF_MONTH, -1);
+		return cal.getTime();
+	}
 }

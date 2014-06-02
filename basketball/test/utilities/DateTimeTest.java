@@ -102,4 +102,18 @@ public class DateTimeTest {
     	String season = DateTime.getSeason(date);
         assertThat(season).isEqualTo("2013-14");
     }
+    
+    @Test
+    public void createDateMinusOneDay_EndOfMonth() {
+    	Date date = DateTime.createDateFromStringDate("2013-07-31");
+    	Date minusDate = DateTime.getDateMinusOneDay(date);
+        assertThat(minusDate).isEqualTo(DateTime.createDateFromStringDate("2013-07-30"));
+    }
+    
+    @Test
+    public void createDateMinusOneDay_BeginingOfMonth() {
+    	Date date = DateTime.createDateFromStringDate("2013-07-01");
+    	Date minusDate = DateTime.getDateMinusOneDay(date);
+        assertThat(minusDate).isEqualTo(DateTime.createDateFromStringDate("2013-06-30"));
+    }
 }
