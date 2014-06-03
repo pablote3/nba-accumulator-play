@@ -68,33 +68,6 @@ public class RosterPlayerTest {
           }
         });
     }
-    
-	@Test
-    public void findTeam() {
-        running(fakeApplication(), new Runnable() {
-          public void run() {
-        	  List<RosterPlayer> createRosterPlayers = createRosterPlayers();
-        	  Set<Player> createPlayers = new HashSet<Player>();
-        	  Player deletePlayer;        	  
-        	  
-        	  List<RosterPlayer> rosterPlayers = RosterPlayer.findByTeam("sacramento-kings");
-        	  assertThat(rosterPlayers.size()).isGreaterThanOrEqualTo(3);
-              assertThat(rosterPlayers.get(0).getPlayer().getFirstName()).isEqualTo("Tim");
-              assertThat(rosterPlayers.get(0).getPlayer().getLastName()).isEqualTo("Jones");
-              assertThat(DateTime.getFindDateShort(rosterPlayers.get(0).getPlayer().getBirthDate())).isEqualTo("1975-01-01");
-              assertThat(rosterPlayers.get(0).getTeam().getKey()).isEqualTo("sacramento-kings");
-              
-        	  for (int i = 0; i < createRosterPlayers.size(); i++) {
-        		  createPlayers.add(createRosterPlayers.get(i).getPlayer());
-        		  RosterPlayer.delete(createRosterPlayers.get(i), ProcessingType.online);
-        	  } 
-        	  for (Iterator<Player> it = createPlayers.iterator(); it.hasNext(); ) {
-        		  deletePlayer = it.next();
-        		  Player.delete(deletePlayer, ProcessingType.online);
-        	  }
-          }
-        });
-    }
 	
 	@Test
     public void findDateTeam() {
