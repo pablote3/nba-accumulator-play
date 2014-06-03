@@ -28,7 +28,7 @@ public class EbeanServerTest {
 		mySql.setDriver("com.mysql.jdbc.Driver");
 		mySql.setUsername("root");  
 		mySql.setPassword("root");  
-		mySql.setUrl("jdbc:mysql://localhost:3306/basketball");  
+		mySql.setUrl("jdbc:mysql://localhost:3306/basketball?characterEncoding=UTF-8");  
 		mySql.setHeartbeatSql("select count(*) from team");  		  
 		config.setDataSourceConfig(mySql);
 		config.setDefaultServer(false);  
