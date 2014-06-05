@@ -73,7 +73,7 @@ public class GameModel extends UntypedActor {
 			
 			if (game.getStatus().equals(Status.scheduled) || game.getStatus().equals(Status.finished)) {
 				output = new StringBuffer();
-				output.append(Utilities.padString("  Finished Game Ready for Completion -", 40));
+				output.append(Utilities.padString('\n' + "  Finished Game Ready for Completion -", 40));
 				output.append(" " + DateTime.getFindDateNaked(game.getDate()));
 				output.append("-" + game.getBoxScores().get(0).getTeam().getKey() + "-at");
 				output.append("-" + game.getBoxScores().get(1).getTeam().getKey());
@@ -84,7 +84,7 @@ public class GameModel extends UntypedActor {
 			}
 			else  {
 				output = new StringBuffer();
-				output.append(Utilities.padString("  " + game.getStatus() + " Not Eligible for Completion -", 40));
+				output.append(Utilities.padString('\n' + "  " + game.getStatus() + " Not Eligible for Completion -", 40));
 				output.append(" " + DateTime.getFindDateNaked(game.getDate()));
 				output.append("-" + game.getBoxScores().get(0).getTeam().getKey() + "-at");
 				output.append("-" + game.getBoxScores().get(1).getTeam().getKey());
