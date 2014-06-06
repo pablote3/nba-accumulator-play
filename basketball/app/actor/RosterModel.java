@@ -172,7 +172,7 @@ public class RosterModel extends UntypedActor {
 				}
 				if (!foundPlayerOnRoster) {
 					//player is not on current team roster
-					latestRosterPlayer.setToDate(DateTime.createDateFromStringDate(rosterDate));
+					latestRosterPlayer.setToDate(DateTime.getDateMinusOneDay(DateTime.createDateFromStringDate(rosterDate)));
 					RosterPlayer.update(latestRosterPlayer, processingType);
 					
 					output = new StringBuffer();
