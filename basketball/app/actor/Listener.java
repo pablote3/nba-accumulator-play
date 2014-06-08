@@ -26,12 +26,11 @@ public class Listener extends UntypedActor {
 		}
 		else if (message.equals(Finish)) {
 			System.out.println("Batch Mission Compete");
-			getContext().system().shutdown();
-			System.exit(0);
 		}
 		else {
 			unhandled(message);
 		}
-
+		getContext().system().shutdown();
+		System.exit(0);
 	}
 }
