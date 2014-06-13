@@ -34,7 +34,7 @@ public class RosterJsonFile {
           public void run() {
         	  InputStream baseJson; 
         	  try {
-        		  Path path =  Paths.get(System.getProperty("config.roster")).resolve("sacramento-kings_20131030.json");
+        		  Path path =  Paths.get(System.getProperty("config.test")).resolve("sacramento-kings_20131030.json");
         		  File file = path.toFile();
 	              baseJson = new FileInputStream(file);
 		        
