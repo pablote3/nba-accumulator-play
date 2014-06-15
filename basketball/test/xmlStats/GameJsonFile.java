@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 
 import json.xmlStats.BoxScorePlayerDTO;
 import json.xmlStats.JsonHelper;
@@ -19,7 +18,6 @@ import json.xmlStats.NBABoxScore;
 import models.BoxScore;
 import models.BoxScore.Location;
 import models.BoxScore.Result;
-import models.BoxScorePlayer;
 import models.Game;
 import models.Game.ProcessingType;
 import models.Game.SeasonType;
