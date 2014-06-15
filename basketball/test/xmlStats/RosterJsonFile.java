@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 
 import json.xmlStats.JsonHelper;
@@ -31,35 +32,46 @@ public class RosterJsonFile {
     @Test
     public void createRoster() {
         running(fakeApplication(), new Runnable() {
-          public void run() {
-        	  InputStream baseJson; 
-        	  try {
-        		  Path path =  Paths.get(System.getProperty("config.test")).resolve("sacramento-kings_20131030.json");
-        		  File file = path.toFile();
-	              baseJson = new FileInputStream(file);
+        	public void run() {
+        		InputStream baseJson; 
+        		try {
+        			Path path =  Paths.get(System.getProperty("config.test")).resolve("sacramento-kings.json");
+        			File file = path.toFile();
+        			baseJson = new FileInputStream(file);
 		        
-	              ObjectMapper mapper = new ObjectMapper();
-	              mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-	            
-	              Roster xmlStatsRoster = mapper.readValue(baseJson, Roster.class);
+        			ObjectMapper mapper = new ObjectMapper();
+        			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);	            
+        			Roster xmlStatsRoster = mapper.readValue(baseJson, Roster.class);
 	              
-	              List<RosterPlayer> rosterPlayers = JsonHelper.getRosterPlayers(xmlStatsRoster, ProcessingType.online);
-	              
-	              for (int i = 0; i < rosterPlayers.size(); i++) {
-	            	RosterPlayer rosterPlayer = rosterPlayers.get(i);
-	            	Player player = rosterPlayer.getPlayer();
-	            	Player searchPlayer = Player.findByNameBirthDate(player.getLastName(), player.getFirstName(), DateTime.getFindDateShort(player.getBirthDate()), ProcessingType.online);
-	            	if (searchPlayer == null) {
-	            		Player.create(player, ProcessingType.online);
-	            		RosterPlayer.create(rosterPlayer, ProcessingType.online);
-	            	}
-					Player createPlayer = Player.findByNameBirthDate(player.getLastName(), player.getFirstName(), DateTime.getFindDateShort(player.getBirthDate()), ProcessingType.online);
-					assertThat(createPlayer.getBirthPlace()).isEqualTo(player.getBirthPlace());
-	              }
-	              
-	              for (int j = 0; j < rosterPlayers.size(); j++) {
-	            	  RosterPlayer.delete(rosterPlayers.get(j), ProcessingType.online);
-	            	  Player.delete(rosterPlayers.get(j).getPlayer(), ProcessingType.online);
+            		ProcessingType processingType = ProcessingType.online;
+            		String rosterDate = "1998-05-14";
+            		Date fromDate = DateTime.createDateFromStringDate(rosterDate);
+            		Date toDate = DateTime.getDateMaxSeason(DateTime.createDateFromStringDate(rosterDate));
+            		String rosterTeamKey = "sacramento-kings";
+            		
+        			List<RosterPlayer> xmlStatsRosterPlayers = JsonHelper.getRosterPlayers(xmlStatsRoster, processingType);
+        			RosterPlayer xmlStatsRosterPlayer;
+	  			  	Player xmlStatsPlayer; 
+	  			  	RosterPlayer finderRosterPlayer;
+	  			  	Player finderPlayer;
+
+	  			  	for (int i = 0; i < xmlStatsRosterPlayers.size(); i++) {
+	  			  		xmlStatsRosterPlayer = xmlStatsRosterPlayers.get(i);
+	  			  		xmlStatsPlayer = xmlStatsRosterPlayer.getPlayer();
+
+	  			  		Player.create(xmlStatsPlayer, processingType);							
+	  			  		xmlStatsRosterPlayer.setFromDate(fromDate);
+	  			  		xmlStatsRosterPlayer.setToDate(toDate);
+	  			  		RosterPlayer.create(xmlStatsRosterPlayer, processingType);
+
+	  			  		finderRosterPlayer = RosterPlayer.findByDatePlayerNameTeam(rosterDate, xmlStatsPlayer.getLastName(), xmlStatsPlayer.getFirstName(), rosterTeamKey, processingType);
+	  			  		finderPlayer = finderRosterPlayer.getPlayer();
+	  			  	
+	  			  		assertThat(finderRosterPlayer.getNumber()).isEqualTo(xmlStatsRosterPlayer.getNumber());
+	  			  		assertThat(finderPlayer.getLastName()).isEqualTo(xmlStatsPlayer.getLastName());
+	  			  	
+	  			  		RosterPlayer.delete(finderRosterPlayer, processingType);
+	  			  		Player.delete(finderPlayer, processingType);
 	              }
 
         	  } catch (FileNotFoundException e) {
