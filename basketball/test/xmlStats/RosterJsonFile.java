@@ -55,24 +55,22 @@ public class RosterJsonFile {
 	  			  	RosterPlayer finderRosterPlayer;
 	  			  	Player finderPlayer;
 
-	  			  	for (int i = 0; i < xmlStatsRosterPlayers.size(); i++) {
-	  			  		xmlStatsRosterPlayer = xmlStatsRosterPlayers.get(i);
-	  			  		xmlStatsPlayer = xmlStatsRosterPlayer.getPlayer();
+	  			  	xmlStatsRosterPlayer = xmlStatsRosterPlayers.get(0);
+	  			  	xmlStatsPlayer = xmlStatsRosterPlayer.getPlayer();
 
-	  			  		Player.create(xmlStatsPlayer, processingType);							
-	  			  		xmlStatsRosterPlayer.setFromDate(fromDate);
-	  			  		xmlStatsRosterPlayer.setToDate(toDate);
-	  			  		RosterPlayer.create(xmlStatsRosterPlayer, processingType);
+	  			  	Player.create(xmlStatsPlayer, processingType);							
+	  			  	xmlStatsRosterPlayer.setFromDate(fromDate);
+	  			  	xmlStatsRosterPlayer.setToDate(toDate);
+	  			  	RosterPlayer.create(xmlStatsRosterPlayer, processingType);
 
-	  			  		finderRosterPlayer = RosterPlayer.findByDatePlayerNameTeam(rosterDate, xmlStatsPlayer.getLastName(), xmlStatsPlayer.getFirstName(), rosterTeamKey, processingType);
-	  			  		finderPlayer = finderRosterPlayer.getPlayer();
+	  			  	finderRosterPlayer = RosterPlayer.findByDatePlayerNameTeam(rosterDate, xmlStatsPlayer.getLastName(), xmlStatsPlayer.getFirstName(), rosterTeamKey, processingType);
+	  			  	finderPlayer = finderRosterPlayer.getPlayer();
 	  			  	
-	  			  		assertThat(finderRosterPlayer.getNumber()).isEqualTo(xmlStatsRosterPlayer.getNumber());
-	  			  		assertThat(finderPlayer.getLastName()).isEqualTo(xmlStatsPlayer.getLastName());
+	  			  	assertThat(finderRosterPlayer.getNumber()).isEqualTo(xmlStatsRosterPlayer.getNumber());
+	  			  	assertThat(finderPlayer.getLastName()).isEqualTo(xmlStatsPlayer.getLastName());
 	  			  	
-	  			  		RosterPlayer.delete(finderRosterPlayer, processingType);
-	  			  		Player.delete(finderPlayer, processingType);
-	              }
+	  			  	RosterPlayer.delete(finderRosterPlayer, processingType);
+	  			  	Player.delete(finderPlayer, processingType);
 
         	  } catch (FileNotFoundException e) {
       	          e.printStackTrace();
