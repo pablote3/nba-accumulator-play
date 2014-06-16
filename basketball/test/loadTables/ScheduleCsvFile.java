@@ -37,7 +37,7 @@ public class ScheduleCsvFile {
 	        	//need to replace ,, with , , prior to execution for parsing to work correctly
 	        	//found a few accuracy problems with games, needed to compare with www.basketball-reference.com/leagues/NBA_2013_games.html
 	        	//like that it has game start times though
-	        	Path path =  Paths.get(System.getProperty("config.load")).resolve("nba-complete-2012-2013.csv");
+	        	Path path =  Paths.get(System.getProperty("config.load")).resolve("Schedule_2012-2013.csv");
 				File file = path.toFile();
 
 				BufferedReader bufRdr = null;
