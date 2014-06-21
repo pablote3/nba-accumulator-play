@@ -4,23 +4,20 @@ import static org.fest.assertions.Assertions.assertThat;
 import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.running;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import javax.persistence.PersistenceException;
 
 import models.Game.ProcessingType;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
-import util.DateTime;
+import util.DateTimeUtil;
 
 public class RosterPlayerTest {
     @Test
@@ -81,7 +78,7 @@ public class RosterPlayerTest {
         	  assertThat(rosterPlayers.size()).isEqualTo(1);
               assertThat(rosterPlayers.get(0).getPlayer().getFirstName()).isEqualTo("Tim");
               assertThat(rosterPlayers.get(0).getPlayer().getLastName()).isEqualTo("Jones");
-              assertThat(DateTime.getFindDateShort(rosterPlayers.get(0).getPlayer().getBirthDate())).isEqualTo("1975-01-01");
+              assertThat(DateTimeUtil.getFindDateShort(rosterPlayers.get(0).getPlayer().getBirthDate())).isEqualTo("1975-01-01");
               assertThat(rosterPlayers.get(0).getTeam().getKey()).isEqualTo("sacramento-kings");
               
         	  for (int i = 0; i < createRosterPlayers.size(); i++) {
@@ -133,7 +130,7 @@ public class RosterPlayerTest {
         	  RosterPlayer rosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2000-02-02", "Jones", "Tim", "sacramento-kings", ProcessingType.online);
               assertThat(rosterPlayer.getPlayer().getFirstName()).isEqualTo("Tim");
               assertThat(rosterPlayer.getPlayer().getLastName()).isEqualTo("Jones");
-              assertThat(DateTime.getFindDateShort(rosterPlayer.getPlayer().getBirthDate())).isEqualTo("1975-01-01");
+              assertThat(DateTimeUtil.getFindDateShort(rosterPlayer.getPlayer().getBirthDate())).isEqualTo("1975-01-01");
               assertThat(rosterPlayer.getTeam().getKey()).isEqualTo("sacramento-kings");
               
         	  for (int i = 0; i < createRosterPlayers.size(); i++) {
@@ -180,7 +177,7 @@ public class RosterPlayerTest {
         	  Player deletePlayer;  
         	  
         	  RosterPlayer rosterPlayer = RosterPlayer.findLatestByPlayerNameBirthDateSeason("2000-02-02", "Jones", "Tim", "1975-01-01", ProcessingType.online);
-        	  assertThat(DateTime.getFindDateShort(rosterPlayer.getFromDate())).isEqualTo("2000-02-01");
+        	  assertThat(DateTimeUtil.getFindDateShort(rosterPlayer.getFromDate())).isEqualTo("2000-02-01");
         	  assertThat(rosterPlayer.getTeam().getAbbr()).isEqualTo("SAC");
         	  
         	  for (int i = 0; i < createRosterPlayers.size(); i++) {
@@ -204,7 +201,7 @@ public class RosterPlayerTest {
         	  Player deletePlayer;  
         	  
         	  RosterPlayer rosterPlayer = RosterPlayer.findLatestByPlayerNameBirthDateSeason("2000-02-02", "Jones", "Tim", "1972-05-01", ProcessingType.online);
-        	  assertThat(DateTime.getFindDateShort(rosterPlayer.getFromDate())).isEqualTo("1999-11-01");
+        	  assertThat(DateTimeUtil.getFindDateShort(rosterPlayer.getFromDate())).isEqualTo("1999-11-01");
         	  assertThat(rosterPlayer.getTeam().getAbbr()).isEqualTo("LAL");
         	  
         	  for (int i = 0; i < createRosterPlayers.size(); i++) {
@@ -228,7 +225,7 @@ public class RosterPlayerTest {
         	  Player deletePlayer;  
         	  
         	  RosterPlayer rosterPlayer = RosterPlayer.findLatestByPlayerNameBirthDateSeason("1998-11-12", "Jones", "Tim", "1972-05-01", ProcessingType.online);
-        	  assertThat(DateTime.getFindDateShort(rosterPlayer.getFromDate())).isEqualTo("1998-10-30");
+        	  assertThat(DateTimeUtil.getFindDateShort(rosterPlayer.getFromDate())).isEqualTo("1998-10-30");
         	  assertThat(rosterPlayer.getTeam().getAbbr()).isEqualTo("SAC");
         	  
         	  for (int i = 0; i < createRosterPlayers.size(); i++) {
@@ -370,12 +367,7 @@ public class RosterPlayerTest {
         	  
         	  RosterPlayer createRosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2000-04-04", player.getLastName(), player.getFirstName(), "golden-state-warriors", ProcessingType.online);
         	  
-        	  Date toDate = null;
-        	  try {
-        	  	  toDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2000-04-15");
-        	  } catch (ParseException e) {
-        	  	  e.printStackTrace();
-        	  }
+        	  DateTime toDate = new DateTime(2000, 4, 15, 0, 0, 0);
         	  createRosterPlayer.setToDate(toDate);
         	  RosterPlayer.update(createRosterPlayer, ProcessingType.online);
         	  

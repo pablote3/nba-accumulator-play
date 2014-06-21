@@ -10,14 +10,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.StringTokenizer;
 
 import models.Official;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -39,7 +37,7 @@ public class OfficialsCsvFile {
 				}
 				String line = null;
 				Official official;
-				Date date;
+				DateTime date;
 				int i = 0;
 				 
 				//read each line of text file
@@ -51,9 +49,9 @@ public class OfficialsCsvFile {
 						official.setFirstName(st.nextToken());
 						official.setLastName(st.nextToken());
 						
-			            try {			            	
-			            	date = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH).parse(st.nextToken());
-			            } catch (ParseException e) {
+			            try {
+			    			date = DateTimeFormat.forPattern("MM/dd/yyyy").parseDateTime(st.nextToken());
+			            } catch (Exception e) {
 			            	e.printStackTrace();
 			            	break;
 			            }

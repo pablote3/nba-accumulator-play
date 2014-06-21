@@ -27,7 +27,7 @@ import models.Game.Source;
 import models.Game.Status;
 import models.GameOfficial;
 import models.PeriodScore;
-import util.DateTime;
+import util.DateTimeUtil;
 import actor.ActorApi.CompleteGame;
 import actor.ActorApi.IncompleteRosterException;
 import actor.ActorApi.ScheduleGame;
@@ -38,6 +38,7 @@ import akka.actor.UntypedActor;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 
 public class GameXmlStats extends UntypedActor {
     static final String AUTHORIZATION = "Authorization";
@@ -55,7 +56,7 @@ public class GameXmlStats extends UntypedActor {
 	public GameXmlStats(ActorRef listener) {
 		this.listener = listener;
 	}
-
+	
 	public void onReceive(Object message) {
 		if (message instanceof ServiceProps) {
 			accessToken = "Bearer " + ((ServiceProps) message).accessToken;
@@ -71,7 +72,7 @@ public class GameXmlStats extends UntypedActor {
 			BoxScore awayBoxScore = game.getBoxScores().get(0);
 			BoxScore homeBoxScore = game.getBoxScores().get(1);
 			
-			String urlDate = DateTime.getFindDateNaked(game.getDate());
+			String urlDate = DateTimeUtil.getFindDateNaked(game.getDate());
 			String urlAwayTeam = awayBoxScore.getTeam().getKey();
 			String urlHomeTeam = homeBoxScore.getTeam().getKey();			
 			String event = urlDate + "-" + urlAwayTeam + "-at-" + urlHomeTeam + ".json";
@@ -95,11 +96,12 @@ public class GameXmlStats extends UntypedActor {
 					if (GZIP.equals(encoding)) {
 						inputStreamJson = new GZIPInputStream(inputStreamJson);
 					}
-				}				
-
+				}
+				
 				baseJson = new InputStreamReader(inputStreamJson, StandardCharsets.UTF_8);
 		        if (baseJson != null) {
 		           	ObjectMapper mapper = new ObjectMapper();
+		           	mapper.registerModule(new JodaModule());  
 		    	    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		    	    NBABoxScore xmlStatsBoxScore = mapper.readValue(baseJson, NBABoxScore.class);
 		    	        
@@ -119,14 +121,14 @@ public class GameXmlStats extends UntypedActor {
 		    	    }	    	        
 		    	    awayBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStatsBoxScore.away_period_scores));
 		    	    JsonHelper.getBoxScoreStats(awayBoxScore, xmlStatsBoxScore.away_totals);
-		    	    List<BoxScorePlayer> awayBoxScorePlayers = JsonHelper.getBoxScorePlayers(xmlStatsBoxScore.away_stats, DateTime.getFindDateShort(xmlStatsBoxScore.event_information.getDate()), processingType);
+		    	    List<BoxScorePlayer> awayBoxScorePlayers = JsonHelper.getBoxScorePlayers(xmlStatsBoxScore.away_stats, DateTimeUtil.getFindDateShort(xmlStatsBoxScore.event_information.getDate()), processingType);
 	
 		    	    if (awayBoxScorePlayers != null) {
 		    	    	System.out.println("  Away Team " + awayBoxScore.getTeam().getShortName() + " Roster is Complete");	
 		    	    	awayBoxScore.setBoxScorePlayers(awayBoxScorePlayers);
 		    	    }
 		    	    else
-		    	    	throw new IncompleteRosterException(game.getId(), DateTime.getFindDateShort(game.getDate()), awayBoxScore.getTeam().getKey());
+		    	    	throw new IncompleteRosterException(game.getId(), DateTimeUtil.getFindDateShort(game.getDate()), awayBoxScore.getTeam().getKey());
 		    	        
 		    	    if (homeBoxScore.getPeriodScores().size() > 0) {
 		    	        for (int i = 0; i < homeBoxScore.getPeriodScores().size(); i++) {
@@ -135,13 +137,13 @@ public class GameXmlStats extends UntypedActor {
 		    	    }	 
 		    	    homeBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStatsBoxScore.home_period_scores));
 		    	    JsonHelper.getBoxScoreStats(homeBoxScore, xmlStatsBoxScore.home_totals);	    	        
-		    	    List<BoxScorePlayer> homeBoxScorePlayers = JsonHelper.getBoxScorePlayers(xmlStatsBoxScore.home_stats, DateTime.getFindDateShort(xmlStatsBoxScore.event_information.getDate()), processingType);
+		    	    List<BoxScorePlayer> homeBoxScorePlayers = JsonHelper.getBoxScorePlayers(xmlStatsBoxScore.home_stats, DateTimeUtil.getFindDateShort(xmlStatsBoxScore.event_information.getDate()), processingType);
 		    	    if (homeBoxScorePlayers != null) {
 						System.out.println("  Home Team " + homeBoxScore.getTeam().getShortName() + " Roster is Complete");						
 						homeBoxScore.setBoxScorePlayers(homeBoxScorePlayers);
 		    	    }
 		    	    else
-		    	    	throw new IncompleteRosterException(game.getId(), DateTime.getFindDateShort(game.getDate()), homeBoxScore.getTeam().getKey());
+		    	    	throw new IncompleteRosterException(game.getId(), DateTimeUtil.getFindDateShort(game.getDate()), homeBoxScore.getTeam().getKey());
 		    	        
 		    		if (xmlStatsBoxScore.away_totals.getPoints() > xmlStatsBoxScore.home_totals.getPoints()) {
 		    		  	homeBoxScore.setResult(Result.loss);

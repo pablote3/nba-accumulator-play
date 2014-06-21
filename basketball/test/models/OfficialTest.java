@@ -57,7 +57,7 @@ public class OfficialTest {
     public void findOfficialFinderByNumber() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Official official = Official.findByKey("number", "10");
+        	  Official official = Official.findByNumber("10", ProcessingType.online);
               assertThat(official.getFirstName()).isEqualTo("Ron");
               assertThat(official.getLastName()).isEqualTo("Garretson");
               assertThat(official.getActive()).isTrue();

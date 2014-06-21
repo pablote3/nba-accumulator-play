@@ -3,14 +3,16 @@ package actor;
 import static actor.ActorApi.NextGame;
 import static actor.ActorApi.WorkStart;
 
-import java.util.Date;
 import java.util.List;
 
 import models.BoxScore;
 import models.Game;
 import models.Game.ProcessingType;
 import models.Game.Status;
-import util.DateTime;
+
+import org.joda.time.DateTime;
+
+import util.DateTimeUtil;
 import util.Utilities;
 import actor.ActorApi.CompleteGame;
 import actor.ActorApi.GameIds;
@@ -39,7 +41,7 @@ public class GameModel extends UntypedActor {
 
 	public void onReceive(Object message) {
 		if (message instanceof ServiceProps) {
-			propDate = ((ServiceProps) message).date == null || ((ServiceProps) message).date.isEmpty() ? DateTime.getFindDateShort(new Date()) : ((ServiceProps) message).date;
+			propDate = ((ServiceProps) message).date == null || ((ServiceProps) message).date.isEmpty() ? DateTimeUtil.getFindDateShort(new DateTime()) : ((ServiceProps) message).date;
 			propTeam = ((ServiceProps) message).team;
 			propSize = ((ServiceProps) message).size == null || ((ServiceProps) message).size.isEmpty() ? propSize = "0" : ((ServiceProps) message).size;
 			processingType = Game.ProcessingType.valueOf(((ServiceProps) message).processType);
@@ -74,7 +76,7 @@ public class GameModel extends UntypedActor {
 			if (game.getStatus().equals(Status.scheduled) || game.getStatus().equals(Status.finished)) {
 				output = new StringBuffer();
 				output.append(Utilities.padString('\n' + "  Finished Game Ready for Completion -", 40));
-				output.append(" " + DateTime.getFindDateNaked(game.getDate()));
+				output.append(" " + DateTimeUtil.getFindDateNaked(game.getDate()));
 				output.append("-" + game.getBoxScores().get(0).getTeam().getKey() + "-at");
 				output.append("-" + game.getBoxScores().get(1).getTeam().getKey());
 				System.out.println(output.toString());
@@ -85,7 +87,7 @@ public class GameModel extends UntypedActor {
 			else  {
 				output = new StringBuffer();
 				output.append(Utilities.padString('\n' + "  " + game.getStatus() + " Not Eligible for Completion -", 40));
-				output.append(" " + DateTime.getFindDateNaked(game.getDate()));
+				output.append(" " + DateTimeUtil.getFindDateNaked(game.getDate()));
 				output.append("-" + game.getBoxScores().get(0).getTeam().getKey() + "-at");
 				output.append("-" + game.getBoxScores().get(1).getTeam().getKey());
 				System.out.println(output.toString());

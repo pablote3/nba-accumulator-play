@@ -23,7 +23,7 @@ import models.Game;
 import models.Game.ProcessingType;
 import models.Game.Source;
 import models.RosterPlayer;
-import util.DateTime;
+import util.DateTimeUtil;
 import actor.ActorApi.ActiveRosterPlayers;
 import actor.ActorApi.ServiceProps;
 import actor.ActorApi.UpdateRoster;
@@ -33,6 +33,7 @@ import akka.actor.UntypedActor;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 
 public class RosterXmlStats extends UntypedActor {
     static final String AUTHORIZATION = "Authorization";
@@ -63,7 +64,7 @@ public class RosterXmlStats extends UntypedActor {
 		}
 		else if(message instanceof UpdateRoster) {
 			String gameDate = ((UpdateRoster) message).date;
-			String nakedDate = DateTime.getFindDateNaked(DateTime.createDateFromStringDate(gameDate));
+			String nakedDate = DateTimeUtil.getFindDateNaked(DateTimeUtil.createDateFromStringDate(gameDate));
 			String gameTeam = ((UpdateRoster) message).team;
 			InputStream inputStreamJson = null;
 			InputStreamReader baseJson = null;
@@ -92,6 +93,7 @@ public class RosterXmlStats extends UntypedActor {
 				baseJson = new InputStreamReader(inputStreamJson, StandardCharsets.UTF_8);
 				if (baseJson != null) {
 				  	ObjectMapper mapper = new ObjectMapper();
+				  	mapper.registerModule(new JodaModule());  
 				    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 				    Roster xmlStatsRoster = mapper.readValue(baseJson, Roster.class);				    
 				    List<RosterPlayer> rosterPlayers = JsonHelper.getRosterPlayers(xmlStatsRoster, processingType);

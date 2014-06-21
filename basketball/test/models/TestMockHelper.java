@@ -1,11 +1,7 @@
 package models;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import models.BoxScore.Location;
 import models.BoxScore.Result;
@@ -16,15 +12,14 @@ import models.RosterPlayer.Position;
 import models.Team.Conference;
 import models.Team.Division;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+
 public class TestMockHelper {
 
 	protected static Game getGameCompleted() {
 	    Game game = new Game();
-	    try {
-			game.setDate(new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2013-07-05"));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		game.setDate(new DateTime(2013, 7, 5, 0, 0, 0));
 	    game.setStatus(Status.completed);
 	    game.setSeasonType(SeasonType.pre);
 	    return game;
@@ -32,11 +27,7 @@ public class TestMockHelper {
     
 	protected static Game getGameScheduled() {
 	    Game game = new Game();
-	    try {
-			game.setDate(new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2013-07-04"));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		game.setDate(new DateTime(2013, 7, 4, 0, 0, 0));
 	    game.setStatus(Status.scheduled);
 	    game.setSeasonType(SeasonType.pre);
 	    return game;
@@ -69,12 +60,7 @@ public class TestMockHelper {
   	  official.setNumber("99");
   	  official.setLastName("Hansen");
   	  official.setFirstName("Chris");
-      Date date = null;
-      try {
-    	  date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2012-11-05");
-      } catch (ParseException e) {
-    	  e.printStackTrace();
-      }
+      DateTime date = new DateTime(2012, 11, 5, 0, 0, 0);
 	  official.setFirstGame(date);
 	  official.setActive(false);
   	  return official;
@@ -87,12 +73,13 @@ public class TestMockHelper {
 	  player.setDisplayName("Tim Jones");
 	  player.setHeight((short)79);
 	  player.setWeight((short)215);
-	  Date date = null;
+	  DateTime date = null;
 	  try {
-	  	  date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(birthDate);
-	  } catch (ParseException e) {
+		  date = DateTimeFormat.forPattern("yyyy-MM-dd").parseDateTime(birthDate);
+	  } catch (Exception e) {
 	  	  e.printStackTrace();
 	  }
+	  
 	  player.setBirthDate(date);
 	  player.setBirthPlace("Brooklyn, New York, USA");
 	  return player;
@@ -104,12 +91,12 @@ public class TestMockHelper {
 	  rosterPlayer.setTeam(team);
 	  rosterPlayer.setNumber("10");
 	  rosterPlayer.setPosition(Position.PG);
-	  Date fromDate = null;
-	  Date toDate = null;
+	  DateTime fromDate = null;
+	  DateTime toDate = null;
 	  try {
-	  	  fromDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(startDate);
-	  	  toDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(endDate);
-	  } catch (ParseException e) {
+	  	  fromDate = DateTimeFormat.forPattern("yyyy-MM-dd").parseDateTime(startDate);
+	  	  toDate = DateTimeFormat.forPattern("yyyy-MM-dd").parseDateTime(endDate);
+	  } catch (Exception e) {
 	  	  e.printStackTrace();
 	  }
 	  rosterPlayer.setFromDate(fromDate);

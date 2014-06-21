@@ -13,7 +13,7 @@ import models.Game.ProcessingType;
 
 import org.junit.Test;
 
-import util.DateTime;
+import util.DateTimeUtil;
 
 public class PlayerTest {    
     @Test
@@ -55,7 +55,7 @@ public class PlayerTest {
         	  List<Player> createPlayers = createPlayers();
         	  
         	  Player createPlayer = Player.findByNameBirthDate("Jones", "Tim", "1975-01-01", ProcessingType.online);
-        	  assertThat(DateTime.getFindDateShort(createPlayer.getBirthDate())).isEqualTo("1975-01-01");
+        	  assertThat(DateTimeUtil.getFindDateShort(createPlayer.getBirthDate())).isEqualTo("1975-01-01");
         	  assertThat(createPlayer.getWeight()).isEqualTo((short)215);
         	  
         	  for (int i = 0; i < createPlayers.size(); i++) {
@@ -73,7 +73,7 @@ public class PlayerTest {
         	  Player.create(player, ProcessingType.online);
               
         	  Player createPlayer = Player.findByNameBirthDate("Jones", "Tim", "1975-01-01", ProcessingType.online);
-        	  assertThat(DateTime.getFindDateShort(player.getBirthDate())).isEqualTo("1975-01-01");
+        	  assertThat(DateTimeUtil.getFindDateShort(player.getBirthDate())).isEqualTo("1975-01-01");
               assertThat(createPlayer.getWeight()).isEqualTo((short)215);
               Player.delete(createPlayer, ProcessingType.online);
           }
@@ -86,7 +86,7 @@ public class PlayerTest {
         Player.create(player, ProcessingType.batch);
               
         Player createPlayer = Player.findByNameBirthDate("Jones", "Tim", "1975-01-01", ProcessingType.batch);
-        assertThat(DateTime.getFindDateShort(player.getBirthDate())).isEqualTo("1975-01-01");
+        assertThat(DateTimeUtil.getFindDateShort(player.getBirthDate())).isEqualTo("1975-01-01");
         assertThat(createPlayer.getWeight()).isEqualTo((short)215);
         Player.delete(createPlayer, ProcessingType.batch);
     }
@@ -103,7 +103,7 @@ public class PlayerTest {
         	  createPlayer.update();
         	  
         	  Player updatePlayer = Player.findByNameBirthDate("Jones", "Tim", "1975-01-01", ProcessingType.online);
-        	  assertThat(DateTime.getFindDateShort(player.getBirthDate())).isEqualTo("1975-01-01");
+        	  assertThat(DateTimeUtil.getFindDateShort(player.getBirthDate())).isEqualTo("1975-01-01");
               assertThat(updatePlayer.getWeight()).isEqualTo((short)345);
               Player.delete(createPlayer, ProcessingType.online);
           }

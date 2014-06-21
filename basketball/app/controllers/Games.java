@@ -13,8 +13,6 @@ public class Games extends Controller {
     * @param page Current page number (starts from 0)
     */
    public static Result list(int page) {
-//	   java.text.SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", java.util.Locale.ENGLISH);
-//	   String gameDate = simpleDateFormat.format(new java.util.Date()).toString();
 	   String gameDate = "2012-10-31";
 
        return ok(

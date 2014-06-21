@@ -1,12 +1,12 @@
 package json.xmlStats;
 
-import java.util.Date;
+import org.joda.time.DateTime;
 
 public class RosterPlayerDTO {
 	private String last_name;
 	private String first_name;
 	private String display_name;
-	private Date birthdate;
+	private DateTime birthdate;
 	private String birthplace;
 	private Short height_in;
 	private Short weight_lb;
@@ -31,10 +31,10 @@ public class RosterPlayerDTO {
 	public void setDisplay_name(String display_name) {
 		this.display_name = display_name;
 	}
-	public Date getBirthdate() {
+	public DateTime getBirthdate() {
 		return birthdate;
 	}
-	public void setBirthdate(Date birthdate) {
+	public void setBirthdate(DateTime birthdate) {
 		this.birthdate = birthdate;
 	}
 	public String getBirthplace() {

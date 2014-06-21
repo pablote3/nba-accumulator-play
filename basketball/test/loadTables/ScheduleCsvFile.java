@@ -10,11 +10,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
 import java.util.StringTokenizer;
 
 import models.BoxScore;
@@ -24,6 +19,8 @@ import models.Game.SeasonType;
 import models.Game.Status;
 import models.Team;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -52,9 +49,9 @@ public class ScheduleCsvFile {
 				BoxScore boxScoreAway;
 				Team teamHome;
 				Team teamAway;
-				final Date preseasonEnd = new GregorianCalendar(2012, 9, 28).getTime();		//10/28/13
+				DateTime preseasonEnd = new DateTime(2012, 9, 28, 0, 0, 0);		//10/28/13
 				StringBuffer sbDate;
-				Date date;
+				DateTime date;
 				int i = 0;
 				 
 				//read each line of text file
@@ -69,14 +66,14 @@ public class ScheduleCsvFile {
 			            String awayTeam = st.nextToken().trim();
 			            String homeTeam = st.nextToken().trim();
 
-			            try {			            	
-			            	date = new SimpleDateFormat("MM/dd/yyyy kk:mm", Locale.ENGLISH).parse(sbDate.toString());
-			            } catch (ParseException e) {
+			            try {
+			            	date = DateTimeFormat.forPattern("MM/dd/yyyy kk:mm").parseDateTime(sbDate.toString());
+			            } catch (Exception e) {
 			            	e.printStackTrace();
 			            	break;
 			            }
 			            
-			            if(date.after(preseasonEnd)) {
+			            if(date.isAfter(preseasonEnd)) {
 				            teamHome = Team.findByKey("shortName", homeTeam);
 				            teamAway = Team.findByKey("shortName", awayTeam);				            
 				            

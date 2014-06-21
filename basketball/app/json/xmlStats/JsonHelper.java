@@ -13,7 +13,7 @@ import models.PeriodScore;
 import models.Player;
 import models.RosterPlayer;
 import models.Team;
-import util.DateTime;
+import util.DateTimeUtil;
 
 public class JsonHelper {
    
@@ -123,7 +123,7 @@ public class JsonHelper {
         	player.setDisplayName(rosterPlayerDTOs[i].getDisplay_name());
         	player.setHeight(rosterPlayerDTOs[i].getHeight_in());
         	player.setWeight(rosterPlayerDTOs[i].getWeight_lb());
-        	player.setBirthDate(DateTime.createDateMinTime(rosterPlayerDTOs[i].getBirthdate()));
+        	player.setBirthDate(DateTimeUtil.createDateMinTime(rosterPlayerDTOs[i].getBirthdate()));
         	player.setBirthPlace(rosterPlayerDTOs[i].getBirthplace());
         	rosterPlayer = new RosterPlayer();
         	rosterPlayer.setPlayer(player);

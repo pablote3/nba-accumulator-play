@@ -1,119 +1,111 @@
 package utilities;
 
 import static org.fest.assertions.Assertions.assertThat;
+import util.DateTimeUtil;
 
-import java.util.Date;
-
+import org.joda.time.DateTime;
 import org.junit.Test;
-
-import util.DateTime;
 
 public class DateTimeTest {	
     @Test
     public void displayTimeHalfHourAM() {
-    	Date date = DateTime.createDateFromStringDateTime("2013-03-30 09:30:00");
-    	assertThat(DateTime.getDisplayTime(date)).isEqualTo("09:30 AM PDT");
+    	String s = DateTimeUtil.getDisplayTime(new DateTime(2013, 3, 30, 9, 30, 0));
+    	assertThat(s).isEqualTo("09:30 AM PDT");
     }
     
     @Test
     public void displayTimeFullHourAM() {
-    	Date date = DateTime.createDateFromStringDateTime("2013-03-30 09:00:00");
-        assertThat(DateTime.getDisplayTime(date)).isEqualTo("09:00 AM PDT");
+    	String s = DateTimeUtil.getDisplayTime(new DateTime(2013, 3, 30, 9, 0, 0));
+    	assertThat(s).isEqualTo("09:00 AM PDT");
     }
     
     @Test
     public void displayTimeHalfHourPM() {
-    	Date date = DateTime.createDateFromStringDateTime("2013-03-30 19:30:00");
-    	assertThat(DateTime.getDisplayTime(date)).isEqualTo("07:30 PM PDT");
+    	String s = DateTimeUtil.getDisplayTime(new DateTime(2013, 3, 30, 19, 30, 0));
+    	assertThat(s).isEqualTo("07:30 PM PDT");
     }
     
     @Test
     public void displayTimeFullHourPM() {
-    	Date date = DateTime.createDateFromStringDateTime("2013-03-30 19:00:00");
-        assertThat(DateTime.getDisplayTime(date)).isEqualTo("07:00 PM PDT");
+    	String s = DateTimeUtil.getDisplayTime(new DateTime(2013, 3, 30, 19, 0, 0));
+    	assertThat(s).isEqualTo("07:00 PM PDT");
     }
     
     @Test
     public void displayDateLong() {
-    	Date date = DateTime.createDateFromStringDateTime("2013-03-30 19:00:00");
-        assertThat(DateTime.getDisplayDateLong(date)).isEqualTo("Saturday, March 30, 2013");
+    	String s = DateTimeUtil.getDisplayDateLong(new DateTime(2013, 3, 30, 19, 0, 0));
+        assertThat(s).isEqualTo("Saturday, March 30, 2013");
     }
     
     @Test
     public void displayDateMiddle() {
-    	Date date = DateTime.createDateFromStringDateTime("2013-03-30 19:00:00");
-        assertThat(DateTime.getDisplayDateMiddle(date)).isEqualTo("March 30, 2013");
+    	String s = DateTimeUtil.getDisplayDateMiddle(new DateTime(2013, 3, 30, 19, 0, 0));
+        assertThat(s).isEqualTo("March 30, 2013");
     }
     
     @Test
     public void displayDateShort() {
-    	Date date = DateTime.createDateFromStringDateTime("2013-03-30 19:00:00");
-        assertThat(DateTime.getDisplayDateShort(date)).isEqualTo("03-30-2013");
+    	String s = DateTimeUtil.getDisplayDateShort(new DateTime(2013, 3, 30, 19, 0, 0));
+        assertThat(s).isEqualTo("03-30-2013");
     }
     
     @Test
     public void displayDateNaked() {
-    	Date date = DateTime.createDateFromStringDateTime("2013-03-30 19:00:00");
-        assertThat(DateTime.getFindDateNaked(date)).isEqualTo("20130330");
+    	String s = DateTimeUtil.getFindDateNaked(new DateTime(2013, 3, 30, 19, 0, 0));
+        assertThat(s).isEqualTo("20130330");
     }   
     
     @Test
     public void createDateMaxTime() {
-    	Date date = DateTime.createDateFromStringDateTime("2013-03-30 00:00:00");
-        assertThat(DateTime.createDateMaxTime(date)).isEqualTo(DateTime.createDateFromStringDateTime("2013-03-30 23:59:59"));
+    	DateTime date = DateTimeUtil.createDateMaxTime(new DateTime(2013, 3, 30, 0, 0, 0));
+        assertThat(date).isEqualTo(new DateTime(2013, 03, 30, 23, 59, 59));
     }
     
     @Test
     public void createDateMinSeason_Min() {
-    	Date date = DateTime.createDateFromStringDateTime("2013-07-01 00:00:00");
-        assertThat(DateTime.getDateMinSeason(date)).isEqualTo(DateTime.createDateFromStringDateTime("2013-07-01 00:00:00"));
+    	DateTime date = DateTimeUtil.getDateMinSeason(new DateTime(2013, 7, 1, 0, 0, 0));
+        assertThat(date).isEqualTo(new DateTime(2013, 7, 1, 0, 0, 0));
     }
     
     @Test
     public void createDateMinSeason_Max() {
-    	Date date = DateTime.createDateFromStringDateTime("2013-06-30 23:59:59");
-        assertThat(DateTime.getDateMinSeason(date)).isEqualTo(DateTime.createDateFromStringDateTime("2012-07-01 00:00:00"));
+    	DateTime date = DateTimeUtil.getDateMinSeason(new DateTime(2013, 6, 30, 23, 59, 59));
+    	assertThat(date).isEqualTo(new DateTime(2012, 7, 1, 0, 0, 0));
     }
     
     @Test
     public void createDateMaxSeason_Min() {
-    	Date date = DateTime.createDateFromStringDate("2013-07-01 00:00:00");
-    	Date minDate = DateTime.getDateMaxSeason(date);
-        assertThat(minDate).isEqualTo(DateTime.createDateFromStringDateTime("2014-06-30 23:59:59"));
+    	DateTime date = DateTimeUtil.getDateMaxSeason(new DateTime(2013, 7, 1, 0, 0, 0));
+    	assertThat(date).isEqualTo(new DateTime(2014, 6, 30, 23, 59, 59));
     }
     
     @Test
     public void createDateMaxSeason_Max() {
-    	Date date = DateTime.createDateFromStringDate("2013-06-30");
-    	Date maxDate = DateTime.getDateMaxSeason(date);
-        assertThat(maxDate).isEqualTo(DateTime.createDateFromStringDateTime("2013-06-30 23:59:59"));
+    	DateTime date = DateTimeUtil.getDateMaxSeason(new DateTime(2014, 6, 30, 23, 59, 59));
+    	assertThat(date).isEqualTo(new DateTime(2014, 6, 30, 23, 59, 59));
     }
     
     @Test
     public void createSeasonFromDate_Max() {
-    	Date date = DateTime.createDateFromStringDate("2013-06-30");
-    	String season = DateTime.getSeason(date);
-        assertThat(season).isEqualTo("2012-13");
+    	DateTime date = DateTimeUtil.getDateMaxSeason(new DateTime(2013, 6, 30, 23, 59, 59));
+        assertThat(DateTimeUtil.getSeason(date)).isEqualTo("2012-13");
     }
     
     @Test
     public void createSeasonFromDate_Min() {
-    	Date date = DateTime.createDateFromStringDate("2013-07-01");
-    	String season = DateTime.getSeason(date);
-        assertThat(season).isEqualTo("2013-14");
+    	DateTime date = DateTimeUtil.getDateMaxSeason(new DateTime(2013, 7, 1, 0, 0, 0));
+        assertThat(DateTimeUtil.getSeason(date)).isEqualTo("2013-14");
     }
     
     @Test
     public void createDateMinusOneDay_EndOfMonth() {
-    	Date date = DateTime.createDateFromStringDate("2013-07-31");
-    	Date minusDate = DateTime.getDateMinusOneDay(date);
-        assertThat(minusDate).isEqualTo(DateTime.createDateFromStringDate("2013-07-30"));
+    	DateTime date = DateTimeUtil.getDateMinusOneDay(new DateTime(2013, 7, 31, 0, 0, 0));
+        assertThat(date).isEqualTo(new DateTime(2013, 7, 30, 0, 0, 0));
     }
     
     @Test
     public void createDateMinusOneDay_BeginingOfMonth() {
-    	Date date = DateTime.createDateFromStringDate("2013-07-01");
-    	Date minusDate = DateTime.getDateMinusOneDay(date);
-        assertThat(minusDate).isEqualTo(DateTime.createDateFromStringDate("2013-06-30"));
+    	DateTime date = DateTimeUtil.getDateMinusOneDay(new DateTime(2013, 7, 1, 0, 0, 0));
+        assertThat(date).isEqualTo(new DateTime(2013, 6, 30, 0, 0, 0));
     }
 }

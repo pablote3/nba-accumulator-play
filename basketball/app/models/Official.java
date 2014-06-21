@@ -2,7 +2,6 @@ package models;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -18,12 +17,15 @@ import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 import models.Game.ProcessingType;
+
+import org.joda.time.DateTime;
+
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import services.EbeanServerService;
 import services.EbeanServerServiceImpl;
 import services.InjectorModule;
-import util.DateTime;
+import util.DateTimeUtil;
 
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.EbeanServer;
@@ -111,15 +113,15 @@ public class Official extends Model {
 	@Required
 	@Column(name="firstGame", nullable=false)
 	@Temporal(TemporalType.DATE)
-	private Date firstGame;
-	public Date getFirstGame() {
+	private DateTime firstGame;
+	public DateTime getFirstGame() {
 		return firstGame;
 	}
-	public void setFirstGame(Date firstGame) {
+	public void setFirstGame(DateTime firstGame) {
 		this.firstGame = firstGame;
 	}
 	public String getFirstGameDisplay() {
-		return DateTime.getDisplayDateShort(firstGame);
+		return DateTimeUtil.getDisplayDateShort(firstGame);
 	}
 		
 	@Required
@@ -155,6 +157,18 @@ public class Official extends Model {
 		query.where().eq("active", active);
 		List<Official> officials = query.findList();
 	    return officials;
+	}
+	
+	public static Official findByNumber(String number, ProcessingType processingType) {
+		Official official;
+		Query<Official> query; 
+		if (processingType.equals(ProcessingType.batch))
+			query = ebeanServer.find(Official.class);
+		else
+			query = Ebean.find(Official.class);
+		query.where().eq("number", number);
+		official = query.findUnique();
+	    return official;
 	}
 	
 	public static Official findByName(String lastName, String firstName, ProcessingType processingType) {

@@ -10,6 +10,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
+import util.DateTimeUtil;
+import util.Utilities;
 import models.Game;
 import actor.ActorApi.PropertyException;
 import actor.ActorApi.ServiceProps;
@@ -34,13 +36,13 @@ public class Property extends UntypedActor {
 				properties.load(in);
 				in.close();
 				
-				if (properties.getProperty("game.date") != null && !util.DateTime.isDate(properties.getProperty("game.date")))
+				if (properties.getProperty("game.date") != null && !DateTimeUtil.isDate(properties.getProperty("game.date")))
 					throw new PropertyException("InvalidDate - game.date");
 				
-				if (properties.getProperty("xmlstats.size") != null && !util.Utilities.isValidNumber(properties.getProperty("xmlstats.size")))
+				if (properties.getProperty("xmlstats.size") != null && !Utilities.isValidNumber(properties.getProperty("xmlstats.size")))
 					throw new PropertyException("InvalidNumber - xmlstats.size");
 				
-				if (properties.getProperty("xmlstats.delay") != null && !util.Utilities.isValidNumber(properties.getProperty("xmlstats.delay")))
+				if (properties.getProperty("xmlstats.delay") != null && !Utilities.isValidNumber(properties.getProperty("xmlstats.delay")))
 					throw new PropertyException("InvalidNumber - xmlstats.delay");
 				
 				Game.ProcessingType.valueOf(properties.getProperty("aggregator.processType"));

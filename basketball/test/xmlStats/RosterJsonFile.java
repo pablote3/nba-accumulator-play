@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Date;
 import java.util.List;
 
 import json.xmlStats.JsonHelper;
@@ -20,12 +19,14 @@ import models.Game.ProcessingType;
 import models.Player;
 import models.RosterPlayer;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
-import util.DateTime;
+import util.DateTimeUtil;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 
 public class RosterJsonFile {
 
@@ -40,13 +41,14 @@ public class RosterJsonFile {
         			baseJson = new FileInputStream(file);
 		        
         			ObjectMapper mapper = new ObjectMapper();
+        			mapper.registerModule(new JodaModule());
         			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);	            
         			Roster xmlStatsRoster = mapper.readValue(baseJson, Roster.class);
 	              
             		ProcessingType processingType = ProcessingType.online;
             		String rosterDate = "1998-05-14";
-            		Date fromDate = DateTime.createDateFromStringDate(rosterDate);
-            		Date toDate = DateTime.getDateMaxSeason(DateTime.createDateFromStringDate(rosterDate));
+            		DateTime fromDate = DateTimeUtil.createDateFromStringDate(rosterDate);
+            		DateTime toDate = DateTimeUtil.getDateMaxSeason(DateTimeUtil.createDateFromStringDate(rosterDate));
             		String rosterTeamKey = "sacramento-kings";
             		
         			List<RosterPlayer> xmlStatsRosterPlayers = JsonHelper.getRosterPlayers(xmlStatsRoster, processingType);

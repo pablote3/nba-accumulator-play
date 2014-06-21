@@ -2,7 +2,6 @@ package models;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -17,10 +16,12 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+import models.Game.ProcessingType;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.joda.time.DateTime;
 
-import models.Game.ProcessingType;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import services.EbeanServerService;
@@ -133,11 +134,11 @@ public class Player extends Model {
 	@Column(name="birthdate", nullable=true)
 	@Temporal(TemporalType.DATE)
 	@JsonProperty("birthdate")
-	private Date birthDate;
-	public Date getBirthDate() {
+	private DateTime birthDate;
+	public DateTime getBirthDate() {
 		return birthDate;
 	}
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(DateTime birthDate) {
 		this.birthDate = birthDate;
 	}
 	

@@ -1,7 +1,6 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -20,12 +19,15 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import models.Game.ProcessingType;
+
+import org.joda.time.DateTime;
+
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import services.EbeanServerService;
 import services.EbeanServerServiceImpl;
 import services.InjectorModule;
-import util.DateTime;
+import util.DateTimeUtil;
 
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.EbeanServer;
@@ -93,29 +95,29 @@ public class RosterPlayer extends Model {
 	@Required
 	@Column(name="fromDate", nullable=false)
 	@Temporal(TemporalType.DATE)
-	private Date fromDate;
-	public Date getFromDate() {
+	private DateTime fromDate;
+	public DateTime getFromDate() {
 		return fromDate;
 	}
-	public void setFromDate(Date fromDate) {
+	public void setFromDate(DateTime fromDate) {
 		this.fromDate = fromDate;
 	}
 	public String getFromDateDisplay() {
-		return DateTime.getDisplayDateShort(fromDate);
+		return DateTimeUtil.getDisplayDateShort(fromDate);
 	}
 	
 	@Required
 	@Column(name="toDate", nullable=false)
 	@Temporal(TemporalType.DATE)
-	private Date toDate;
-	public Date getToDate() {
+	private DateTime toDate;
+	public DateTime getToDate() {
 		return toDate;
 	}
-	public void setToDate(Date toDate) {
+	public void setToDate(DateTime toDate) {
 		this.toDate = toDate;
 	}
 	public String getToDateDisplay() {
-		return DateTime.getDisplayDateShort(toDate);
+		return DateTimeUtil.getDisplayDateShort(toDate);
 	}
 
 	@Required
@@ -243,7 +245,7 @@ public class RosterPlayer extends Model {
 		query.fetch("player");
 	  	query.fetch("team");
 	  	query.where().lt("fromDate", gameDate + " 00:00:01");
-	  	query.where().gt("fromDate", DateTime.getDateMinSeason(DateTime.createDateFromStringDate(gameDate)));	 
+	  	query.where().gt("fromDate", DateTimeUtil.getDateMinSeason(DateTimeUtil.createDateFromStringDate(gameDate)));	 
 		query.where().eq("t1.last_Name", lastName);
 		query.where().eq("t1.first_Name", firstName);
 		query.where().eq("t1.birthdate", birthDate);
@@ -254,7 +256,7 @@ public class RosterPlayer extends Model {
 	}
 	
 	public static void create(RosterPlayer rosterPlayer, ProcessingType processingType) {
-		rosterPlayer.setToDate(DateTime.createDateMaxTime(rosterPlayer.getToDate()));
+		rosterPlayer.setToDate(DateTimeUtil.createDateMaxTime(rosterPlayer.getToDate()));
 		if (processingType.equals(ProcessingType.batch))
 			ebeanServer.save(rosterPlayer);
 		else
@@ -262,7 +264,7 @@ public class RosterPlayer extends Model {
 	}
 	
 	public static void update(RosterPlayer rosterPlayer, ProcessingType processingType) {
-		rosterPlayer.setToDate(DateTime.createDateMaxTime(rosterPlayer.getToDate()));
+		rosterPlayer.setToDate(DateTimeUtil.createDateMaxTime(rosterPlayer.getToDate()));
 		if (processingType.equals(ProcessingType.batch))
 			ebeanServer.update(rosterPlayer);
 		else

@@ -2,7 +2,6 @@ package models;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -15,15 +14,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.TableGenerator;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import services.EbeanServerService;
 import services.InjectorModule;
-import util.DateTime;
+import util.DateTimeUtil;
+
+import org.joda.time.DateTime;
 
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.EbeanServer;
@@ -94,16 +93,15 @@ public class Game extends Model {
 	@Required
 	@Column(name="date", nullable=false)
 	@JsonProperty("start_date_time")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date date;
-	public Date getDate() {
+	private DateTime date;
+	public DateTime getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(DateTime date) {
 		this.date = date;
 	}
 	public String getTimeDisplay() {
-		return DateTime.getDisplayTime(date);
+		return DateTimeUtil.getDisplayTime(date);
 	}
 	
 	@Required
@@ -206,9 +204,9 @@ public class Game extends Model {
 	  	if (maxRows > 0)
 		  	query.setMaxRows(maxRows);
 
-	  	Date maxDate = DateTime.getDateMaxSeason(DateTime.createDateFromStringDate(propDate));
+	  	DateTime maxDate = DateTimeUtil.getDateMaxSeason(DateTimeUtil.createDateFromStringDate(propDate));
 
-	  	query.where().between("date", propDate + " 00:00:00", DateTime.getFindDateTimeShort(maxDate));
+	  	query.where().between("date", propDate + " 00:00:00", DateTimeUtil.getFindDateTimeShort(maxDate));
 	  	query.orderBy("t0.date asc");
 	    List<Game> games = query.findList();
 	    
@@ -244,11 +242,11 @@ public class Game extends Model {
 	  	if (maxRows > 0)
 		  	query.setMaxRows(maxRows);
 	  	
-	  	Date maxDate = DateTime.getDateMaxSeason(DateTime.createDateFromStringDate(propDate));
+	  	DateTime maxDate = DateTimeUtil.getDateMaxSeason(DateTimeUtil.createDateFromStringDate(propDate));
 	  	
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
-	  	query.where().between("t0.date", propDate + " 00:00:00", DateTime.getFindDateTimeShort(maxDate));
+	  	query.where().between("t0.date", propDate + " 00:00:00", DateTimeUtil.getFindDateTimeShort(maxDate));
 	    query.where().eq("t2.team_key", propTeam);
 	    query.orderBy("t0.date asc");
 	    List<Game> games = query.findList();

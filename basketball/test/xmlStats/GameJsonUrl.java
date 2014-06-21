@@ -34,10 +34,11 @@ import models.Game.Status;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import util.DateTime;
+import util.DateTimeUtil;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 
 public class GameJsonUrl {
     static final String AUTHORIZATION = "Authorization";
@@ -77,6 +78,7 @@ public class GameJsonUrl {
 			
 		            if (baseJson != null) {
 		            	ObjectMapper mapper = new ObjectMapper();
+		            	mapper.registerModule(new JodaModule());  
 		    	        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		    	        NBABoxScore xmlStats = mapper.readValue(baseJson, NBABoxScore.class);
 			    	        
@@ -105,12 +107,12 @@ public class GameJsonUrl {
 		      		  	awayBoxScore = completeGame.getBoxScores().get(0);
 		      		  	awayBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStats.away_period_scores));
 		      		  	JsonHelper.getBoxScoreStats(awayBoxScore, xmlStats.away_totals);
-		      		  	awayBoxScore.setBoxScorePlayers(JsonHelper.getBoxScorePlayers(xmlStats.away_stats, DateTime.getFindDateShort(xmlStats.event_information.getDate()), ProcessingType.online));
+		      		  	awayBoxScore.setBoxScorePlayers(JsonHelper.getBoxScorePlayers(xmlStats.away_stats, DateTimeUtil.getFindDateShort(xmlStats.event_information.getDate()), ProcessingType.online));
 		              
 		      		  	homeBoxScore = completeGame.getBoxScores().get(1);
 		      		  	homeBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStats.home_period_scores));
 		      		  	JsonHelper.getBoxScoreStats(homeBoxScore, xmlStats.home_totals);
-		      		  	homeBoxScore.setBoxScorePlayers(JsonHelper.getBoxScorePlayers(xmlStats.home_stats, DateTime.getFindDateShort(xmlStats.event_information.getDate()), ProcessingType.online));
+		      		  	homeBoxScore.setBoxScorePlayers(JsonHelper.getBoxScorePlayers(xmlStats.home_stats, DateTimeUtil.getFindDateShort(xmlStats.event_information.getDate()), ProcessingType.online));
 		      		  	
 		      		  	if (xmlStats.away_totals.getPoints() > xmlStats.home_totals.getPoints()) {
 		      		  		homeBoxScore.setResult(Result.loss);

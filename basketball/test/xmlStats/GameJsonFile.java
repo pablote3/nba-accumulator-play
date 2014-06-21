@@ -28,10 +28,11 @@ import models.Team;
 
 import org.junit.Test;
 
-import util.DateTime;
+import util.DateTimeUtil;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 
 public class GameJsonFile {
 
@@ -46,7 +47,8 @@ public class GameJsonFile {
         			baseJson = new FileInputStream(file);
 		        
         			ObjectMapper mapper = new ObjectMapper();
-        			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);	            
+        			mapper.registerModule(new JodaModule());        			
+        			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);       			
         			NBABoxScore xmlStats = mapper.readValue(baseJson, NBABoxScore.class);
 	              
         			ProcessingType processingType = ProcessingType.online;
@@ -68,8 +70,8 @@ public class GameJsonFile {
         			RosterPlayer homeRosterPlayer = new RosterPlayer();
         			homeRosterPlayer.setPlayer(homePlayer);
         			homeRosterPlayer.setTeam(homeTeam);
-        			homeRosterPlayer.setFromDate(DateTime.createDateMinTime(game.getDate()));
-        			homeRosterPlayer.setToDate(DateTime.getDateMaxSeason(game.getDate()));
+        			homeRosterPlayer.setFromDate(DateTimeUtil.createDateMinTime(game.getDate()));
+        			homeRosterPlayer.setToDate(DateTimeUtil.getDateMaxSeason(game.getDate()));
         			homeRosterPlayer.setPosition(RosterPlayer.Position.valueOf(homeBoxScorePlayerDTO.getPosition()));
 					RosterPlayer.create(homeRosterPlayer, processingType);
 	              
@@ -78,7 +80,7 @@ public class GameJsonFile {
         			homeBoxScore.setTeam(homeTeam);
         			homeBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStats.home_period_scores));
         			JsonHelper.getBoxScoreStats(homeBoxScore, xmlStats.home_totals);
-        			homeBoxScore.setBoxScorePlayers(JsonHelper.getBoxScorePlayers(xmlStats.home_stats, DateTime.getFindDateShort(game.getDate()), processingType));
+        			homeBoxScore.setBoxScorePlayers(JsonHelper.getBoxScorePlayers(xmlStats.home_stats, DateTimeUtil.getFindDateShort(game.getDate()), processingType));
         			
         			BoxScorePlayerDTO awayBoxScorePlayerDTO = xmlStats.away_stats[0];
         			Team awayTeam = Team.findByAbbr(awayBoxScorePlayerDTO.getTeam_abbreviation(), processingType);
@@ -91,8 +93,8 @@ public class GameJsonFile {
         			RosterPlayer awayRosterPlayer = new RosterPlayer();
         			awayRosterPlayer.setPlayer(awayPlayer);
         			awayRosterPlayer.setTeam(awayTeam);
-        			awayRosterPlayer.setFromDate(DateTime.createDateMinTime(game.getDate()));
-        			awayRosterPlayer.setToDate(DateTime.getDateMaxSeason(game.getDate()));
+        			awayRosterPlayer.setFromDate(DateTimeUtil.createDateMinTime(game.getDate()));
+        			awayRosterPlayer.setToDate(DateTimeUtil.getDateMaxSeason(game.getDate()));
         			awayRosterPlayer.setPosition(RosterPlayer.Position.valueOf(awayBoxScorePlayerDTO.getPosition()));
 					RosterPlayer.create(awayRosterPlayer, processingType);
 	              
@@ -101,7 +103,7 @@ public class GameJsonFile {
         			awayBoxScore.setTeam(awayTeam);
         			awayBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStats.away_period_scores));
         			JsonHelper.getBoxScoreStats(awayBoxScore, xmlStats.away_totals);
-        			awayBoxScore.setBoxScorePlayers(JsonHelper.getBoxScorePlayers(xmlStats.away_stats, DateTime.getFindDateShort(game.getDate()), processingType));
+        			awayBoxScore.setBoxScorePlayers(JsonHelper.getBoxScorePlayers(xmlStats.away_stats, DateTimeUtil.getFindDateShort(game.getDate()), processingType));
 
         			if (xmlStats.away_totals.getPoints() > xmlStats.home_totals.getPoints()) {
         				homeBoxScore.setResult(Result.loss);
