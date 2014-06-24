@@ -82,7 +82,7 @@ create table official (
   number                    varchar(2) not null,
   lastName                  varchar(35) not null,
   firstName                 varchar(35) not null,
-  firstGame                 datetime not null,
+  firstGame                 date not null,
   active                    tinyint(1) default 0 not null,
   last_update               datetime not null,
   constraint pk_official primary key (id))
@@ -103,7 +103,7 @@ create table player (
   display_name              varchar(50) not null,
   height                    smallint,
   weight                    smallint,
-  birthdate                 datetime,
+  birthdate                 date,
   birthplace                varchar(50),
   last_update               datetime not null,
   constraint pk_player primary key (id))
@@ -113,8 +113,8 @@ create table roster_player (
   id                        bigint auto_increment not null,
   team_id                   bigint,
   player_id                 bigint,
-  fromDate                  datetime not null,
-  toDate                    datetime not null,
+  fromDate                  date not null,
+  toDate                    date not null,
   position                  varchar(5) not null,
   number                    varchar(2),
   constraint ck_roster_player_position check (position in ('F','SF','G','SG','C','PF','PG')),

@@ -19,7 +19,7 @@ import models.Game.ProcessingType;
 import models.Player;
 import models.RosterPlayer;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.junit.Test;
 
 import util.DateTimeUtil;
@@ -47,8 +47,8 @@ public class RosterJsonFile {
 	              
             		ProcessingType processingType = ProcessingType.online;
             		String rosterDate = "1998-05-14";
-            		DateTime fromDate = DateTimeUtil.createDateFromStringDate(rosterDate);
-            		DateTime toDate = DateTimeUtil.getDateMaxSeason(DateTimeUtil.createDateFromStringDate(rosterDate));
+            		LocalDate fromDate = DateTimeUtil.createDateFromStringDate(rosterDate);
+            		LocalDate toDate = DateTimeUtil.getDateMaxSeason(DateTimeUtil.createDateFromStringDate(rosterDate));
             		String rosterTeamKey = "sacramento-kings";
             		
         			List<RosterPlayer> xmlStatsRosterPlayers = JsonHelper.getRosterPlayers(xmlStatsRoster, processingType);

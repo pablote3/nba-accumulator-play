@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
 
 import models.Official;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class OfficialsCsvFile {
 				}
 				String line = null;
 				Official official;
-				DateTime date;
+				LocalDate date;
 				int i = 0;
 				 
 				//read each line of text file
@@ -50,7 +50,7 @@ public class OfficialsCsvFile {
 						official.setLastName(st.nextToken());
 						
 			            try {
-			    			date = DateTimeFormat.forPattern("MM/dd/yyyy").parseDateTime(st.nextToken());
+			            	date = LocalDate.parse(st.nextToken(), DateTimeFormat.forPattern("MM/dd/yyyy"));
 			            } catch (Exception e) {
 			            	e.printStackTrace();
 			            	break;

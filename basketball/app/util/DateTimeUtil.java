@@ -1,49 +1,57 @@
 package util;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 public class DateTimeUtil {
 	static public String getDisplayTime(DateTime date) {
-		DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("hh:mm a z");
-		return date.toString(dateTimeFormatter);
+		return date.toString(DateTimeFormat.forPattern("hh:mm a z"));
 	}
+	
 	static public String getDisplayDateLong(DateTime date) {
-		DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("EEEEEEEEE, MMMMMMMMM d, y");
-		return date.toString(dateTimeFormatter);
+		return date.toString(DateTimeFormat.forPattern("EEEEEEEEE, MMMMMMMMM d, y"));
 	}
+	
 	static public String getDisplayDateMiddle(DateTime date) {
-		DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("MMMMMMMMM d, y");
-		return date.toString(dateTimeFormatter);
+		return date.toString(DateTimeFormat.forPattern("MMMMMMMMM d, y"));
 	}
-	static public String getDisplayDateShort(DateTime date) {
-		DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("MM-dd-yyyy");
-		return date.toString(dateTimeFormatter);
+	
+	static public String getDisplayDateShort(LocalDate date) {
+		return date.toString(DateTimeFormat.forPattern("MM-dd-yyyy"));
 	}
+	
+	static public String getFindDateShort(LocalDate date) {
+		return date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
+	}
+	
 	static public String getFindDateShort(DateTime date) {
-		DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd");
-		return date.toString(dateTimeFormatter);
+		return date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
 	}
+	
 	static public String getFindDateTimeShort(DateTime date) {
-		DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-		return date.toString(dateTimeFormatter);
+		return date.toString(DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
 	}
+	
 	static public String getFindDateNaked(DateTime date) {
-		DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyyMMdd");
-		return date.toString(dateTimeFormatter);
+		return date.toString(DateTimeFormat.forPattern("yyyyMMdd"));
 	}
-	static public String getSeason(DateTime date) {
-		DateTime minDate = getDateMinSeason(date);
-		DateTimeFormatter sdfMin = DateTimeFormat.forPattern("yyyy");
-		String minYear = minDate.toString(sdfMin);
+	
+	static public String getFindDateNaked(LocalDate date) {
+		return date.toString(DateTimeFormat.forPattern("yyyyMMdd"));
+	}
+	
+	static public String getSeason(LocalDate date) {
+		LocalDate minDate = getDateMinSeason(date);
+		String minYear = minDate.toString(DateTimeFormat.forPattern("yyyy"));
 		
-		DateTime  maxDate = getDateMaxSeason(date);
-		DateTimeFormatter sdfMax = DateTimeFormat.forPattern("yy");
-		String maxYear = maxDate.toString(sdfMax);
+		LocalDate  maxDate = getDateMaxSeason(date);
+		String maxYear = maxDate.toString(DateTimeFormat.forPattern("yy"));
 		
 		return minYear + "-" + maxYear; 
 	}
+	
 	static public boolean isDate(String strDate)  {
 		try {
 			DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd");
@@ -53,10 +61,9 @@ public class DateTimeUtil {
 			return false;
 		}
 	}
-	static public DateTime createDateFromStringDate(String strDate) {
+	static public LocalDate createDateFromStringDate(String strDate) {
 		try {
-			DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd");
-			return dateTimeFormatter.parseDateTime(strDate);
+			return LocalDate.parse(strDate, DateTimeFormat.forPattern("yyyy-MM-dd"));
 		} 
 		catch (Exception e) {
 			e.printStackTrace();
@@ -73,29 +80,26 @@ public class DateTimeUtil {
 		}
 		return date;
     }
-	static public DateTime createDateMaxTime(DateTime date) {
-		return date.withTime(23, 59, 59, 0);
-	}
-	static public DateTime createDateMinTime(DateTime date) {
-		return date.withTime(0, 0, 0, 0);
-	}
-	static public DateTime getDateMinSeason(DateTime date) {
+	static public LocalDate getDateMinSeason(LocalDate date) {
 		if (date.getMonthOfYear() <= 6 && date.getDayOfMonth() <= 30) {
-			return new DateTime(date.getYear() - 1, 7, 1, 0, 0, 0);
+			return new LocalDate(date.getYear() - 1, 7, 1);
 		}
 		else {
-			return new DateTime(date.getYear(), 7, 1, 0, 0, 0);
+			return new LocalDate(date.getYear(), 7, 1);
 		}
 	}	
-	static public DateTime getDateMaxSeason(DateTime date) {
+	static public LocalDate getDateMaxSeason(LocalDate date) {
 		if (date.getMonthOfYear() >= 7 && date.getDayOfMonth() >= 1) {
-			return new DateTime(date.getYear() + 1, 6, 30, 23, 59, 59);
+			return new LocalDate(date.getYear() + 1, 6, 30);
 		}
 		else {
-			return new DateTime(date.getYear(), 6, 30, 23, 59, 59);
+			return new LocalDate(date.getYear(), 6, 30);
 		}
 	}
-	static public DateTime getDateMinusOneDay(DateTime date) {
+	static public LocalDate getDateMinusOneDay(LocalDate date) {
 		return date.minusDays(1);
+	}
+	static public LocalDate getLocalDateFromDateTime(DateTime date) {
+		return new LocalDate(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth());
 	}
 }

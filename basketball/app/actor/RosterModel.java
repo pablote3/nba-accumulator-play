@@ -7,7 +7,7 @@ import models.Game.ProcessingType;
 import models.Player;
 import models.RosterPlayer;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import util.DateTimeUtil;
 import util.Utilities;
@@ -58,8 +58,8 @@ public class RosterModel extends UntypedActor {
 		else if(message instanceof ActiveRosterPlayers) {
 			ActiveRosterPlayers activeRosterPlayers = (ActiveRosterPlayers) message;
 			List<RosterPlayer> xmlStatsRosterPlayers = activeRosterPlayers.rosterPlayers;
-			DateTime fromDate = DateTimeUtil.createDateFromStringDate(rosterDate);
-			DateTime toDate = DateTimeUtil.getDateMaxSeason(DateTimeUtil.createDateFromStringDate(rosterDate));
+			LocalDate fromDate = DateTimeUtil.createDateFromStringDate(rosterDate);
+			LocalDate toDate = DateTimeUtil.getDateMaxSeason(DateTimeUtil.createDateFromStringDate(rosterDate));
 			StringBuffer output;
 
 			//activate new roster players

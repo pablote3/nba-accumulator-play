@@ -14,7 +14,7 @@ import javax.persistence.PersistenceException;
 
 import models.Game.ProcessingType;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.junit.Test;
 
 import util.DateTimeUtil;
@@ -362,12 +362,12 @@ public class RosterPlayerTest {
         	  Player.create(player, ProcessingType.online);
         	  
         	  Team team = Team.findByAbbr("GS", ProcessingType.online);
-        	  RosterPlayer rosterPlayer = TestMockHelper.getRosterPlayer(player, team, "2000-04-04", "9999-12-31");
+        	  RosterPlayer rosterPlayer = TestMockHelper.getRosterPlayer(player, team, "2000-04-04", "2002-12-31");
         	  RosterPlayer.create(rosterPlayer, ProcessingType.online);
         	  
         	  RosterPlayer createRosterPlayer = RosterPlayer.findByDatePlayerNameTeam("2000-04-04", player.getLastName(), player.getFirstName(), "golden-state-warriors", ProcessingType.online);
         	  
-        	  DateTime toDate = new DateTime(2000, 4, 15, 0, 0, 0);
+        	  LocalDate toDate = new LocalDate(2000, 4, 15);
         	  createRosterPlayer.setToDate(toDate);
         	  RosterPlayer.update(createRosterPlayer, ProcessingType.online);
         	  

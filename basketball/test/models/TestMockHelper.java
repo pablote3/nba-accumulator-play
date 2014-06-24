@@ -13,6 +13,7 @@ import models.Team.Conference;
 import models.Team.Division;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 
 public class TestMockHelper {
@@ -60,7 +61,7 @@ public class TestMockHelper {
   	  official.setNumber("99");
   	  official.setLastName("Hansen");
   	  official.setFirstName("Chris");
-      DateTime date = new DateTime(2012, 11, 5, 0, 0, 0);
+      LocalDate date = new LocalDate(2012, 11, 5);
 	  official.setFirstGame(date);
 	  official.setActive(false);
   	  return official;
@@ -73,9 +74,9 @@ public class TestMockHelper {
 	  player.setDisplayName("Tim Jones");
 	  player.setHeight((short)79);
 	  player.setWeight((short)215);
-	  DateTime date = null;
+	  LocalDate date = null;
 	  try {
-		  date = DateTimeFormat.forPattern("yyyy-MM-dd").parseDateTime(birthDate);
+		  date = LocalDate.parse(birthDate, DateTimeFormat.forPattern("yyyy-MM-dd"));
 	  } catch (Exception e) {
 	  	  e.printStackTrace();
 	  }
@@ -91,11 +92,11 @@ public class TestMockHelper {
 	  rosterPlayer.setTeam(team);
 	  rosterPlayer.setNumber("10");
 	  rosterPlayer.setPosition(Position.PG);
-	  DateTime fromDate = null;
-	  DateTime toDate = null;
+	  LocalDate fromDate = null;
+	  LocalDate toDate = null;
 	  try {
-	  	  fromDate = DateTimeFormat.forPattern("yyyy-MM-dd").parseDateTime(startDate);
-	  	  toDate = DateTimeFormat.forPattern("yyyy-MM-dd").parseDateTime(endDate);
+	  	  fromDate = LocalDate.parse(startDate, DateTimeFormat.forPattern("yyyy-MM-dd"));
+	  	  toDate = LocalDate.parse(endDate, DateTimeFormat.forPattern("yyyy-MM-dd"));
 	  } catch (Exception e) {
 	  	  e.printStackTrace();
 	  }

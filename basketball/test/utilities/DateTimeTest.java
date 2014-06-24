@@ -4,6 +4,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import util.DateTimeUtil;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.junit.Test;
 
 public class DateTimeTest {	
@@ -45,67 +46,67 @@ public class DateTimeTest {
     
     @Test
     public void displayDateShort() {
-    	String s = DateTimeUtil.getDisplayDateShort(new DateTime(2013, 3, 30, 19, 0, 0));
+    	String s = DateTimeUtil.getDisplayDateShort(new LocalDate(2013, 3, 30));
         assertThat(s).isEqualTo("03-30-2013");
     }
     
     @Test
     public void displayDateNaked() {
-    	String s = DateTimeUtil.getFindDateNaked(new DateTime(2013, 3, 30, 19, 0, 0));
+    	String s = DateTimeUtil.getFindDateNaked(new DateTime(2013, 3, 30, 0, 0, 0));
         assertThat(s).isEqualTo("20130330");
-    }   
-    
-    @Test
-    public void createDateMaxTime() {
-    	DateTime date = DateTimeUtil.createDateMaxTime(new DateTime(2013, 3, 30, 0, 0, 0));
-        assertThat(date).isEqualTo(new DateTime(2013, 03, 30, 23, 59, 59));
     }
+    
+//    @Test
+//    public void createDateMaxTime() {
+//    	LocalDate date = DateTimeUtil.createDateMaxTime(new LocalDate(2013, 3, 30));
+//        assertThat(date).isEqualTo(new LocalDate(2013, 03, 30));
+//    }
     
     @Test
     public void createDateMinSeason_Min() {
-    	DateTime date = DateTimeUtil.getDateMinSeason(new DateTime(2013, 7, 1, 0, 0, 0));
-        assertThat(date).isEqualTo(new DateTime(2013, 7, 1, 0, 0, 0));
+    	LocalDate date = DateTimeUtil.getDateMinSeason(new LocalDate(2013, 7, 1));
+        assertThat(date).isEqualTo(new LocalDate(2013, 7, 1));
     }
     
     @Test
     public void createDateMinSeason_Max() {
-    	DateTime date = DateTimeUtil.getDateMinSeason(new DateTime(2013, 6, 30, 23, 59, 59));
-    	assertThat(date).isEqualTo(new DateTime(2012, 7, 1, 0, 0, 0));
+    	LocalDate date = DateTimeUtil.getDateMinSeason(new LocalDate(2013, 6, 30));
+    	assertThat(date).isEqualTo(new LocalDate(2012, 7, 1));
     }
     
     @Test
     public void createDateMaxSeason_Min() {
-    	DateTime date = DateTimeUtil.getDateMaxSeason(new DateTime(2013, 7, 1, 0, 0, 0));
-    	assertThat(date).isEqualTo(new DateTime(2014, 6, 30, 23, 59, 59));
+    	LocalDate date = DateTimeUtil.getDateMaxSeason(new LocalDate(2013, 7, 1));
+    	assertThat(date).isEqualTo(new LocalDate(2014, 6, 30));
     }
     
     @Test
     public void createDateMaxSeason_Max() {
-    	DateTime date = DateTimeUtil.getDateMaxSeason(new DateTime(2014, 6, 30, 23, 59, 59));
-    	assertThat(date).isEqualTo(new DateTime(2014, 6, 30, 23, 59, 59));
+    	LocalDate date = DateTimeUtil.getDateMaxSeason(new LocalDate(2014, 6, 30));
+    	assertThat(date).isEqualTo(new LocalDate(2014, 6, 30));
     }
     
     @Test
     public void createSeasonFromDate_Max() {
-    	DateTime date = DateTimeUtil.getDateMaxSeason(new DateTime(2013, 6, 30, 23, 59, 59));
+    	LocalDate date = DateTimeUtil.getDateMaxSeason(new LocalDate(2013, 6, 30));
         assertThat(DateTimeUtil.getSeason(date)).isEqualTo("2012-13");
     }
     
     @Test
     public void createSeasonFromDate_Min() {
-    	DateTime date = DateTimeUtil.getDateMaxSeason(new DateTime(2013, 7, 1, 0, 0, 0));
+    	LocalDate date = DateTimeUtil.getDateMaxSeason(new LocalDate(2013, 7, 1));
         assertThat(DateTimeUtil.getSeason(date)).isEqualTo("2013-14");
     }
     
     @Test
     public void createDateMinusOneDay_EndOfMonth() {
-    	DateTime date = DateTimeUtil.getDateMinusOneDay(new DateTime(2013, 7, 31, 0, 0, 0));
-        assertThat(date).isEqualTo(new DateTime(2013, 7, 30, 0, 0, 0));
+    	LocalDate date = DateTimeUtil.getDateMinusOneDay(new LocalDate(2013, 7, 31));
+        assertThat(date).isEqualTo(new LocalDate(2013, 7, 30));
     }
     
     @Test
     public void createDateMinusOneDay_BeginingOfMonth() {
-    	DateTime date = DateTimeUtil.getDateMinusOneDay(new DateTime(2013, 7, 1, 0, 0, 0));
-        assertThat(date).isEqualTo(new DateTime(2013, 6, 30, 0, 0, 0));
+    	LocalDate date = DateTimeUtil.getDateMinusOneDay(new LocalDate(2013, 7, 1));
+        assertThat(date).isEqualTo(new LocalDate(2013, 6, 30));
     }
 }

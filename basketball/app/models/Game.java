@@ -14,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.TableGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 import play.data.validation.Constraints.Required;
@@ -23,6 +25,7 @@ import services.InjectorModule;
 import util.DateTimeUtil;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.EbeanServer;
@@ -92,6 +95,7 @@ public class Game extends Model {
 
 	@Required
 	@Column(name="date", nullable=false)
+	@Temporal(TemporalType.TIMESTAMP)
 	@JsonProperty("start_date_time")
 	private DateTime date;
 	public DateTime getDate() {
@@ -204,9 +208,9 @@ public class Game extends Model {
 	  	if (maxRows > 0)
 		  	query.setMaxRows(maxRows);
 
-	  	DateTime maxDate = DateTimeUtil.getDateMaxSeason(DateTimeUtil.createDateFromStringDate(propDate));
+	  	LocalDate maxDate = DateTimeUtil.getDateMaxSeason(DateTimeUtil.createDateFromStringDate(propDate));
 
-	  	query.where().between("date", propDate + " 00:00:00", DateTimeUtil.getFindDateTimeShort(maxDate));
+	  	query.where().between("date", propDate, maxDate);
 	  	query.orderBy("t0.date asc");
 	    List<Game> games = query.findList();
 	    
@@ -242,11 +246,11 @@ public class Game extends Model {
 	  	if (maxRows > 0)
 		  	query.setMaxRows(maxRows);
 	  	
-	  	DateTime maxDate = DateTimeUtil.getDateMaxSeason(DateTimeUtil.createDateFromStringDate(propDate));
+	  	LocalDate maxDate = DateTimeUtil.getDateMaxSeason(DateTimeUtil.createDateFromStringDate(propDate));
 	  	
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
-	  	query.where().between("t0.date", propDate + " 00:00:00", DateTimeUtil.getFindDateTimeShort(maxDate));
+	  	query.where().between("t0.date", propDate, maxDate);
 	    query.where().eq("t2.team_key", propTeam);
 	    query.orderBy("t0.date asc");
 	    List<Game> games = query.findList();

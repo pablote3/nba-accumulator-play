@@ -18,7 +18,7 @@ import javax.persistence.Version;
 
 import models.Game.ProcessingType;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
@@ -113,11 +113,11 @@ public class Official extends Model {
 	@Required
 	@Column(name="firstGame", nullable=false)
 	@Temporal(TemporalType.DATE)
-	private DateTime firstGame;
-	public DateTime getFirstGame() {
+	private LocalDate firstGame;
+	public LocalDate getFirstGame() {
 		return firstGame;
 	}
-	public void setFirstGame(DateTime firstGame) {
+	public void setFirstGame(LocalDate firstGame) {
 		this.firstGame = firstGame;
 	}
 	public String getFirstGameDisplay() {

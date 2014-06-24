@@ -20,7 +20,7 @@ import models.Game.ProcessingType;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
@@ -134,11 +134,11 @@ public class Player extends Model {
 	@Column(name="birthdate", nullable=true)
 	@Temporal(TemporalType.DATE)
 	@JsonProperty("birthdate")
-	private DateTime birthDate;
-	public DateTime getBirthDate() {
+	private LocalDate birthDate;
+	public LocalDate getBirthDate() {
 		return birthDate;
 	}
-	public void setBirthDate(DateTime birthDate) {
+	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
 	

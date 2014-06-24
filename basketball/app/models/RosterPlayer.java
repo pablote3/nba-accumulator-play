@@ -20,7 +20,7 @@ import javax.persistence.TemporalType;
 
 import models.Game.ProcessingType;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
@@ -95,11 +95,11 @@ public class RosterPlayer extends Model {
 	@Required
 	@Column(name="fromDate", nullable=false)
 	@Temporal(TemporalType.DATE)
-	private DateTime fromDate;
-	public DateTime getFromDate() {
+	private LocalDate fromDate;
+	public LocalDate getFromDate() {
 		return fromDate;
 	}
-	public void setFromDate(DateTime fromDate) {
+	public void setFromDate(LocalDate fromDate) {
 		this.fromDate = fromDate;
 	}
 	public String getFromDateDisplay() {
@@ -109,11 +109,11 @@ public class RosterPlayer extends Model {
 	@Required
 	@Column(name="toDate", nullable=false)
 	@Temporal(TemporalType.DATE)
-	private DateTime toDate;
-	public DateTime getToDate() {
+	private LocalDate toDate;
+	public LocalDate getToDate() {
 		return toDate;
 	}
-	public void setToDate(DateTime toDate) {
+	public void setToDate(LocalDate toDate) {
 		this.toDate = toDate;
 	}
 	public String getToDateDisplay() {
@@ -180,8 +180,8 @@ public class RosterPlayer extends Model {
 	
 	public static List<RosterPlayer> findByDate(String date) {
 		Query<RosterPlayer> query = Ebean.find(RosterPlayer.class);
-	    query.where().lt("fromDate", date + " 00:00:01");
-	    query.where().gt("toDate", date + " 23:59:58");	    
+	    query.where().le("fromDate", date);
+	    query.where().ge("toDate", date);	    
 	    List<RosterPlayer> rosterPlayer = query.findList();
 	    return rosterPlayer;
 	}
@@ -194,8 +194,8 @@ public class RosterPlayer extends Model {
   		else
   			query = Ebean.find(RosterPlayer.class);	
 	  	query.fetch("team");
-	    query.where().lt("fromDate", date + " 00:00:01");
-	    query.where().gt("toDate", date + " 23:59:58");	 
+	    query.where().le("fromDate", date);
+	    query.where().ge("toDate", date);	 
 	    query.where().eq("t1.team_key", teamKey);
 	    rosterPlayer = query.findList();
 	    return rosterPlayer;
@@ -209,8 +209,8 @@ public class RosterPlayer extends Model {
   		else
   			query = Ebean.find(RosterPlayer.class);	
 	  	query.fetch("player");
-	  	query.where().lt("fromDate", date + " 00:00:01");
-	  	query.where().gt("toDate", date + " 23:59:58");	 
+	  	query.where().le("fromDate", date);
+	  	query.where().ge("toDate", date);	 
 	  	query.where().eq("t1.last_Name", lastName);
 	  	query.where().eq("t1.first_Name", firstName);
 	  	rosterPlayer = query.findList();	    
@@ -226,8 +226,8 @@ public class RosterPlayer extends Model {
   			query = Ebean.find(RosterPlayer.class);	
 	  	query.fetch("player");
 	  	query.fetch("team");
-	  	query.where().lt("fromDate", gameDate + " 00:00:01");
-	  	query.where().gt("toDate", gameDate + " 23:59:58");	 
+	  	query.where().le("fromDate", gameDate);
+	  	query.where().ge("toDate", gameDate);	 
 	  	query.where().eq("t1.last_Name", lastName);
 	  	query.where().eq("t1.first_Name", firstName);
 	  	query.where().eq("t2.team_key", teamKey);
@@ -244,8 +244,8 @@ public class RosterPlayer extends Model {
   			query = Ebean.find(RosterPlayer.class);	
 		query.fetch("player");
 	  	query.fetch("team");
-	  	query.where().lt("fromDate", gameDate + " 00:00:01");
-	  	query.where().gt("fromDate", DateTimeUtil.getDateMinSeason(DateTimeUtil.createDateFromStringDate(gameDate)));	 
+	  	query.where().le("fromDate", gameDate);
+	  	query.where().ge("fromDate", DateTimeUtil.getDateMinSeason(DateTimeUtil.createDateFromStringDate(gameDate)));	 
 		query.where().eq("t1.last_Name", lastName);
 		query.where().eq("t1.first_Name", firstName);
 		query.where().eq("t1.birthdate", birthDate);
@@ -256,7 +256,6 @@ public class RosterPlayer extends Model {
 	}
 	
 	public static void create(RosterPlayer rosterPlayer, ProcessingType processingType) {
-		rosterPlayer.setToDate(DateTimeUtil.createDateMaxTime(rosterPlayer.getToDate()));
 		if (processingType.equals(ProcessingType.batch))
 			ebeanServer.save(rosterPlayer);
 		else
@@ -264,7 +263,6 @@ public class RosterPlayer extends Model {
 	}
 	
 	public static void update(RosterPlayer rosterPlayer, ProcessingType processingType) {
-		rosterPlayer.setToDate(DateTimeUtil.createDateMaxTime(rosterPlayer.getToDate()));
 		if (processingType.equals(ProcessingType.batch))
 			ebeanServer.update(rosterPlayer);
 		else
