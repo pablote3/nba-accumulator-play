@@ -56,12 +56,6 @@ public class DateTimeTest {
         assertThat(s).isEqualTo("20130330");
     }
     
-//    @Test
-//    public void createDateMaxTime() {
-//    	LocalDate date = DateTimeUtil.createDateMaxTime(new LocalDate(2013, 3, 30));
-//        assertThat(date).isEqualTo(new LocalDate(2013, 03, 30));
-//    }
-    
     @Test
     public void createDateMinSeason_Min() {
     	LocalDate date = DateTimeUtil.getDateMinSeason(new LocalDate(2013, 7, 1));
