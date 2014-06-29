@@ -45,7 +45,7 @@ public class Property extends UntypedActor {
 				if (properties.getProperty("xmlstats.delay") != null && !Utilities.isValidNumber(properties.getProperty("xmlstats.delay")))
 					throw new PropertyException("InvalidNumber - xmlstats.delay");
 				
-				Game.ProcessingType.valueOf(properties.getProperty("aggregator.processType"));
+				Game.ProcessingType.valueOf(properties.getProperty("accumulator.processType"));
 			}
 			catch (FileNotFoundException e) {
 				throw new PropertyException("FileNotFoundException");
@@ -68,9 +68,9 @@ public class Property extends UntypedActor {
 				String date = props.getProperty("game.date");
 				String team = props.getProperty("game.team");
 				String size = props.getProperty("game.size");
-				String processType = props.getProperty("aggregator.processType");
-				String sourceBoxScore = props.getProperty("aggregator.source.boxScore");
-				String sourceRoster = props.getProperty("aggregator.source.roster");
+				String processType = props.getProperty("accumulator.processType");
+				String sourceBoxScore = props.getProperty("accumulator.source.boxScore");
+				String sourceRoster = props.getProperty("accumulator.source.roster");
 				String accessToken = props.getProperty("xmlstats.accessToken");
 				String userAgentName = props.getProperty("xmlstats.userAgentName");
 				String urlBoxScore = props.getProperty("xmlstats.urlBoxScore");
