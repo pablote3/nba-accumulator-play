@@ -29,7 +29,13 @@ public class Property extends UntypedActor {
 	private Properties getProperties() throws PropertyException {
 		if (properties == null) {
 			try {
-        		Path path =  Paths.get(System.getProperty("config.properties")).resolve("service.properties");
+				String strPath = System.getProperty("config.properties");
+				if (strPath == null) {
+					strPath = "/home/pablote/pdrive/pwork/config/accumulator/properties";
+				}
+        		Path path =  Paths.get(strPath).resolve("service.properties");
+        		System.out.println("path = " + path);
+        		
         		File file = path.toFile();
 				properties = new Properties();
 				FileInputStream in = new FileInputStream(file);
