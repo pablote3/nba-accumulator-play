@@ -233,6 +233,7 @@ public class Team extends Model {
   			query = Ebean.find(Team.class);	
 
 		query.where().eq("abbr", abbr);
+		query.where().eq("active", true);
 		team = query.findUnique();
 		return team;
 	}
