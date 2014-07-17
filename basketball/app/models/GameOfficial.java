@@ -1,5 +1,6 @@
 package models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,7 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.TableGenerator;
 
 import models.Game.ProcessingType;
-
 import play.db.ebean.Model;
 import services.EbeanServerService;
 import services.EbeanServerServiceImpl;
@@ -57,6 +57,15 @@ public class GameOfficial extends Model {
 	}
 	public void setOfficial(Official official) {
 		this.official = official;
+	}
+	
+	@Column(name="count", nullable=false)
+	private Short count;
+	public Short getCount() {
+		return count;
+	}
+	public void setCount(Short count) {
+		this.count = count;
 	}
 	
 	public static void delete(GameOfficial gameOfficial, ProcessingType processingType) {
