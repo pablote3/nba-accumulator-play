@@ -1,8 +1,8 @@
 package services;
 
 import static org.fest.assertions.Assertions.assertThat;
-
 import models.Team;
+import models.Game.ProcessingType;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -57,7 +57,7 @@ public class EbeanServerTest {
 	@Ignore
     @Test
     public void invokeEbeanServerUsingTeamFinder() {
-		Team team = Team.findByKey("key", "sacramento-kings");
+		Team team = Team.findByKey("key", "sacramento-kings", ProcessingType.batch);
         assertThat(team.getAbbr()).isEqualTo("SAC");
     }
     

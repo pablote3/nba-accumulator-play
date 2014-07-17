@@ -184,8 +184,11 @@ public class Official extends Model {
 	    return official;
 	}
 	
-	public static void create(Official official) {
-		official.save();
+	public static void create(Official official, ProcessingType processingType) {
+		if (processingType.equals(ProcessingType.batch))
+			ebeanServer.save(official);
+		else
+			Ebean.save(official);
 	}
 	  
 	public static void delete(Long id) {

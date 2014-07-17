@@ -211,8 +211,13 @@ public class Team extends Model {
 		return team;
 	}
 	
-	public static Team findByKey(String key, String value) {
-		Query<Team> query = Ebean.find(Team.class);
+	public static Team findByKey(String key, String value, ProcessingType processingType) {
+		Query<Team> query;
+		if (processingType.equals(ProcessingType.batch))
+			query = ebeanServer.find(Team.class);
+		else
+			query = Ebean.find(Team.class);
+		
 		query.where().eq(key, value);		
 		Team team = query.findUnique();
 		return team;
@@ -266,8 +271,11 @@ public class Team extends Model {
 		return teams;
 	}
 	  
-	public static void create(Team team) {
-	  	team.save();
+	public static void create(Team team, ProcessingType processingType) {
+		if (processingType.equals(ProcessingType.batch))
+			ebeanServer.save(team);
+		else
+			Ebean.save(team);
 	}
 	  
 	public static void delete(Long id) {

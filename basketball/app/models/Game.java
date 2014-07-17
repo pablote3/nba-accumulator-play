@@ -156,8 +156,11 @@ public class Game extends Model {
         @EnumValue("API") api
     }
 	
-	public static void create(Game game) {
-	  	game.save();
+	public static void create(Game game, ProcessingType processingType) {
+		if (processingType.equals(ProcessingType.batch))
+			ebeanServer.save(game);
+		else
+			Ebean.save(game);
 	}
 	
 	public static void update(Game game, ProcessingType processingType) {

@@ -60,6 +60,7 @@ public class JsonHelper {
         	official = Official.findByName(officials[i].getLastName(), officials[i].getFirstName(), processingType);
         	gameOfficial = new GameOfficial();
         	gameOfficial.setOfficial(official);
+        	gameOfficial.setCount((short) (i+1));
         	gameOfficials.add(gameOfficial);
         }
     	return gameOfficials;

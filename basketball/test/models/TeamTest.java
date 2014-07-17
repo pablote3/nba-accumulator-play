@@ -32,9 +32,9 @@ public class TeamTest {
     public void findByKey() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Team team1 = Team.findByKey("shortName", "Pelicans");
+        	  Team team1 = Team.findByKey("shortName", "Pelicans", ProcessingType.online);
               assertThat(team1.getFullName()).isEqualTo("New Orleans Pelicans");
-              assertThat(team1.getAbbr()).isEqualTo("NOP");
+              assertThat(team1.getAbbr()).isEqualTo("NO");
               assertThat(team1.getActive()).isTrue();
           }
         });
@@ -104,9 +104,9 @@ public class TeamTest {
     public void createTeam() {
         running(fakeApplication(), new Runnable() {
           public void run() {       
-              Team.create(TestMockHelper.getTeam());
+              Team.create(TestMockHelper.getTeam(), ProcessingType.online);
               
-              Team createTeam = Team.findByKey("key", "seattle-supersonics");
+              Team createTeam = Team.findByKey("key", "seattle-supersonics", ProcessingType.online);
               assertThat(createTeam.getFullName()).isEqualTo("Seattle Supersonics");
               assertThat(createTeam.getAbbr()).isEqualTo("SEA");
               Team.delete(createTeam.getId());
@@ -118,11 +118,11 @@ public class TeamTest {
     public void updateTeam() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-              Team team = Team.findByKey("key", "new-orleans-hornets");
+              Team team = Team.findByKey("key", "new-orleans-hornets", ProcessingType.online);
               team.setActive(true);
               team.update();
               
-              Team updateTeam = Team.findByKey("key", "new-orleans-hornets");
+              Team updateTeam = Team.findByKey("key", "new-orleans-hornets", ProcessingType.online);
               assertThat(updateTeam.getFullName()).isEqualTo("New Orleans Hornets");
               assertThat(updateTeam.getAbbr()).isEqualTo("NO");
               assertThat(updateTeam.getActive()).isTrue();
@@ -137,7 +137,7 @@ public class TeamTest {
         running(fakeApplication(), new Runnable() {
           public void run() {
        		  try {
-       			  Team team = Team.findByKey("key", "new-orleans-hornets");
+       			  Team team = Team.findByKey("key", "new-orleans-hornets", ProcessingType.online);
        			  team.setFullName(null);
        			  team.update();
        		  } catch (PersistenceException e) {

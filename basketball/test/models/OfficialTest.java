@@ -69,7 +69,7 @@ public class OfficialTest {
     public void createOfficial() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Official.create(TestMockHelper.getOfficial());
+        	  Official.create(TestMockHelper.getOfficial(), ProcessingType.online);
               
         	  Official createOfficial = Official.findByName("Hansen", "Chris", ProcessingType.online);
               assertThat(createOfficial.getNumber()).isEqualTo("99");

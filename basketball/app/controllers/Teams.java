@@ -2,6 +2,7 @@ package controllers;
 
 import static play.data.Form.form;
 import models.Team;
+import models.Game.ProcessingType;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -34,7 +35,7 @@ public class Teams extends Controller {
      */
     public static Result search(String key, String value) {
         try {
-        	Team team = Team.findByKey(key, value);
+        	Team team = Team.findByKey(key, value, ProcessingType.online);
 			return ok(team.getId().toString());
 		} catch (Exception e) {
 			return badRequest();

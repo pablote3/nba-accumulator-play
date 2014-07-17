@@ -151,14 +151,14 @@ public class GameTest {
         	Game game = TestMockHelper.getGameScheduled();
 		    
 		    BoxScore homeBoxScore = TestMockHelper.getBoxScoreHomeScheduled();
-		    homeBoxScore.setTeam(Team.findByKey("key", "new-orleans-pelicans"));
+		    homeBoxScore.setTeam(Team.findByKey("key", "new-orleans-pelicans", ProcessingType.online));
 		    game.addBoxScore(homeBoxScore);
 		    
 		    BoxScore awayBoxScore = TestMockHelper.getBoxScoreAwayScheduled();
-		    awayBoxScore.setTeam(Team.findByKey("key", "sacramento-kings"));
+		    awayBoxScore.setTeam(Team.findByKey("key", "sacramento-kings", ProcessingType.online));
 		    game.addBoxScore(awayBoxScore);
 		    
-		    Game.create(game);
+		    Game.create(game, ProcessingType.online);
 		    Long gameId = game.getId();
 		    
 		    Game createGame = Game.findById(gameId, ProcessingType.online);
@@ -170,7 +170,7 @@ public class GameTest {
       	  			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("SAC");
       	  		}
       	  		else {
-      	  			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("NOP");
+      	  			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("NO");
       	  		}
       	  	}
             Game.delete(gameId, ProcessingType.online);		    
@@ -186,23 +186,25 @@ public class GameTest {
         	game.setGameOfficials(TestMockHelper.getGameOfficials());
 		    
 		    BoxScore homeBoxScore = TestMockHelper.getBoxScoreHomeCompleted(TestMockHelper.getBoxScoreHomeScheduled());
-		    homeBoxScore.setTeam(Team.findByKey("key", "toronto-raptors"));
+		    homeBoxScore.setTeam(Team.findByKey("key", "toronto-raptors", ProcessingType.online));
 		    homeBoxScore.setPeriodScores(TestMockHelper.getPeriodScoresHome());
 		    game.addBoxScore(homeBoxScore);
 		    
 		    BoxScore awayBoxScore = TestMockHelper.getBoxScoreAwayCompleted(TestMockHelper.getBoxScoreAwayScheduled());
-		    awayBoxScore.setTeam(Team.findByKey("key", "detroit-pistons"));
+		    awayBoxScore.setTeam(Team.findByKey("key", "detroit-pistons", ProcessingType.online));
 		    awayBoxScore.setPeriodScores(TestMockHelper.getPeriodScoresAway());
 		    game.addBoxScore(awayBoxScore);
 		    
-		    Game.create(game);
+		    Game.create(game, ProcessingType.online);
 		    Long gameId = game.getId();
 		    
 		    Game createGame = Game.findById(gameId, ProcessingType.online);
             assertThat(createGame.getSeasonType()).isEqualTo(SeasonType.pre);
             assertThat(createGame.getGameOfficials().size()).isEqualTo(3);
-            if (createGame.getGameOfficials().size() > 0)
-            	assertThat(createGame.getGameOfficials().get(0).getOfficial().getLastName()).endsWith("Brown");
+            if (createGame.getGameOfficials().size() > 0) {
+            	assertThat(createGame.getGameOfficials().get(0).getOfficial().getLastName()).isEqualTo("Brown");
+            	assertThat(createGame.getGameOfficials().get(0).getCount()).isEqualTo((short)1);
+            }
             assertThat(createGame.getBoxScores().size()).isEqualTo(2);
             for (int i = 0; i < createGame.getBoxScores().size(); i++) {
             	BoxScore boxScore = createGame.getBoxScores().get(i);
@@ -231,14 +233,14 @@ public class GameTest {
           	Game scheduleGame = TestMockHelper.getGameScheduled();
 		    
   		    BoxScore homeBoxScore = TestMockHelper.getBoxScoreHomeScheduled();
-  		    homeBoxScore.setTeam(Team.findByKey("key", "new-orleans-pelicans"));
+  		    homeBoxScore.setTeam(Team.findByKey("key", "new-orleans-pelicans", ProcessingType.online));
   		    scheduleGame.addBoxScore(homeBoxScore);
   		    
   		    BoxScore awayBoxScore = TestMockHelper.getBoxScoreAwayScheduled();
-  		    awayBoxScore.setTeam(Team.findByKey("key", "sacramento-kings"));
+  		    awayBoxScore.setTeam(Team.findByKey("key", "sacramento-kings", ProcessingType.online));
   		    scheduleGame.addBoxScore(awayBoxScore);
   		    
-  		    Game.create(scheduleGame);
+  		    Game.create(scheduleGame, ProcessingType.online);
   		    Long gameId = scheduleGame.getId();
 
   		    Game completeGame = Game.findById(gameId, ProcessingType.online);  		    
@@ -262,8 +264,10 @@ public class GameTest {
   		    Game updateGame = Game.findById(gameId, ProcessingType.online);
             assertThat(updateGame.getSeasonType()).isEqualTo(SeasonType.pre);
             assertThat(updateGame.getBoxScores().size()).isEqualTo(2);
-            if (updateGame.getGameOfficials().size() > 0)
+            if (updateGame.getGameOfficials().size() > 0) {
             	assertThat(updateGame.getGameOfficials().get(0).getOfficial().getLastName()).endsWith("Brown");
+            	assertThat(updateGame.getGameOfficials().get(0).getCount()).isEqualTo((short)1);
+            }
             assertThat(updateGame.getBoxScores().size()).isEqualTo(2);
             for (int i = 0; i < updateGame.getBoxScores().size(); i++) {
             	BoxScore boxScore = updateGame.getBoxScores().get(i);
@@ -275,7 +279,7 @@ public class GameTest {
             	}
             	else {
                     assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)30);
-                    assertThat(boxScore.getTeam().getAbbr()).isEqualTo("NOP");
+                    assertThat(boxScore.getTeam().getAbbr()).isEqualTo("NO");
                     if (boxScore.getPeriodScores().size() > 0)
                     	assertThat(boxScore.getPeriodScores().get(0).getScore()).isEqualTo((short)25);
             	}

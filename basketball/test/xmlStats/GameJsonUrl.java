@@ -89,15 +89,15 @@ public class GameJsonUrl {
 			            
 			            BoxScore awayBoxScore = new BoxScore();
 			            awayBoxScore.setLocation(Location.away);
-			            awayBoxScore.setTeam(Team.findByKey("key", xmlStats.away_team.getKey()));
+			            awayBoxScore.setTeam(Team.findByKey("key", xmlStats.away_team.getKey(), ProcessingType.online));
 			            scheduleGame.addBoxScore(awayBoxScore);
 			              
 			            BoxScore homeBoxScore = new BoxScore();
 			            homeBoxScore.setLocation(Location.home);
-			            homeBoxScore.setTeam(Team.findByKey("key", xmlStats.home_team.getKey()));
+			            homeBoxScore.setTeam(Team.findByKey("key", xmlStats.home_team.getKey(), ProcessingType.online));
 			            scheduleGame.addBoxScore(homeBoxScore);
 
-			            Game.create(scheduleGame);
+			            Game.create(scheduleGame, ProcessingType.online);
 			            Long gameId = scheduleGame.getId();
 				              
 			    		Game completeGame = Game.findById(gameId, ProcessingType.online);
@@ -130,6 +130,7 @@ public class GameJsonUrl {
 			            assertThat(createGame.getGameOfficials().size()).isEqualTo(3);
 			            if (createGame.getGameOfficials().size() > 0) {
 			            	assertThat(createGame.getGameOfficials().get(1).getOfficial().getLastName()).endsWith("Crawford");
+			            	assertThat(createGame.getGameOfficials().get(1).getCount()).isEqualTo((short)2);
 			            	assertThat(createGame.getBoxScores().size()).isEqualTo(2);
 			              	for (int i = 0; i < createGame.getBoxScores().size(); i++) {
 			              		BoxScore boxScore = createGame.getBoxScores().get(i);
