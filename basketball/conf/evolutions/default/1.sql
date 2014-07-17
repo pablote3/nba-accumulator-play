@@ -74,6 +74,7 @@ create table game_official (
   id                        bigint auto_increment not null,
   game_id                   bigint,
   official_id               bigint,
+  count                     smallint not null,
   constraint pk_game_official primary key (id))
 ;
 
