@@ -203,7 +203,7 @@ public class GameTest {
             assertThat(createGame.getGameOfficials().size()).isEqualTo(3);
             if (createGame.getGameOfficials().size() > 0) {
             	assertThat(createGame.getGameOfficials().get(0).getOfficial().getLastName()).isEqualTo("Brown");
-            	assertThat(createGame.getGameOfficials().get(0).getCount()).isEqualTo((short)1);
+            	assertThat(createGame.getGameOfficials().get(0).getCounter()).isEqualTo((short)1);
             }
             assertThat(createGame.getBoxScores().size()).isEqualTo(2);
             for (int i = 0; i < createGame.getBoxScores().size(); i++) {
@@ -266,7 +266,7 @@ public class GameTest {
             assertThat(updateGame.getBoxScores().size()).isEqualTo(2);
             if (updateGame.getGameOfficials().size() > 0) {
             	assertThat(updateGame.getGameOfficials().get(0).getOfficial().getLastName()).endsWith("Brown");
-            	assertThat(updateGame.getGameOfficials().get(0).getCount()).isEqualTo((short)1);
+            	assertThat(updateGame.getGameOfficials().get(0).getCounter()).isEqualTo((short)1);
             }
             assertThat(updateGame.getBoxScores().size()).isEqualTo(2);
             for (int i = 0; i < updateGame.getBoxScores().size(); i++) {
