@@ -59,13 +59,13 @@ public class GameOfficial extends Model {
 		this.official = official;
 	}
 	
-	@Column(name="count", nullable=false)
-	private Short count;
-	public Short getCount() {
-		return count;
+	@Column(name="counter", nullable=false)
+	private Short counter;
+	public Short getCounter() {
+		return counter;
 	}
-	public void setCount(Short count) {
-		this.count = count;
+	public void setCounter(Short counter) {
+		this.counter = counter;
 	}
 	
 	public static void delete(GameOfficial gameOfficial, ProcessingType processingType) {

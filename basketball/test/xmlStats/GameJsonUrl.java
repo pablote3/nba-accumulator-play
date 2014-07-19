@@ -130,7 +130,7 @@ public class GameJsonUrl {
 			            assertThat(createGame.getGameOfficials().size()).isEqualTo(3);
 			            if (createGame.getGameOfficials().size() > 0) {
 			            	assertThat(createGame.getGameOfficials().get(1).getOfficial().getLastName()).endsWith("Crawford");
-			            	assertThat(createGame.getGameOfficials().get(1).getCount()).isEqualTo((short)2);
+			            	assertThat(createGame.getGameOfficials().get(1).getCounter()).isEqualTo((short)2);
 			            	assertThat(createGame.getBoxScores().size()).isEqualTo(2);
 			              	for (int i = 0; i < createGame.getBoxScores().size(); i++) {
 			              		BoxScore boxScore = createGame.getBoxScores().get(i);

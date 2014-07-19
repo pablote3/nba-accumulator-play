@@ -127,7 +127,7 @@ public class GameJsonFile {
 			    
         			assertThat(createGame.getSeasonType()).isEqualTo(SeasonType.post);
        				assertThat(createGame.getGameOfficials().get(1).getOfficial().getLastName()).endsWith("Crawford");
-       				assertThat(createGame.getGameOfficials().get(1).getCount()).isEqualTo((short)2);
+       				assertThat(createGame.getGameOfficials().get(1).getCounter()).isEqualTo((short)2);
 	              	for (int i = 0; i < createGame.getBoxScores().size(); i++) {
 	              		BoxScore boxScore = createGame.getBoxScores().get(i);
 	              		if (boxScore.getLocation().equals(Location.away)) {

@@ -42,19 +42,19 @@ public class TestMockHelper {
 	    official = Official.findByName("Brown", "Tony", ProcessingType.online);
 	  	gameOfficial = new GameOfficial();
 	  	gameOfficial.setOfficial(official);
-	  	gameOfficial.setCount((short)1);
+	  	gameOfficial.setCounter((short)1);
 	  	gameOfficials.add(gameOfficial);
 	  	
 	  	official = Official.findByName("Davis", "Marc", ProcessingType.online);
 	  	gameOfficial = new GameOfficial();
 	  	gameOfficial.setOfficial(official);
-	  	gameOfficial.setCount((short)2);
+	  	gameOfficial.setCounter((short)2);
 	  	gameOfficials.add(gameOfficial);
     	
 	    official = Official.findByName("Palmer", "Violet", ProcessingType.online);
 	  	gameOfficial = new GameOfficial();
 	  	gameOfficial.setOfficial(official);
-	  	gameOfficial.setCount((short)3);
+	  	gameOfficial.setCounter((short)3);
 	  	gameOfficials.add(gameOfficial);
     	return gameOfficials;
     }
