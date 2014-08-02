@@ -89,7 +89,7 @@ public class Official extends Model {
 	}
 	
 	@Required
-	@Column(name="lastName", length=35, nullable=false)
+	@Column(name="lastName", length=25, nullable=false)
 	@JsonProperty("last_name")
 	private String lastName;
 	public String getLastName() {
@@ -100,7 +100,7 @@ public class Official extends Model {
 	}
 
 	@Required
-	@Column(name="firstName", length=35, nullable=false)
+	@Column(name="firstName", length=25, nullable=false)
 	@JsonProperty("first_name")
 	private String firstName;
 	public String getFirstName() {
