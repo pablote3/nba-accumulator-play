@@ -18,8 +18,7 @@ import com.typesafe.config.ConfigFactory;
       
 		@Override
 		public void onStart(Application app) {
-			Logger.info("Application has started");
-			System.out.println("Application has started");
+			Logger.info("Application has started - Global.onStart()");
 			Config config = ConfigFactory.parseString("akka.loglevel = DEBUG \n" + "akka.actor.debug.lifecycle = on");
 			ActorSystem system = ActorSystem.create("GameSystem", config);
 			listener = system.actorOf(Props.create(Listener.class), "listener");

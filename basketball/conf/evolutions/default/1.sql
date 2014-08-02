@@ -81,8 +81,8 @@ create table game_official (
 create table official (
   id                        bigint auto_increment not null,
   number                    varchar(2) not null,
-  lastName                  varchar(35) not null,
-  firstName                 varchar(35) not null,
+  lastName                  varchar(25) not null,
+  firstName                 varchar(25) not null,
   firstGame                 date not null,
   active                    tinyint(1) default 0 not null,
   last_update               datetime not null,
