@@ -32,9 +32,9 @@ public class TeamTest {
     public void findByKey() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Team team1 = Team.findByKey("shortName", "Pelicans", ProcessingType.online);
-              assertThat(team1.getFullName()).isEqualTo("New Orleans Pelicans");
-              assertThat(team1.getAbbr()).isEqualTo("NO");
+        	  Team team1 = Team.findByKey("shortName", "Spurs", ProcessingType.online);
+              assertThat(team1.getFullName()).isEqualTo("San Antonio Spurs");
+              assertThat(team1.getAbbr()).isEqualTo("SA");
               assertThat(team1.getActive()).isTrue();
           }
         });
