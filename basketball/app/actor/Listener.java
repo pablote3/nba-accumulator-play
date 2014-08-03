@@ -22,10 +22,10 @@ public class Listener extends UntypedActor {
 			System.out.println("XmlStats Exception " + pe.getMessage() + " - " + getSender());
 		}
 		else if (message.equals(Wait)) {
-			System.out.println("Online Mission Compete");	
+			System.out.println("Online Mission Complete");	
 		}
 		else if (message.equals(Finish)) {
-			System.out.println("Batch Mission Compete");
+			System.out.println("Batch Mission Complete");
 		}
 		else {
 			unhandled(message);

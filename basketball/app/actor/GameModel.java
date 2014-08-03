@@ -16,6 +16,7 @@ import util.DateTimeUtil;
 import util.Utilities;
 import actor.ActorApi.CompleteGame;
 import actor.ActorApi.GameIds;
+import actor.ActorApi.IncompleteOfficialException;
 import actor.ActorApi.IncompleteRosterException;
 import actor.ActorApi.ModelException;
 import actor.ActorApi.ScheduleGame;
@@ -105,6 +106,10 @@ public class GameModel extends UntypedActor {
 		}
 		else if(message instanceof IncompleteRosterException) {
 			controller.tell(message, getSelf());
+		}
+		else if(message instanceof IncompleteOfficialException) {
+			ModelException me = new ModelException(((IncompleteOfficialException)message).getMessage());
+			listener.tell(me, getSelf());
 		}
 		else {
 			unhandled(message);

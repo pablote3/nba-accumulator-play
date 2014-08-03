@@ -108,6 +108,14 @@ public interface ActorApi {
 		}
 	}
 	
+	public static class IncompleteOfficialException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+		
+		public IncompleteOfficialException(String msg) {
+			super(msg);
+		}
+	}
+	
 	public static class GameIds {
 		public final List<Long> games;
 		

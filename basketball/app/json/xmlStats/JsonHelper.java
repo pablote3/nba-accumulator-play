@@ -57,11 +57,19 @@ public class JsonHelper {
 	    Official official;
 	    
         for (int i = 0; i < officials.length; i++) {
-        	official = Official.findByName(officials[i].getLastName(), officials[i].getFirstName(), processingType);
-        	gameOfficial = new GameOfficial();
-        	gameOfficial.setOfficial(official);
-        	gameOfficial.setCounter((short) (i+1));
-        	gameOfficials.add(gameOfficial);
+        	String lastName = officials[i].getLastName();
+        	String firstName = officials[i].getFirstName();
+        	official = Official.findByName(lastName, firstName, processingType);
+        	if (official == null) {
+        		System.out.println("Official not found " + firstName + " " + lastName);
+        		return null;
+        	}
+        	else {
+        		gameOfficial = new GameOfficial();
+        		gameOfficial.setOfficial(official);
+        		gameOfficial.setCounter((short) (i+1));
+        		gameOfficials.add(gameOfficial);
+        	}
         }
     	return gameOfficials;
     }

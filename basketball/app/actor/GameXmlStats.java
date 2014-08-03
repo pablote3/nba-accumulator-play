@@ -29,6 +29,7 @@ import models.GameOfficial;
 import models.PeriodScore;
 import util.DateTimeUtil;
 import actor.ActorApi.CompleteGame;
+import actor.ActorApi.IncompleteOfficialException;
 import actor.ActorApi.IncompleteRosterException;
 import actor.ActorApi.ScheduleGame;
 import actor.ActorApi.ServiceProps;
@@ -112,7 +113,12 @@ public class GameXmlStats extends UntypedActor {
 							GameOfficial.delete(game.getGameOfficials().get(i), processingType);
 						}
 		    	    }
-		    	    game.setGameOfficials(JsonHelper.getGameOfficials(xmlStatsBoxScore.officials, processingType));
+		    	    List<GameOfficial> gameOfficials = JsonHelper.getGameOfficials(xmlStatsBoxScore.officials, processingType);		    	    
+		    	    
+		    	    if (gameOfficials != null)
+						game.setGameOfficials(gameOfficials);
+		    	    else
+		    	    	throw new IncompleteOfficialException("Official not found");
 		    	        
 		    	    if (awayBoxScore.getPeriodScores().size() > 0) {
 		    	        for (int i = 0; i < awayBoxScore.getPeriodScores().size(); i++) {
