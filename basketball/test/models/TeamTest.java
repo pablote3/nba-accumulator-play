@@ -118,15 +118,15 @@ public class TeamTest {
     public void updateTeam() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-              Team team = Team.findByKey("key", "new-orleans-hornets", ProcessingType.online);
-              team.setActive(true);
+              Team team = Team.findByKey("key", "miami-heat", ProcessingType.online);
+              team.setActive(false);
               team.update();
               
-              Team updateTeam = Team.findByKey("key", "new-orleans-hornets", ProcessingType.online);
-              assertThat(updateTeam.getFullName()).isEqualTo("New Orleans Hornets");
-              assertThat(updateTeam.getAbbr()).isEqualTo("NO");
-              assertThat(updateTeam.getActive()).isTrue();
-              updateTeam.setActive(false);
+              Team updateTeam = Team.findByKey("key", "miami-heat", ProcessingType.online);
+              assertThat(updateTeam.getFullName()).isEqualTo("Miami Heat");
+              assertThat(updateTeam.getAbbr()).isEqualTo("MIA");
+              assertThat(updateTeam.getActive()).isFalse();
+              updateTeam.setActive(true);
               updateTeam.update();
           }
         });
