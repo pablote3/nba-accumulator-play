@@ -9,6 +9,7 @@ create table box_score (
   game_id                   bigint,
   location                  varchar(5) not null,
   result                    varchar(4),
+  minutes                   smallint,
   points                    smallint,
   assists                   smallint,
   turnovers                 smallint,
@@ -122,6 +123,38 @@ create table roster_player (
   constraint pk_roster_player primary key (id))
 ;
 
+create table standing (
+  id                        bigint auto_increment not null,
+  team_id                   bigint,
+  boxscore_id               bigint,
+  rank                      smallint not null,
+  ordinalRank               varchar(255) not null,
+  gamesWon                  smallint not null,
+  gamesLost                 smallint not null,
+  streak                    varchar(255) not null,
+  streakType                varchar(4) not null,
+  streakTotal               smallint not null,
+  gamesBack                 float not null,
+  pointsFor                 smallint not null,
+  pointsAgainst             smallint not null,
+  homeWins                  smallint not null,
+  homeLosses                smallint not null,
+  awayWins                  smallint not null,
+  awayLosses                smallint not null,
+  conferenceWins            smallint not null,
+  conferenceLosses          smallint not null,
+  lastFive                  varchar(255) not null,
+  lastTen                   varchar(255) not null,
+  gamesPlayed               smallint not null,
+  pointsScoredPerGame       float not null,
+  pointsAllowedPerGame      float not null,
+  winPercentage             float not null,
+  pointDifferential         smallint not null,
+  pointDifferentialPerGame  float not null,
+  constraint ck_standing_streakType check (streakType in ('Loss','Win')),
+  constraint pk_standing primary key (id))
+;
+
 create table team (
   id                        bigint auto_increment not null,
   team_key                  varchar(35) not null,
@@ -158,6 +191,10 @@ alter table roster_player add constraint fk_roster_player_team_8 foreign key (te
 create index ix_roster_player_team_8 on roster_player (team_id);
 alter table roster_player add constraint fk_roster_player_player_9 foreign key (player_id) references player (id) on delete restrict on update restrict;
 create index ix_roster_player_player_9 on roster_player (player_id);
+alter table standing add constraint fk_standing_team_10 foreign key (team_id) references team (id) on delete restrict on update restrict;
+create index ix_standing_team_10 on standing (team_id);
+alter table standing add constraint fk_standing_boxScore_11 foreign key (boxscore_id) references box_score (id) on delete restrict on update restrict;
+create index ix_standing_boxScore_11 on standing (boxscore_id);
 
 
 
@@ -180,6 +217,8 @@ drop table period_score;
 drop table player;
 
 drop table roster_player;
+
+drop table standing;
 
 drop table team;
 

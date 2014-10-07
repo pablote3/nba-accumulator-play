@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 import json.xmlStats.BoxScorePlayerDTO;
 import json.xmlStats.JsonHelper;
 import json.xmlStats.NBABoxScore;
+import json.xmlStats.Standings;
 import models.BoxScore;
 import models.BoxScore.Location;
 import models.BoxScore.Result;
@@ -115,12 +116,21 @@ public class GameJsonFile {
         			else {
         				homeBoxScore.setResult(Result.win);
         				awayBoxScore.setResult(Result.loss);
-        			}	  
+        			}
+        			
+        			path =  Paths.get(System.getProperty("config.test")).resolve("20020621-standings.json");
+        			file = path.toFile();
+        			baseJson = new FileInputStream(file);
+        			
+        			mapper = new ObjectMapper();
+        			mapper.registerModule(new JodaModule());        			
+        			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);       			
+        			Standings xmlStandings = mapper.readValue(baseJson, Standings.class);
 	              
         			game.addBoxScore(homeBoxScore);
         			game.addBoxScore(awayBoxScore);
 	              
-        			Game.create(game, processingType);
+//        			Game.create(game, processingType);
         			Long gameId = game.getId();
 
         			Game createGame = Game.findById(gameId, processingType);

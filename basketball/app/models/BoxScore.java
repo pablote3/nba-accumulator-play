@@ -16,12 +16,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.TableGenerator;
 
-import com.fasterxml.jackson.annotation.*;
-
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 import com.avaje.ebean.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 public class BoxScore extends Model {
@@ -83,6 +82,21 @@ public class BoxScore extends Model {
 	}
 	public void removeBoxScorePlayer(BoxScorePlayer boxScorePlayer)  {
 		this.getBoxScorePlayers().remove(boxScorePlayer);
+	}	
+	
+	@OneToMany(mappedBy="boxScore", cascade=CascadeType.ALL)
+	private List<Standing> standings = new ArrayList<Standing>();
+	public List<Standing> getStandings()  {
+		return standings;
+	}
+	public void setStandings(List<Standing> standings)  {
+		this.standings = standings;
+	}
+	public void addStanding(Standing standing)  {
+		this.getStandings().add(standing);
+	}
+	public void removeStanding(Standing standing)  {
+		this.getStandings().remove(standing);
 	}
 	
 	@Required
@@ -113,6 +127,15 @@ public class BoxScore extends Model {
         @EnumValue("Win") win,
         @EnumValue("Loss") loss,
     }
+	
+	@Column(name="minutes", nullable=true)
+	private Short minutes;
+	public Short getMinutes() {
+		return minutes;
+	}
+	public void setMinutes(Short minutes) {
+		this.minutes = minutes;
+	}
 	
 	@Column(name="points", nullable=true)
 	private Short points;

@@ -31,6 +31,7 @@ public class JsonHelper {
     }
     
 	public static BoxScore getBoxScoreStats(BoxScore boxScore, BoxScore stats) {
+		boxScore.setMinutes(stats.getMinutes());
         boxScore.setPoints(stats.getPoints());
         boxScore.setAssists(stats.getAssists());
         boxScore.setTurnovers(stats.getTurnovers());

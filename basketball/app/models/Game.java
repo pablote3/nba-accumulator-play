@@ -18,14 +18,14 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import services.EbeanServerService;
 import services.InjectorModule;
 import util.DateTimeUtil;
-
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.EbeanServer;

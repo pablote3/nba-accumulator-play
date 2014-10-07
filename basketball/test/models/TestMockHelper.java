@@ -9,6 +9,7 @@ import models.Game.ProcessingType;
 import models.Game.SeasonType;
 import models.Game.Status;
 import models.RosterPlayer.Position;
+import models.Standing.StreakType;
 import models.Team.Conference;
 import models.Team.Division;
 
@@ -137,6 +138,7 @@ public class TestMockHelper {
     
 	protected static BoxScore getBoxScoreHomeCompleted(BoxScore boxScore) {
     	boxScore.setResult(Result.win);
+    	boxScore.setMinutes((short)180);
 	    boxScore.setPoints((short)100);
 	    boxScore.setAssists((short)25);
 	    boxScore.setTurnovers((short)12);
@@ -159,6 +161,7 @@ public class TestMockHelper {
     
 	protected static BoxScore getBoxScoreAwayCompleted(BoxScore boxScore) {
     	boxScore.setResult(Result.loss);
+    	boxScore.setMinutes((short)190);
 	    boxScore.setPoints((short)99);
 	    boxScore.setAssists((short)25);
 	    boxScore.setTurnovers((short)12);
@@ -177,6 +180,66 @@ public class TestMockHelper {
 	    boxScore.setReboundsDefense((short)12);
 	    boxScore.setPersonalFouls((short)21);
     	return boxScore;
+    }
+	
+	protected static Standing getStandingHomeCompleted(Team team) {
+		Standing standing = new Standing();
+		standing.setTeamKey(team.getKey());
+    	standing.setRank((short)1);
+    	standing.setOrdinalRank("1st");
+	    standing.setGamesWon((short)99);
+	    standing.setGamesLost((short)100);
+	    standing.setStreak("L3");
+	    standing.setStreakType(StreakType.loss);
+	    standing.setStreakTotal((short)3);
+	    standing.setGamesBack((float)0);
+	    standing.setPointsFor((short)2998);
+	    standing.setPointsAgainst((short)3501);
+	    standing.setHomeWins((short)50);
+	    standing.setHomeLosses((short)50);
+	    standing.setAwayWins((short)49);
+	    standing.setAwayLosses((short)50);
+	    standing.setConferenceWins((short)15);
+	    standing.setConferenceLosses((short)11);
+	    standing.setLastFive("3-2");
+	    standing.setLastTen("5-10");
+	    standing.setGamesPlayed((short)199);
+	    standing.setPointsScoredPerGame((float)102.1);
+	    standing.setPointsAllowedPerGame((float)105.1);
+	    standing.setWinPercentage((float)0.505);
+	    standing.setPointDifferential((short)-2);
+	    standing.setPointDifferentialPerGame((float)-0.4);
+    	return standing;
+    }
+	
+	protected static Standing getStandingAwayCompleted(Team team) {
+		Standing standing = new Standing();
+		standing.setTeamKey(team.getKey());
+    	standing.setRank((short)2);
+    	standing.setOrdinalRank("2nd");
+	    standing.setGamesWon((short)95);
+	    standing.setGamesLost((short)102);
+	    standing.setStreak("W1");
+	    standing.setStreakType(StreakType.win);
+	    standing.setStreakTotal((short)1);
+	    standing.setGamesBack((float)1.5);
+	    standing.setPointsFor((short)2902);
+	    standing.setPointsAgainst((short)3505);
+	    standing.setHomeWins((short)40);
+	    standing.setHomeLosses((short)60);
+	    standing.setAwayWins((short)49);
+	    standing.setAwayLosses((short)50);
+	    standing.setConferenceWins((short)15);
+	    standing.setConferenceLosses((short)11);
+	    standing.setLastFive("2-3");
+	    standing.setLastTen("5-10");
+	    standing.setGamesPlayed((short)197);
+	    standing.setPointsScoredPerGame((float)102.1);
+	    standing.setPointsAllowedPerGame((float)105.1);
+	    standing.setWinPercentage((float)0.505);
+	    standing.setPointDifferential((short)-2);
+	    standing.setPointDifferentialPerGame((float)-0.4);
+    	return standing;
     }
     
 	protected static List<PeriodScore> getPeriodScoresHome() {
