@@ -125,8 +125,8 @@ create table roster_player (
 
 create table standing (
   id                        bigint auto_increment not null,
-  team_id                   bigint,
   boxscore_id               bigint,
+  teamKey                   varchar(255) not null,
   rank                      smallint not null,
   ordinalRank               varchar(255) not null,
   gamesWon                  smallint not null,
@@ -191,10 +191,8 @@ alter table roster_player add constraint fk_roster_player_team_8 foreign key (te
 create index ix_roster_player_team_8 on roster_player (team_id);
 alter table roster_player add constraint fk_roster_player_player_9 foreign key (player_id) references player (id) on delete restrict on update restrict;
 create index ix_roster_player_player_9 on roster_player (player_id);
-alter table standing add constraint fk_standing_team_10 foreign key (team_id) references team (id) on delete restrict on update restrict;
-create index ix_standing_team_10 on standing (team_id);
-alter table standing add constraint fk_standing_boxScore_11 foreign key (boxscore_id) references box_score (id) on delete restrict on update restrict;
-create index ix_standing_boxScore_11 on standing (boxscore_id);
+alter table standing add constraint fk_standing_boxScore_10 foreign key (boxscore_id) references box_score (id) on delete restrict on update restrict;
+create index ix_standing_boxScore_10 on standing (boxscore_id);
 
 
 

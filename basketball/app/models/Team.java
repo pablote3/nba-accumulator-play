@@ -87,21 +87,6 @@ public class Team extends Model {
 	public void removeRosterPlayer(RosterPlayer rosterPlayer)  {
 		this.getRosterPlayers().remove(rosterPlayer);
 	}
-	
-	@OneToMany(mappedBy="team", fetch=FetchType.LAZY)
-	private List<Standing> standings = new ArrayList<Standing>();
-	public List<Standing> getStandings()  {
-		return standings;
-	}
-	public void setStandings(List<Standing> standings)  {
-		this.standings = standings;
-	}
-	public void addStanding(Standing standing)  {
-		this.getStandings().add(standing);
-	}
-	public void removeStanding(Standing standing)  {
-		this.getStandings().remove(standing);
-	}
 
 	@Required
 	@Column(name="team_key", length=35, nullable=false)

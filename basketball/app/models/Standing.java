@@ -29,16 +29,6 @@ public class Standing extends Model {
 	}
 	
 	@ManyToOne
-	@JoinColumn(name="team_id", referencedColumnName="id", nullable=false)
-	private Team team;
-	public Team getTeam() {
-		return team;
-	}
-	public void setTeam(Team team) {
-		this.team = team;
-	}
-	
-	@ManyToOne
 	@JoinColumn(name="boxscore_id", referencedColumnName="id", nullable=false)
 	private BoxScore boxScore;
 	public BoxScore getBoxScore() {
@@ -46,6 +36,16 @@ public class Standing extends Model {
 	}
 	public void setBoxScore(BoxScore boxScore) {
 		this.boxScore = boxScore;
+	}
+	
+	@Column(name="teamKey", nullable=false)
+	@JsonProperty("team_id")
+	private String teamKey;
+	public String getTeamKey() {
+		return teamKey;
+	}
+	public void setTeamKey(String teamKey) {
+		this.teamKey = teamKey;
 	}
 	
 	@Column(name="rank", nullable=false)
@@ -286,7 +286,7 @@ public class Standing extends Model {
 
 	public String toString() {
 		return new StringBuffer()
-			.append("\n" + this.team + "\n")
+			.append("\n" + this.teamKey + "\n")
 			.append("  id: " + this.id)
 			.append("  rank: " + this.rank)
 			.append("  ordinal rank: " + this.ordinalRank)
