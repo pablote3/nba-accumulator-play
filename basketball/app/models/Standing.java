@@ -178,7 +178,7 @@ public class Standing extends Model {
 		this.awayWins = awayWins;
 	}
 	@Column(name="awayLosses", nullable=false)
-	@JsonProperty("away_losst")
+	@JsonProperty("away_lost")
 	private Short awayLosses;
 	public Short getAwayLosses() {
 		return awayLosses;
