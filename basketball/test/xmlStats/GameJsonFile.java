@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import json.xmlStats.BoxScorePlayerDTO;
 import json.xmlStats.JsonHelper;
@@ -25,6 +27,7 @@ import models.Game.SeasonType;
 import models.Game.Status;
 import models.Player;
 import models.RosterPlayer;
+import models.Standing;
 import models.Team;
 
 import org.joda.time.LocalDate;
@@ -126,11 +129,28 @@ public class GameJsonFile {
         			mapper.registerModule(new JodaModule());        			
         			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);       			
         			Standings xmlStandings = mapper.readValue(baseJson, Standings.class);
+        			ArrayList<Standing> standings = new ArrayList<Standing>(Arrays.asList(xmlStandings.standing));
+        			
+        			for (int i = 0; i < standings.size(); i++)  {
+        				String homeTeamKey = homeBoxScore.getTeam().getKey();
+        				if (standings.get(i).getTeamKey().equals(homeTeamKey))  {
+        					homeBoxScore.getStandings().add(standings.get(i));
+        					break;
+        				}
+        			}
+        			
+        			for (int i = 0; i < standings.size(); i++)  {
+        				String awayTeamKey = awayBoxScore.getTeam().getKey();
+        				if (standings.get(i).getTeamKey().equals(awayTeamKey))  {
+        					awayBoxScore.getStandings().add(standings.get(i));
+        					break;
+        				}
+        			}
 	              
         			game.addBoxScore(homeBoxScore);
         			game.addBoxScore(awayBoxScore);
 	              
-//        			Game.create(game, processingType);
+        			Game.create(game, processingType);
         			Long gameId = game.getId();
 
         			Game createGame = Game.findById(gameId, processingType);
@@ -146,6 +166,7 @@ public class GameJsonFile {
 	              			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("OKC");
 	              			assertThat(boxScore.getBoxScorePlayers().get(0).getRosterPlayer().getPlayer().getLastName()).isEqualTo("Durant");
 	              			assertThat(boxScore.getBoxScorePlayers().get(0).getPoints()).isEqualTo((short)32);
+	              			assertThat(boxScore.getStandings().get(0).getGamesBack()).isEqualTo((float)0.5);
 	              		}
 	              		else {
 	              			assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)40);
@@ -153,6 +174,7 @@ public class GameJsonFile {
 	              			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("MIA");
 	              			assertThat(boxScore.getBoxScorePlayers().get(0).getRosterPlayer().getPlayer().getLastName()).isEqualTo("James");
 	              			assertThat(boxScore.getBoxScorePlayers().get(0).getPoints()).isEqualTo((short)26);
+	              			assertThat(boxScore.getStandings().get(0).getGamesBack()).isEqualTo((float)1.5);
 	              		}
 	              	}
 	              
