@@ -9,21 +9,25 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.zip.GZIPInputStream;
 
 import json.xmlStats.JsonHelper;
 import json.xmlStats.NBABoxScore;
+import json.xmlStats.Standings;
 import models.BoxScore;
 import models.BoxScorePlayer;
 import models.Game;
 import models.Player;
 import models.RosterPlayer;
+import models.Standing;
 import models.Team;
 import models.BoxScore.Location;
 import models.BoxScore.Result;
@@ -55,26 +59,12 @@ public class GameJsonUrl {
 		        try {
 	        		Path path =  Paths.get(System.getProperty("config.properties")).resolve("service.properties");
 	        		File file = path.toFile();				
-					Properties properties = new Properties();
+	        		Properties properties = new Properties();
 					FileInputStream in = new FileInputStream(file);
 					properties.load(in);
 					in.close();
 
-	            	String urlBoxScore = properties.getProperty("xmlstats.urlBoxScore");
-	            	String event = "20120621-oklahoma-city-thunder-at-miami-heat.json";
-		            URL url = new URL(urlBoxScore + event);
-		            URLConnection connection = url.openConnection();
-		            String accessToken = properties.getProperty("xmlstats.accessToken");
-		            String bearer = "Bearer " + accessToken;
-		            String userAgentName = properties.getProperty("xmlstats.userAgentName");
-		            connection.setRequestProperty(AUTHORIZATION, bearer);
-		            connection.setRequestProperty(USER_AGENT, userAgentName);
-		            connection.setRequestProperty(ACCEPT_ENCODING, GZIP);
-		            baseJson = connection.getInputStream();
-		            String encoding = connection.getContentEncoding();
-		            if (GZIP.equals(encoding)) {
-		            	baseJson = new GZIPInputStream(baseJson);
-		            }
+	            	baseJson = getJson(properties, "xmlstats.urlBoxScore", "20120621-oklahoma-city-thunder-at-miami-heat.json");
 			
 		            if (baseJson != null) {
 		            	ObjectMapper mapper = new ObjectMapper();
@@ -121,8 +111,32 @@ public class GameJsonUrl {
 		      		  	else {
 		      		  		homeBoxScore.setResult(Result.win);
 		      		  		awayBoxScore.setResult(Result.loss);
-		      		  	}		      		  	
-			              
+		      		  	}
+		      		  	
+		      		  	baseJson = getJson(properties, "xmlstats.urlStandings", "20020621-standings.json");
+
+	        			mapper = new ObjectMapper();
+	        			mapper.registerModule(new JodaModule());        			
+	        			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);       			
+	        			Standings xmlStandings = mapper.readValue(baseJson, Standings.class);
+	        			ArrayList<Standing> standings = new ArrayList<Standing>(Arrays.asList(xmlStandings.standing));
+		      		  	
+	        			for (int i = 0; i < standings.size(); i++)  {
+	        				String homeTeamKey = homeBoxScore.getTeam().getKey();
+	        				if (standings.get(i).getTeamKey().equals(homeTeamKey))  {
+	        					homeBoxScore.getStandings().add(standings.get(i));
+	        					break;
+	        				}
+	        			}
+	        			
+	        			for (int i = 0; i < standings.size(); i++)  {
+	        				String awayTeamKey = awayBoxScore.getTeam().getKey();
+	        				if (standings.get(i).getTeamKey().equals(awayTeamKey))  {
+	        					awayBoxScore.getStandings().add(standings.get(i));
+	        					break;
+	        				}
+	        			}
+	        			
 		      		  	completeGame.update();
 		      		  	Game createGame = Game.findById(gameId, ProcessingType.online);
 		              
@@ -141,6 +155,7 @@ public class GameJsonUrl {
 			              			assertThat(boxScore.getBoxScorePlayers().get(0).getRosterPlayer().getPlayer().getLastName()).isEqualTo("Durant");
 			              			assertThat(boxScore.getBoxScorePlayers().get(0).getRosterPlayer().getTeam().getAbbr()).isEqualTo("OKC");
 			              			assertThat(boxScore.getBoxScorePlayers().get(0).getPoints()).isEqualTo((short)32);
+			              			assertThat(boxScore.getStandings().get(0).getGamesBack()).isEqualTo((float)3.0);
 			              		}
 			              		else {
 			              			assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)40);
@@ -149,6 +164,7 @@ public class GameJsonUrl {
 			              			assertThat(boxScore.getBoxScorePlayers().get(1).getRosterPlayer().getPlayer().getLastName()).isEqualTo("Wade");
 			              			assertThat(boxScore.getBoxScorePlayers().get(1).getRosterPlayer().getTeam().getAbbr()).isEqualTo("MIA");
 			              			assertThat(boxScore.getBoxScorePlayers().get(1).getPoints()).isEqualTo((short)20);
+			              			assertThat(boxScore.getStandings().get(0).getGamesBack()).isEqualTo((float)4.0);
 			              		}
 			              	}
 		        	  	}
@@ -183,6 +199,26 @@ public class GameJsonUrl {
 		            ex.printStackTrace();
 		        }
 		    }
+
+			private InputStream getJson(Properties properties, String urlMethod, String urlEvent) throws MalformedURLException, IOException {
+				InputStream baseJson;
+				String urlBoxScore = properties.getProperty(urlMethod);
+				String event = urlEvent;
+				URL url = new URL(urlBoxScore + event);
+				URLConnection connection = url.openConnection();
+				String accessToken = properties.getProperty("xmlstats.accessToken");
+				String bearer = "Bearer " + accessToken;
+				String userAgentName = properties.getProperty("xmlstats.userAgentName");
+				connection.setRequestProperty(AUTHORIZATION, bearer);
+				connection.setRequestProperty(USER_AGENT, userAgentName);
+				connection.setRequestProperty(ACCEPT_ENCODING, GZIP);
+				baseJson = connection.getInputStream();
+				String encoding = connection.getContentEncoding();
+				if (GZIP.equals(encoding)) {
+					baseJson = new GZIPInputStream(baseJson);
+				}
+				return baseJson;
+			}
         });
     }
  }
