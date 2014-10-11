@@ -25,12 +25,14 @@ public interface ActorApi {
 		public final String fileBoxScore;
 		public final String urlRoster;
 		public final String fileRoster;
+		public final String urlStandings;
+		public final String fileStandings;
 		public final String delay;
 		public final String processType;
 		public final String sourceBoxScore;
 		public final String sourceRoster;
 		
-		public ServiceProps(String date, String team, String size, String accessToken, String userAgentName, String urlBoxScore, String fileBoxScore, String urlRoster, String fileRoster, String delay, String processType, String sourceBoxScore, String sourceRoster) {
+		public ServiceProps(String date, String team, String size, String accessToken, String userAgentName, String urlBoxScore, String fileBoxScore, String urlRoster, String fileRoster, String urlStandings, String fileStandings, String delay, String processType, String sourceBoxScore, String sourceRoster) {
 			this.date = date;
 			this.team = team;
 			this.size = size;
@@ -40,6 +42,8 @@ public interface ActorApi {
 			this.fileBoxScore = fileBoxScore;
 			this.urlRoster = urlRoster;
 			this.fileRoster = fileRoster;
+			this.urlStandings = urlStandings;
+			this.fileStandings = fileStandings;
 			this.delay = delay;
 			this.processType = processType;
 			this.sourceBoxScore = sourceBoxScore;

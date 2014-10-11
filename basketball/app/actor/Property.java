@@ -81,10 +81,12 @@ public class Property extends UntypedActor {
 				String userAgentName = props.getProperty("xmlstats.userAgentName");
 				String urlBoxScore = props.getProperty("xmlstats.urlBoxScore");
 				String fileBoxScore = props.getProperty("xmlstats.fileBoxScore");
+				String urlStandings = props.getProperty("xmlstats.urlStandings");
+				String fileStandings = props.getProperty("xmlstats.fileStandings");
 				String urlRoster = props.getProperty("xmlstats.urlRoster");
 				String fileRoster = props.getProperty("xmlstats.fileRoster");
 				String delay = props.getProperty("xmlstats.delay");
-				ServiceProps serviceProps = new ServiceProps(date, team, size, accessToken, userAgentName, urlBoxScore, fileBoxScore, urlRoster, fileRoster, delay, processType, sourceBoxScore, sourceRoster);
+				ServiceProps serviceProps = new ServiceProps(date, team, size, accessToken, userAgentName, urlBoxScore, fileBoxScore, urlRoster, fileRoster, urlStandings, fileStandings, delay, processType, sourceBoxScore, sourceRoster);
 				getSender().tell(serviceProps, getSelf());
 				getContext().stop(getSelf());
 			} 
