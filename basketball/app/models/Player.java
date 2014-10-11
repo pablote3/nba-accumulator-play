@@ -176,7 +176,7 @@ public class Player extends Model {
 		Query<Player> query; 
 	  	if (processingType.equals(ProcessingType.batch)) 
 	  		query = ebeanServer.find(Player.class);
-  		else
+  		else if (processingType.equals(ProcessingType.online))
   			query = Ebean.find(Player.class);	
 
 		query = ebeanServer.find(Player.class);
@@ -191,7 +191,7 @@ public class Player extends Model {
 		Query<Player> query; 
 	  	if (processingType.equals(ProcessingType.batch)) 
 	  		query = ebeanServer.find(Player.class);
-  		else
+  		else if (processingType.equals(ProcessingType.online))
   			query = Ebean.find(Player.class);	
 
 		query = ebeanServer.find(Player.class);
@@ -205,21 +205,21 @@ public class Player extends Model {
 	public static void create(Player player, ProcessingType processingType) {
 		if (processingType.equals(ProcessingType.batch))
 			ebeanServer.save(player);
-		else
+		else if (processingType.equals(ProcessingType.online))
 			Ebean.save(player);
 	}
 	
 	public static void update(Player player, ProcessingType processingType) {
 		if (processingType.equals(ProcessingType.batch))
 			ebeanServer.update(player);
-		else
+		else if (processingType.equals(ProcessingType.online))
 			Ebean.update(player);
 	}
 	  
 	public static void delete(Player player, ProcessingType processingType) {
 		if (processingType.equals(ProcessingType.batch))
 			ebeanServer.delete(player);
-		else
+		else if (processingType.equals(ProcessingType.online))
 			Ebean.delete(player);
 	}
 	

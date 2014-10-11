@@ -188,10 +188,10 @@ public class RosterPlayer extends Model {
 	
 	public static List<RosterPlayer> findByDateTeam(String date, String teamKey, ProcessingType processingType) {
 		List<RosterPlayer> rosterPlayer;
-	  	Query<RosterPlayer> query;
+	  	Query<RosterPlayer> query = null;
 	  	if (processingType.equals(ProcessingType.batch)) 
 	  		query = ebeanServer.find(RosterPlayer.class);
-  		else
+  		else if (processingType.equals(ProcessingType.online))
   			query = Ebean.find(RosterPlayer.class);	
 	  	query.fetch("team");
 	    query.where().le("fromDate", date);
@@ -203,10 +203,10 @@ public class RosterPlayer extends Model {
 	
 	public static List<RosterPlayer> findByDatePlayerName(String date, String lastName, String firstName, ProcessingType processingType) {
 		List<RosterPlayer> rosterPlayer;
-	  	Query<RosterPlayer> query;
+	  	Query<RosterPlayer> query = null;
 	  	if (processingType.equals(ProcessingType.batch)) 
 	  		query = ebeanServer.find(RosterPlayer.class);
-  		else
+  		else if (processingType.equals(ProcessingType.online))
   			query = Ebean.find(RosterPlayer.class);	
 	  	query.fetch("player");
 	  	query.where().le("fromDate", date);
@@ -219,10 +219,10 @@ public class RosterPlayer extends Model {
 	
 	public static RosterPlayer findByDatePlayerNameTeam(String gameDate, String lastName, String firstName, String teamKey, ProcessingType processingType) {
 		RosterPlayer rosterPlayer;
-	  	Query<RosterPlayer> query;
+	  	Query<RosterPlayer> query = null;
 	  	if (processingType.equals(ProcessingType.batch)) 
 	  		query = ebeanServer.find(RosterPlayer.class);
-  		else
+  		else if (processingType.equals(ProcessingType.online))
   			query = Ebean.find(RosterPlayer.class);	
 	  	query.fetch("player");
 	  	query.fetch("team");
@@ -237,10 +237,10 @@ public class RosterPlayer extends Model {
 	
 	public static RosterPlayer findLatestByPlayerNameBirthDateSeason(String gameDate, String lastName, String firstName, String birthDate, ProcessingType processingType) {
 		RosterPlayer rosterPlayer;
-	  	Query<RosterPlayer> query;
+	  	Query<RosterPlayer> query = null;
 	  	if (processingType.equals(ProcessingType.batch)) 
 	  		query = ebeanServer.find(RosterPlayer.class);
-  		else
+  		else if (processingType.equals(ProcessingType.online))
   			query = Ebean.find(RosterPlayer.class);	
 		query.fetch("player");
 	  	query.fetch("team");
@@ -258,21 +258,21 @@ public class RosterPlayer extends Model {
 	public static void create(RosterPlayer rosterPlayer, ProcessingType processingType) {
 		if (processingType.equals(ProcessingType.batch))
 			ebeanServer.save(rosterPlayer);
-		else
+		else if (processingType.equals(ProcessingType.online))
 			Ebean.save(rosterPlayer);
 	}
 	
 	public static void update(RosterPlayer rosterPlayer, ProcessingType processingType) {
 		if (processingType.equals(ProcessingType.batch))
 			ebeanServer.update(rosterPlayer);
-		else
+		else if (processingType.equals(ProcessingType.online))
 			Ebean.update(rosterPlayer);
 	}
 	  
 	public static void delete(RosterPlayer rosterPlayer, ProcessingType processingType) {
 		if (processingType.equals(ProcessingType.batch))
 			ebeanServer.delete(rosterPlayer);
-		else
+		else if (processingType.equals(ProcessingType.online))
 			Ebean.delete(rosterPlayer);
 	}
 	

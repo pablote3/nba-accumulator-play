@@ -43,7 +43,7 @@ public class Master extends UntypedActor {
 		else if (message.equals(WorkComplete)) {
 			if (processingType.equals(ProcessingType.batch))
 				listener.tell(Finish, getSelf());
-			else
+			else if (processingType.equals(ProcessingType.online))
 				listener.tell(Wait, getSelf());
 		} 
 		else {

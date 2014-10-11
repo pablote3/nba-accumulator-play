@@ -161,10 +161,10 @@ public class Official extends Model {
 	
 	public static Official findByNumber(String number, ProcessingType processingType) {
 		Official official;
-		Query<Official> query; 
+		Query<Official> query = null; 
 		if (processingType.equals(ProcessingType.batch))
 			query = ebeanServer.find(Official.class);
-		else
+		else if (processingType.equals(ProcessingType.online))
 			query = Ebean.find(Official.class);
 		query.where().eq("number", number);
 		official = query.findUnique();
@@ -173,10 +173,10 @@ public class Official extends Model {
 	
 	public static Official findByName(String lastName, String firstName, ProcessingType processingType) {
 		Official official;
-		Query<Official> query; 
+		Query<Official> query = null; 
 		if (processingType.equals(ProcessingType.batch))
 			query = ebeanServer.find(Official.class);
-		else
+		else if (processingType.equals(ProcessingType.online))
 			query = Ebean.find(Official.class);
 		query.where().eq("lastName", lastName);
 		query.where().eq("firstName", firstName);
@@ -187,7 +187,7 @@ public class Official extends Model {
 	public static void create(Official official, ProcessingType processingType) {
 		if (processingType.equals(ProcessingType.batch))
 			ebeanServer.save(official);
-		else
+		else if (processingType.equals(ProcessingType.online))
 			Ebean.save(official);
 	}
 	  

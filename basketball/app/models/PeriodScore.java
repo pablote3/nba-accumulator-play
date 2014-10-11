@@ -66,12 +66,10 @@ public class PeriodScore extends Model {
 	}
 	
 	public static void delete(PeriodScore periodScore, ProcessingType processingType) {
-		if (processingType.equals(ProcessingType.batch)) {
+		if (processingType.equals(ProcessingType.batch)) 
 			ebeanServer.delete(periodScore);
-		}
-		else {
+		else if (processingType.equals(ProcessingType.online))
 			Ebean.delete(periodScore);
-		}
 	}
 
 	public String toString() {

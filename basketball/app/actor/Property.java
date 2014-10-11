@@ -34,7 +34,6 @@ public class Property extends UntypedActor {
 					strPath = "/home/pablote/pdrive/pwork/config/accumulator/properties";
 				}
         		Path path =  Paths.get(strPath).resolve("service.properties");
-        		System.out.println("path = " + path);
         		
         		File file = path.toFile();
 				properties = new Properties();

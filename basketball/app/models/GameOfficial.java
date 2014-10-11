@@ -69,11 +69,9 @@ public class GameOfficial extends Model {
 	}
 	
 	public static void delete(GameOfficial gameOfficial, ProcessingType processingType) {
-		if (processingType.equals(ProcessingType.batch)) {
+		if (processingType.equals(ProcessingType.batch)) 
 			ebeanServer.delete(gameOfficial);
-		}
-		else {
+		else if (processingType.equals(ProcessingType.online))
 			Ebean.delete(gameOfficial);
-		}
 	}
 }

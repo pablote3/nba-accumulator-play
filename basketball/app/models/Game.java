@@ -148,7 +148,8 @@ public class Game extends Model {
 	
 	public enum ProcessingType {
         @EnumValue("Batch") batch,
-        @EnumValue("Online") online
+        @EnumValue("Online") online,
+        @EnumValue("Test") test
     }
 	
 	public enum Source {
@@ -159,14 +160,14 @@ public class Game extends Model {
 	public static void create(Game game, ProcessingType processingType) {
 		if (processingType.equals(ProcessingType.batch))
 			ebeanServer.save(game);
-		else
+		else if (processingType.equals(ProcessingType.online))
 			Ebean.save(game);
 	}
 	
 	public static void update(Game game, ProcessingType processingType) {
 		if (processingType.equals(ProcessingType.batch))
 			ebeanServer.update(game);
-		else
+		else if (processingType.equals(ProcessingType.online))
 			Ebean.update(game);
 	}
 	  
@@ -176,10 +177,10 @@ public class Game extends Model {
 	}
 	  
 	public static Game findById(Long id, ProcessingType processingType) {
-		Game game;
+		Game game = null;
 		if (processingType.equals(ProcessingType.batch))
 			game = ebeanServer.find(Game.class, id);
-		else
+		else if (processingType.equals(ProcessingType.online))
 			game = Ebean.find(Game.class, id);
 		return game;
 	}
@@ -201,10 +202,10 @@ public class Game extends Model {
 	}
 	
 	public static List<Long> findIdsByDateSize(String propDate, String propSize, ProcessingType processingType) {
-	  	Query<Game> query;
+	  	Query<Game> query = null;
 	  	if (processingType.equals(ProcessingType.batch))
 	  		query = ebeanServer.find(Game.class);
-	  	else
+	  	else if (processingType.equals(ProcessingType.online))
 	  		query = Ebean.find(Game.class);
 	  	
 	  	int maxRows = Integer.parseInt(propSize);
@@ -239,10 +240,10 @@ public class Game extends Model {
 	}
 	
 	public static List<Long> findIdsByDateTeamSize(String propDate, String propTeam, String propSize, ProcessingType processingType) {
-	  	Query<Game> query;
+	  	Query<Game> query = null;
 	  	if (processingType.equals(ProcessingType.batch))
 	  		query = ebeanServer.find(Game.class);
-	  	else
+	  	else if (processingType.equals(ProcessingType.online))
 	  		query = Ebean.find(Game.class);
 	  	
 	  	int maxRows = Integer.parseInt(propSize);

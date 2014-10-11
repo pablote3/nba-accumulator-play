@@ -212,10 +212,10 @@ public class Team extends Model {
 	}
 	
 	public static Team findByKey(String key, String value, ProcessingType processingType) {
-		Query<Team> query;
+		Query<Team> query = null;
 		if (processingType.equals(ProcessingType.batch))
 			query = ebeanServer.find(Team.class);
-		else
+		else if (processingType.equals(ProcessingType.online))
 			query = Ebean.find(Team.class);
 		
 		query.where().eq(key, value);		
@@ -231,10 +231,10 @@ public class Team extends Model {
 	
 	public static Team findByAbbr(String abbr, ProcessingType processingType) {
 		Team team;
-		Query<Team> query; 
+		Query<Team> query = null; 
 	  	if (processingType.equals(ProcessingType.batch)) 
 	  		query = ebeanServer.find(Team.class);
-  		else
+  		else if (processingType.equals(ProcessingType.online))
   			query = Ebean.find(Team.class);	
 
 		query.where().eq("abbr", abbr);
@@ -246,10 +246,10 @@ public class Team extends Model {
 	
 	public static Team findByTeamKey(String teamKey, ProcessingType processingType) {
 		Team team;
-		Query<Team> query; 
+		Query<Team> query = null; 
 	  	if (processingType.equals(ProcessingType.batch)) 
 	  		query = ebeanServer.find(Team.class);
-  		else
+  		else if (processingType.equals(ProcessingType.online))
   			query = Ebean.find(Team.class);	
 
 		query.where().eq("team_key", teamKey);
@@ -274,7 +274,7 @@ public class Team extends Model {
 	public static void create(Team team, ProcessingType processingType) {
 		if (processingType.equals(ProcessingType.batch))
 			ebeanServer.save(team);
-		else
+		else if (processingType.equals(ProcessingType.online))
 			Ebean.save(team);
 	}
 	  

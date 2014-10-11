@@ -252,7 +252,7 @@ public class BoxScorePlayer extends Model {
 		if (processingType.equals(ProcessingType.batch)) {
 			ebeanServer.delete(boxScorePlayer);
 		}
-		else {
+		else if (processingType.equals(ProcessingType.online)) {
 			Ebean.delete(boxScorePlayer);
 		}
 	}
