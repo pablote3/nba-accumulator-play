@@ -3,6 +3,7 @@ package actor;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import util.DateTimeUtil;
 import models.BoxScore;
 import models.Game;
 import models.Standing;
@@ -25,7 +26,7 @@ public class StandingModel extends UntypedActor {
 	
 	public StandingModel(ActorRef listener) {
 		this.listener = listener;
-		standingXmlStats = getContext().actorOf(Props.create(RosterXmlStats.class, listener), "standingXmlStats");
+		standingXmlStats = getContext().actorOf(Props.create(StandingXmlStats.class, listener), "standingXmlStats");
 	}
 
 	public void onReceive(Object message) {
@@ -36,8 +37,9 @@ public class StandingModel extends UntypedActor {
 			gameModel = getSender();
 			CompleteBoxScore cbs = (CompleteBoxScore)message;
 			game = cbs.game;
-			RetrieveStandings retrieveStandings = new RetrieveStandings(game.getDate().toString());
-			standingXmlStats.tell(retrieveStandings, getSelf());
+			
+			RetrieveStandings rs = new RetrieveStandings(DateTimeUtil.getFindDateNaked(game.getDate()));
+			standingXmlStats.tell(rs, getSelf());
 		}
 		else if(message instanceof ActiveStandings) {
 			ActiveStandings activeStandings = (ActiveStandings) message;

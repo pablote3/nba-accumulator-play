@@ -19,9 +19,6 @@ import java.util.zip.GZIPInputStream;
 import json.xmlStats.Standings;
 import models.Game;
 import models.Game.Source;
-
-import org.joda.time.LocalDate;
-
 import util.DateTimeUtil;
 import actor.ActorApi.ActiveStandings;
 import actor.ActorApi.RetrieveStandings;
@@ -62,12 +59,10 @@ public class StandingXmlStats extends UntypedActor {
 		}
 		else if(message instanceof RetrieveStandings) {
 			String gameDate = ((RetrieveStandings) message).date;
-			LocalDate fromDate = DateTimeUtil.createDateFromStringDate(gameDate);
-			
-			if (standings == null || DateTimeUtil.getLocalDateFromDateTime(standings.standings_date) != fromDate) {			
+			if (standings == null || DateTimeUtil.getFindDateNaked(standings.standings_date) != gameDate) {			
 				InputStream inputStreamJson = null;
 				InputStreamReader baseJson = null;
-				String event = DateTimeUtil.getFindDateNaked(fromDate) + ".json";
+				String event = gameDate + ".json";
 				
 				try {
 					if (source.equals(Source.file)) {
