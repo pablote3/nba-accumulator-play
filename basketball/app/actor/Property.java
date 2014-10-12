@@ -76,6 +76,7 @@ public class Property extends UntypedActor {
 				String processType = props.getProperty("accumulator.processType");
 				String sourceBoxScore = props.getProperty("accumulator.source.boxScore");
 				String sourceRoster = props.getProperty("accumulator.source.roster");
+				String sourceStanding = props.getProperty("accumulator.source.standing");
 				String accessToken = props.getProperty("xmlstats.accessToken");
 				String userAgentName = props.getProperty("xmlstats.userAgentName");
 				String urlBoxScore = props.getProperty("xmlstats.urlBoxScore");
@@ -85,7 +86,7 @@ public class Property extends UntypedActor {
 				String urlRoster = props.getProperty("xmlstats.urlRoster");
 				String fileRoster = props.getProperty("xmlstats.fileRoster");
 				String delay = props.getProperty("xmlstats.delay");
-				ServiceProps serviceProps = new ServiceProps(date, team, size, accessToken, userAgentName, urlBoxScore, fileBoxScore, urlRoster, fileRoster, urlStanding, fileStanding, delay, processType, sourceBoxScore, sourceRoster);
+				ServiceProps serviceProps = new ServiceProps(date, team, size, accessToken, userAgentName, urlBoxScore, fileBoxScore, urlRoster, fileRoster, urlStanding, fileStanding, delay, processType, sourceBoxScore, sourceRoster, sourceStanding);
 				getSender().tell(serviceProps, getSelf());
 				getContext().stop(getSelf());
 			} 

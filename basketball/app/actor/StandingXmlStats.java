@@ -57,7 +57,7 @@ public class StandingXmlStats extends UntypedActor {
 			userAgentName = ((ServiceProps) message).userAgentName;
 			urlStanding = ((ServiceProps) message).urlStanding;
 			fileStanding = ((ServiceProps) message).fileStanding;
-			source = Game.Source.valueOf(((ServiceProps) message).sourceRoster);
+			source = Game.Source.valueOf(((ServiceProps) message).sourceStanding);
 			getSender().tell(InitializeComplete, getSelf());
 		}
 		else if(message instanceof RetrieveStandings) {
