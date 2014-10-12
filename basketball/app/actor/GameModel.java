@@ -14,6 +14,7 @@ import org.joda.time.DateTime;
 
 import util.DateTimeUtil;
 import util.Utilities;
+import actor.ActorApi.CompleteBoxScore;
 import actor.ActorApi.CompleteGame;
 import actor.ActorApi.GameIds;
 import actor.ActorApi.IncompleteOfficialException;
@@ -29,6 +30,7 @@ import akka.actor.UntypedActor;
 public class GameModel extends UntypedActor {
 	private ActorRef listener;
 	private final ActorRef gameXmlStats;
+	private final ActorRef standingModel;
 	private ActorRef controller;
 	private String propDate;
 	private String propTeam;
@@ -38,6 +40,7 @@ public class GameModel extends UntypedActor {
 	public GameModel(ActorRef listener) {
 		this.listener = listener;
 		gameXmlStats = getContext().actorOf(Props.create(GameXmlStats.class, listener), "gameXmlStats");
+		standingModel = getContext().actorOf(Props.create(StandingModel.class, listener), "standingModel");
 	}
 
 	public void onReceive(Object message) {
@@ -95,6 +98,9 @@ public class GameModel extends UntypedActor {
 				
 				controller.tell(NextGame, getSelf());
 			}
+		}
+		else if(message instanceof CompleteBoxScore) {
+			standingModel.tell(message, getSelf());
 		}
 		else if(message instanceof CompleteGame) {
 			Game game = ((CompleteGame)message).game;

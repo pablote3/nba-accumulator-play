@@ -122,14 +122,6 @@ public class GameJsonUrl {
 	        			ArrayList<Standing> standings = new ArrayList<Standing>(Arrays.asList(xmlStandings.standing));
 		      		  	
 	        			for (int i = 0; i < standings.size(); i++)  {
-	        				String homeTeamKey = homeBoxScore.getTeam().getKey();
-	        				if (standings.get(i).getTeamKey().equals(homeTeamKey))  {
-	        					homeBoxScore.getStandings().add(standings.get(i));
-	        					break;
-	        				}
-	        			}
-	        			
-	        			for (int i = 0; i < standings.size(); i++)  {
 	        				String awayTeamKey = awayBoxScore.getTeam().getKey();
 	        				if (standings.get(i).getTeamKey().equals(awayTeamKey))  {
 	        					awayBoxScore.getStandings().add(standings.get(i));
@@ -137,6 +129,14 @@ public class GameJsonUrl {
 	        				}
 	        			}
 	        			
+	        			for (int i = 0; i < standings.size(); i++)  {
+	        				String homeTeamKey = homeBoxScore.getTeam().getKey();
+	        				if (standings.get(i).getTeamKey().equals(homeTeamKey))  {
+	        					homeBoxScore.getStandings().add(standings.get(i));
+	        					break;
+	        				}
+	        			}
+	        				
 		      		  	completeGame.update();
 		      		  	Game createGame = Game.findById(gameId, ProcessingType.online);
 		              

@@ -2,6 +2,7 @@ package actor;
 
 import java.util.List;
 
+import json.xmlStats.Standings;
 import models.Game;
 import models.RosterPlayer;
 
@@ -25,14 +26,14 @@ public interface ActorApi {
 		public final String fileBoxScore;
 		public final String urlRoster;
 		public final String fileRoster;
-		public final String urlStandings;
-		public final String fileStandings;
+		public final String urlStanding;
+		public final String fileStanding;
 		public final String delay;
 		public final String processType;
 		public final String sourceBoxScore;
 		public final String sourceRoster;
 		
-		public ServiceProps(String date, String team, String size, String accessToken, String userAgentName, String urlBoxScore, String fileBoxScore, String urlRoster, String fileRoster, String urlStandings, String fileStandings, String delay, String processType, String sourceBoxScore, String sourceRoster) {
+		public ServiceProps(String date, String team, String size, String accessToken, String userAgentName, String urlBoxScore, String fileBoxScore, String urlRoster, String fileRoster, String urlStanding, String fileStanding, String delay, String processType, String sourceBoxScore, String sourceRoster) {
 			this.date = date;
 			this.team = team;
 			this.size = size;
@@ -42,8 +43,8 @@ public interface ActorApi {
 			this.fileBoxScore = fileBoxScore;
 			this.urlRoster = urlRoster;
 			this.fileRoster = fileRoster;
-			this.urlStandings = urlStandings;
-			this.fileStandings = fileStandings;
+			this.urlStanding = urlStanding;
+			this.fileStanding = fileStanding;
 			this.delay = delay;
 			this.processType = processType;
 			this.sourceBoxScore = sourceBoxScore;
@@ -112,6 +113,14 @@ public interface ActorApi {
 		}
 	}
 	
+	public static class RetrieveStandings {
+		public final String date;
+		
+		public RetrieveStandings(String date) {
+			this.date = date;
+		}
+	}
+	
 	public static class IncompleteOfficialException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 		
@@ -152,11 +161,27 @@ public interface ActorApi {
 		}
 	}
 	
+	public static class CompleteBoxScore {
+		public final Game game;
+		
+		public CompleteBoxScore(Game game) {
+			this.game = game;
+		}
+	}
+	
 	public static class CompleteGame {
 		public final Game game;
 		
 		public CompleteGame(Game game) {
 			this.game = game;
+		}
+	}
+	
+	public static class ActiveStandings {
+		public final Standings standings;
+		
+		public ActiveStandings(Standings standings) {
+			this.standings = standings;
 		}
 	}
 	

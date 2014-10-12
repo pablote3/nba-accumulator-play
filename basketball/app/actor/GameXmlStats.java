@@ -28,7 +28,7 @@ import models.Game.Status;
 import models.GameOfficial;
 import models.PeriodScore;
 import util.DateTimeUtil;
-import actor.ActorApi.CompleteGame;
+import actor.ActorApi.CompleteBoxScore;
 import actor.ActorApi.IncompleteOfficialException;
 import actor.ActorApi.IncompleteRosterException;
 import actor.ActorApi.ScheduleGame;
@@ -159,8 +159,8 @@ public class GameXmlStats extends UntypedActor {
 		    		  	homeBoxScore.setResult(Result.win);
 		    		  	awayBoxScore.setResult(Result.loss);
 		    		}
-		    		CompleteGame cg = new CompleteGame(game);
-		    		getSender().tell(cg, getSelf());
+		    		CompleteBoxScore cbs = new CompleteBoxScore(game);
+		    		getSender().tell(cbs, getSelf());
 				}
 			}
 			catch (MalformedURLException e) {
