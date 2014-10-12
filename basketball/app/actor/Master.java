@@ -35,7 +35,7 @@ public class Master extends UntypedActor {
 			controller.tell(message, getSelf());	
 		}
 		else if (message.equals(InitializeComplete)) {
-			if (synchThreadCount == 0)
+			if (synchThreadCount < 2)
 				synchThreadCount++;
 			else
 				controller.tell(WorkStart, getSelf());	
