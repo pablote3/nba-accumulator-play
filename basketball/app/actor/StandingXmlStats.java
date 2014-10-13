@@ -88,7 +88,8 @@ public class StandingXmlStats extends UntypedActor {
 					if (baseJson != null) {
 					  	ObjectMapper mapper = new ObjectMapper();
 					  	mapper.registerModule(new JodaModule());  
-					    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);					    
+					    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+					    mapper.configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL, true);
 	        			standings = mapper.readValue(baseJson, Standings.class);
 					}
 				} 
