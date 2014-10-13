@@ -30,7 +30,6 @@ import akka.actor.UntypedActor;
 public class GameModel extends UntypedActor {
 	private ActorRef listener;
 	private final ActorRef gameXmlStats;
-	private final ActorRef standingModel;
 	private ActorRef controller;
 	private String propDate;
 	private String propTeam;
@@ -40,7 +39,6 @@ public class GameModel extends UntypedActor {
 	public GameModel(ActorRef listener) {
 		this.listener = listener;
 		gameXmlStats = getContext().actorOf(Props.create(GameXmlStats.class, listener), "gameXmlStats");
-		standingModel = getContext().actorOf(Props.create(StandingModel.class, listener), "standingModel");
 	}
 
 	public void onReceive(Object message) {
@@ -94,13 +92,12 @@ public class GameModel extends UntypedActor {
 				output.append(" " + DateTimeUtil.getFindDateNaked(game.getDate()));
 				output.append("-" + game.getBoxScores().get(0).getTeam().getKey() + "-at");
 				output.append("-" + game.getBoxScores().get(1).getTeam().getKey());
-				System.out.println(output.toString());
-				
+				System.out.println(output.toString());				
 				controller.tell(NextGame, getSelf());
 			}
 		}
 		else if(message instanceof CompleteBoxScore) {
-			standingModel.tell(message, getSelf());
+			controller.tell(message, getSelf());
 		}
 		else if(message instanceof CompleteGame) {
 			Game game = ((CompleteGame)message).game;

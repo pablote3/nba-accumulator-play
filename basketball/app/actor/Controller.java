@@ -6,6 +6,8 @@ import static actor.ActorApi.WorkStart;
 
 import java.util.List;
 
+import actor.ActorApi.CompleteBoxScore;
+import actor.ActorApi.CompleteGame;
 import actor.ActorApi.RepeatGame;
 import actor.ActorApi.WorkGame;
 import actor.ActorApi.GameIds;
@@ -19,6 +21,7 @@ import akka.actor.UntypedActor;
 public class Controller extends UntypedActor {
 	private final ActorRef gameModel;
 	private final ActorRef rosterModel;
+	private final ActorRef standingModel;
 	private ActorRef master;
 	private int nbrSecondsDelay;
 	private List<Long> ids;
@@ -27,6 +30,7 @@ public class Controller extends UntypedActor {
 	public Controller(ActorRef listener) {
 		gameModel = getContext().actorOf(Props.create(GameModel.class, listener), "gameModel");
 		rosterModel = getContext().actorOf(Props.create(RosterModel.class, listener), "rosterModel");
+		standingModel = getContext().actorOf(Props.create(StandingModel.class, listener), "standingModel");
 	}
 
 	public void onReceive(Object message) {
@@ -35,6 +39,7 @@ public class Controller extends UntypedActor {
 			nbrSecondsDelay = Integer.parseInt(((ServiceProps) message).delay);
 			gameModel.tell(message, master);
 			rosterModel.tell(message, master);
+			standingModel.tell(message, master);
 		}
 		else if (message.equals(WorkStart)) {
 			gameModel.tell(message, getSelf());
@@ -53,6 +58,12 @@ public class Controller extends UntypedActor {
 			else {
 				master.tell(WorkComplete, getSelf());
 			}
+		}
+		else if(message instanceof CompleteBoxScore) {
+			standingModel.tell(message, getSelf());
+		}
+		else if(message instanceof CompleteGame) {
+			gameModel.tell(message, getSelf());
 		}
 		else if (message instanceof RepeatGame) {
 			sleep();

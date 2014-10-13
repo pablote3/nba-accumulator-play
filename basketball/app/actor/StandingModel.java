@@ -21,7 +21,7 @@ public class StandingModel extends UntypedActor {
 	private ActorRef listener;
 	
 	private final ActorRef standingXmlStats;
-	private ActorRef gameModel;
+	private ActorRef controller;
 	private Game game;
 	
 	public StandingModel(ActorRef listener) {
@@ -34,7 +34,7 @@ public class StandingModel extends UntypedActor {
 			standingXmlStats.tell(message, getSender());
 		}
 		else if(message instanceof CompleteBoxScore) {
-			gameModel = getSender();
+			controller = getSender();
 			CompleteBoxScore cbs = (CompleteBoxScore)message;
 			game = cbs.game;
 			
@@ -62,8 +62,8 @@ public class StandingModel extends UntypedActor {
 					break;
 				}
 			}
-
-			gameModel.tell(new CompleteGame(game), getSelf());
+			CompleteGame cg = new CompleteGame(game);
+			controller.tell(cg, getSelf());
 		}
 		else {
 			unhandled(message);
