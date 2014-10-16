@@ -239,6 +239,31 @@ public class Game extends Model {
 	    return game;
 	}
 	
+	public static Game findPreviousByDateTeam(String date, String teamKey) {
+	  	Query<Game> query = Ebean.find(Game.class);
+	  	query.fetch("boxScores");
+	  	query.fetch("boxScores.team");
+	  	query.where().lt("t0.date", date + " 00:00:00");
+	    query.where().eq("t2.team_key", teamKey);
+	    query.orderBy("t0.date desc");
+	
+	    List<Game> games = query.findList();
+	    return games.get(0);
+	}
+	
+	public static Game findPreviousByDateTeamSeason(String date, String teamKey) {
+	  	Query<Game> query = Ebean.find(Game.class);
+	  	query.fetch("boxScores");
+	  	query.fetch("boxScores.team");
+	  	query.where().lt("t0.date", date + " 00:00:00");
+	  	query.where().between("t0.date", DateTimeUtil.getDateMinSeason(DateTimeUtil.createDateFromStringDate(date)) + " 00:00:00", date + " 23:59:59"); 	
+	    query.where().eq("t2.team_key", teamKey);
+	    query.orderBy("t0.date desc");
+	
+	    List<Game> games = query.findList();
+	    return games.get(0);
+	}
+	
 	public static List<Long> findIdsByDateTeamSize(String propDate, String propTeam, String propSize, ProcessingType processingType) {
 	  	Query<Game> query = null;
 	  	if (processingType.equals(ProcessingType.batch))

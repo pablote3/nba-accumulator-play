@@ -80,6 +80,42 @@ public class GameTest {
           }
         });
     }
+
+    @Test
+    public void findPreviousGameDateTeam() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  Game game = Game.findPreviousByDateTeam("2012-12-01", "sacramento-kings");
+        	  Game previousGame = Game.findById(game.getId(), ProcessingType.online);
+        	  
+        	  assertThat(previousGame.getSeasonType()).isEqualTo(SeasonType.regular);
+        	  assertThat(previousGame.getBoxScores().size()).isEqualTo(2);
+       		  BoxScore boxScore = previousGame.getBoxScores().get(0);
+       		  assertThat(boxScore.getLocation()).isEqualTo(Location.away);
+        	  assertThat(boxScore.getTeam().getAbbr()).isEqualTo("IND");
+        	  //standings uninitialized
+        	  assertThat(boxScore.getStandings().size()).isEqualTo(0);
+          }
+        });
+    }
+    
+    @Test
+    public void findPreviousGameDateTeamSeason() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  Game game = Game.findPreviousByDateTeamSeason("2012-12-01", "sacramento-kings");
+        	  Game previousGame = Game.findById(game.getId(), ProcessingType.online);
+        	  
+        	  assertThat(previousGame.getSeasonType()).isEqualTo(SeasonType.regular);
+        	  assertThat(previousGame.getBoxScores().size()).isEqualTo(2);
+       		  BoxScore boxScore = previousGame.getBoxScores().get(0);
+       		  assertThat(boxScore.getLocation()).isEqualTo(Location.away);
+        	  assertThat(boxScore.getTeam().getAbbr()).isEqualTo("IND");
+        	  //standings uninitialized
+        	  assertThat(boxScore.getStandings().size()).isEqualTo(0);
+          }
+        });
+    }
     
     @Test
     public void findGameIdByDateTeamOnline_Game() {
