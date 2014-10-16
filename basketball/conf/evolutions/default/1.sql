@@ -151,6 +151,8 @@ create table standing (
   winPercentage             float not null,
   pointDifferential         smallint not null,
   pointDifferentialPerGame  float not null,
+  sumOpptPoints             smallint not null,
+  sumOpptGamesPlayed        smallint not null,
   constraint ck_standing_streakType check (streakType in ('Loss','Win')),
   constraint pk_standing primary key (id))
 ;

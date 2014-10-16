@@ -103,7 +103,7 @@ public class GameTest {
     public void findPreviousGameDateTeamSeason() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Game game = Game.findPreviousByDateTeamSeason("2012-12-01", "sacramento-kings");
+        	  Game game = Game.findPreviousByDateTeamSeason("2012-12-01", "sacramento-kings", ProcessingType.online);
         	  Game previousGame = Game.findById(game.getId(), ProcessingType.online);
         	  
         	  assertThat(previousGame.getSeasonType()).isEqualTo(SeasonType.regular);

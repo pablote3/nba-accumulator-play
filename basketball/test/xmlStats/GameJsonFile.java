@@ -134,7 +134,10 @@ public class GameJsonFile {
         			for (int i = 0; i < standings.size(); i++)  {
         				String homeTeamKey = homeBoxScore.getTeam().getKey();
         				if (standings.get(i).getTeamKey().equals(homeTeamKey))  {
-        					homeBoxScore.getStandings().add(standings.get(i));
+        					Standing standing = standings.get(i);
+        					standing.setSumOpptGamesPlayed((short)3);
+        					standing.setSumOpptPoints((short)90);
+        					homeBoxScore.getStandings().add(standing);
         					break;
         				}
         			}
@@ -142,7 +145,10 @@ public class GameJsonFile {
         			for (int i = 0; i < standings.size(); i++)  {
         				String awayTeamKey = awayBoxScore.getTeam().getKey();
         				if (standings.get(i).getTeamKey().equals(awayTeamKey))  {
-        					awayBoxScore.getStandings().add(standings.get(i));
+        					Standing standing = standings.get(i);
+        					standing.setSumOpptGamesPlayed((short)2);
+        					standing.setSumOpptPoints((short)95);
+        					awayBoxScore.getStandings().add(standing);
         					break;
         				}
         			}

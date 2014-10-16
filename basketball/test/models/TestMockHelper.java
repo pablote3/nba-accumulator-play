@@ -209,6 +209,8 @@ public class TestMockHelper {
 	    standing.setWinPercentage((float)0.505);
 	    standing.setPointDifferential((short)-2);
 	    standing.setPointDifferentialPerGame((float)-0.4);
+	    standing.setSumOpptPoints((short)95);
+	    standing.setSumOpptGamesPlayed((short)3);
     	return standing;
     }
 	
@@ -239,6 +241,8 @@ public class TestMockHelper {
 	    standing.setWinPercentage((float)0.505);
 	    standing.setPointDifferential((short)-2);
 	    standing.setPointDifferentialPerGame((float)-0.4);
+	    standing.setSumOpptPoints((short)92);
+	    standing.setSumOpptGamesPlayed((short)2);
     	return standing;
     }
     
