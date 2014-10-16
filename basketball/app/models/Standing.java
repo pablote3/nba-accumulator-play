@@ -284,13 +284,13 @@ public class Standing extends Model {
 		this.pointDifferentialPerGame = pointDifferentialPerGame;
 	}
 	
-	@Column(name="sumOpptPoints", nullable=false)
-	private Short sumOpptPoints;
-	public Short getSumOpptPoints() {
-		return sumOpptPoints;
+	@Column(name="sumOpptWins", nullable=false)
+	private Short sumOpptWins;
+	public Short getSumOpptWins() {
+		return sumOpptWins;
 	}
-	public void setSumOpptPoints(Short sumOpptPoints) {
-		this.sumOpptPoints = sumOpptPoints;
+	public void setSumOpptWins(Short sumOpptWins) {
+		this.sumOpptWins = sumOpptWins;
 	}
 	
 	@Column(name="sumOpptGamesPlayed", nullable=false)

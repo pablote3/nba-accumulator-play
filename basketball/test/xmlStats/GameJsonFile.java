@@ -136,7 +136,7 @@ public class GameJsonFile {
         				if (standings.get(i).getTeamKey().equals(homeTeamKey))  {
         					Standing standing = standings.get(i);
         					standing.setSumOpptGamesPlayed((short)3);
-        					standing.setSumOpptPoints((short)90);
+        					standing.setSumOpptWins((short)0);
         					homeBoxScore.getStandings().add(standing);
         					break;
         				}
@@ -147,7 +147,7 @@ public class GameJsonFile {
         				if (standings.get(i).getTeamKey().equals(awayTeamKey))  {
         					Standing standing = standings.get(i);
         					standing.setSumOpptGamesPlayed((short)2);
-        					standing.setSumOpptPoints((short)95);
+        					standing.setSumOpptWins((short)2);
         					awayBoxScore.getStandings().add(standing);
         					break;
         				}
