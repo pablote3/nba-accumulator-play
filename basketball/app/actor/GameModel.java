@@ -9,6 +9,7 @@ import models.BoxScore;
 import models.Game;
 import models.Game.ProcessingType;
 import models.Game.Status;
+import models.Standing;
 
 import org.joda.time.DateTime;
 
@@ -101,9 +102,46 @@ public class GameModel extends UntypedActor {
 		}
 		else if(message instanceof CompleteGame) {
 			Game game = ((CompleteGame)message).game;
+			String gameDate = DateTimeUtil.getFindDateShort(game.getDate());
+			
 			BoxScore awayBoxScore = game.getBoxScores().get(0);
+			Game awayPreviousGame = Game.findPreviousByDateTeamSeason(gameDate, awayBoxScore.getTeam().getKey(), processingType);
+			
+			if (awayPreviousGame != null) {
+				Standing awayPreviousStanding;
+				if (awayPreviousGame.getBoxScores().get(0).getTeam().getKey().equals(awayBoxScore.getTeam().getKey()))
+					awayPreviousStanding = awayPreviousGame.getBoxScores().get(0).getStandings().get(0);
+				else
+					awayPreviousStanding = awayPreviousGame.getBoxScores().get(1).getStandings().get(0);
+		
+				awayPreviousStanding.setSumOpptWins((short)(awayPreviousStanding.getSumOpptWins() + awayPreviousStanding.getGamesWon()));
+				awayPreviousStanding.setSumOpptGamesPlayed((short)(awayPreviousStanding.getSumOpptGamesPlayed() + awayPreviousStanding.getGamesPlayed()));
+			}
+			else {
+				awayBoxScore.getStandings().get(0).setSumOpptWins((short)0);
+				awayBoxScore.getStandings().get(0).setSumOpptGamesPlayed((short)0);
+			}
+			
 			BoxScore homeBoxScore = game.getBoxScores().get(1);
+			Game homePreviousGame = Game.findPreviousByDateTeamSeason(gameDate, homeBoxScore.getTeam().getKey(), processingType);
+			
+			if (homePreviousGame != null) {
+				Standing homePreviousStanding;
+				if (homePreviousGame.getBoxScores().get(0).getTeam().getKey().equals(homeBoxScore.getTeam().getKey()))
+					homePreviousStanding = homePreviousGame.getBoxScores().get(0).getStandings().get(0);
+				else
+					homePreviousStanding = homePreviousGame.getBoxScores().get(1).getStandings().get(0);
+				
+				homePreviousStanding.setSumOpptWins((short)(homePreviousStanding.getSumOpptWins() + homePreviousStanding.getGamesWon()));
+				homePreviousStanding.setSumOpptGamesPlayed((short)(homePreviousStanding.getSumOpptGamesPlayed() + homePreviousStanding.getGamesPlayed()));
+			}
+			else {
+				homeBoxScore.getStandings().get(0).setSumOpptWins((short)0);
+				homeBoxScore.getStandings().get(0).setSumOpptGamesPlayed((short)0);
+			}			
+			
 			System.out.println(awayBoxScore.getTeam().getShortName() +  " " + awayBoxScore.getPoints() + " " + homeBoxScore.getTeam().getShortName() +  " " + homeBoxScore.getPoints());
+			
 		  	Game.update(game, processingType);
 		  	controller.tell(NextGame, getSelf());
 		}
