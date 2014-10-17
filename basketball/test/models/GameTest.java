@@ -100,7 +100,7 @@ public class GameTest {
     }
     
     @Test
-    public void findPreviousGameDateTeamSeason() {
+    public void findPreviousGameDateTeamSeason_Valid() {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	  Game game = Game.findPreviousByDateTeamSeason("2012-12-01", "sacramento-kings", ProcessingType.online);
@@ -113,6 +113,16 @@ public class GameTest {
         	  assertThat(boxScore.getTeam().getAbbr()).isEqualTo("IND");
         	  //standings uninitialized
         	  assertThat(boxScore.getStandings().size()).isEqualTo(0);
+          }
+        });
+    }
+    
+    @Test
+    public void findPreviousGameDateTeamSeason_Null() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  Game game = Game.findPreviousByDateTeamSeason("2012-10-30", "washington-wizards", ProcessingType.online);        	  
+        	  assertThat(game).isEqualTo(null);
           }
         });
     }

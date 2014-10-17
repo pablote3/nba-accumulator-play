@@ -264,9 +264,12 @@ public class Game extends Model {
 	  	query.where().between("t0.date", DateTimeUtil.getDateMinSeason(DateTimeUtil.createDateFromStringDate(date)) + " 00:00:00", date + " 23:59:59"); 	
 	    query.where().eq("t2.team_key", teamKey);
 	    query.orderBy("t0.date desc");
-	
 	    List<Game> games = query.findList();
-	    return games.get(0);
+	    
+	    Game game = null;
+	    if (games.size() > 0)
+	    	game =  games.get(0);
+	    return game;
 	}
 	
 	public static List<Long> findIdsByDateTeamSize(String propDate, String propTeam, String propSize, ProcessingType processingType) {
