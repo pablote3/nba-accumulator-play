@@ -59,7 +59,8 @@ public class StandingXmlStats extends UntypedActor {
 		}
 		else if(message instanceof RetrieveStandings) {
 			String gameDate = ((RetrieveStandings) message).date;
-			if (standings == null || DateTimeUtil.getFindDateNaked(standings.standings_date) != gameDate) {			
+			if (standings == null || !DateTimeUtil.getFindDateNaked(standings.standings_date).equals(gameDate)) {		
+				System.out.println("  Retrieving standings for " + gameDate);
 				InputStream inputStreamJson = null;
 				InputStreamReader baseJson = null;
 				String event = gameDate + ".json";
@@ -105,6 +106,9 @@ public class StandingXmlStats extends UntypedActor {
 				catch (Exception e) {
 					System.out.println("Exception");
 				}
+			}
+			else {
+				System.out.println("  Standings already loaded for " + gameDate);
 			}
 			ActiveStandings as = new ActiveStandings(standings);
 		    getSender().tell(as, getSender());
