@@ -308,8 +308,10 @@ public class Standing extends Model {
 			.append("  id: " + this.id)
 			.append("  rank: " + this.rank)
 			.append("  ordinal rank: " + this.ordinalRank)
-			.append("  streak: " + this.streak)
-			.append("  streak type: " + this.streakType)
+			.append("  games won: " + this.gamesWon)
+			.append("  games played: " + this.gamesPlayed)
+			.append("  oppt games won: " + this.sumOpptWins)
+			.append("  oppt games played: " + this.sumOpptGamesPlayed)
 			.toString();
 	}
 }
