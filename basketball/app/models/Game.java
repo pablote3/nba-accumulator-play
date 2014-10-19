@@ -268,7 +268,7 @@ public class Game extends Model {
 	    
 	    Game game = null;
 	    if (games.size() > 0)
-	    	game =  games.get(0);
+	    	game = Game.findById(games.get(0).getId(), processingType);
 	    return game;
 	}
 	
