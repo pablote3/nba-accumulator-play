@@ -78,7 +78,7 @@ public class GameModel extends UntypedActor {
 			
 			if (game.getStatus().equals(Status.scheduled) || game.getStatus().equals(Status.finished)) {
 				output = new StringBuffer();
-				output.append(Utilities.padString('\n' + "  Finished Game Ready for Completion -", 40));
+				output.append(Utilities.padString('\n' + "Finished Game Ready for Completion -", 40));
 				output.append(" " + DateTimeUtil.getFindDateNaked(game.getDate()));
 				output.append("-" + game.getBoxScores().get(0).getTeam().getKey() + "-at");
 				output.append("-" + game.getBoxScores().get(1).getTeam().getKey());
@@ -89,7 +89,7 @@ public class GameModel extends UntypedActor {
 			}
 			else  {
 				output = new StringBuffer();
-				output.append(Utilities.padString('\n' + "  " + game.getStatus() + " Not Eligible for Completion -", 40));
+				output.append(Utilities.padString('\n' + "" + game.getStatus() + " Not Eligible for Completion -", 40));
 				output.append(" " + DateTimeUtil.getFindDateNaked(game.getDate()));
 				output.append("-" + game.getBoxScores().get(0).getTeam().getKey() + "-at");
 				output.append("-" + game.getBoxScores().get(1).getTeam().getKey());
@@ -148,9 +148,20 @@ public class GameModel extends UntypedActor {
 			awayBoxScore.getStandings().get(0).setSumOpptWins((short)(awayTeamPrevOpptOpptGamesWon + homeOpptPrevOpptOpptGamesWon + awayResult));
 			awayBoxScore.getStandings().get(0).setSumOpptGamesPlayed((short)(awayTeamPrevOpptOpptGamesPlayed + homeOpptPrevOpptOpptGamesPlayed + 1));
 			
-			System.out.println(awayBoxScore.getTeam().getShortName() +  " " + awayBoxScore.getPoints() + " " + homeBoxScore.getTeam().getShortName() +  " " + homeBoxScore.getPoints());
+			System.out.println("  HomeTeamStanding " + homeBoxScore.getTeam().getShortName());
+			System.out.println("    HomeTeamPrevOpptOppt " + homeTeamPrevOpptOpptGamesWon + "-" + homeTeamPrevOpptOpptGamesPlayed + " + " +
+							   		"AwayOpptPrevOpptOppt " + awayOpptPrevOpptOpptGamesWon + "-" + awayOpptPrevOpptOpptGamesPlayed + " + " +
+									"HomeCurrent " + homeResult + "-1 = " +
+							   		"Result " + homeBoxScore.getStandings().get(0).getSumOpptWins() + "-" + homeBoxScore.getStandings().get(0).getSumOpptGamesPlayed());
+			System.out.println("  AwayTeamStanding " + awayBoxScore.getTeam().getShortName());
+			System.out.println("    AwayTeamPrevOpptOppt " + awayTeamPrevOpptOpptGamesWon + "-" + awayTeamPrevOpptOpptGamesPlayed + " + " +
+							   		"HomeOpptPrevOpptOppt " + homeOpptPrevOpptOpptGamesWon + "-" + homeOpptPrevOpptOpptGamesPlayed + " + " +
+									"AwayCurrent " + awayResult + "-1 = " +
+									"Result " + awayBoxScore.getStandings().get(0).getSumOpptWins() + "-" + awayBoxScore.getStandings().get(0).getSumOpptGamesPlayed());
 			
-		  	Game.update(game, processingType);
+		  	Game.update(game, processingType);		  	
+		  	System.out.println("Game Complete " + awayBoxScore.getTeam().getShortName() +  " " + awayBoxScore.getPoints() + " " + homeBoxScore.getTeam().getShortName() +  " " + homeBoxScore.getPoints());
+		  	
 		  	controller.tell(NextGame, getSelf());
 		}
 		else if(message instanceof IncompleteRosterException) {
