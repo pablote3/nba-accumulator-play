@@ -110,14 +110,14 @@ public class GameModel extends UntypedActor {
 			BoxScore awayBoxScore = game.getBoxScores().get(0);
 			Game awayPreviousGame = Game.findPreviousByDateTeamSeason(gameDate, awayBoxScore.getTeam().getKey(), processingType);
 
-			Short homeTeamPrevOpptOpptGamesWon = 0;
-			Short homeTeamPrevOpptOpptGamesPlayed = 0;			
-			Short homeOpptPrevOpptOpptGamesWon = 0;
-			Short homeOpptPrevOpptOpptGamesPlayed = 0;
-			Short awayTeamPrevOpptOpptGamesWon = 0;
-			Short awayTeamPrevOpptOpptGamesPlayed = 0;	
-			Short awayOpptPrevOpptOpptGamesWon = 0;
-			Short awayOpptPrevOpptOpptGamesPlayed = 0;
+			Integer homeTeamPrevOpptOpptGamesWon = 0;
+			Integer homeTeamPrevOpptOpptGamesPlayed = 0;			
+			Integer homeOpptPrevOpptOpptGamesWon = 0;
+			Integer homeOpptPrevOpptOpptGamesPlayed = 0;
+			Integer awayTeamPrevOpptOpptGamesWon = 0;
+			Integer awayTeamPrevOpptOpptGamesPlayed = 0;	
+			Integer awayOpptPrevOpptOpptGamesWon = 0;
+			Integer awayOpptPrevOpptOpptGamesPlayed = 0;
 
 			if (homePreviousGame != null) {
 				if (homePreviousGame.getBoxScores().get(0).getTeam().getKey().equals(homeBoxScore.getTeam().getKey())) {
@@ -152,11 +152,11 @@ public class GameModel extends UntypedActor {
 			int homeResult = homeBoxScore.getResult() == Result.win ? 1 : 0;
 			int awayResult = awayBoxScore.getResult() == Result.win ? 1 : 0;
 
-			homeBoxScore.getStandings().get(0).setSumOpptWins((short)(homeTeamPrevOpptOpptGamesWon + awayOpptPrevOpptOpptGamesWon + homeResult));
-			homeBoxScore.getStandings().get(0).setSumOpptGamesPlayed((short)(homeTeamPrevOpptOpptGamesPlayed + awayOpptPrevOpptOpptGamesPlayed + 1));
+			homeBoxScore.getStandings().get(0).setSumOpptWins(homeTeamPrevOpptOpptGamesWon + awayOpptPrevOpptOpptGamesWon + homeResult);
+			homeBoxScore.getStandings().get(0).setSumOpptGamesPlayed(homeTeamPrevOpptOpptGamesPlayed + awayOpptPrevOpptOpptGamesPlayed + 1);
 
-			awayBoxScore.getStandings().get(0).setSumOpptWins((short)(awayTeamPrevOpptOpptGamesWon + homeOpptPrevOpptOpptGamesWon + awayResult));
-			awayBoxScore.getStandings().get(0).setSumOpptGamesPlayed((short)(awayTeamPrevOpptOpptGamesPlayed + homeOpptPrevOpptOpptGamesPlayed + 1));
+			awayBoxScore.getStandings().get(0).setSumOpptWins(awayTeamPrevOpptOpptGamesWon + homeOpptPrevOpptOpptGamesWon + awayResult);
+			awayBoxScore.getStandings().get(0).setSumOpptGamesPlayed(awayTeamPrevOpptOpptGamesPlayed + homeOpptPrevOpptOpptGamesPlayed + 1);
 			
 			System.out.println("  HomeTeamStanding " + homeBoxScore.getTeam().getShortName());
 			System.out.println("    HomeTeamPrevOpptOppt " + homeTeamPrevOpptOpptGamesWon + "-" + homeTeamPrevOpptOpptGamesPlayed + " + " +

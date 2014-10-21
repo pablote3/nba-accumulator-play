@@ -285,20 +285,20 @@ public class Standing extends Model {
 	}
 	
 	@Column(name="sumOpptWins", nullable=false)
-	private Short sumOpptWins;
-	public Short getSumOpptWins() {
+	private Integer sumOpptWins;
+	public Integer getSumOpptWins() {
 		return sumOpptWins;
 	}
-	public void setSumOpptWins(Short sumOpptWins) {
+	public void setSumOpptWins(Integer sumOpptWins) {
 		this.sumOpptWins = sumOpptWins;
 	}
 	
 	@Column(name="sumOpptGamesPlayed", nullable=false)
-	private Short sumOpptGamesPlayed;
-	public Short getSumOpptGamesPlayed() {
+	private Integer sumOpptGamesPlayed;
+	public Integer getSumOpptGamesPlayed() {
 		return sumOpptGamesPlayed;
 	}
-	public void setSumOpptGamesPlayed(Short sumOpptGamesPlayed) {
+	public void setSumOpptGamesPlayed(Integer sumOpptGamesPlayed) {
 		this.sumOpptGamesPlayed = sumOpptGamesPlayed;
 	}
 

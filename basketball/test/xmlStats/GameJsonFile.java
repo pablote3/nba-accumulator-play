@@ -135,8 +135,8 @@ public class GameJsonFile {
         				String homeTeamKey = homeBoxScore.getTeam().getKey();
         				if (standings.get(i).getTeamKey().equals(homeTeamKey))  {
         					Standing standing = standings.get(i);
-        					standing.setSumOpptGamesPlayed((short)3);
-        					standing.setSumOpptWins((short)0);
+        					standing.setSumOpptGamesPlayed(3);
+        					standing.setSumOpptWins(0);
         					homeBoxScore.getStandings().add(standing);
         					break;
         				}
@@ -146,8 +146,8 @@ public class GameJsonFile {
         				String awayTeamKey = awayBoxScore.getTeam().getKey();
         				if (standings.get(i).getTeamKey().equals(awayTeamKey))  {
         					Standing standing = standings.get(i);
-        					standing.setSumOpptGamesPlayed((short)2);
-        					standing.setSumOpptWins((short)2);
+        					standing.setSumOpptGamesPlayed(2);
+        					standing.setSumOpptWins(2);
         					awayBoxScore.getStandings().add(standing);
         					break;
         				}
