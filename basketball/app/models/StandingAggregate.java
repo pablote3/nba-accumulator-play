@@ -14,10 +14,9 @@ public class StandingAggregate extends Model {
 	@OneToOne
 	Standing standing;
 	
-	public String teamKey;
-	public Integer sumWins;
-	public Integer sumGamesPlayed;
-//	private Float avgWinPercent;
+	private String teamKey;
+	private Integer sumWins;
+	private Integer sumGamesPlayed;
 
 	public String getTeamKey() {
 		return teamKey;
@@ -42,21 +41,11 @@ public class StandingAggregate extends Model {
 	public void setSumGamesPlayed(Integer sumGamesPlayed) {
 		this.sumGamesPlayed = sumGamesPlayed;
 	}
-
-//	public Float getAvgWinPercent() {
-//		return avgWinPercent;
-//	}
-//
-//	public void setAvgWinPercent(Float avgWinPercent) {
-//		this.avgWinPercent = avgWinPercent;
-//	}
 	
 	public String toString() {
 		return new StringBuffer()
-//			.append("\n" + this.teamKey + "\n")
 			.append("  sumWins: " + this.sumWins)
 			.append("  sumGamesPlayed: " + this.sumGamesPlayed)
-//			.append("  avgWinPercent: " + this.avgWinPercent)
 			.toString();
 	}
 }

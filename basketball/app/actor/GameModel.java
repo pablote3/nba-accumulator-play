@@ -6,6 +6,7 @@ import static actor.ActorApi.WorkStart;
 import java.util.List;
 
 import models.BoxScore;
+import models.Standing;
 import models.BoxScore.Result;
 import models.Game;
 import models.Game.ProcessingType;
@@ -155,23 +156,26 @@ public class GameModel extends UntypedActor {
 			homeBoxScore.getStandings().get(0).setGameDate(game.getDate());
 			homeBoxScore.getStandings().get(0).setOpptOpptWins(awayPrevOpptOpptGamesWon + homePrevGamesWon + homeResult);
 			homeBoxScore.getStandings().get(0).setOpptOpptGamesPlayed(awayPrevOpptOpptGamesPlayed + homePrevGamesPlayed + 1);
-			homeBoxScore.getStandings().get(0).setOpptOpptWinPercentage((float)0.0);
+			homeBoxScore.getStandings().get(0).setAvgOpptOpptWinPercentage(Standing.findOpponentOppenentWinPercentageSeason(gameDate, homeBoxScore.getTeam().getKey(), processingType));
 
 			awayBoxScore.getStandings().get(0).setGameDate(game.getDate());
 			awayBoxScore.getStandings().get(0).setOpptOpptWins(homePrevOpptOpptGamesWon + awayPrevGamesWon + awayResult);
 			awayBoxScore.getStandings().get(0).setOpptOpptGamesPlayed(homePrevOpptOpptGamesPlayed + awayPrevGamesPlayed + 1);
-			awayBoxScore.getStandings().get(0).setOpptOpptWinPercentage((float)0.0);
+			awayBoxScore.getStandings().get(0).setAvgOpptOpptWinPercentage(Standing.findOpponentOppenentWinPercentageSeason(gameDate, awayBoxScore.getTeam().getKey(), processingType));
 			
 			System.out.println("  HomeTeamStanding " + homeBoxScore.getTeam().getShortName());
 			System.out.println("     AwayPrevOpptOppt " + awayPrevOpptOpptGamesWon + "-" + awayPrevOpptOpptGamesPlayed + " + " +
 									"HomePrevious " + homePrevGamesWon + "-" + homePrevGamesPlayed + " + " + 
 									"HomeCurrent " + homeResult + "-1 = " +
-							   		"Result " + homeBoxScore.getStandings().get(0).getOpptOpptWins() + "-" + homeBoxScore.getStandings().get(0).getOpptOpptGamesPlayed());
+							   		"Result " + homeBoxScore.getStandings().get(0).getOpptOpptWins() + "-" + homeBoxScore.getStandings().get(0).getOpptOpptGamesPlayed()); 
+			System.out.println("     AvgOpptOpptWin% " + homeBoxScore.getStandings().get(0).getAvgOpptOpptWinPercentage());
+			
 			System.out.println("  AwayTeamStanding " + awayBoxScore.getTeam().getShortName());
 			System.out.println("     HomePrevOpptOppt " + homePrevOpptOpptGamesWon + "-" + homePrevOpptOpptGamesPlayed + " + " +
 									"AwayPrevious " + awayPrevGamesWon + "-" + awayPrevGamesPlayed + " + " + 
 									"AwayCurrent " + awayResult + "-1 = " +
 									"Result " + awayBoxScore.getStandings().get(0).getOpptOpptWins() + "-" + awayBoxScore.getStandings().get(0).getOpptOpptGamesPlayed());
+			System.out.println("     AvgOpptOpptWin% " + awayBoxScore.getStandings().get(0).getAvgOpptOpptWinPercentage());
 			
 		  	Game.update(game, processingType);		  	
 		  	System.out.println("Game Complete " + awayBoxScore.getTeam().getShortName() +  " " + awayBoxScore.getPoints() + " " + homeBoxScore.getTeam().getShortName() +  " " + homeBoxScore.getPoints());
