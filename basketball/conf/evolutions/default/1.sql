@@ -154,7 +154,7 @@ create table standing (
   pointDifferentialPerGame  float not null,
   opptOpptWins              integer not null,
   opptOpptGamesPlayed       integer not null,
-  opptOpptWinPercentage     float not null,
+  avgOpptOpptWinPercentage  float not null,
   constraint ck_standing_streakType check (streakType in ('Loss','Win')),
   constraint pk_standing primary key (id))
 ;
