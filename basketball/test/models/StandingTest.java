@@ -5,10 +5,12 @@ import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.running;
 import models.Game.ProcessingType;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class StandingTest {    
     @Test
+    @Ignore
     public void findOpponentOppenentWinPercentageSeason() {
         running(fakeApplication(), new Runnable() {
           public void run() {
