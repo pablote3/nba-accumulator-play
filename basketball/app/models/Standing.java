@@ -1,5 +1,8 @@
 package models;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,9 +13,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.TableGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import models.Game.ProcessingType;
+
+import org.joda.time.DateTime;
 
 import play.db.ebean.Model;
 
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.Query;
+import com.avaje.ebean.RawSql;
+import com.avaje.ebean.RawSqlBuilder;
 import com.avaje.ebean.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -46,6 +59,16 @@ public class Standing extends Model {
 	}
 	public void setTeamKey(String teamKey) {
 		this.teamKey = teamKey;
+	}
+	
+	@Column(name="gameDate", nullable=false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private DateTime gameDate;
+	public DateTime getGameDate() {
+		return gameDate;
+	}
+	public void setGameDate(DateTime gameDate) {
+		this.gameDate = gameDate;
 	}
 	
 	@Column(name="rank", nullable=false)
@@ -284,34 +307,69 @@ public class Standing extends Model {
 		this.pointDifferentialPerGame = pointDifferentialPerGame;
 	}
 	
-	@Column(name="sumOpptWins", nullable=false)
-	private Integer sumOpptWins;
-	public Integer getSumOpptWins() {
-		return sumOpptWins;
+	@Column(name="opptOpptWins", nullable=false)
+	private Integer opptOpptWins;
+	public Integer getOpptOpptWins() {
+		return opptOpptWins;
 	}
-	public void setSumOpptWins(Integer sumOpptWins) {
-		this.sumOpptWins = sumOpptWins;
+	public void setOpptOpptWins(Integer opptOpptWins) {
+		this.opptOpptWins = opptOpptWins;
 	}
 	
-	@Column(name="sumOpptGamesPlayed", nullable=false)
-	private Integer sumOpptGamesPlayed;
-	public Integer getSumOpptGamesPlayed() {
-		return sumOpptGamesPlayed;
+	@Column(name="opptOpptGamesPlayed", nullable=false)
+	private Integer opptOpptGamesPlayed;
+	public Integer getOpptOpptGamesPlayed() {
+		return opptOpptGamesPlayed;
 	}
-	public void setSumOpptGamesPlayed(Integer sumOpptGamesPlayed) {
-		this.sumOpptGamesPlayed = sumOpptGamesPlayed;
+	public void setOpptOpptGamesPlayed(Integer opptOpptGamesPlayed) {
+		this.opptOpptGamesPlayed = opptOpptGamesPlayed;
 	}
+	
+	@Column(name="opptOpptWinPercentage", nullable=false)
+	private Float opptOpptWinPercentage;
+	public Float getOpptOpptWinPercentage() {
+		return opptOpptWinPercentage;
+	}
+	public void setOpptOpptWinPercentage(Float opptOpptWinPercentage) {
+		this.opptOpptWinPercentage = opptOpptWinPercentage;
+	}
+	
+	public static Float findOpponentOppenentWinPercentageSeason(String date, String team_key, ProcessingType processingType) {	
+		String sql =
+				"select teamKey, sum(opptOpptWins) as sumWins, sum(opptOpptGamesPlayed) as sumGamesPlayed " +
+				"from standing " + 
+				"group by teamKey ";
+			
+		RawSql rawSql = 
+				RawSqlBuilder
+					.parse(sql)
+					.columnMapping("teamKey", "teamKey")
+					.columnMapping("sum(opptOpptWins)", "sumWins")
+					.columnMapping("sum(opptOpptGamesPlayed)", "sumGamesPlayed")
+					.create();
+		
+		Query<StandingAggregate> query = Ebean.find(StandingAggregate.class);
+		query.setRawSql(rawSql)
+			 .having().eq("teamKey", team_key);
+				
+		StandingAggregate sa = query.findUnique();
+	
+		//if overflow is likely, if it would overflow (ie the dividend is bigger than 922337203685477581)
+		return new BigDecimal(sa.sumWins).divide(new BigDecimal(sa.sumGamesPlayed), 3, RoundingMode.HALF_UP).floatValue();
+	}
+	
 
 	public String toString() {
 		return new StringBuffer()
 			.append("\n" + this.teamKey + "\n")
-			.append("  id: " + this.id)
+			.append("  game date: " + this.gameDate)
 			.append("  rank: " + this.rank)
 			.append("  ordinal rank: " + this.ordinalRank)
 			.append("  games won: " + this.gamesWon)
 			.append("  games played: " + this.gamesPlayed)
-			.append("  oppt games won: " + this.sumOpptWins)
-			.append("  oppt games played: " + this.sumOpptGamesPlayed)
+			.append("  oppt games won: " + this.opptOpptWins)
+			.append("  oppt games played: " + this.opptOpptGamesPlayed)
+			.append("  oppt win percentage: " + this.opptOpptWinPercentage)
 			.toString();
 	}
 }

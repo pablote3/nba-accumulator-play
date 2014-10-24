@@ -110,64 +110,68 @@ public class GameModel extends UntypedActor {
 			BoxScore awayBoxScore = game.getBoxScores().get(0);
 			Game awayPreviousGame = Game.findPreviousByDateTeamSeason(gameDate, awayBoxScore.getTeam().getKey(), processingType);
 
-			Integer homeTeamPrevOpptOpptGamesWon = 0;
-			Integer homeTeamPrevOpptOpptGamesPlayed = 0;			
-			Integer homeOpptPrevOpptOpptGamesWon = 0;
-			Integer homeOpptPrevOpptOpptGamesPlayed = 0;
-			Integer awayTeamPrevOpptOpptGamesWon = 0;
-			Integer awayTeamPrevOpptOpptGamesPlayed = 0;	
-			Integer awayOpptPrevOpptOpptGamesWon = 0;
-			Integer awayOpptPrevOpptOpptGamesPlayed = 0;
+			Integer homePrevOpptOpptGamesWon = 0;
+			Integer homePrevOpptOpptGamesPlayed = 0;
+			Short homePrevGamesWon = 0;
+			Short homePrevGamesPlayed = 0;
+			Integer awayPrevOpptOpptGamesWon = 0;
+			Integer awayPrevOpptOpptGamesPlayed = 0;
+			Short awayPrevGamesWon = 0;
+			Short awayPrevGamesPlayed = 0;
 
 			if (homePreviousGame != null) {
 				if (homePreviousGame.getBoxScores().get(0).getTeam().getKey().equals(homeBoxScore.getTeam().getKey())) {
-					homeTeamPrevOpptOpptGamesWon = homePreviousGame.getBoxScores().get(0).getStandings().get(0).getSumOpptWins();
-					homeTeamPrevOpptOpptGamesPlayed = homePreviousGame.getBoxScores().get(0).getStandings().get(0).getSumOpptGamesPlayed();
-					homeOpptPrevOpptOpptGamesWon = homePreviousGame.getBoxScores().get(1).getStandings().get(0).getSumOpptWins();
-					homeOpptPrevOpptOpptGamesPlayed = homePreviousGame.getBoxScores().get(1).getStandings().get(0).getSumOpptGamesPlayed();
+					homePrevOpptOpptGamesWon = homePreviousGame.getBoxScores().get(1).getStandings().get(0).getOpptOpptWins();
+					homePrevOpptOpptGamesPlayed = homePreviousGame.getBoxScores().get(1).getStandings().get(0).getOpptOpptGamesPlayed();
+					homePrevGamesWon = homePreviousGame.getBoxScores().get(1).getStandings().get(0).getGamesWon();
+					homePrevGamesPlayed = homePreviousGame.getBoxScores().get(1).getStandings().get(0).getGamesPlayed();
 				}
 				else {
-					homeTeamPrevOpptOpptGamesWon = homePreviousGame.getBoxScores().get(1).getStandings().get(0).getSumOpptWins();
-					homeTeamPrevOpptOpptGamesPlayed = homePreviousGame.getBoxScores().get(1).getStandings().get(0).getSumOpptGamesPlayed();
-					homeOpptPrevOpptOpptGamesWon = homePreviousGame.getBoxScores().get(0).getStandings().get(0).getSumOpptWins();
-					homeOpptPrevOpptOpptGamesPlayed = homePreviousGame.getBoxScores().get(0).getStandings().get(0).getSumOpptGamesPlayed();					
+					homePrevOpptOpptGamesWon = homePreviousGame.getBoxScores().get(0).getStandings().get(0).getOpptOpptWins();
+					homePrevOpptOpptGamesPlayed = homePreviousGame.getBoxScores().get(0).getStandings().get(0).getOpptOpptGamesPlayed();
+					homePrevGamesWon = homePreviousGame.getBoxScores().get(0).getStandings().get(0).getGamesWon();
+					homePrevGamesPlayed = homePreviousGame.getBoxScores().get(0).getStandings().get(0).getGamesPlayed();
 				}
 			}
 			
 			if (awayPreviousGame != null) {
 				if (awayPreviousGame.getBoxScores().get(0).getTeam().getKey().equals(awayBoxScore.getTeam().getKey())) {
-					awayTeamPrevOpptOpptGamesWon = awayPreviousGame.getBoxScores().get(0).getStandings().get(0).getSumOpptWins();
-					awayTeamPrevOpptOpptGamesPlayed = awayPreviousGame.getBoxScores().get(0).getStandings().get(0).getSumOpptGamesPlayed();					
-					awayOpptPrevOpptOpptGamesWon = awayPreviousGame.getBoxScores().get(1).getStandings().get(0).getSumOpptWins();
-					awayOpptPrevOpptOpptGamesPlayed = awayPreviousGame.getBoxScores().get(1).getStandings().get(0).getSumOpptGamesPlayed();
+					awayPrevOpptOpptGamesWon = awayPreviousGame.getBoxScores().get(1).getStandings().get(0).getOpptOpptWins();
+					awayPrevOpptOpptGamesPlayed = awayPreviousGame.getBoxScores().get(1).getStandings().get(0).getOpptOpptGamesPlayed();
+					awayPrevGamesWon = awayPreviousGame.getBoxScores().get(1).getStandings().get(0).getGamesWon();
+					awayPrevGamesPlayed = awayPreviousGame.getBoxScores().get(1).getStandings().get(0).getGamesPlayed();
 				}
 				else {
-					awayTeamPrevOpptOpptGamesWon = awayPreviousGame.getBoxScores().get(1).getStandings().get(0).getSumOpptWins();
-					awayTeamPrevOpptOpptGamesPlayed = awayPreviousGame.getBoxScores().get(1).getStandings().get(0).getSumOpptGamesPlayed();					
-					awayOpptPrevOpptOpptGamesWon = awayPreviousGame.getBoxScores().get(0).getStandings().get(0).getSumOpptWins();
-					awayOpptPrevOpptOpptGamesPlayed = awayPreviousGame.getBoxScores().get(0).getStandings().get(0).getSumOpptGamesPlayed();					
+					awayPrevOpptOpptGamesWon = awayPreviousGame.getBoxScores().get(0).getStandings().get(0).getOpptOpptWins();
+					awayPrevOpptOpptGamesPlayed = awayPreviousGame.getBoxScores().get(0).getStandings().get(0).getOpptOpptGamesPlayed();
+					awayPrevGamesWon = awayPreviousGame.getBoxScores().get(0).getStandings().get(0).getGamesWon();
+					awayPrevGamesPlayed = awayPreviousGame.getBoxScores().get(0).getStandings().get(0).getGamesPlayed();
 				}
 			}
 			
 			int homeResult = homeBoxScore.getResult() == Result.win ? 1 : 0;
 			int awayResult = awayBoxScore.getResult() == Result.win ? 1 : 0;
+			
+			homeBoxScore.getStandings().get(0).setGameDate(game.getDate());
+			homeBoxScore.getStandings().get(0).setOpptOpptWins(awayPrevOpptOpptGamesWon + homePrevGamesWon + homeResult);
+			homeBoxScore.getStandings().get(0).setOpptOpptGamesPlayed(awayPrevOpptOpptGamesPlayed + homePrevGamesPlayed + 1);
+			homeBoxScore.getStandings().get(0).setOpptOpptWinPercentage((float)0.0);
 
-			homeBoxScore.getStandings().get(0).setSumOpptWins(homeTeamPrevOpptOpptGamesWon + awayOpptPrevOpptOpptGamesWon + homeResult);
-			homeBoxScore.getStandings().get(0).setSumOpptGamesPlayed(homeTeamPrevOpptOpptGamesPlayed + awayOpptPrevOpptOpptGamesPlayed + 1);
-
-			awayBoxScore.getStandings().get(0).setSumOpptWins(awayTeamPrevOpptOpptGamesWon + homeOpptPrevOpptOpptGamesWon + awayResult);
-			awayBoxScore.getStandings().get(0).setSumOpptGamesPlayed(awayTeamPrevOpptOpptGamesPlayed + homeOpptPrevOpptOpptGamesPlayed + 1);
+			awayBoxScore.getStandings().get(0).setGameDate(game.getDate());
+			awayBoxScore.getStandings().get(0).setOpptOpptWins(homePrevOpptOpptGamesWon + awayPrevGamesWon + awayResult);
+			awayBoxScore.getStandings().get(0).setOpptOpptGamesPlayed(homePrevOpptOpptGamesPlayed + awayPrevGamesPlayed + 1);
+			awayBoxScore.getStandings().get(0).setOpptOpptWinPercentage((float)0.0);
 			
 			System.out.println("  HomeTeamStanding " + homeBoxScore.getTeam().getShortName());
-			System.out.println("    HomeTeamPrevOpptOppt " + homeTeamPrevOpptOpptGamesWon + "-" + homeTeamPrevOpptOpptGamesPlayed + " + " +
-							   		"AwayOpptPrevOpptOppt " + awayOpptPrevOpptOpptGamesWon + "-" + awayOpptPrevOpptOpptGamesPlayed + " + " +
+			System.out.println("     AwayPrevOpptOppt " + awayPrevOpptOpptGamesWon + "-" + awayPrevOpptOpptGamesPlayed + " + " +
+									"HomePrevious " + homePrevGamesWon + "-" + homePrevGamesPlayed + " + " + 
 									"HomeCurrent " + homeResult + "-1 = " +
-							   		"Result " + homeBoxScore.getStandings().get(0).getSumOpptWins() + "-" + homeBoxScore.getStandings().get(0).getSumOpptGamesPlayed());
+							   		"Result " + homeBoxScore.getStandings().get(0).getOpptOpptWins() + "-" + homeBoxScore.getStandings().get(0).getOpptOpptGamesPlayed());
 			System.out.println("  AwayTeamStanding " + awayBoxScore.getTeam().getShortName());
-			System.out.println("    AwayTeamPrevOpptOppt " + awayTeamPrevOpptOpptGamesWon + "-" + awayTeamPrevOpptOpptGamesPlayed + " + " +
-							   		"HomeOpptPrevOpptOppt " + homeOpptPrevOpptOpptGamesWon + "-" + homeOpptPrevOpptOpptGamesPlayed + " + " +
+			System.out.println("     HomePrevOpptOppt " + homePrevOpptOpptGamesWon + "-" + homePrevOpptOpptGamesPlayed + " + " +
+									"AwayPrevious " + awayPrevGamesWon + "-" + awayPrevGamesPlayed + " + " + 
 									"AwayCurrent " + awayResult + "-1 = " +
-									"Result " + awayBoxScore.getStandings().get(0).getSumOpptWins() + "-" + awayBoxScore.getStandings().get(0).getSumOpptGamesPlayed());
+									"Result " + awayBoxScore.getStandings().get(0).getOpptOpptWins() + "-" + awayBoxScore.getStandings().get(0).getOpptOpptGamesPlayed());
 			
 		  	Game.update(game, processingType);		  	
 		  	System.out.println("Game Complete " + awayBoxScore.getTeam().getShortName() +  " " + awayBoxScore.getPoints() + " " + homeBoxScore.getTeam().getShortName() +  " " + homeBoxScore.getPoints());

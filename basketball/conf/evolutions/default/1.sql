@@ -127,6 +127,7 @@ create table standing (
   id                        bigint auto_increment not null,
   boxscore_id               bigint,
   teamKey                   varchar(255) not null,
+  gameDate                  datetime not null,
   rank                      smallint not null,
   ordinalRank               varchar(255) not null,
   gamesWon                  smallint not null,
@@ -151,8 +152,9 @@ create table standing (
   winPercentage             float not null,
   pointDifferential         smallint not null,
   pointDifferentialPerGame  float not null,
-  sumOpptWins               integer not null,
-  sumOpptGamesPlayed        integer not null,
+  opptOpptWins              integer not null,
+  opptOpptGamesPlayed       integer not null,
+  opptOpptWinPercentage     float not null,
   constraint ck_standing_streakType check (streakType in ('Loss','Win')),
   constraint pk_standing primary key (id))
 ;
