@@ -370,7 +370,10 @@ public class Standing extends Model {
 		StandingAggregate sa = query.findUnique();
 	
 		//if overflow is likely, if it would overflow (ie the dividend is bigger than 922337203685477581), divide the divisor by 100 first.
-		return new BigDecimal(sa.getSumWins()).divide(new BigDecimal(sa.getSumGamesPlayed()), 3, RoundingMode.HALF_UP).floatValue();
+		BigDecimal avgOpptOpptWinPercentage = new BigDecimal(0).setScale(3);
+		if (sa != null && sa.getSumGamesPlayed() != null)
+			avgOpptOpptWinPercentage = new BigDecimal(sa.getSumWins()).divide(new BigDecimal(sa.getSumGamesPlayed()), 3, RoundingMode.HALF_UP);
+		return avgOpptOpptWinPercentage.floatValue();
 	}
 	
 
