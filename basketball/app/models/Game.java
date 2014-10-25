@@ -261,7 +261,8 @@ public class Game extends Model {
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
 	  	query.where().lt("t0.date", date + " 00:00:00");
-	  	query.where().between("t0.date", DateTimeUtil.getDateMinSeason(DateTimeUtil.createDateFromStringDate(date)) + " 00:00:00", date + " 23:59:59"); 	
+	  	query.where().gt("t0.date", DateTimeUtil.getDateMinSeason(DateTimeUtil.createDateFromStringDate(date)) + " 00:00:00");
+	  	query.where().eq("t0.status", "Completed");
 	    query.where().eq("t2.team_key", teamKey);
 	    query.orderBy("t0.date desc");
 	    List<Game> games = query.findList();
