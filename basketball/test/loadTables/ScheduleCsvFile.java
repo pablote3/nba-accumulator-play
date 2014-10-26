@@ -26,10 +26,7 @@ public class ScheduleCsvFile {
 	@Ignore
 	@Test
 	public void createSchedule() {
-	    //entire nba schedule from www.LiveFanChat.com
-	    //need to replace ,, with , , prior to execution for parsing to work correctly
-	    //found a few accuracy problems with games, needed to compare with www.basketball-reference.com/leagues/NBA_2013_games.html
-	    //like that it has game start times though
+	    //http://www.basketball-reference.com/leagues/NBA_2015_games.html
 	    Path path =  Paths.get(System.getProperty("config.load")).resolve("Schedule_2013-2014.csv");
 		File file = path.toFile();
 
