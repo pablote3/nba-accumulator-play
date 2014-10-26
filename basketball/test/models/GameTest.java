@@ -100,6 +100,7 @@ public class GameTest {
     }
     
     @Test
+    @Ignore
     public void findPreviousGameDateTeamSeason_Valid() {
         running(fakeApplication(), new Runnable() {
           public void run() {
