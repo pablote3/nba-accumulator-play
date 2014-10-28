@@ -27,7 +27,8 @@ public class ScheduleCsvFile {
 	@Test
 	public void createSchedule() {
 	    //http://www.basketball-reference.com/leagues/NBA_2015_games.html
-	    Path path =  Paths.get(System.getProperty("config.load")).resolve("Schedule_2013-2014.csv");
+		//http://www.nba.com/schedules/national_tv_schedule/
+	    Path path =  Paths.get(System.getProperty("config.load")).resolve("Schedule_2014-2015.csv");
 		File file = path.toFile();
 
 		BufferedReader bufRdr = null;
@@ -42,7 +43,7 @@ public class ScheduleCsvFile {
 		BoxScore boxScoreAway;
 		Team teamHome;
 		Team teamAway;
-		DateTime preseasonEnd = new DateTime(2013, 9, 28, 0, 0, 0);		//10/28/13
+		DateTime preseasonEnd = new DateTime(2014, 9, 28, 0, 0, 0);		//10/28/13
 		StringBuffer sbDate;
 		DateTime date;
 		int i = 0;
