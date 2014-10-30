@@ -5,9 +5,11 @@ import static actor.ActorApi.InitializeComplete;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -23,6 +25,9 @@ import models.Game;
 import models.Game.ProcessingType;
 import models.Game.Source;
 import models.RosterPlayer;
+
+import org.apache.commons.io.IOUtils;
+
 import util.DateTimeUtil;
 import actor.ActorApi.ActiveRosterPlayers;
 import actor.ActorApi.ServiceProps;
@@ -66,17 +71,9 @@ public class RosterXmlStats extends UntypedActor {
 			String gameDate = ((UpdateRoster) message).date;
 			String nakedDate = DateTimeUtil.getFindDateNaked(DateTimeUtil.createDateFromStringDate(gameDate));
 			String gameTeam = ((UpdateRoster) message).team;
-			InputStream inputStreamJson = null;
-			InputStreamReader baseJson = null;
 			
 			try {
-				if (source.equals(Source.file)) {
-					String fileTeam =  gameTeam + "-" + nakedDate + ".json";				
-					Path path =  Paths.get(fileRoster).resolve(fileTeam);
-					File file = path.toFile();
-					inputStreamJson = new FileInputStream(file);
-				}
-				else {
+				if (source.equals(Source.api)) {
 					URL url;
 					String urlTeam = urlRoster + gameTeam + ".json";
 					url = new URL(urlTeam);
@@ -84,13 +81,22 @@ public class RosterXmlStats extends UntypedActor {
 					connection.setRequestProperty(AUTHORIZATION, accessToken);
 					connection.setRequestProperty(USER_AGENT, userAgentName);
 					connection.setRequestProperty(ACCEPT_ENCODING, GZIP);
-					inputStreamJson = connection.getInputStream();
+					InputStream inputStreamApi = connection.getInputStream();
 					String encoding = connection.getContentEncoding();
 					if (GZIP.equals(encoding)) {
-						inputStreamJson = new GZIPInputStream(inputStreamJson);
+						inputStreamApi = new GZIPInputStream(inputStreamApi);
 					}
+					OutputStream outputStreamJson = new FileOutputStream(fileRoster + File.separatorChar + gameTeam + "-" + nakedDate + ".json");
+					outputStreamJson.write(IOUtils.toByteArray(inputStreamApi));
+					outputStreamJson.close();
+					inputStreamApi.close();
 				}
-				baseJson = new InputStreamReader(inputStreamJson, StandardCharsets.UTF_8);
+				String fileTeam =  gameTeam + "-" + nakedDate + ".json";				
+				Path path =  Paths.get(fileRoster).resolve(fileTeam);
+				File file = path.toFile();
+				InputStream inputStreamFile = new FileInputStream(file);
+
+				InputStreamReader baseJson = new InputStreamReader(inputStreamFile, StandardCharsets.UTF_8);
 				if (baseJson != null) {
 				  	ObjectMapper mapper = new ObjectMapper();
 				  	mapper.registerModule(new JodaModule());  
@@ -100,6 +106,7 @@ public class RosterXmlStats extends UntypedActor {
 				    ActiveRosterPlayers activeRosterPlayers = new ActiveRosterPlayers(rosterPlayers);
 				    getSender().tell(activeRosterPlayers, getSelf());
 				}
+				inputStreamFile.close();
 			} 
 			catch (FileNotFoundException e) {
 				listener.tell(new XmlStatsException("FileNotFoundException"), getSelf());
