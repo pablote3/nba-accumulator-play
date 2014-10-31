@@ -73,7 +73,7 @@ public class ScheduleCsvFile {
 				            
 					game = new Game();
 		            game.setDate(date);
-		            game.setStatus(Status.finished);
+		            game.setStatus(Status.scheduled);
 		            game.setSeasonType(SeasonType.regular);
 				            
 					boxScoreAway = new BoxScore();			            
