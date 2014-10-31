@@ -19,6 +19,7 @@ import java.util.Map;
 
 import models.Team;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import play.data.Form;
@@ -84,6 +85,7 @@ public class FormTeamTest {
     }
     
     @Test
+    @Ignore
     public void saveAndDeleteTeam() {
 	    running(fakeApplication(), new Runnable() {
 	        public void run() {

@@ -106,7 +106,7 @@ public class TeamTest {
           public void run() {       
               Team.create(TestMockHelper.getTeam(), ProcessingType.online);
               
-              Team createTeam = Team.findByKey("key", "seattle-supersonics", ProcessingType.online);
+              Team createTeam = Team.findByTeamKey("seattle-supersonics", ProcessingType.online);
               assertThat(createTeam.getFullName()).isEqualTo("Seattle Supersonics");
               assertThat(createTeam.getAbbr()).isEqualTo("SEA");
               Team.delete(createTeam.getId());
@@ -119,14 +119,14 @@ public class TeamTest {
         running(fakeApplication(), new Runnable() {
           public void run() {
               Team team = Team.findByKey("key", "miami-heat", ProcessingType.online);
-              team.setActive(false);
+              team.setCity("Detroit");
               team.update();
               
               Team updateTeam = Team.findByKey("key", "miami-heat", ProcessingType.online);
               assertThat(updateTeam.getFullName()).isEqualTo("Miami Heat");
               assertThat(updateTeam.getAbbr()).isEqualTo("MIA");
-              assertThat(updateTeam.getActive()).isFalse();
-              updateTeam.setActive(true);
+              assertThat(updateTeam.getCity()).isEqualTo("Detroit");
+              updateTeam.setCity("Miami");
               updateTeam.update();
           }
         });
@@ -137,7 +137,7 @@ public class TeamTest {
         running(fakeApplication(), new Runnable() {
           public void run() {
        		  try {
-       			  Team team = Team.findByKey("key", "new-orleans-hornets", ProcessingType.online);
+       			  Team team = Team.findByKey("key", "miami-heat", ProcessingType.online);
        			  team.setFullName(null);
        			  team.update();
        		  } catch (PersistenceException e) {

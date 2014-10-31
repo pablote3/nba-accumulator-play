@@ -218,7 +218,8 @@ public class Team extends Model {
 		else if (processingType.equals(ProcessingType.online))
 			query = Ebean.find(Team.class);
 		
-		query.where().eq(key, value);		
+		query.where().eq(key, value);
+		query.where().eq("active", true);
 		Team team = query.findUnique();
 		return team;
 	}

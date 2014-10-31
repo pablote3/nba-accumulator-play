@@ -82,6 +82,7 @@ public class GameTest {
     }
 
     @Test
+    @Ignore
     public void findPreviousGameDateTeam() {
         running(fakeApplication(), new Runnable() {
           public void run() {
