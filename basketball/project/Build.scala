@@ -14,7 +14,8 @@ object ApplicationBuild extends Build {
     javaEbean,
     "mysql" % "mysql-connector-java" % "5.1.23",
     "com.google.inject" % "guice" % "4.0-beta",
-    "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % "2.4.1"
+    "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % "2.4.1",
+    "commons-io" % "commons-io" % "2.4"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
