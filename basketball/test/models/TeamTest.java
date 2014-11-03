@@ -23,7 +23,7 @@ public class TeamTest {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	  List<Team> teams = Team.findAll();
-        	  assertThat(teams.size()).isEqualTo(31);
+        	  assertThat(teams.size()).isEqualTo(32);
           }
         });
     }
@@ -152,7 +152,7 @@ public class TeamTest {
         running(fakeApplication(), new Runnable() {
            public void run() {
                Page<Team> teams = Team.page(0, 15, "fullName", "ASC", "");
-               assertThat(teams.getTotalRowCount()).isEqualTo(31);
+               assertThat(teams.getTotalRowCount()).isEqualTo(32);
                assertThat(teams.getList().size()).isEqualTo(15);
            }
         });
