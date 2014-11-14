@@ -27,6 +27,14 @@ create table box_score (
   reboundsOffense           smallint,
   reboundsDefense           smallint,
   personalFouls             smallint,
+  pointsPeriod1             smallint,
+  pointsPeriod2             smallint,
+  pointsPeriod3             smallint,
+  pointsPeriod4             smallint,
+  pointsPeriod5             smallint,
+  pointsPeriod6             smallint,
+  pointsPeriod7             smallint,
+  pointsPeriod8             smallint,
   constraint ck_box_score_location check (location in ('Away','Home')),
   constraint ck_box_score_result check (result in ('Loss','Win')),
   constraint pk_box_score primary key (id))
@@ -88,14 +96,6 @@ create table official (
   active                    tinyint(1) default 0 not null,
   last_update               datetime not null,
   constraint pk_official primary key (id))
-;
-
-create table period_score (
-  id                        bigint auto_increment not null,
-  boxscore_id               bigint,
-  quarter                   smallint not null,
-  score                     smallint not null,
-  constraint pk_period_score primary key (id))
 ;
 
 create table player (
@@ -189,14 +189,12 @@ alter table game_official add constraint fk_game_official_game_5 foreign key (ga
 create index ix_game_official_game_5 on game_official (game_id);
 alter table game_official add constraint fk_game_official_official_6 foreign key (official_id) references official (id) on delete restrict on update restrict;
 create index ix_game_official_official_6 on game_official (official_id);
-alter table period_score add constraint fk_period_score_boxScore_7 foreign key (boxscore_id) references box_score (id) on delete restrict on update restrict;
-create index ix_period_score_boxScore_7 on period_score (boxscore_id);
-alter table roster_player add constraint fk_roster_player_team_8 foreign key (team_id) references team (id) on delete restrict on update restrict;
-create index ix_roster_player_team_8 on roster_player (team_id);
-alter table roster_player add constraint fk_roster_player_player_9 foreign key (player_id) references player (id) on delete restrict on update restrict;
-create index ix_roster_player_player_9 on roster_player (player_id);
-alter table standing add constraint fk_standing_boxScore_10 foreign key (boxscore_id) references box_score (id) on delete restrict on update restrict;
-create index ix_standing_boxScore_10 on standing (boxscore_id);
+alter table roster_player add constraint fk_roster_player_team_7 foreign key (team_id) references team (id) on delete restrict on update restrict;
+create index ix_roster_player_team_7 on roster_player (team_id);
+alter table roster_player add constraint fk_roster_player_player_8 foreign key (player_id) references player (id) on delete restrict on update restrict;
+create index ix_roster_player_player_8 on roster_player (player_id);
+alter table standing add constraint fk_standing_boxScore_9 foreign key (boxscore_id) references box_score (id) on delete restrict on update restrict;
+create index ix_standing_boxScore_9 on standing (boxscore_id);
 
 
 
@@ -213,8 +211,6 @@ drop table game;
 drop table game_official;
 
 drop table official;
-
-drop table period_score;
 
 drop table player;
 

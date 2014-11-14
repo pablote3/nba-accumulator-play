@@ -9,26 +9,12 @@ import models.RosterPlayer.Position;
 import models.Game.ProcessingType;
 import models.GameOfficial;
 import models.Official;
-import models.PeriodScore;
 import models.Player;
 import models.RosterPlayer;
 import models.Team;
 import util.DateTimeUtil;
 
 public class JsonHelper {
-   
-	public static List<PeriodScore> getPeriodScores(int[] scores) {
-    	List<PeriodScore> periodScores = new ArrayList<PeriodScore>();	    
-	    PeriodScore periodScore;
-
-        for (int i = 0; i < scores.length; i++) {
-        	periodScore = new PeriodScore();
-      		periodScore.setQuarter((short)(i+1));
-      		periodScore.setScore((short)scores[i]);
-			periodScores.add(periodScore);
-        }
-	    return periodScores;
-    }
     
 	public static BoxScore getBoxScoreStats(BoxScore boxScore, BoxScore stats) {
 		boxScore.setMinutes(stats.getMinutes());

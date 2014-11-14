@@ -235,17 +235,15 @@ public class GameTest {
         	game.setGameOfficials(TestMockHelper.getGameOfficials());
 		    
         	Team homeTeam = Team.findByKey("key", "toronto-raptors", ProcessingType.online);
-		    BoxScore homeBoxScore = TestMockHelper.getBoxScoreHomeCompleted(TestMockHelper.getBoxScoreHomeScheduled());
+		    BoxScore homeBoxScore = TestMockHelper.getBoxScoreHomeCompleted(TestMockHelper.getBoxScoreHomeScheduled(), TestMockHelper.getPeriodScoresHome());
 		    homeBoxScore.setTeam(homeTeam);
 		    homeBoxScore.addStanding(TestMockHelper.getStandingHomeCompleted(homeTeam));
-		    homeBoxScore.setPeriodScores(TestMockHelper.getPeriodScoresHome());
 		    game.addBoxScore(homeBoxScore);
 		    
 		    Team awayTeam = Team.findByKey("key", "detroit-pistons", ProcessingType.online);
-		    BoxScore awayBoxScore = TestMockHelper.getBoxScoreAwayCompleted(TestMockHelper.getBoxScoreAwayScheduled());
+		    BoxScore awayBoxScore = TestMockHelper.getBoxScoreAwayCompleted(TestMockHelper.getBoxScoreAwayScheduled(), TestMockHelper.getPeriodScoresAway());
 		    awayBoxScore.setTeam(awayTeam);
 		    awayBoxScore.addStanding(TestMockHelper.getStandingAwayCompleted(awayTeam));
-		    awayBoxScore.setPeriodScores(TestMockHelper.getPeriodScoresAway());
 		    game.addBoxScore(awayBoxScore);
 		    
 		    Game.create(game, ProcessingType.online);
@@ -263,15 +261,13 @@ public class GameTest {
             	BoxScore boxScore = createGame.getBoxScores().get(i);
             	if (boxScore.getLocation().equals(Location.away)) {
             		assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)29);
-            		if (boxScore.getPeriodScores().size() > 0)
-            			assertThat(boxScore.getPeriodScores().get(0).getScore()).isEqualTo((short)25);
+           			assertThat(boxScore.getPointsPeriod5()).isEqualTo((short)21);
             		assertThat(boxScore.getTeam().getAbbr()).isEqualTo("DET");
             		assertThat(boxScore.getStandings().get(0).getLastFive()).isEqualTo("2-3");
             	}
             	else {
             		assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)30);
-            		if (boxScore.getPeriodScores().size() > 0)
-            			assertThat(boxScore.getPeriodScores().get(0).getScore()).isEqualTo((short)25);
+            		assertThat(boxScore.getPointsPeriod5()).isEqualTo((short)20);
             		assertThat(boxScore.getTeam().getAbbr()).isEqualTo("TOR");
             		assertThat(boxScore.getStandings().get(0).getLastFive()).isEqualTo("3-2");
             	}
@@ -309,15 +305,11 @@ public class GameTest {
   		    
   		    for (int i = 0; i < completeGame.getBoxScores().size(); i++) {
 				BoxScore boxScore = completeGame.getBoxScores().get(i);
-				if (boxScore.getLocation().equals(Location.away)) {
-					TestMockHelper.getBoxScoreAwayCompleted(boxScore);
-					boxScore.setPeriodScores(TestMockHelper.getPeriodScoresAway());
-				} 
-				else {
-					TestMockHelper.getBoxScoreHomeCompleted(boxScore);
-					boxScore.setPeriodScores(TestMockHelper.getPeriodScoresHome());
-				}
-			}
+				if (boxScore.getLocation().equals(Location.away))
+					TestMockHelper.getBoxScoreAwayCompleted(boxScore, TestMockHelper.getPeriodScoresAway());
+				else
+					TestMockHelper.getBoxScoreHomeCompleted(boxScore, TestMockHelper.getPeriodScoresHome());
+  		    }
 
   		    Game.update(completeGame, ProcessingType.online);
   		    
@@ -334,15 +326,13 @@ public class GameTest {
             	if (boxScore.getLocation().equals(Location.away)) {
                     assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)29);
                     assertThat(boxScore.getTeam().getAbbr()).isEqualTo("SAC");
-                    if (boxScore.getPeriodScores().size() > 0)
-                    	assertThat(boxScore.getPeriodScores().get(0).getScore()).isEqualTo((short)25);
+                    assertThat(boxScore.getPointsPeriod5()).isEqualTo((short)21);
                     assertThat(boxScore.getStandings().get(0).getLastFive()).isEqualTo("2-3");
             	}
             	else {
                     assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)30);
                     assertThat(boxScore.getTeam().getAbbr()).isEqualTo("NO");
-                    if (boxScore.getPeriodScores().size() > 0)
-                    	assertThat(boxScore.getPeriodScores().get(0).getScore()).isEqualTo((short)25);
+                    assertThat(boxScore.getPointsPeriod5()).isEqualTo((short)20);
                     assertThat(boxScore.getStandings().get(0).getLastFive()).isEqualTo("3-2");
             	}
             }

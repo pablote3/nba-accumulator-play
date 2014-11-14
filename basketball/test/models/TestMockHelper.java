@@ -136,7 +136,7 @@ public class TestMockHelper {
     	return boxScore;
     }
     
-	protected static BoxScore getBoxScoreHomeCompleted(BoxScore boxScore) {
+	protected static BoxScore getBoxScoreHomeCompleted(BoxScore boxScore, short[] periodScores) {
     	boxScore.setResult(Result.win);
     	boxScore.setMinutes((short)180);
 	    boxScore.setPoints((short)100);
@@ -156,10 +156,16 @@ public class TestMockHelper {
 	    boxScore.setReboundsOffense((short)15);
 	    boxScore.setReboundsDefense((short)12);
 	    boxScore.setPersonalFouls((short)21);
+	    boxScore.setPointsPeriod1(periodScores[0]);
+	    boxScore.setPointsPeriod2(periodScores[1]);
+	    boxScore.setPointsPeriod3(periodScores[2]);
+	    boxScore.setPointsPeriod4(periodScores[3]);
+	    if (periodScores.length > 4)
+	    	boxScore.setPointsPeriod5(periodScores[4]);
     	return boxScore;
     }
     
-	protected static BoxScore getBoxScoreAwayCompleted(BoxScore boxScore) {
+	protected static BoxScore getBoxScoreAwayCompleted(BoxScore boxScore, short[] periodScores) {
     	boxScore.setResult(Result.loss);
     	boxScore.setMinutes((short)190);
 	    boxScore.setPoints((short)99);
@@ -179,6 +185,12 @@ public class TestMockHelper {
 	    boxScore.setReboundsOffense((short)15);
 	    boxScore.setReboundsDefense((short)12);
 	    boxScore.setPersonalFouls((short)21);
+	    boxScore.setPointsPeriod1(periodScores[0]);
+	    boxScore.setPointsPeriod2(periodScores[1]);
+	    boxScore.setPointsPeriod3(periodScores[2]);
+	    boxScore.setPointsPeriod4(periodScores[3]);
+	    if (periodScores.length > 4)
+	    	boxScore.setPointsPeriod5(periodScores[4]);
     	return boxScore;
     }
 	
@@ -250,57 +262,23 @@ public class TestMockHelper {
     	return standing;
     }
     
-	protected static List<PeriodScore> getPeriodScoresHome() {
-    	List<PeriodScore> periodScores = new ArrayList<PeriodScore>();	    
-	    PeriodScore periodScore;
-	    
-	    periodScore = new PeriodScore();
-	    periodScore.setQuarter((short)1);
-	    periodScore.setScore((short)25);
-	    periodScores.add(periodScore);
-
-	    periodScore = new PeriodScore();
-	    periodScore.setQuarter((short)2);
-	    periodScore.setScore((short)25);
-	    periodScores.add(periodScore);
-	    
-	    periodScore = new PeriodScore();
-	    periodScore.setQuarter((short)3);
-	    periodScore.setScore((short)25);
-	    periodScores.add(periodScore);
-	    
-	    periodScore = new PeriodScore();
-	    periodScore.setQuarter((short)4);
-	    periodScore.setScore((short)25);
-	    periodScores.add(periodScore);
-	    
+	protected static short[] getPeriodScoresHome() {
+		short[] periodScores = new short[5];		
+		periodScores[0] = (short)25;
+		periodScores[1] = (short)25;
+		periodScores[2] = (short)25;
+		periodScores[3] = (short)25;
+		periodScores[4] = (short)20;
 	    return periodScores;
     }
     
-	protected static List<PeriodScore> getPeriodScoresAway() {
-    	List<PeriodScore> periodScores = new ArrayList<PeriodScore>();	    
-	    PeriodScore periodScore;
-	    
-	    periodScore = new PeriodScore();
-	    periodScore.setQuarter((short)1);
-	    periodScore.setScore((short)25);
-	    periodScores.add(periodScore);
-
-	    periodScore = new PeriodScore();
-	    periodScore.setQuarter((short)2);
-	    periodScore.setScore((short)25);
-	    periodScores.add(periodScore);
-	    
-	    periodScore = new PeriodScore();
-	    periodScore.setQuarter((short)3);
-	    periodScore.setScore((short)25);
-	    periodScores.add(periodScore);
-	    
-	    periodScore = new PeriodScore();
-	    periodScore.setQuarter((short)4);
-	    periodScore.setScore((short)24);
-	    periodScores.add(periodScore);
-	    
+	protected static short[] getPeriodScoresAway() {
+		short[] periodScores = new short[5];
+		periodScores[0] = (short)25;
+		periodScores[1] = (short)25;
+		periodScores[2] = (short)25;
+		periodScores[3] = (short)25;
+		periodScores[4] = (short)21;
 	    return periodScores;
     }
 }

@@ -53,22 +53,7 @@ public class BoxScore extends Model {
 	public void setGame(Game game) {
 		this.game = game;
 	}
-	
-	@OneToMany(mappedBy="boxScore", cascade=CascadeType.ALL)
-	private List<PeriodScore> periodScores = new ArrayList<PeriodScore>();
-	public List<PeriodScore> getPeriodScores()  {
-		return periodScores;
-	}
-	public void setPeriodScores(List<PeriodScore> periodScores)  {
-		this.periodScores = periodScores;
-	}
-	public void addPeriodScore(PeriodScore periodScore)  {
-		this.getPeriodScores().add(periodScore);
-	}
-	public void removePeriodScore(PeriodScore periodScore)  {
-		this.getPeriodScores().remove(periodScore);
-	}
-	
+
 	@OneToMany(mappedBy="boxScore", cascade=CascadeType.ALL)
 	private List<BoxScorePlayer> boxScorePlayers = new ArrayList<BoxScorePlayer>();
 	public List<BoxScorePlayer> getBoxScorePlayers()  {
@@ -294,6 +279,78 @@ public class BoxScore extends Model {
 	}
 	public void setPersonalFouls(Short personalFouls) {
 		this.personalFouls = personalFouls;
+	}
+	
+	@Column(name="pointsPeriod1", nullable=true)
+	private Short pointsPeriod1;
+	public Short getPointsPeriod1() {
+		return pointsPeriod1;
+	}
+	public void setPointsPeriod1(Short pointsPeriod1) {
+		this.pointsPeriod1 = pointsPeriod1;
+	}
+	
+	@Column(name="pointsPeriod2", nullable=true)
+	private Short pointsPeriod2;
+	public Short getPointsPeriod2() {
+		return pointsPeriod2;
+	}
+	public void setPointsPeriod2(Short pointsPeriod2) {
+		this.pointsPeriod2 = pointsPeriod2;
+	}
+	
+	@Column(name="pointsPeriod3", nullable=true)
+	private Short pointsPeriod3;
+	public Short getPointsPeriod3() {
+		return pointsPeriod3;
+	}
+	public void setPointsPeriod3(Short pointsPeriod3) {
+		this.pointsPeriod3 = pointsPeriod3;
+	}
+	
+	@Column(name="pointsPeriod4", nullable=true)
+	private Short pointsPeriod4;
+	public Short getPointsPeriod4() {
+		return pointsPeriod4;
+	}
+	public void setPointsPeriod4(Short pointsPeriod4) {
+		this.pointsPeriod4 = pointsPeriod4;
+	}
+	
+	@Column(name="pointsPeriod5", nullable=true)
+	private Short pointsPeriod5;
+	public Short getPointsPeriod5() {
+		return pointsPeriod5;
+	}
+	public void setPointsPeriod5(Short pointsPeriod5) {
+		this.pointsPeriod5 = pointsPeriod5;
+	}
+	
+	@Column(name="pointsPeriod6", nullable=true)
+	private Short pointsPeriod6;
+	public Short getPointsPeriod6() {
+		return pointsPeriod6;
+	}
+	public void setPointsPeriod6(Short pointsPeriod6) {
+		this.pointsPeriod6 = pointsPeriod6;
+	}
+	
+	@Column(name="pointsPeriod7", nullable=true)
+	private Short pointsPeriod7;
+	public Short getPointsPeriod7() {
+		return pointsPeriod7;
+	}
+	public void setPointsPeriod7(Short pointsPeriod7) {
+		this.pointsPeriod7 = pointsPeriod7;
+	}
+	
+	@Column(name="pointsPeriod8", nullable=true)
+	private Short pointsPeriod8;
+	public Short getPointsPeriod8() {
+		return pointsPeriod8;
+	}
+	public void setPointsPeriod8(Short pointsPeriod8) {
+		this.pointsPeriod8 = pointsPeriod8;
 	}
 
 	public String toString() {

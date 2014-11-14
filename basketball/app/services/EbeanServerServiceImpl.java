@@ -13,15 +13,15 @@ public class EbeanServerServiceImpl implements EbeanServerService {
 
 	public EbeanServer createEbeanServer() {
 		ServerConfig config = new ServerConfig();
-		config.setName("accumulate"); 
-//		config.setName("accumulate_dev"); 
+//		config.setName("accumulate"); 
+		config.setName("accumulate_dev"); 
 		
 		DataSourceConfig mySql = new DataSourceConfig();  
 		mySql.setDriver("com.mysql.jdbc.Driver");
 		mySql.setUsername("root");  
 		mySql.setPassword("root"); 
-		mySql.setUrl("jdbc:mysql://localhost:3306/accumulate?characterEncoding=UTF-8"); 
-//		mySql.setUrl("jdbc:mysql://localhost:3306/accumulate_dev?characterEncoding=UTF-8");  
+//		mySql.setUrl("jdbc:mysql://localhost:3306/accumulate?characterEncoding=UTF-8"); 
+		mySql.setUrl("jdbc:mysql://localhost:3306/accumulate_dev?characterEncoding=UTF-8");  
 		mySql.setHeartbeatSql("select count(*) from team");  		  
 		config.setDataSourceConfig(mySql);
 		config.setDefaultServer(false);  

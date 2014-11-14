@@ -94,13 +94,41 @@ public class GameJsonUrl {
 			    		completeGame.setStatus(Status.completed);	              
 		      		  	completeGame.setGameOfficials(JsonHelper.getGameOfficials(xmlStats.officials, ProcessingType.online));
 		      		  	
-		      		  	awayBoxScore = completeGame.getBoxScores().get(0);
-		      		  	awayBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStats.away_period_scores));
+		      		  	awayBoxScore = completeGame.getBoxScores().get(0);	  	
+		      		  	
+			    	    int[] awayPeriodScores = xmlStats.away_period_scores;
+			    	    awayBoxScore.setPointsPeriod1((short)awayPeriodScores[0]);
+			    	    awayBoxScore.setPointsPeriod2((short)awayPeriodScores[1]);
+			    	    awayBoxScore.setPointsPeriod3((short)awayPeriodScores[2]);
+			    	    awayBoxScore.setPointsPeriod4((short)awayPeriodScores[3]);
+			    	    if(awayPeriodScores.length > 4)
+			    	    	awayBoxScore.setPointsPeriod5((short)awayPeriodScores[4]);
+			    	    if(awayPeriodScores.length > 5)
+			    	    	awayBoxScore.setPointsPeriod6((short)awayPeriodScores[5]);
+			    	    if(awayPeriodScores.length > 6)
+			    	    	awayBoxScore.setPointsPeriod7((short)awayPeriodScores[6]);
+			    	    if(awayPeriodScores.length > 7)
+			    	    	awayBoxScore.setPointsPeriod8((short)awayPeriodScores[7]);
+		      		  			      		  	
 		      		  	JsonHelper.getBoxScoreStats(awayBoxScore, xmlStats.away_totals);
 		      		  	awayBoxScore.setBoxScorePlayers(JsonHelper.getBoxScorePlayers(xmlStats.away_stats, DateTimeUtil.getFindDateShort(xmlStats.event_information.getDate()), ProcessingType.online));
 		              
 		      		  	homeBoxScore = completeGame.getBoxScores().get(1);
-		      		  	homeBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStats.home_period_scores));
+		      		  	
+			    	    int[] homePeriodScores = xmlStats.home_period_scores;
+			    	    homeBoxScore.setPointsPeriod1((short)homePeriodScores[0]);
+			    	    homeBoxScore.setPointsPeriod2((short)homePeriodScores[1]);
+			    	    homeBoxScore.setPointsPeriod3((short)homePeriodScores[2]);
+			    	    homeBoxScore.setPointsPeriod4((short)homePeriodScores[3]);
+			    	    if(homePeriodScores.length > 4)
+			    	    	homeBoxScore.setPointsPeriod5((short)homePeriodScores[4]);
+			    	    if(homePeriodScores.length > 5)
+			    	    	homeBoxScore.setPointsPeriod6((short)homePeriodScores[5]);
+			    	    if(homePeriodScores.length > 6)
+			    	    	homeBoxScore.setPointsPeriod7((short)homePeriodScores[6]);
+			    	    if(homePeriodScores.length > 7)
+			    	    	homeBoxScore.setPointsPeriod8((short)homePeriodScores[7]);
+		      		  	
 		      		  	JsonHelper.getBoxScoreStats(homeBoxScore, xmlStats.home_totals);
 		      		  	homeBoxScore.setBoxScorePlayers(JsonHelper.getBoxScorePlayers(xmlStats.home_stats, DateTimeUtil.getFindDateShort(xmlStats.event_information.getDate()), ProcessingType.online));
 		      		  	
@@ -150,7 +178,7 @@ public class GameJsonUrl {
 			              		BoxScore boxScore = createGame.getBoxScores().get(i);
 			              		if (boxScore.getLocation().equals(Location.away)) {
 			              			assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)36);
-			              			assertThat(boxScore.getPeriodScores().get(0).getScore()).isEqualTo((short)26);
+			              			assertThat(boxScore.getPointsPeriod1()).isEqualTo((short)26);
 			              			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("OKC");
 			              			assertThat(boxScore.getBoxScorePlayers().get(0).getRosterPlayer().getPlayer().getLastName()).isEqualTo("Durant");
 			              			assertThat(boxScore.getBoxScorePlayers().get(0).getRosterPlayer().getTeam().getAbbr()).isEqualTo("OKC");
@@ -159,7 +187,7 @@ public class GameJsonUrl {
 			              		}
 			              		else {
 			              			assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)40);
-			              			assertThat(boxScore.getPeriodScores().get(0).getScore()).isEqualTo((short)31);
+			              			assertThat(boxScore.getPointsPeriod1()).isEqualTo((short)31);
 			              			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("MIA");
 			              			assertThat(boxScore.getBoxScorePlayers().get(1).getRosterPlayer().getPlayer().getLastName()).isEqualTo("Wade");
 			              			assertThat(boxScore.getBoxScorePlayers().get(1).getRosterPlayer().getTeam().getAbbr()).isEqualTo("MIA");

@@ -26,7 +26,6 @@ import models.Game.ProcessingType;
 import models.Game.Source;
 import models.Game.Status;
 import models.GameOfficial;
-import models.PeriodScore;
 import util.DateTimeUtil;
 import actor.ActorApi.CompleteBoxScore;
 import actor.ActorApi.IncompleteOfficialException;
@@ -119,14 +118,23 @@ public class GameXmlStats extends UntypedActor {
 						game.setGameOfficials(gameOfficials);
 		    	    else
 		    	    	throw new IncompleteOfficialException("Official not found");
-		    	        
-		    	    if (awayBoxScore.getPeriodScores().size() > 0) {
-		    	        for (int i = 0; i < awayBoxScore.getPeriodScores().size(); i++) {
-							PeriodScore.delete(awayBoxScore.getPeriodScores().get(i), processingType);
-						}
-		    	    }	    	        
-		    	    awayBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStatsBoxScore.away_period_scores));
+		    	    
 		    	    JsonHelper.getBoxScoreStats(awayBoxScore, xmlStatsBoxScore.away_totals);
+		    	    
+		    	    int[] awayPeriodScores = xmlStatsBoxScore.away_period_scores;
+		    	    awayBoxScore.setPointsPeriod1((short)awayPeriodScores[0]);
+		    	    awayBoxScore.setPointsPeriod2((short)awayPeriodScores[1]);
+		    	    awayBoxScore.setPointsPeriod3((short)awayPeriodScores[2]);
+		    	    awayBoxScore.setPointsPeriod4((short)awayPeriodScores[3]);
+		    	    if(awayPeriodScores.length > 4)
+		    	    	awayBoxScore.setPointsPeriod5((short)awayPeriodScores[4]);
+		    	    if(awayPeriodScores.length > 5)
+		    	    	awayBoxScore.setPointsPeriod6((short)awayPeriodScores[5]);
+		    	    if(awayPeriodScores.length > 6)
+		    	    	awayBoxScore.setPointsPeriod7((short)awayPeriodScores[6]);
+		    	    if(awayPeriodScores.length > 7)
+		    	    	awayBoxScore.setPointsPeriod8((short)awayPeriodScores[7]);
+		    	    
 		    	    List<BoxScorePlayer> awayBoxScorePlayers = JsonHelper.getBoxScorePlayers(xmlStatsBoxScore.away_stats, DateTimeUtil.getFindDateShort(xmlStatsBoxScore.event_information.getDate()), processingType);
 	
 		    	    if (awayBoxScorePlayers != null) {
@@ -136,13 +144,22 @@ public class GameXmlStats extends UntypedActor {
 		    	    else
 		    	    	throw new IncompleteRosterException(game.getId(), DateTimeUtil.getFindDateShort(game.getDate()), awayBoxScore.getTeam().getKey());
 		    	        
-		    	    if (homeBoxScore.getPeriodScores().size() > 0) {
-		    	        for (int i = 0; i < homeBoxScore.getPeriodScores().size(); i++) {
-							PeriodScore.delete(homeBoxScore.getPeriodScores().get(i), processingType);
-						}
-		    	    }	 
-		    	    homeBoxScore.setPeriodScores(JsonHelper.getPeriodScores(xmlStatsBoxScore.home_period_scores));
-		    	    JsonHelper.getBoxScoreStats(homeBoxScore, xmlStatsBoxScore.home_totals);	    	        
+		    	    JsonHelper.getBoxScoreStats(homeBoxScore, xmlStatsBoxScore.home_totals);
+		    	    
+		    	    int[] homePeriodScores = xmlStatsBoxScore.home_period_scores;
+		    	    homeBoxScore.setPointsPeriod1((short)homePeriodScores[0]);
+		    	    homeBoxScore.setPointsPeriod2((short)homePeriodScores[1]);
+		    	    homeBoxScore.setPointsPeriod3((short)homePeriodScores[2]);
+		    	    homeBoxScore.setPointsPeriod4((short)homePeriodScores[3]);
+		    	    if(homePeriodScores.length > 4)
+		    	    	homeBoxScore.setPointsPeriod5((short)homePeriodScores[4]);
+		    	    if(homePeriodScores.length > 5)
+		    	    	homeBoxScore.setPointsPeriod6((short)homePeriodScores[5]);
+		    	    if(homePeriodScores.length > 6)
+		    	    	homeBoxScore.setPointsPeriod7((short)homePeriodScores[6]);
+		    	    if(homePeriodScores.length > 7)
+		    	    	homeBoxScore.setPointsPeriod8((short)homePeriodScores[7]);
+		    	    
 		    	    List<BoxScorePlayer> homeBoxScorePlayers = JsonHelper.getBoxScorePlayers(xmlStatsBoxScore.home_stats, DateTimeUtil.getFindDateShort(xmlStatsBoxScore.event_information.getDate()), processingType);
 		    	    if (homeBoxScorePlayers != null) {
 						System.out.println("  Home Team " + homeBoxScore.getTeam().getShortName() + " Roster is Complete");						
