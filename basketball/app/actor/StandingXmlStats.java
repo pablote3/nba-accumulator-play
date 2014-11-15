@@ -61,10 +61,10 @@ public class StandingXmlStats extends UntypedActor {
 			String gameDate = ((RetrieveStandings) message).date;
 			if (standings == null || !DateTimeUtil.getFindDateNaked(standings.standings_date).equals(gameDate)) {		
 				System.out.println("  Retrieving standings for " + gameDate);
+				String event = gameDate + ".json";
 				InputStream inputStreamJson = null;
 				InputStreamReader baseJson = null;
-				String event = gameDate + ".json";
-				
+			
 				try {
 					if (source.equals(Source.file)) {
 						Path path =  Paths.get(fileStanding).resolve(event);
@@ -72,9 +72,7 @@ public class StandingXmlStats extends UntypedActor {
 						inputStreamJson = new FileInputStream(file);
 					}
 					else {
-						URL url;
-						String strUrl = urlStanding + event;
-						url = new URL(strUrl);
+						URL url = new URL(urlStanding + event);
 						URLConnection connection = url.openConnection();
 						connection.setRequestProperty(AUTHORIZATION, accessToken);
 						connection.setRequestProperty(USER_AGENT, userAgentName);

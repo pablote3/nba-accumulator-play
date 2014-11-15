@@ -164,9 +164,8 @@ public class GameJsonFile {
         				if (standings.get(i).getTeamKey().equals(homeTeamKey))  {
         					Standing standing = standings.get(i);
         					standing.setGameDate(game.getDate());
-        					standing.setOpptOpptGamesPlayed(3);
-        					standing.setOpptOpptWins(0);
-        					standing.setAvgOpptOpptWinPercentage((float).75);
+        					standing.setOpptGamesPlayed(3);
+        					standing.setOpptWins(0);
         					homeBoxScore.getStandings().add(standing);
         					break;
         				}
@@ -177,9 +176,8 @@ public class GameJsonFile {
         				if (standings.get(i).getTeamKey().equals(awayTeamKey))  {
         					Standing standing = standings.get(i);
         					standing.setGameDate(game.getDate());
-        					standing.setOpptOpptGamesPlayed(2);
-        					standing.setOpptOpptWins(2);
-        					standing.setAvgOpptOpptWinPercentage((float).35);
+        					standing.setOpptGamesPlayed(2);
+        					standing.setOpptWins(2);
         					awayBoxScore.getStandings().add(standing);
         					break;
         				}

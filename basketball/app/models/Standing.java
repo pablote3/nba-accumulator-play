@@ -1,8 +1,5 @@
 package models;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -16,31 +13,16 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import models.Game.ProcessingType;
-
 import org.joda.time.DateTime;
 
 import play.db.ebean.Model;
-import services.EbeanServerService;
-import services.InjectorModule;
-import util.DateTimeUtil;
 
-import com.avaje.ebean.Ebean;
-import com.avaje.ebean.EbeanServer;
-import com.avaje.ebean.Query;
-import com.avaje.ebean.RawSql;
-import com.avaje.ebean.RawSqlBuilder;
 import com.avaje.ebean.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 
 @Entity
 public class Standing extends Model {
 	private static final long serialVersionUID = 1L;
-	private static Injector injector = Guice.createInjector(new InjectorModule());
-	private static EbeanServerService service = injector.getInstance(EbeanServerService.class);	
-	private static EbeanServer ebeanServer = service.createEbeanServer();
 
 	@Id
 	@TableGenerator(name="table_gen", table="seq_table", pkColumnName="seq_name", valueColumnName="seq_count", pkColumnValue="standing_seq", initialValue=1)
@@ -316,6 +298,24 @@ public class Standing extends Model {
 		this.pointDifferentialPerGame = pointDifferentialPerGame;
 	}
 	
+	@Column(name="opptWins", nullable=false)
+	private Integer opptWins;
+	public Integer getOpptWins() {
+		return opptWins;
+	}
+	public void setOpptWins(Integer opptWins) {
+		this.opptWins = opptWins;
+	}
+	
+	@Column(name="opptGamesPlayed", nullable=true)
+	private Integer opptGamesPlayed;
+	public Integer getOpptGamesPlayed() {
+		return opptGamesPlayed;
+	}
+	public void setOpptGamesPlayed(Integer opptGamesPlayed) {
+		this.opptGamesPlayed = opptGamesPlayed;
+	}
+	
 	@Column(name="opptOpptWins", nullable=false)
 	private Integer opptOpptWins;
 	public Integer getOpptOpptWins() {
@@ -325,7 +325,7 @@ public class Standing extends Model {
 		this.opptOpptWins = opptOpptWins;
 	}
 	
-	@Column(name="opptOpptGamesPlayed", nullable=false)
+	@Column(name="opptOpptGamesPlayed", nullable=true)
 	private Integer opptOpptGamesPlayed;
 	public Integer getOpptOpptGamesPlayed() {
 		return opptOpptGamesPlayed;
@@ -333,49 +333,6 @@ public class Standing extends Model {
 	public void setOpptOpptGamesPlayed(Integer opptOpptGamesPlayed) {
 		this.opptOpptGamesPlayed = opptOpptGamesPlayed;
 	}
-	
-	@Column(name="avgOpptOpptWinPercentage", nullable=false)
-	private Float avgOpptOpptWinPercentage;
-	public Float getAvgOpptOpptWinPercentage() {
-		return avgOpptOpptWinPercentage;
-	}
-	public void setAvgOpptOpptWinPercentage(Float avgOpptOpptWinPercentage) {
-		this.avgOpptOpptWinPercentage = avgOpptOpptWinPercentage;
-	}
-	
-	public static Float findOpponentOppenentWinPercentageSeason(String date, String team_key, ProcessingType processingType) {	
-		String sql =
-				"select teamKey, sum(opptOpptWins) as sumWins, sum(opptOpptGamesPlayed) as sumGamesPlayed " +
-				"from standing " + 
-				"group by teamKey ";
-			
-		RawSql rawSql = 
-				RawSqlBuilder
-					.parse(sql)
-					.columnMapping("teamKey", "teamKey")
-					.columnMapping("sum(opptOpptWins)", "sumWins")
-					.columnMapping("sum(opptOpptGamesPlayed)", "sumGamesPlayed")
-					.create();
-		
-		Query<StandingAggregate> query = null;
-		if (processingType.equals(ProcessingType.batch))
-	  		query = ebeanServer.find(StandingAggregate.class);
-	  	else if (processingType.equals(ProcessingType.online))
-	  		query = Ebean.find(StandingAggregate.class);
-
-		query.setRawSql(rawSql)
-			.where().between("gameDate", DateTimeUtil.getDateMinSeason(DateTimeUtil.createDateFromStringDate(date)) + " 00:00:00", date + " 23:59:59")
-			.having().eq("teamKey", team_key);
-			
-		StandingAggregate sa = query.findUnique();
-	
-		//if overflow is likely, if it would overflow (ie the dividend is bigger than 922337203685477581), divide the divisor by 100 first.
-		BigDecimal avgOpptOpptWinPercentage = new BigDecimal(0).setScale(3);
-		if (sa != null && sa.getSumGamesPlayed() != null)
-			avgOpptOpptWinPercentage = new BigDecimal(sa.getSumWins()).divide(new BigDecimal(sa.getSumGamesPlayed()), 3, RoundingMode.HALF_UP);
-		return avgOpptOpptWinPercentage.floatValue();
-	}
-	
 
 	public String toString() {
 		return new StringBuffer()
@@ -385,9 +342,8 @@ public class Standing extends Model {
 			.append("  ordinal rank: " + this.ordinalRank)
 			.append("  games won: " + this.gamesWon)
 			.append("  games played: " + this.gamesPlayed)
-			.append("  oppt games won: " + this.opptOpptWins)
-			.append("  oppt games played: " + this.opptOpptGamesPlayed)
-			.append("  oppt win percentage: " + this.avgOpptOpptWinPercentage)
+			.append("  oppt games won: " + this.opptWins)
+			.append("  oppt games played: " + this.opptGamesPlayed)
 			.toString();
 	}
 }
