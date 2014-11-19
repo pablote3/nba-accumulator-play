@@ -160,27 +160,21 @@ public class GameJsonFile {
         			ArrayList<Standing> standings = new ArrayList<Standing>(Arrays.asList(xmlStandings.standing));
         			
         			for (int i = 0; i < standings.size(); i++)  {
-        				String homeTeamKey = homeBoxScore.getTeam().getKey();
-        				if (standings.get(i).getTeamKey().equals(homeTeamKey))  {
-        					Standing standing = standings.get(i);
-        					standing.setGameDate(game.getDate());
-        					standing.setOpptGamesPlayed(3);
-        					standing.setOpptWins(0);
-        					homeBoxScore.getStandings().add(standing);
-        					break;
-        				}
+       					Standing standing = standings.get(i);
+       					standing.setTeam(homeTeam);
+       					standing.setGameDate(game.getDate());
+       					standing.setOpptGamesWon(0);
+       					standing.setOpptGamesPlayed(3);
+       					homeBoxScore.getStandings().add(standing);
         			}
         			
         			for (int i = 0; i < standings.size(); i++)  {
-        				String awayTeamKey = awayBoxScore.getTeam().getKey();
-        				if (standings.get(i).getTeamKey().equals(awayTeamKey))  {
-        					Standing standing = standings.get(i);
-        					standing.setGameDate(game.getDate());
-        					standing.setOpptGamesPlayed(2);
-        					standing.setOpptWins(2);
-        					awayBoxScore.getStandings().add(standing);
-        					break;
-        				}
+       					Standing standing = standings.get(i);
+       					standing.setTeam(awayTeam);
+       					standing.setGameDate(game.getDate());
+       					standing.setOpptGamesWon(2);
+       					standing.setOpptGamesPlayed(2);
+       					awayBoxScore.getStandings().add(standing);
         			}
 	              
         			game.addBoxScore(homeBoxScore);

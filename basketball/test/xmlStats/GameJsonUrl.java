@@ -150,16 +150,14 @@ public class GameJsonUrl {
 	        			ArrayList<Standing> standings = new ArrayList<Standing>(Arrays.asList(xmlStandings.standing));
 		      		  	
 	        			for (int i = 0; i < standings.size(); i++)  {
-	        				String awayTeamKey = awayBoxScore.getTeam().getKey();
-	        				if (standings.get(i).getTeamKey().equals(awayTeamKey))  {
+	        				if (standings.get(i).getTeam().equals(awayBoxScore.getTeam()))  {
 	        					awayBoxScore.getStandings().add(standings.get(i));
 	        					break;
 	        				}
 	        			}
 	        			
 	        			for (int i = 0; i < standings.size(); i++)  {
-	        				String homeTeamKey = homeBoxScore.getTeam().getKey();
-	        				if (standings.get(i).getTeamKey().equals(homeTeamKey))  {
+	        				if (standings.get(i).getTeam().equals(homeBoxScore.getTeam()))  {
 	        					homeBoxScore.getStandings().add(standings.get(i));
 	        					break;
 	        				}

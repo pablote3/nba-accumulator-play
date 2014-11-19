@@ -46,18 +46,16 @@ public class StandingModel extends UntypedActor {
 			ArrayList<Standing> standings = new ArrayList<Standing>(Arrays.asList(activeStandings.standings.standing));
 
 			BoxScore awayBoxScore = game.getBoxScores().get(0);
-			String awayTeamKey = awayBoxScore.getTeam().getKey();
 			for (int i = 0; i < standings.size(); i++)  {
-				if (standings.get(i).getTeamKey().equals(awayTeamKey))  {
+				if (standings.get(i).getTeam().equals(awayBoxScore.getTeam()))  {
 					awayBoxScore.getStandings().add(standings.get(i));
 					break;
 				}
 			}
 
 			BoxScore homeBoxScore = game.getBoxScores().get(1);
-			String homeTeamKey = homeBoxScore.getTeam().getKey();
 			for (int i = 0; i < standings.size(); i++)  {
-				if (standings.get(i).getTeamKey().equals(homeTeamKey))  {
+				if (standings.get(i).getTeam().equals(homeBoxScore.getTeam()))  {
 					homeBoxScore.getStandings().add(standings.get(i));
 					break;
 				}

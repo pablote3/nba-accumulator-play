@@ -42,14 +42,14 @@ public class Standing extends Model {
 		this.boxScore = boxScore;
 	}
 	
-	@Column(name="teamKey", nullable=false)
-	@JsonProperty("team_id")
-	private String teamKey;
-	public String getTeamKey() {
-		return teamKey;
+	@ManyToOne
+	@JoinColumn(name="team_id", referencedColumnName="id", nullable=false)
+	private Team team;
+	public Team getTeam() {
+		return team;
 	}
-	public void setTeamKey(String teamKey) {
-		this.teamKey = teamKey;
+	public void setTeam(Team team) {
+		this.team = team;
 	}
 	
 	@Column(name="gameDate", nullable=false)
@@ -298,16 +298,16 @@ public class Standing extends Model {
 		this.pointDifferentialPerGame = pointDifferentialPerGame;
 	}
 	
-	@Column(name="opptWins", nullable=false)
-	private Integer opptWins;
-	public Integer getOpptWins() {
-		return opptWins;
+	@Column(name="opptGamesWon", nullable=false)
+	private Integer opptGamesWon;
+	public Integer getOpptGamesWon() {
+		return opptGamesWon;
 	}
-	public void setOpptWins(Integer opptWins) {
-		this.opptWins = opptWins;
+	public void setOpptGamesWon(Integer opptGamesWon) {
+		this.opptGamesWon = opptGamesWon;
 	}
 	
-	@Column(name="opptGamesPlayed", nullable=true)
+	@Column(name="opptGamesPlayed", nullable=false)
 	private Integer opptGamesPlayed;
 	public Integer getOpptGamesPlayed() {
 		return opptGamesPlayed;
@@ -316,16 +316,16 @@ public class Standing extends Model {
 		this.opptGamesPlayed = opptGamesPlayed;
 	}
 	
-	@Column(name="opptOpptWins", nullable=false)
-	private Integer opptOpptWins;
-	public Integer getOpptOpptWins() {
-		return opptOpptWins;
+	@Column(name="opptOpptGamesWon", nullable=false)
+	private Integer opptOpptGamesWon;
+	public Integer getOpptOpptGamesWon() {
+		return opptOpptGamesWon;
 	}
-	public void setOpptOpptWins(Integer opptOpptWins) {
-		this.opptOpptWins = opptOpptWins;
+	public void setOpptOpptGamesWon(Integer opptOpptGamesWon) {
+		this.opptOpptGamesWon = opptOpptGamesWon;
 	}
 	
-	@Column(name="opptOpptGamesPlayed", nullable=true)
+	@Column(name="opptOpptGamesPlayed", nullable=false)
 	private Integer opptOpptGamesPlayed;
 	public Integer getOpptOpptGamesPlayed() {
 		return opptOpptGamesPlayed;
@@ -336,13 +336,13 @@ public class Standing extends Model {
 
 	public String toString() {
 		return new StringBuffer()
-			.append("\n" + this.teamKey + "\n")
+			.append("\n" + this.team + "\n")
 			.append("  game date: " + this.gameDate)
 			.append("  rank: " + this.rank)
 			.append("  ordinal rank: " + this.ordinalRank)
 			.append("  games won: " + this.gamesWon)
 			.append("  games played: " + this.gamesPlayed)
-			.append("  oppt games won: " + this.opptWins)
+			.append("  oppt games won: " + this.opptGamesWon)
 			.append("  oppt games played: " + this.opptGamesPlayed)
 			.toString();
 	}

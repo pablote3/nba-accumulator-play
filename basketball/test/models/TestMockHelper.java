@@ -196,7 +196,7 @@ public class TestMockHelper {
 	
 	protected static Standing getStandingHomeCompleted(Team team) {
 		Standing standing = new Standing();
-		standing.setTeamKey(team.getKey());
+		standing.setTeam(team);
 		standing.setGameDate(new DateTime(2013, 7, 5, 0, 0, 0));
     	standing.setRank((short)1);
     	standing.setOrdinalRank("1st");
@@ -222,14 +222,16 @@ public class TestMockHelper {
 	    standing.setWinPercentage((float)0.505);
 	    standing.setPointDifferential((short)-2);
 	    standing.setPointDifferentialPerGame((float)-0.4);
-	    standing.setOpptWins(2);
+	    standing.setOpptGamesWon(2);
 	    standing.setOpptGamesPlayed(3);
+	    standing.setOpptOpptGamesWon(4);
+	    standing.setOpptOpptGamesPlayed(5);
     	return standing;
     }
 	
 	protected static Standing getStandingAwayCompleted(Team team) {
 		Standing standing = new Standing();
-		standing.setTeamKey(team.getKey());
+		standing.setTeam(team);
 		standing.setGameDate(new DateTime(2013, 7, 5, 0, 0, 0));
     	standing.setRank((short)2);
     	standing.setOrdinalRank("2nd");
@@ -255,8 +257,10 @@ public class TestMockHelper {
 	    standing.setWinPercentage((float)0.505);
 	    standing.setPointDifferential((short)-2);
 	    standing.setPointDifferentialPerGame((float)-0.4);
-	    standing.setOpptWins(1);
+	    standing.setOpptGamesWon(1);
 	    standing.setOpptGamesPlayed(2);
+	    standing.setOpptOpptGamesWon(3);
+	    standing.setOpptOpptGamesPlayed(4);
     	return standing;
     }
     
