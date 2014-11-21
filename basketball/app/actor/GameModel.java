@@ -137,13 +137,13 @@ public class GameModel extends UntypedActor {
 				awayOpptOpptPrevGamesPlayed = awayPreviousGame.getBoxScores().get(awayIndex).getStandings().get(0).getOpptOpptGamesPlayed();
 			}
 
-			homeBoxScore.getStandings().get(0).setGameDate(game.getDate());
+			homeBoxScore.getStandings().get(0).setDate(DateTimeUtil.getLocalDateFromDateTime(game.getDate()));
 			homeBoxScore.getStandings().get(0).setOpptGamesWon(homeOpptPrevGamesWon + awayBoxScore.getStandings().get(0).getGamesWon());
 			homeBoxScore.getStandings().get(0).setOpptGamesPlayed(homeOpptPrevGamesPlayed + awayBoxScore.getStandings().get(0).getGamesPlayed());
 			homeBoxScore.getStandings().get(0).setOpptOpptGamesWon(homeOpptOpptPrevGamesWon + homeBoxScore.getStandings().get(0).getGamesWon());
 			homeBoxScore.getStandings().get(0).setOpptOpptGamesPlayed(homeOpptOpptPrevGamesPlayed + homeBoxScore.getStandings().get(0).getGamesPlayed());
 			
-			awayBoxScore.getStandings().get(0).setGameDate(game.getDate());
+			awayBoxScore.getStandings().get(0).setDate(DateTimeUtil.getLocalDateFromDateTime(game.getDate()));
 			awayBoxScore.getStandings().get(0).setOpptGamesWon(awayOpptPrevGamesWon + homeBoxScore.getStandings().get(0).getGamesWon());
 			awayBoxScore.getStandings().get(0).setOpptGamesPlayed(awayOpptPrevGamesPlayed + homeBoxScore.getStandings().get(0).getGamesPlayed());
 			awayBoxScore.getStandings().get(0).setOpptOpptGamesWon(awayOpptOpptPrevGamesWon + awayBoxScore.getStandings().get(0).getGamesWon());

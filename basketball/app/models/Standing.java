@@ -1,5 +1,7 @@
 package models;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,16 +15,30 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.joda.time.DateTime;
+import models.Game.ProcessingType;
+
+import org.joda.time.LocalDate;
 
 import play.db.ebean.Model;
+import services.EbeanServerService;
+import services.EbeanServerServiceImpl;
+import services.InjectorModule;
 
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.EbeanServer;
+import com.avaje.ebean.Query;
 import com.avaje.ebean.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 @Entity
 public class Standing extends Model {
 	private static final long serialVersionUID = 1L;
+	
+	private static Injector injector = Guice.createInjector(new InjectorModule());
+	private static EbeanServerService service = injector.getInstance(EbeanServerServiceImpl.class);	
+	private static EbeanServer ebeanServer = service.createEbeanServer();
 
 	@Id
 	@TableGenerator(name="table_gen", table="seq_table", pkColumnName="seq_name", valueColumnName="seq_count", pkColumnValue="standing_seq", initialValue=1)
@@ -33,7 +49,7 @@ public class Standing extends Model {
 	}
 	
 	@ManyToOne
-	@JoinColumn(name="boxscore_id", referencedColumnName="id", nullable=false)
+	@JoinColumn(name="boxscore_id", referencedColumnName="id", nullable=true)
 	private BoxScore boxScore;
 	public BoxScore getBoxScore() {
 		return boxScore;
@@ -52,14 +68,14 @@ public class Standing extends Model {
 		this.team = team;
 	}
 	
-	@Column(name="gameDate", nullable=false)
+	@Column(name="date", nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
-	private DateTime gameDate;
-	public DateTime getGameDate() {
-		return gameDate;
+	private LocalDate date;
+	public LocalDate getDate() {
+		return date;
 	}
-	public void setGameDate(DateTime gameDate) {
-		this.gameDate = gameDate;
+	public void setDate(LocalDate date) {
+		this.date = date;
 	}
 	
 	@Column(name="rank", nullable=false)
@@ -298,7 +314,7 @@ public class Standing extends Model {
 		this.pointDifferentialPerGame = pointDifferentialPerGame;
 	}
 	
-	@Column(name="opptGamesWon", nullable=false)
+	@Column(name="opptGamesWon", nullable=true)
 	private Integer opptGamesWon;
 	public Integer getOpptGamesWon() {
 		return opptGamesWon;
@@ -307,7 +323,7 @@ public class Standing extends Model {
 		this.opptGamesWon = opptGamesWon;
 	}
 	
-	@Column(name="opptGamesPlayed", nullable=false)
+	@Column(name="opptGamesPlayed", nullable=true)
 	private Integer opptGamesPlayed;
 	public Integer getOpptGamesPlayed() {
 		return opptGamesPlayed;
@@ -316,7 +332,7 @@ public class Standing extends Model {
 		this.opptGamesPlayed = opptGamesPlayed;
 	}
 	
-	@Column(name="opptOpptGamesWon", nullable=false)
+	@Column(name="opptOpptGamesWon", nullable=true)
 	private Integer opptOpptGamesWon;
 	public Integer getOpptOpptGamesWon() {
 		return opptOpptGamesWon;
@@ -325,19 +341,77 @@ public class Standing extends Model {
 		this.opptOpptGamesWon = opptOpptGamesWon;
 	}
 	
-	@Column(name="opptOpptGamesPlayed", nullable=false)
+	@Column(name="opptOpptGamesPlayed", nullable=true)
 	private Integer opptOpptGamesPlayed;
 	public Integer getOpptOpptGamesPlayed() {
 		return opptOpptGamesPlayed;
 	}
+	
 	public void setOpptOpptGamesPlayed(Integer opptOpptGamesPlayed) {
 		this.opptOpptGamesPlayed = opptOpptGamesPlayed;
+	}
+	
+	public static Standing findById(Long id) {
+		Standing standing = Ebean.find(Standing.class, id);
+		return standing;
+	}
+	
+	public static List<Standing> findByTeam(String teamKey) {
+	  	Query<Standing> query = Ebean.find(Standing.class);
+	  	query.fetch("team");
+	    query.where().eq("t1.team_key", teamKey);
+	    List <Standing> standing = query.findList();
+	    return standing;
+	}
+	
+	public static List<Standing> findByDate(String date) {
+		Query<Standing> query = Ebean.find(Standing.class);
+	    query.where().le("fromDate", date);
+	    query.where().ge("toDate", date);	    
+	    List<Standing> standing = query.findList();
+	    return standing;
+	}
+	
+	public static Standing findByDateTeam(String date, String teamKey, ProcessingType processingType) {
+		Standing standing;
+	  	Query<Standing> query = null;
+	  	if (processingType.equals(ProcessingType.batch)) 
+	  		query = ebeanServer.find(Standing.class);
+  		else if (processingType.equals(ProcessingType.online))
+  			query = Ebean.find(Standing.class);	
+	  	query.fetch("team");
+	    query.where().le("fromDate", date);
+	    query.where().ge("toDate", date);	 
+	    query.where().eq("t1.team_key", teamKey);
+	    standing = query.findUnique();
+	    return standing;
+	}
+	
+	public static void create(Standing standing, ProcessingType processingType) {
+		if (processingType.equals(ProcessingType.batch))
+			ebeanServer.save(standing);
+		else if (processingType.equals(ProcessingType.online))
+			Ebean.save(standing);
+	}
+	
+	public static void update(Standing standing, ProcessingType processingType) {
+		if (processingType.equals(ProcessingType.batch))
+			ebeanServer.update(standing);
+		else if (processingType.equals(ProcessingType.online))
+			Ebean.update(standing);
+	}
+	  
+	public static void delete(Standing standing, ProcessingType processingType) {
+		if (processingType.equals(ProcessingType.batch))
+			ebeanServer.delete(standing);
+		else if (processingType.equals(ProcessingType.online))
+			Ebean.delete(standing);
 	}
 
 	public String toString() {
 		return new StringBuffer()
 			.append("\n" + this.team + "\n")
-			.append("  game date: " + this.gameDate)
+			.append("  date: " + this.date)
 			.append("  rank: " + this.rank)
 			.append("  ordinal rank: " + this.ordinalRank)
 			.append("  games won: " + this.gamesWon)

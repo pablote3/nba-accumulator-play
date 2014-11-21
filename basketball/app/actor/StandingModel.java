@@ -1,12 +1,11 @@
 package actor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-import util.DateTimeUtil;
 import models.BoxScore;
 import models.Game;
 import models.Standing;
+import util.DateTimeUtil;
 import actor.ActorApi.ActiveStandings;
 import actor.ActorApi.CompleteBoxScore;
 import actor.ActorApi.CompleteGame;
@@ -43,7 +42,7 @@ public class StandingModel extends UntypedActor {
 		}
 		else if(message instanceof ActiveStandings) {
 			ActiveStandings activeStandings = (ActiveStandings) message;
-			ArrayList<Standing> standings = new ArrayList<Standing>(Arrays.asList(activeStandings.standings.standing));
+			ArrayList<Standing> standings = new ArrayList<Standing>(activeStandings.standings);
 
 			BoxScore awayBoxScore = game.getBoxScores().get(0);
 			for (int i = 0; i < standings.size(); i++)  {

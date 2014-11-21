@@ -14,12 +14,15 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+import json.xmlStats.JsonHelper;
 import json.xmlStats.Standings;
 import models.Game;
+import models.Game.ProcessingType;
 import models.Game.Source;
-import util.DateTimeUtil;
+import models.Standing;
 import actor.ActorApi.ActiveStandings;
 import actor.ActorApi.RetrieveStandings;
 import actor.ActorApi.ServiceProps;
@@ -40,7 +43,7 @@ public class StandingXmlStats extends UntypedActor {
 	private String userAgentName;
 	private String urlStanding;
 	private String fileStanding;
-	private Standings standings = null;
+	private ProcessingType processingType;
 	private Source source;
 	private ActorRef listener;
 	
@@ -54,62 +57,59 @@ public class StandingXmlStats extends UntypedActor {
 			userAgentName = ((ServiceProps) message).userAgentName;
 			urlStanding = ((ServiceProps) message).urlStanding;
 			fileStanding = ((ServiceProps) message).fileStanding;
+			processingType = Game.ProcessingType.valueOf(((ServiceProps) message).processType);
 			source = Game.Source.valueOf(((ServiceProps) message).sourceStanding);
 			getSender().tell(InitializeComplete, getSelf());
 		}
 		else if(message instanceof RetrieveStandings) {
 			String gameDate = ((RetrieveStandings) message).date;
-			if (standings == null || !DateTimeUtil.getFindDateNaked(standings.standings_date).equals(gameDate)) {		
-				System.out.println("  Retrieving standings for " + gameDate);
-				String event = gameDate + ".json";
-				InputStream inputStreamJson = null;
-				InputStreamReader baseJson = null;
-			
-				try {
-					if (source.equals(Source.file)) {
-						Path path =  Paths.get(fileStanding).resolve(event);
-						File file = path.toFile();
-						inputStreamJson = new FileInputStream(file);
-					}
-					else {
-						URL url = new URL(urlStanding + event);
-						URLConnection connection = url.openConnection();
-						connection.setRequestProperty(AUTHORIZATION, accessToken);
-						connection.setRequestProperty(USER_AGENT, userAgentName);
-						connection.setRequestProperty(ACCEPT_ENCODING, GZIP);
-						inputStreamJson = connection.getInputStream();
-						String encoding = connection.getContentEncoding();
-						if (GZIP.equals(encoding)) {
-							inputStreamJson = new GZIPInputStream(inputStreamJson);
-						}
-					}
-					baseJson = new InputStreamReader(inputStreamJson, StandardCharsets.UTF_8);
-					if (baseJson != null) {
-					  	ObjectMapper mapper = new ObjectMapper();
-					  	mapper.registerModule(new JodaModule());  
-					    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-					    mapper.configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL, true);
-	        			standings = mapper.readValue(baseJson, Standings.class);
-					}
-				} 
-				catch (FileNotFoundException e) {
-					listener.tell(new XmlStatsException("FileNotFoundException"), getSelf());
+			System.out.println("  Retrieving standings for " + gameDate);
+			String event = gameDate + ".json";
+			InputStream inputStreamJson = null;
+			InputStreamReader baseJson = null;
+		
+			try {
+				if (source.equals(Source.file)) {
+					Path path =  Paths.get(fileStanding).resolve(event);
+					File file = path.toFile();
+					inputStreamJson = new FileInputStream(file);
 				}
-				catch (MalformedURLException e) {
-					listener.tell(new XmlStatsException("MalformedURLException"), getSelf());
-				} 
-				catch (IOException e) {
-					listener.tell(new XmlStatsException("IOException"), getSelf());
+				else {
+					URL url = new URL(urlStanding + event);
+					URLConnection connection = url.openConnection();
+					connection.setRequestProperty(AUTHORIZATION, accessToken);
+					connection.setRequestProperty(USER_AGENT, userAgentName);
+					connection.setRequestProperty(ACCEPT_ENCODING, GZIP);
+					inputStreamJson = connection.getInputStream();
+					String encoding = connection.getContentEncoding();
+					if (GZIP.equals(encoding)) {
+						inputStreamJson = new GZIPInputStream(inputStreamJson);
+					}
 				}
-				catch (Exception e) {
-					System.out.println("Exception");
+				baseJson = new InputStreamReader(inputStreamJson, StandardCharsets.UTF_8);
+				if (baseJson != null) {
+				  	ObjectMapper mapper = new ObjectMapper();
+				  	mapper.registerModule(new JodaModule());  
+				    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+				    mapper.configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL, true);
+				    Standings xmlStatsStandings = mapper.readValue(baseJson, Standings.class);
+				    List<Standing> standings = JsonHelper.getStandings(xmlStatsStandings, processingType);
+				    ActiveStandings activeStandings = new ActiveStandings(standings);
+				    getSender().tell(activeStandings, getSender());
 				}
 			}
-			else {
-				System.out.println("  Standings already loaded for " + gameDate);
+			catch (FileNotFoundException e) {
+				listener.tell(new XmlStatsException("FileNotFoundException"), getSelf());
 			}
-			ActiveStandings as = new ActiveStandings(standings);
-		    getSender().tell(as, getSender());
+			catch (MalformedURLException e) {
+				listener.tell(new XmlStatsException("MalformedURLException"), getSelf());
+			} 
+			catch (IOException e) {
+				listener.tell(new XmlStatsException("IOException"), getSelf());
+			}
+			catch (Exception e) {
+				System.out.println("Exception");
+			}
 		}
 		else {
 			unhandled(message);

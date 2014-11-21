@@ -2,9 +2,9 @@ package actor;
 
 import java.util.List;
 
-import json.xmlStats.Standings;
 import models.Game;
 import models.RosterPlayer;
+import models.Standing;
 
 public interface ActorApi {
 	public static final Object Start = "Start";
@@ -180,9 +180,9 @@ public interface ActorApi {
 	}
 	
 	public static class ActiveStandings {
-		public final Standings standings;
+		public final List<Standing> standings;
 		
-		public ActiveStandings(Standings standings) {
+		public ActiveStandings(List<Standing> standings) {
 			this.standings = standings;
 		}
 	}

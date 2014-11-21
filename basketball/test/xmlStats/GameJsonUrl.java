@@ -15,7 +15,6 @@ import java.net.URLConnection;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Properties;
 import java.util.zip.GZIPInputStream;
 
@@ -23,17 +22,17 @@ import json.xmlStats.JsonHelper;
 import json.xmlStats.NBABoxScore;
 import json.xmlStats.Standings;
 import models.BoxScore;
+import models.BoxScore.Location;
+import models.BoxScore.Result;
 import models.BoxScorePlayer;
 import models.Game;
+import models.Game.ProcessingType;
+import models.Game.SeasonType;
+import models.Game.Status;
 import models.Player;
 import models.RosterPlayer;
 import models.Standing;
 import models.Team;
-import models.BoxScore.Location;
-import models.BoxScore.Result;
-import models.Game.ProcessingType;
-import models.Game.SeasonType;
-import models.Game.Status;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -147,7 +146,7 @@ public class GameJsonUrl {
 	        			mapper.registerModule(new JodaModule());        			
 	        			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);       			
 	        			Standings xmlStandings = mapper.readValue(baseJson, Standings.class);
-	        			ArrayList<Standing> standings = new ArrayList<Standing>(Arrays.asList(xmlStandings.standing));
+	        			ArrayList<Standing> standings = new ArrayList<Standing>(JsonHelper.getStandings(xmlStandings, ProcessingType.online));;
 		      		  	
 	        			for (int i = 0; i < standings.size(); i++)  {
 	        				if (standings.get(i).getTeam().equals(awayBoxScore.getTeam()))  {

@@ -3,6 +3,8 @@ package json.xmlStats;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.LocalDate;
+
 import models.BoxScore;
 import models.BoxScorePlayer;
 import models.RosterPlayer.Position;
@@ -11,6 +13,8 @@ import models.GameOfficial;
 import models.Official;
 import models.Player;
 import models.RosterPlayer;
+import models.Standing;
+import models.Standing.StreakType;
 import models.Team;
 import util.DateTimeUtil;
 
@@ -129,5 +133,43 @@ public class JsonHelper {
         	rosterPlayers.add(rosterPlayer);
         }
 	    return rosterPlayers;
+    }
+	
+	public static List<Standing> getStandings(Standings xmlStatsStandings, ProcessingType processingType) {
+		StandingDTO[] standingDTOs = xmlStatsStandings.standing;
+		LocalDate date = DateTimeUtil.getLocalDateFromDateTime(xmlStatsStandings.standings_date);
+    	List<Standing> standings = new ArrayList<Standing>();	    
+	    Standing standing;
+	    StandingDTO standingDTO;
+        for (int i = 0; i < standingDTOs.length; i++) {
+        	standingDTO = xmlStatsStandings.standing[i];
+        	standing = new Standing();
+        	standing.setTeam(Team.findByTeamKey(standingDTO.getTeam_id(), processingType));
+        	standing.setDate(date);
+        	standing.setRank(standingDTO.getRank());
+        	standing.setOrdinalRank(standingDTO.getOrdinal_rank());
+        	standing.setGamesWon(standingDTO.getWon());
+        	standing.setGamesLost(standingDTO.getLost());
+        	standing.setStreak(standingDTO.getStreak());
+        	standing.setStreakType(StreakType.valueOf(standingDTO.getStreak_type()));
+        	standing.setStreakTotal(standingDTO.getStreak_total());
+        	standing.setGamesBack(standingDTO.getGames_back());
+        	standing.setPointsFor(standingDTO.getPoints_for());
+        	standing.setPointsAgainst(standingDTO.getPoints_against());
+        	standing.setHomeWins(standingDTO.getHome_won());
+        	standing.setHomeLosses(standingDTO.getHome_lost());
+        	standing.setConferenceWins(standingDTO.getConference_won());
+        	standing.setConferenceLosses(standingDTO.getConference_lost());
+        	standing.setLastFive(standingDTO.getLast_five());
+        	standing.setLastTen(standingDTO.getLast_ten());
+        	standing.setGamesPlayed(standingDTO.getGames_played());
+        	standing.setPointsScoredPerGame(standingDTO.getPoints_scored_per_game());
+        	standing.setPointsAllowedPerGame(standingDTO.getPoints_allowed_per_game());
+        	standing.setWinPercentage(standingDTO.getWin_percentage());
+        	standing.setPointDifferential(standingDTO.getPoint_differential());
+        	standing.setPointDifferentialPerGame(standingDTO.getPoint_differential_per_game());       	
+        	standings.add(standing);
+        }
+	    return standings;
     }
 }

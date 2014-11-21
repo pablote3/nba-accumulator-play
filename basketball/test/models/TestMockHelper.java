@@ -197,7 +197,7 @@ public class TestMockHelper {
 	protected static Standing getStandingHomeCompleted(Team team) {
 		Standing standing = new Standing();
 		standing.setTeam(team);
-		standing.setGameDate(new DateTime(2013, 7, 5, 0, 0, 0));
+		standing.setDate(LocalDate.parse("2013-07-05", DateTimeFormat.forPattern("yyyy-MM-dd")));
     	standing.setRank((short)1);
     	standing.setOrdinalRank("1st");
 	    standing.setGamesWon((short)99);
@@ -232,7 +232,7 @@ public class TestMockHelper {
 	protected static Standing getStandingAwayCompleted(Team team) {
 		Standing standing = new Standing();
 		standing.setTeam(team);
-		standing.setGameDate(new DateTime(2013, 7, 5, 0, 0, 0));
+		standing.setDate(LocalDate.parse("2013-07-05", DateTimeFormat.forPattern("yyyy-MM-dd")));
     	standing.setRank((short)2);
     	standing.setOrdinalRank("2nd");
 	    standing.setGamesWon((short)95);
