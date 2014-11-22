@@ -237,13 +237,11 @@ public class GameTest {
         	Team homeTeam = Team.findByKey("key", "toronto-raptors", ProcessingType.online);
 		    BoxScore homeBoxScore = TestMockHelper.getBoxScoreHomeCompleted(TestMockHelper.getBoxScoreHomeScheduled(), TestMockHelper.getPeriodScoresHome());
 		    homeBoxScore.setTeam(homeTeam);
-		    homeBoxScore.addStanding(TestMockHelper.getStandingHomeCompleted(homeTeam));
 		    game.addBoxScore(homeBoxScore);
 		    
 		    Team awayTeam = Team.findByKey("key", "detroit-pistons", ProcessingType.online);
 		    BoxScore awayBoxScore = TestMockHelper.getBoxScoreAwayCompleted(TestMockHelper.getBoxScoreAwayScheduled(), TestMockHelper.getPeriodScoresAway());
 		    awayBoxScore.setTeam(awayTeam);
-		    awayBoxScore.addStanding(TestMockHelper.getStandingAwayCompleted(awayTeam));
 		    game.addBoxScore(awayBoxScore);
 		    
 		    Game.create(game, ProcessingType.online);
@@ -287,13 +285,11 @@ public class GameTest {
           	Team homeTeam = Team.findByKey("key", "new-orleans-pelicans", ProcessingType.online);
   		    BoxScore homeBoxScore = TestMockHelper.getBoxScoreHomeScheduled();
   		    homeBoxScore.setTeam(homeTeam);
-  		    homeBoxScore.addStanding(TestMockHelper.getStandingHomeCompleted(homeTeam));
   		    scheduleGame.addBoxScore(homeBoxScore);
   		    
   		    Team awayTeam = Team.findByKey("key", "sacramento-kings", ProcessingType.online);
   		    BoxScore awayBoxScore = TestMockHelper.getBoxScoreAwayScheduled();
   		    awayBoxScore.setTeam(awayTeam);
-  		    awayBoxScore.addStanding(TestMockHelper.getStandingAwayCompleted(awayTeam));
   		    scheduleGame.addBoxScore(awayBoxScore);
   		    
   		    Game.create(scheduleGame, ProcessingType.online);

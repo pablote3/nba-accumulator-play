@@ -194,45 +194,10 @@ public class TestMockHelper {
     	return boxScore;
     }
 	
-	protected static Standing getStandingHomeCompleted(Team team) {
+	protected static Standing getStanding(String teamKey, String date) {
 		Standing standing = new Standing();
-		standing.setTeam(team);
-		standing.setDate(LocalDate.parse("2013-07-05", DateTimeFormat.forPattern("yyyy-MM-dd")));
-    	standing.setRank((short)1);
-    	standing.setOrdinalRank("1st");
-	    standing.setGamesWon((short)99);
-	    standing.setGamesLost((short)100);
-	    standing.setStreak("L3");
-	    standing.setStreakType(StreakType.loss);
-	    standing.setStreakTotal((short)3);
-	    standing.setGamesBack((float)0);
-	    standing.setPointsFor((short)2998);
-	    standing.setPointsAgainst((short)3501);
-	    standing.setHomeWins((short)50);
-	    standing.setHomeLosses((short)50);
-	    standing.setAwayWins((short)49);
-	    standing.setAwayLosses((short)50);
-	    standing.setConferenceWins((short)15);
-	    standing.setConferenceLosses((short)11);
-	    standing.setLastFive("3-2");
-	    standing.setLastTen("5-10");
-	    standing.setGamesPlayed((short)199);
-	    standing.setPointsScoredPerGame((float)102.1);
-	    standing.setPointsAllowedPerGame((float)105.1);
-	    standing.setWinPercentage((float)0.505);
-	    standing.setPointDifferential((short)-2);
-	    standing.setPointDifferentialPerGame((float)-0.4);
-	    standing.setOpptGamesWon(2);
-	    standing.setOpptGamesPlayed(3);
-	    standing.setOpptOpptGamesWon(4);
-	    standing.setOpptOpptGamesPlayed(5);
-    	return standing;
-    }
-	
-	protected static Standing getStandingAwayCompleted(Team team) {
-		Standing standing = new Standing();
-		standing.setTeam(team);
-		standing.setDate(LocalDate.parse("2013-07-05", DateTimeFormat.forPattern("yyyy-MM-dd")));
+		standing.setTeam(Team.findByTeamKey(teamKey, ProcessingType.batch));
+		standing.setDate(LocalDate.parse(date, DateTimeFormat.forPattern("yyyy-MM-dd")));
     	standing.setRank((short)2);
     	standing.setOrdinalRank("2nd");
 	    standing.setGamesWon((short)95);
@@ -257,10 +222,10 @@ public class TestMockHelper {
 	    standing.setWinPercentage((float)0.505);
 	    standing.setPointDifferential((short)-2);
 	    standing.setPointDifferentialPerGame((float)-0.4);
-	    standing.setOpptGamesWon(1);
-	    standing.setOpptGamesPlayed(2);
-	    standing.setOpptOpptGamesWon(3);
-	    standing.setOpptOpptGamesPlayed(4);
+	    standing.setOpptGamesWon((short)1);
+	    standing.setOpptGamesPlayed((short)2);
+	    standing.setOpptOpptGamesWon((short)3);
+	    standing.setOpptOpptGamesPlayed((short)4);
     	return standing;
     }
     

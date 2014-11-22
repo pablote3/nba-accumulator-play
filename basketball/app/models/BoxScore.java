@@ -69,21 +69,6 @@ public class BoxScore extends Model {
 		this.getBoxScorePlayers().remove(boxScorePlayer);
 	}	
 	
-	@OneToMany(mappedBy="boxScore", cascade=CascadeType.ALL)
-	private List<Standing> standings = new ArrayList<Standing>();
-	public List<Standing> getStandings()  {
-		return standings;
-	}
-	public void setStandings(List<Standing> standings)  {
-		this.standings = standings;
-	}
-	public void addStanding(Standing standing)  {
-		this.getStandings().add(standing);
-	}
-	public void removeStanding(Standing standing)  {
-		this.getStandings().remove(standing);
-	}
-	
 	@Required
 	@Enumerated(EnumType.STRING)
 	@Column(name="location", length=5, nullable=false)
@@ -351,6 +336,42 @@ public class BoxScore extends Model {
 	}
 	public void setPointsPeriod8(Short pointsPeriod8) {
 		this.pointsPeriod8 = pointsPeriod8;
+	}
+	
+	@Column(name="opptGamesWon", nullable=true)
+	private Short opptGamesWon;
+	public Short getOpptGamesWon() {
+		return opptGamesWon;
+	}
+	public void setOpptGamesWon(Short opptGamesWon) {
+		this.opptGamesWon = opptGamesWon;
+	}
+	
+	@Column(name="opptGamesPlayed", nullable=true)
+	private Short opptGamesPlayed;
+	public Short getOpptGamesPlayed() {
+		return opptGamesPlayed;
+	}
+	public void setOpptGamesPlayed(Short opptGamesPlayed) {
+		this.opptGamesPlayed = opptGamesPlayed;
+	}
+	
+	@Column(name="opptOpptGamesWon", nullable=true)
+	private Short opptOpptGamesWon;
+	public Short getOpptOpptGamesWon() {
+		return opptOpptGamesWon;
+	}
+	public void setOpptOpptGamesWon(Short opptOpptGamesWon) {
+		this.opptOpptGamesWon = opptOpptGamesWon;
+	}
+	
+	@Column(name="opptOpptGamesPlayed", nullable=true)
+	private Short opptOpptGamesPlayed;
+	public Short getOpptOpptGamesPlayed() {
+		return opptOpptGamesPlayed;
+	}	
+	public void setOpptOpptGamesPlayed(Short opptOpptGamesPlayed) {
+		this.opptOpptGamesPlayed = opptOpptGamesPlayed;
 	}
 
 	public String toString() {

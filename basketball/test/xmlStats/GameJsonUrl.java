@@ -20,7 +20,6 @@ import java.util.zip.GZIPInputStream;
 
 import json.xmlStats.JsonHelper;
 import json.xmlStats.NBABoxScore;
-import json.xmlStats.Standings;
 import models.BoxScore;
 import models.BoxScore.Location;
 import models.BoxScore.Result;
@@ -31,7 +30,6 @@ import models.Game.SeasonType;
 import models.Game.Status;
 import models.Player;
 import models.RosterPlayer;
-import models.Standing;
 import models.Team;
 
 import org.junit.Ignore;
@@ -139,28 +137,6 @@ public class GameJsonUrl {
 		      		  		homeBoxScore.setResult(Result.win);
 		      		  		awayBoxScore.setResult(Result.loss);
 		      		  	}
-		      		  	
-		      		  	baseJson = getJson(properties, "xmlstats.urlStandings", "20020621-standings.json");
-
-	        			mapper = new ObjectMapper();
-	        			mapper.registerModule(new JodaModule());        			
-	        			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);       			
-	        			Standings xmlStandings = mapper.readValue(baseJson, Standings.class);
-	        			ArrayList<Standing> standings = new ArrayList<Standing>(JsonHelper.getStandings(xmlStandings, ProcessingType.online));;
-		      		  	
-	        			for (int i = 0; i < standings.size(); i++)  {
-	        				if (standings.get(i).getTeam().equals(awayBoxScore.getTeam()))  {
-	        					awayBoxScore.getStandings().add(standings.get(i));
-	        					break;
-	        				}
-	        			}
-	        			
-	        			for (int i = 0; i < standings.size(); i++)  {
-	        				if (standings.get(i).getTeam().equals(homeBoxScore.getTeam()))  {
-	        					homeBoxScore.getStandings().add(standings.get(i));
-	        					break;
-	        				}
-	        			}
 	        				
 		      		  	completeGame.update();
 		      		  	Game createGame = Game.findById(gameId, ProcessingType.online);

@@ -43,7 +43,7 @@ public class StandingJsonFile {
 		        
         			ObjectMapper mapper = new ObjectMapper();
         			mapper.registerModule(new JodaModule());
-        			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);	            
+        			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         			Standings xmlStatsStandings = mapper.readValue(baseJson, Standings.class);
         			List<Standing> standings = JsonHelper.getStandings(xmlStatsStandings, processingType);
         			
@@ -53,21 +53,21 @@ public class StandingJsonFile {
 
             		String standingDate = "2002-06-21";
             		String standingTeamKey = "sacramento-kings";
-	  			  	Standing finderStanding = Standing.findByDateTeam(standingDate, standingTeamKey, processingType);	  			  	
+	  			  	Standing finderStanding = Standing.findByDateTeam(standingDate, standingTeamKey, processingType);
 	  			  	assertThat(finderStanding.getPointsAgainst()).isEqualTo((short)3232);
 	  			  	
 	  			  	List<Standing> finderStandingList;
-	  			  	finderStandingList= Standing.findByDate(standingDate);
+	  			  	finderStandingList= Standing.findByDate(standingDate, processingType);
 	  			  	assertThat(finderStandingList.size()).isEqualTo(30);
 	  			  	
-	  			  	finderStandingList = Standing.findByTeam(standingTeamKey);
+	  			  	finderStandingList = Standing.findByTeam(standingTeamKey, processingType);
 	  			  	assertThat(finderStandingList.size()).isEqualTo(1);
 	  			  	
 	  			  	for (int i = 0; i < standings.size(); i++) {
-	  			  		Standing.delete(standings.get(i), processingType);
+	  			  		Standing.delete(standings.get(i).getId(), processingType);
 	  			  	}
 	  			  	
-	  			  	finderStandingList= Standing.findByDate(standingDate);
+	  			  	finderStandingList= Standing.findByDate(standingDate, processingType);
 	  			  	assertThat(finderStandingList.size()).isEqualTo(0);
         	  } catch (FileNotFoundException e) {
       	          e.printStackTrace();

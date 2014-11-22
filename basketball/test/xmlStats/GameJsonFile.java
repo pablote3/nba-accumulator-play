@@ -11,12 +11,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 
 import json.xmlStats.BoxScorePlayerDTO;
 import json.xmlStats.JsonHelper;
 import json.xmlStats.NBABoxScore;
-import json.xmlStats.Standings;
 import models.BoxScore;
 import models.BoxScore.Location;
 import models.BoxScore.Result;
@@ -26,7 +24,6 @@ import models.Game.SeasonType;
 import models.Game.Status;
 import models.Player;
 import models.RosterPlayer;
-import models.Standing;
 import models.Team;
 
 import org.joda.time.LocalDate;
@@ -147,45 +144,7 @@ public class GameJsonFile {
         				homeBoxScore.setResult(Result.win);
         				awayBoxScore.setResult(Result.loss);
         			}
-        			
-        			path =  Paths.get(System.getProperty("config.test")).resolve("20020621-standings.json");
-        			file = path.toFile();
-        			baseJson = new FileInputStream(file);
-        			
-        			mapper = new ObjectMapper();
-        			mapper.registerModule(new JodaModule());        			
-        			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);       			
-        			Standings xmlStandings = mapper.readValue(baseJson, Standings.class);
-        			ArrayList<Standing> standings = new ArrayList<Standing>(JsonHelper.getStandings(xmlStandings, processingType));
-        			
-        			for (int i = 0; i < standings.size(); i++)  {
-        				if (standings.get(i).getTeam().equals(homeTeam))  {
-        					Standing standing = standings.get(i);
-        					standing.setTeam(homeTeam);
-        					standing.setDate(gameDate);
-        					standing.setOpptGamesWon(0);
-        					standing.setOpptGamesPlayed(3);
-        					standing.setOpptOpptGamesWon(4);
-        					standing.setOpptOpptGamesPlayed(6);
-        					homeBoxScore.getStandings().add(standing);
-        					break;
-        				}
-        			}
-        			
-        			for (int i = 0; i < standings.size(); i++)  {
-        				if (standings.get(i).getTeam().equals(awayTeam))  {
-        					Standing standing = standings.get(i);
-        					standing.setTeam(awayTeam);
-        					standing.setDate(gameDate);
-        					standing.setOpptGamesWon(2);
-        					standing.setOpptGamesPlayed(2);
-        					standing.setOpptOpptGamesWon(2);
-        					standing.setOpptOpptGamesPlayed(5);
-        					awayBoxScore.getStandings().add(standing);
-        					break;
-        				}
-        			}
-	              
+        			        
         			game.addBoxScore(homeBoxScore);
         			game.addBoxScore(awayBoxScore);
 	              

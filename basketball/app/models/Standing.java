@@ -49,16 +49,6 @@ public class Standing extends Model {
 	}
 	
 	@ManyToOne
-	@JoinColumn(name="boxscore_id", referencedColumnName="id", nullable=true)
-	private BoxScore boxScore;
-	public BoxScore getBoxScore() {
-		return boxScore;
-	}
-	public void setBoxScore(BoxScore boxScore) {
-		this.boxScore = boxScore;
-	}
-	
-	@ManyToOne
 	@JoinColumn(name="team_id", referencedColumnName="id", nullable=false)
 	private Team team;
 	public Team getTeam() {
@@ -69,7 +59,7 @@ public class Standing extends Model {
 	}
 	
 	@Column(name="date", nullable=false)
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private LocalDate date;
 	public LocalDate getDate() {
 		return date;
@@ -315,60 +305,73 @@ public class Standing extends Model {
 	}
 	
 	@Column(name="opptGamesWon", nullable=true)
-	private Integer opptGamesWon;
-	public Integer getOpptGamesWon() {
+	private Short opptGamesWon;
+	public Short getOpptGamesWon() {
 		return opptGamesWon;
 	}
-	public void setOpptGamesWon(Integer opptGamesWon) {
+	public void setOpptGamesWon(Short opptGamesWon) {
 		this.opptGamesWon = opptGamesWon;
 	}
 	
 	@Column(name="opptGamesPlayed", nullable=true)
-	private Integer opptGamesPlayed;
-	public Integer getOpptGamesPlayed() {
+	private Short opptGamesPlayed;
+	public Short getOpptGamesPlayed() {
 		return opptGamesPlayed;
 	}
-	public void setOpptGamesPlayed(Integer opptGamesPlayed) {
+	public void setOpptGamesPlayed(Short opptGamesPlayed) {
 		this.opptGamesPlayed = opptGamesPlayed;
 	}
 	
 	@Column(name="opptOpptGamesWon", nullable=true)
-	private Integer opptOpptGamesWon;
-	public Integer getOpptOpptGamesWon() {
+	private Short opptOpptGamesWon;
+	public Short getOpptOpptGamesWon() {
 		return opptOpptGamesWon;
 	}
-	public void setOpptOpptGamesWon(Integer opptOpptGamesWon) {
+	public void setOpptOpptGamesWon(Short opptOpptGamesWon) {
 		this.opptOpptGamesWon = opptOpptGamesWon;
 	}
 	
 	@Column(name="opptOpptGamesPlayed", nullable=true)
-	private Integer opptOpptGamesPlayed;
-	public Integer getOpptOpptGamesPlayed() {
+	private Short opptOpptGamesPlayed;
+	public Short getOpptOpptGamesPlayed() {
 		return opptOpptGamesPlayed;
-	}
-	
-	public void setOpptOpptGamesPlayed(Integer opptOpptGamesPlayed) {
+	}	
+	public void setOpptOpptGamesPlayed(Short opptOpptGamesPlayed) {
 		this.opptOpptGamesPlayed = opptOpptGamesPlayed;
 	}
 	
-	public static Standing findById(Long id) {
-		Standing standing = Ebean.find(Standing.class, id);
+	public static Standing findById(Long id, ProcessingType processingType) {
+		Standing standing = null;
+		if (processingType.equals(ProcessingType.batch))
+			standing = ebeanServer.find(Standing.class, id);
+		else if (processingType.equals(ProcessingType.online))
+			standing = Ebean.find(Standing.class, id);
 		return standing;
 	}
 	
-	public static List<Standing> findByTeam(String teamKey) {
-	  	Query<Standing> query = Ebean.find(Standing.class);
+	public static List<Standing> findByTeam(String teamKey, ProcessingType processingType) {
+		List <Standing> standing;
+		Query<Standing> query = null;
+		if (processingType.equals(ProcessingType.batch)) 
+			query = ebeanServer.find(Standing.class);
+		else if (processingType.equals(ProcessingType.online))
+	  		Ebean.find(Standing.class);
 	  	query.fetch("team");
 	    query.where().eq("t1.team_key", teamKey);
-	    List <Standing> standing = query.findList();
+	    standing = query.findList();
 	    return standing;
 	}
 	
-	public static List<Standing> findByDate(String date) {
-		Query<Standing> query = Ebean.find(Standing.class);
+	public static List<Standing> findByDate(String date, ProcessingType processingType) {
+		List <Standing> standing;
+		Query<Standing> query = null;
+		if (processingType.equals(ProcessingType.batch)) 
+			query = ebeanServer.find(Standing.class);
+		else if (processingType.equals(ProcessingType.online))
+	  		Ebean.find(Standing.class);
 	    query.where().le("fromDate", date);
 	    query.where().ge("toDate", date);	    
-	    List<Standing> standing = query.findList();
+	    standing = query.findList();
 	    return standing;
 	}
 	
@@ -401,11 +404,9 @@ public class Standing extends Model {
 			Ebean.update(standing);
 	}
 	  
-	public static void delete(Standing standing, ProcessingType processingType) {
-		if (processingType.equals(ProcessingType.batch))
-			ebeanServer.delete(standing);
-		else if (processingType.equals(ProcessingType.online))
-			Ebean.delete(standing);
+	public static void delete(Long id, ProcessingType processingType) {
+		Standing standing = Standing.findById(id, processingType);
+	  	standing.delete();
 	}
 
 	public String toString() {
