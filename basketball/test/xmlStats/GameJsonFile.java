@@ -49,7 +49,7 @@ public class GameJsonFile {
 		        
         			ObjectMapper mapper = new ObjectMapper();
         			mapper.registerModule(new JodaModule());        			
-        			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);       			
+        			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         			NBABoxScore xmlStats = mapper.readValue(baseJson, NBABoxScore.class);
 	              
         			ProcessingType processingType = ProcessingType.online;
@@ -57,7 +57,7 @@ public class GameJsonFile {
         			Game game = new Game();
         			game.setDate(xmlStats.event_information.getDate());
         			game.setStatus(Status.completed);
-        			game.setSeasonType(xmlStats.event_information.getSeasonType());	              
+        			game.setSeasonType(xmlStats.event_information.getSeasonType());
         			game.setGameOfficials(JsonHelper.getGameOfficials(xmlStats.officials, processingType));
         			
         			LocalDate gameDate = DateTimeUtil.getLocalDateFromDateTime(game.getDate());
@@ -164,7 +164,6 @@ public class GameJsonFile {
 	              			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("OKC");
 	              			assertThat(boxScore.getBoxScorePlayers().get(0).getRosterPlayer().getPlayer().getLastName()).isEqualTo("Durant");
 	              			assertThat(boxScore.getBoxScorePlayers().get(0).getPoints()).isEqualTo((short)32);
-	              			assertThat(boxScore.getStandings().get(0).getGamesBack()).isEqualTo((float)0.5);
 	              		}
 	              		else {
 	              			assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)40);
@@ -172,16 +171,15 @@ public class GameJsonFile {
 	              			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("MIA");
 	              			assertThat(boxScore.getBoxScorePlayers().get(0).getRosterPlayer().getPlayer().getLastName()).isEqualTo("James");
 	              			assertThat(boxScore.getBoxScorePlayers().get(0).getPoints()).isEqualTo((short)26);
-	              			assertThat(boxScore.getStandings().get(0).getGamesBack()).isEqualTo((float)1.5);
 	              		}
 	              	}
 	              
         			Game.delete(createGame.getId(), processingType);
 	              
-        			RosterPlayer.delete(awayRosterPlayer, processingType);	              
+        			RosterPlayer.delete(awayRosterPlayer, processingType);
         			Player.delete(awayPlayer, processingType);
         			
-        			RosterPlayer.delete(homeRosterPlayer, processingType);	              
+        			RosterPlayer.delete(homeRosterPlayer, processingType);
         			Player.delete(homePlayer, processingType);
 
         		} catch (FileNotFoundException e) {

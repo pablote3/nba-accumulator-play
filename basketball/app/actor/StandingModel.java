@@ -41,24 +41,24 @@ public class StandingModel extends UntypedActor {
 			standingXmlStats.tell(rs, getSelf());
 		}
 		else if(message instanceof ActiveStandings) {
-			ActiveStandings activeStandings = (ActiveStandings) message;
-			ArrayList<Standing> standings = new ArrayList<Standing>(activeStandings.standings);
+//			ActiveStandings activeStandings = (ActiveStandings) message;
+//			ArrayList<Standing> standings = new ArrayList<Standing>(activeStandings.standings);
 
-			BoxScore awayBoxScore = game.getBoxScores().get(0);
-			for (int i = 0; i < standings.size(); i++)  {
-				if (standings.get(i).getTeam().equals(awayBoxScore.getTeam()))  {
-					awayBoxScore.getStandings().add(standings.get(i));
-					break;
-				}
-			}
+//			BoxScore awayBoxScore = game.getBoxScores().get(0);
+//			for (int i = 0; i < standings.size(); i++)  {
+//				if (standings.get(i).getTeam().equals(awayBoxScore.getTeam()))  {
+//					awayBoxScore.getStandings().add(standings.get(i));
+//					break;
+//				}
+//			}
 
-			BoxScore homeBoxScore = game.getBoxScores().get(1);
-			for (int i = 0; i < standings.size(); i++)  {
-				if (standings.get(i).getTeam().equals(homeBoxScore.getTeam()))  {
-					homeBoxScore.getStandings().add(standings.get(i));
-					break;
-				}
-			}
+//			BoxScore homeBoxScore = game.getBoxScores().get(1);
+//			for (int i = 0; i < standings.size(); i++)  {
+//				if (standings.get(i).getTeam().equals(homeBoxScore.getTeam()))  {
+//					homeBoxScore.getStandings().add(standings.get(i));
+//					break;
+//				}
+//			}
 			CompleteGame cg = new CompleteGame(game);
 			controller.tell(cg, getSelf());
 		}

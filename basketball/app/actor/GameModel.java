@@ -103,78 +103,78 @@ public class GameModel extends UntypedActor {
 		}
 		else if(message instanceof CompleteGame) {
 			Game game = ((CompleteGame)message).game;
-			String gameDate = DateTimeUtil.getFindDateShort(game.getDate());
+//			String gameDate = DateTimeUtil.getFindDateShort(game.getDate());
 			
 			BoxScore homeBoxScore = game.getBoxScores().get(1);
-			Game homePreviousGame = Game.findPreviousByDateTeamSeason(gameDate, homeBoxScore.getTeam().getKey(), processingType);
+//			Game homePreviousGame = Game.findPreviousByDateTeamSeason(gameDate, homeBoxScore.getTeam().getKey(), processingType);
 			
 			BoxScore awayBoxScore = game.getBoxScores().get(0);
-			Game awayPreviousGame = Game.findPreviousByDateTeamSeason(gameDate, awayBoxScore.getTeam().getKey(), processingType);
+//			Game awayPreviousGame = Game.findPreviousByDateTeamSeason(gameDate, awayBoxScore.getTeam().getKey(), processingType);
 
-			Short homeOpptPrevGamesWon = 0;
-			Short homeOpptPrevGamesPlayed = 0;
-			Short homeOpptOpptPrevGamesWon = 0;
-			Short homeOpptOpptPrevGamesPlayed = 0;
-			
-			Short awayOpptPrevGamesWon = 0;
-			Short awayOpptPrevGamesPlayed = 0;
-			Short awayOpptOpptPrevGamesWon = 0;
-			Short awayOpptOpptPrevGamesPlayed = 0;
-
-			if (homePreviousGame != null) {
-				int homeIndex = homePreviousGame.getBoxScores().get(0).getTeam().getKey().equals(homeBoxScore.getTeam().getKey()) ? 1 : 0;
-				homeOpptPrevGamesWon = homePreviousGame.getBoxScores().get(homeIndex).getStandings().get(0).getOpptGamesWon();
-				homeOpptPrevGamesPlayed = homePreviousGame.getBoxScores().get(homeIndex).getStandings().get(0).getOpptGamesPlayed();
-				homeOpptOpptPrevGamesWon = homePreviousGame.getBoxScores().get(homeIndex).getStandings().get(0).getOpptOpptGamesWon();
-				homeOpptOpptPrevGamesPlayed = homePreviousGame.getBoxScores().get(homeIndex).getStandings().get(0).getOpptOpptGamesPlayed();
-			}
-			
-			if (awayPreviousGame != null) {
-				int awayIndex = awayPreviousGame.getBoxScores().get(0).getTeam().getKey().equals(awayBoxScore.getTeam().getKey()) ? 1 : 0;
-				awayOpptPrevGamesWon = awayPreviousGame.getBoxScores().get(awayIndex).getStandings().get(0).getOpptGamesWon();
-				awayOpptPrevGamesPlayed = awayPreviousGame.getBoxScores().get(awayIndex).getStandings().get(0).getOpptGamesPlayed();
-				awayOpptOpptPrevGamesWon = awayPreviousGame.getBoxScores().get(awayIndex).getStandings().get(0).getOpptOpptGamesWon();
-				awayOpptOpptPrevGamesPlayed = awayPreviousGame.getBoxScores().get(awayIndex).getStandings().get(0).getOpptOpptGamesPlayed();
-			}
-
-			homeBoxScore.getStandings().get(0).setDate(DateTimeUtil.getLocalDateFromDateTime(game.getDate()));
-			homeBoxScore.getStandings().get(0).setOpptGamesWon((short)(homeOpptPrevGamesWon + awayBoxScore.getStandings().get(0).getGamesWon()));
-			homeBoxScore.getStandings().get(0).setOpptGamesPlayed((short)(homeOpptPrevGamesPlayed + awayBoxScore.getStandings().get(0).getGamesPlayed()));
-			homeBoxScore.getStandings().get(0).setOpptOpptGamesWon((short)(homeOpptOpptPrevGamesWon + homeBoxScore.getStandings().get(0).getGamesWon()));
-			homeBoxScore.getStandings().get(0).setOpptOpptGamesPlayed((short)(homeOpptOpptPrevGamesPlayed + homeBoxScore.getStandings().get(0).getGamesPlayed()));
-			
-			awayBoxScore.getStandings().get(0).setDate(DateTimeUtil.getLocalDateFromDateTime(game.getDate()));
-			awayBoxScore.getStandings().get(0).setOpptGamesWon((short)(awayOpptPrevGamesWon + homeBoxScore.getStandings().get(0).getGamesWon()));
-			awayBoxScore.getStandings().get(0).setOpptGamesPlayed((short)(awayOpptPrevGamesPlayed + homeBoxScore.getStandings().get(0).getGamesPlayed()));
-			awayBoxScore.getStandings().get(0).setOpptOpptGamesWon((short)(awayOpptOpptPrevGamesWon + awayBoxScore.getStandings().get(0).getGamesWon()));
-			awayBoxScore.getStandings().get(0).setOpptOpptGamesPlayed((short)(awayOpptOpptPrevGamesPlayed + awayBoxScore.getStandings().get(0).getGamesPlayed()));
-			
-			BigDecimal homeOpptWinPercent = (homeBoxScore.getStandings().get(0).getOpptGamesPlayed() == 0) ? BigDecimal.ZERO : 
-				new BigDecimal(homeBoxScore.getStandings().get(0).getOpptGamesWon()).divide(new BigDecimal(homeBoxScore.getStandings().get(0).getOpptGamesPlayed()), 3, RoundingMode.HALF_UP);
-			BigDecimal homeOpptOpptWinPercent = (homeBoxScore.getStandings().get(0).getOpptOpptGamesPlayed() == 0) ? BigDecimal.ZERO  : 
-				new BigDecimal(homeBoxScore.getStandings().get(0).getOpptOpptGamesWon()).divide(new BigDecimal(homeBoxScore.getStandings().get(0).getOpptOpptGamesPlayed()), 3, RoundingMode.HALF_UP);
-			BigDecimal awayOpptWinPercent = (awayBoxScore.getStandings().get(0).getOpptGamesPlayed() == 0) ? BigDecimal.ZERO  : 
-				new BigDecimal(awayBoxScore.getStandings().get(0).getOpptGamesWon()).divide(new BigDecimal(awayBoxScore.getStandings().get(0).getOpptGamesPlayed()), 3, RoundingMode.HALF_UP);
-			BigDecimal awayOpptOpptWinPercent = (awayBoxScore.getStandings().get(0).getOpptOpptGamesPlayed() == 0) ? BigDecimal.ZERO  : 
-				new BigDecimal(awayBoxScore.getStandings().get(0).getOpptOpptGamesWon()).divide(new BigDecimal(awayBoxScore.getStandings().get(0).getOpptOpptGamesPlayed()), 3, RoundingMode.HALF_UP);
-			
-			System.out.println("  HomeTeamStanding " + homeBoxScore.getTeam().getShortName());
-			System.out.println("     OldOppt " + homeOpptPrevGamesWon + "-" + homeOpptPrevGamesPlayed + " + " + 
-							   		"OpptRecord " + awayBoxScore.getStandings().get(0).getGamesWon() + "-" + awayBoxScore.getStandings().get(0).getGamesPlayed() + " = " +
-									"NewOppt " + homeBoxScore.getStandings().get(0).getOpptGamesWon() + "-" + homeBoxScore.getStandings().get(0).getOpptGamesPlayed());
-			System.out.println("     OldOpptOppt " + homeOpptOpptPrevGamesWon + "-" + homeOpptOpptPrevGamesPlayed + " + " + 
-			   						"OpptOpptRecord " + homeBoxScore.getStandings().get(0).getGamesWon() + "-" + homeBoxScore.getStandings().get(0).getGamesPlayed() + " = " +
-			   						"NewOpptOppt " + homeBoxScore.getStandings().get(0).getOpptOpptGamesWon() + "-" + homeBoxScore.getStandings().get(0).getOpptOpptGamesPlayed());
-			System.out.println("     StrengthOfSchedule " + homeOpptWinPercent.multiply(new BigDecimal(2)).add(homeOpptOpptWinPercent).divide(new BigDecimal(3), 3, RoundingMode.HALF_UP));
-			
-			System.out.println("  AwayTeamStanding " + awayBoxScore.getTeam().getShortName());
-			System.out.println("     OldOppt " + awayOpptPrevGamesWon + "-" + awayOpptPrevGamesPlayed + " + " + 
-			   						"OpptRecord " + homeBoxScore.getStandings().get(0).getGamesWon() + "-" + homeBoxScore.getStandings().get(0).getGamesPlayed() + " = " +
-			   						"NewOppt " + awayBoxScore.getStandings().get(0).getOpptGamesWon() + "-" + awayBoxScore.getStandings().get(0).getOpptGamesPlayed()); 
-			System.out.println("     OldOpptOppt " + awayOpptOpptPrevGamesWon + "-" + awayOpptOpptPrevGamesPlayed + " + " + 
-									"OpptOpptRecord " + awayBoxScore.getStandings().get(0).getGamesWon() + "-" + awayBoxScore.getStandings().get(0).getGamesPlayed() + " = " +
-									"NewOpptOppt " + awayBoxScore.getStandings().get(0).getOpptOpptGamesWon() + "-" + awayBoxScore.getStandings().get(0).getOpptOpptGamesPlayed());
-			System.out.println("     StrengthOfSchedule " + awayOpptWinPercent.multiply(new BigDecimal(2)).add(awayOpptOpptWinPercent).divide(new BigDecimal(3), 3, RoundingMode.HALF_UP));
+//			Short homeOpptPrevGamesWon = 0;
+//			Short homeOpptPrevGamesPlayed = 0;
+//			Short homeOpptOpptPrevGamesWon = 0;
+//			Short homeOpptOpptPrevGamesPlayed = 0;
+//			
+//			Short awayOpptPrevGamesWon = 0;
+//			Short awayOpptPrevGamesPlayed = 0;
+//			Short awayOpptOpptPrevGamesWon = 0;
+//			Short awayOpptOpptPrevGamesPlayed = 0;
+//
+//			if (homePreviousGame != null) {
+//				int homeIndex = homePreviousGame.getBoxScores().get(0).getTeam().getKey().equals(homeBoxScore.getTeam().getKey()) ? 1 : 0;
+//				homeOpptPrevGamesWon = homePreviousGame.getBoxScores().get(homeIndex).getStandings().get(0).getOpptGamesWon();
+//				homeOpptPrevGamesPlayed = homePreviousGame.getBoxScores().get(homeIndex).getStandings().get(0).getOpptGamesPlayed();
+//				homeOpptOpptPrevGamesWon = homePreviousGame.getBoxScores().get(homeIndex).getStandings().get(0).getOpptOpptGamesWon();
+//				homeOpptOpptPrevGamesPlayed = homePreviousGame.getBoxScores().get(homeIndex).getStandings().get(0).getOpptOpptGamesPlayed();
+//			}
+//			
+//			if (awayPreviousGame != null) {
+//				int awayIndex = awayPreviousGame.getBoxScores().get(0).getTeam().getKey().equals(awayBoxScore.getTeam().getKey()) ? 1 : 0;
+//				awayOpptPrevGamesWon = awayPreviousGame.getBoxScores().get(awayIndex).getStandings().get(0).getOpptGamesWon();
+//				awayOpptPrevGamesPlayed = awayPreviousGame.getBoxScores().get(awayIndex).getStandings().get(0).getOpptGamesPlayed();
+//				awayOpptOpptPrevGamesWon = awayPreviousGame.getBoxScores().get(awayIndex).getStandings().get(0).getOpptOpptGamesWon();
+//				awayOpptOpptPrevGamesPlayed = awayPreviousGame.getBoxScores().get(awayIndex).getStandings().get(0).getOpptOpptGamesPlayed();
+//			}
+//
+//			homeBoxScore.getStandings().get(0).setDate(DateTimeUtil.getLocalDateFromDateTime(game.getDate()));
+//			homeBoxScore.getStandings().get(0).setOpptGamesWon((short)(homeOpptPrevGamesWon + awayBoxScore.getStandings().get(0).getGamesWon()));
+//			homeBoxScore.getStandings().get(0).setOpptGamesPlayed((short)(homeOpptPrevGamesPlayed + awayBoxScore.getStandings().get(0).getGamesPlayed()));
+//			homeBoxScore.getStandings().get(0).setOpptOpptGamesWon((short)(homeOpptOpptPrevGamesWon + homeBoxScore.getStandings().get(0).getGamesWon()));
+//			homeBoxScore.getStandings().get(0).setOpptOpptGamesPlayed((short)(homeOpptOpptPrevGamesPlayed + homeBoxScore.getStandings().get(0).getGamesPlayed()));
+//			
+//			awayBoxScore.getStandings().get(0).setDate(DateTimeUtil.getLocalDateFromDateTime(game.getDate()));
+//			awayBoxScore.getStandings().get(0).setOpptGamesWon((short)(awayOpptPrevGamesWon + homeBoxScore.getStandings().get(0).getGamesWon()));
+//			awayBoxScore.getStandings().get(0).setOpptGamesPlayed((short)(awayOpptPrevGamesPlayed + homeBoxScore.getStandings().get(0).getGamesPlayed()));
+//			awayBoxScore.getStandings().get(0).setOpptOpptGamesWon((short)(awayOpptOpptPrevGamesWon + awayBoxScore.getStandings().get(0).getGamesWon()));
+//			awayBoxScore.getStandings().get(0).setOpptOpptGamesPlayed((short)(awayOpptOpptPrevGamesPlayed + awayBoxScore.getStandings().get(0).getGamesPlayed()));
+//			
+//			BigDecimal homeOpptWinPercent = (homeBoxScore.getStandings().get(0).getOpptGamesPlayed() == 0) ? BigDecimal.ZERO : 
+//				new BigDecimal(homeBoxScore.getStandings().get(0).getOpptGamesWon()).divide(new BigDecimal(homeBoxScore.getStandings().get(0).getOpptGamesPlayed()), 3, RoundingMode.HALF_UP);
+//			BigDecimal homeOpptOpptWinPercent = (homeBoxScore.getStandings().get(0).getOpptOpptGamesPlayed() == 0) ? BigDecimal.ZERO  : 
+//				new BigDecimal(homeBoxScore.getStandings().get(0).getOpptOpptGamesWon()).divide(new BigDecimal(homeBoxScore.getStandings().get(0).getOpptOpptGamesPlayed()), 3, RoundingMode.HALF_UP);
+//			BigDecimal awayOpptWinPercent = (awayBoxScore.getStandings().get(0).getOpptGamesPlayed() == 0) ? BigDecimal.ZERO  : 
+//				new BigDecimal(awayBoxScore.getStandings().get(0).getOpptGamesWon()).divide(new BigDecimal(awayBoxScore.getStandings().get(0).getOpptGamesPlayed()), 3, RoundingMode.HALF_UP);
+//			BigDecimal awayOpptOpptWinPercent = (awayBoxScore.getStandings().get(0).getOpptOpptGamesPlayed() == 0) ? BigDecimal.ZERO  : 
+//				new BigDecimal(awayBoxScore.getStandings().get(0).getOpptOpptGamesWon()).divide(new BigDecimal(awayBoxScore.getStandings().get(0).getOpptOpptGamesPlayed()), 3, RoundingMode.HALF_UP);
+//			
+//			System.out.println("  HomeTeamStanding " + homeBoxScore.getTeam().getShortName());
+//			System.out.println("     OldOppt " + homeOpptPrevGamesWon + "-" + homeOpptPrevGamesPlayed + " + " + 
+//							   		"OpptRecord " + awayBoxScore.getStandings().get(0).getGamesWon() + "-" + awayBoxScore.getStandings().get(0).getGamesPlayed() + " = " +
+//									"NewOppt " + homeBoxScore.getStandings().get(0).getOpptGamesWon() + "-" + homeBoxScore.getStandings().get(0).getOpptGamesPlayed());
+//			System.out.println("     OldOpptOppt " + homeOpptOpptPrevGamesWon + "-" + homeOpptOpptPrevGamesPlayed + " + " + 
+//			   						"OpptOpptRecord " + homeBoxScore.getStandings().get(0).getGamesWon() + "-" + homeBoxScore.getStandings().get(0).getGamesPlayed() + " = " +
+//			   						"NewOpptOppt " + homeBoxScore.getStandings().get(0).getOpptOpptGamesWon() + "-" + homeBoxScore.getStandings().get(0).getOpptOpptGamesPlayed());
+//			System.out.println("     StrengthOfSchedule " + homeOpptWinPercent.multiply(new BigDecimal(2)).add(homeOpptOpptWinPercent).divide(new BigDecimal(3), 3, RoundingMode.HALF_UP));
+//			
+//			System.out.println("  AwayTeamStanding " + awayBoxScore.getTeam().getShortName());
+//			System.out.println("     OldOppt " + awayOpptPrevGamesWon + "-" + awayOpptPrevGamesPlayed + " + " + 
+//			   						"OpptRecord " + homeBoxScore.getStandings().get(0).getGamesWon() + "-" + homeBoxScore.getStandings().get(0).getGamesPlayed() + " = " +
+//			   						"NewOppt " + awayBoxScore.getStandings().get(0).getOpptGamesWon() + "-" + awayBoxScore.getStandings().get(0).getOpptGamesPlayed()); 
+//			System.out.println("     OldOpptOppt " + awayOpptOpptPrevGamesWon + "-" + awayOpptOpptPrevGamesPlayed + " + " + 
+//									"OpptOpptRecord " + awayBoxScore.getStandings().get(0).getGamesWon() + "-" + awayBoxScore.getStandings().get(0).getGamesPlayed() + " = " +
+//									"NewOpptOppt " + awayBoxScore.getStandings().get(0).getOpptOpptGamesWon() + "-" + awayBoxScore.getStandings().get(0).getOpptOpptGamesPlayed());
+//			System.out.println("     StrengthOfSchedule " + awayOpptWinPercent.multiply(new BigDecimal(2)).add(awayOpptOpptWinPercent).divide(new BigDecimal(3), 3, RoundingMode.HALF_UP));
 			
 		  	Game.update(game, processingType);		  	
 		  	System.out.println("Game Complete " + awayBoxScore.getTeam().getShortName() +  " " + awayBoxScore.getPoints() + " " + homeBoxScore.getTeam().getShortName() +  " " + homeBoxScore.getPoints());

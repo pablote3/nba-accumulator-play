@@ -91,7 +91,7 @@ public class GameJsonUrl {
 			    		completeGame.setStatus(Status.completed);	              
 		      		  	completeGame.setGameOfficials(JsonHelper.getGameOfficials(xmlStats.officials, ProcessingType.online));
 		      		  	
-		      		  	awayBoxScore = completeGame.getBoxScores().get(0);	  	
+		      		  	awayBoxScore = completeGame.getBoxScores().get(0);
 		      		  	
 			    	    int[] awayPeriodScores = xmlStats.away_period_scores;
 			    	    awayBoxScore.setPointsPeriod1((short)awayPeriodScores[0]);
@@ -156,7 +156,6 @@ public class GameJsonUrl {
 			              			assertThat(boxScore.getBoxScorePlayers().get(0).getRosterPlayer().getPlayer().getLastName()).isEqualTo("Durant");
 			              			assertThat(boxScore.getBoxScorePlayers().get(0).getRosterPlayer().getTeam().getAbbr()).isEqualTo("OKC");
 			              			assertThat(boxScore.getBoxScorePlayers().get(0).getPoints()).isEqualTo((short)32);
-			              			assertThat(boxScore.getStandings().get(0).getGamesBack()).isEqualTo((float)3.0);
 			              		}
 			              		else {
 			              			assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)40);
@@ -165,7 +164,6 @@ public class GameJsonUrl {
 			              			assertThat(boxScore.getBoxScorePlayers().get(1).getRosterPlayer().getPlayer().getLastName()).isEqualTo("Wade");
 			              			assertThat(boxScore.getBoxScorePlayers().get(1).getRosterPlayer().getTeam().getAbbr()).isEqualTo("MIA");
 			              			assertThat(boxScore.getBoxScorePlayers().get(1).getPoints()).isEqualTo((short)20);
-			              			assertThat(boxScore.getStandings().get(0).getGamesBack()).isEqualTo((float)4.0);
 			              		}
 			              	}
 		        	  	}

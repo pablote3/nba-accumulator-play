@@ -35,6 +35,10 @@ create table box_score (
   pointsPeriod6             smallint,
   pointsPeriod7             smallint,
   pointsPeriod8             smallint,
+  opptGamesWon              smallint,
+  opptGamesPlayed           smallint,
+  opptOpptGamesWon          smallint,
+  opptOpptGamesPlayed       smallint,
   constraint ck_box_score_location check (location in ('Away','Home')),
   constraint ck_box_score_result check (result in ('Loss','Win')),
   constraint pk_box_score primary key (id))
@@ -125,7 +129,6 @@ create table roster_player (
 
 create table standing (
   id                        bigint auto_increment not null,
-  boxscore_id               bigint,
   team_id                   bigint,
   date                      date not null,
   rank                      smallint not null,
@@ -152,10 +155,10 @@ create table standing (
   winPercentage             float not null,
   pointDifferential         smallint not null,
   pointDifferentialPerGame  float not null,
-  opptGamesWon              integer,
-  opptGamesPlayed           integer,
-  opptOpptGamesWon          integer,
-  opptOpptGamesPlayed       integer,
+  opptGamesWon              smallint,
+  opptGamesPlayed           smallint,
+  opptOpptGamesWon          smallint,
+  opptOpptGamesPlayed       smallint,
   constraint ck_standing_streakType check (streakType in ('Loss','Win')),
   constraint pk_standing primary key (id))
 ;
@@ -194,10 +197,8 @@ alter table roster_player add constraint fk_roster_player_team_7 foreign key (te
 create index ix_roster_player_team_7 on roster_player (team_id);
 alter table roster_player add constraint fk_roster_player_player_8 foreign key (player_id) references player (id) on delete restrict on update restrict;
 create index ix_roster_player_player_8 on roster_player (player_id);
-alter table standing add constraint fk_standing_boxScore_9 foreign key (boxscore_id) references box_score (id) on delete restrict on update restrict;
-create index ix_standing_boxScore_9 on standing (boxscore_id);
-alter table standing add constraint fk_standing_team_10 foreign key (team_id) references team (id) on delete restrict on update restrict;
-create index ix_standing_team_10 on standing (team_id);
+alter table standing add constraint fk_standing_team_9 foreign key (team_id) references team (id) on delete restrict on update restrict;
+create index ix_standing_team_9 on standing (team_id);
 
 
 

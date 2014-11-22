@@ -94,8 +94,6 @@ public class GameTest {
        		  BoxScore boxScore = previousGame.getBoxScores().get(0);
        		  assertThat(boxScore.getLocation()).isEqualTo(Location.away);
         	  assertThat(boxScore.getTeam().getAbbr()).isEqualTo("IND");
-        	  //standings uninitialized
-        	  assertThat(boxScore.getStandings().size()).isEqualTo(0);
           }
         });
     }
@@ -113,8 +111,6 @@ public class GameTest {
        		  BoxScore boxScore = previousGame.getBoxScores().get(0);
        		  assertThat(boxScore.getLocation()).isEqualTo(Location.away);
         	  assertThat(boxScore.getTeam().getAbbr()).isEqualTo("IND");
-        	  //standings uninitialized
-        	  assertThat(boxScore.getStandings().size()).isEqualTo(0);
           }
         });
     }
@@ -123,7 +119,7 @@ public class GameTest {
     public void findPreviousGameDateTeamSeason_Null() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Game game = Game.findPreviousByDateTeamSeason("2012-10-30", "washington-wizards", ProcessingType.online);        	  
+        	  Game game = Game.findPreviousByDateTeamSeason("2012-10-30", "washington-wizards", ProcessingType.online);
         	  assertThat(game).isEqualTo(null);
           }
         });
@@ -261,13 +257,11 @@ public class GameTest {
             		assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)29);
            			assertThat(boxScore.getPointsPeriod5()).isEqualTo((short)21);
             		assertThat(boxScore.getTeam().getAbbr()).isEqualTo("DET");
-            		assertThat(boxScore.getStandings().get(0).getLastFive()).isEqualTo("2-3");
             	}
             	else {
             		assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)30);
             		assertThat(boxScore.getPointsPeriod5()).isEqualTo((short)20);
             		assertThat(boxScore.getTeam().getAbbr()).isEqualTo("TOR");
-            		assertThat(boxScore.getStandings().get(0).getLastFive()).isEqualTo("3-2");
             	}
             }
             Game.delete(gameId, ProcessingType.online);	
@@ -279,7 +273,7 @@ public class GameTest {
     @Test
     public void updateGameScheduled() {
         running(fakeApplication(), new Runnable() {
-          public void run() {  
+          public void run() {
           	Game scheduleGame = TestMockHelper.getGameScheduled();
 		    
           	Team homeTeam = Team.findByKey("key", "new-orleans-pelicans", ProcessingType.online);
@@ -295,7 +289,7 @@ public class GameTest {
   		    Game.create(scheduleGame, ProcessingType.online);
   		    Long gameId = scheduleGame.getId();
 
-  		    Game completeGame = Game.findById(gameId, ProcessingType.online);  		    
+  		    Game completeGame = Game.findById(gameId, ProcessingType.online);
   		    completeGame.setStatus(Status.completed);
   		    completeGame.setGameOfficials(TestMockHelper.getGameOfficials());
   		    
@@ -323,13 +317,11 @@ public class GameTest {
                     assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)29);
                     assertThat(boxScore.getTeam().getAbbr()).isEqualTo("SAC");
                     assertThat(boxScore.getPointsPeriod5()).isEqualTo((short)21);
-                    assertThat(boxScore.getStandings().get(0).getLastFive()).isEqualTo("2-3");
             	}
             	else {
                     assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)30);
                     assertThat(boxScore.getTeam().getAbbr()).isEqualTo("NO");
                     assertThat(boxScore.getPointsPeriod5()).isEqualTo((short)20);
-                    assertThat(boxScore.getStandings().get(0).getLastFive()).isEqualTo("3-2");
             	}
             }
             Game.delete(updateGame.getId(), ProcessingType.online);	
@@ -340,7 +332,7 @@ public class GameTest {
     @Test
     public void aggregateScores() {
         running(fakeApplication(), new Runnable() {
-          public void run() {                      	  
+          public void run() {
         	  Date startDate = null;
         	  Date endDate = null;
         	  
