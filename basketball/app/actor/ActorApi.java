@@ -11,6 +11,7 @@ public interface ActorApi {
 	public static final Object InitializeStart = "InitializeStart";
 	public static final Object InitializeComplete = "InitializeComplete";
 	public static final Object WorkStart = "WorkStart";
+	public static final Object WorkGame = "WorkGame";
 	public static final Object NextGame = "NextGame";
 	public static final Object WorkComplete = "WorkComplete";
 	public static final Object Wait = "Wait";
@@ -81,14 +82,12 @@ public interface ActorApi {
 		}
 	}
 	
-	public static class IncompleteRosterException extends RuntimeException {
-		private static final long serialVersionUID = 1L;
-		
+	public static class LoadRoster {
+		public final Long gameId;
 		public final String date;
 		public final String team;
-		public final Long gameId;
 		
-		public IncompleteRosterException(Long gameId, String date, String team) {
+		public LoadRoster(Long gameId, String date, String team) {
 			this.gameId = gameId;
 			this.date = date;
 			this.team = team;
@@ -99,19 +98,27 @@ public interface ActorApi {
 		}
 	}
 	
-	public static class UpdateRoster {
-		public final Long gameId;
+	public static class RetrieveRoster {
 		public final String date;
 		public final String team;
 		
-		public UpdateRoster(Long gameId, String date, String team) {
-			this.gameId = gameId;
+		public RetrieveRoster(String date, String team) {
 			this.date = date;
 			this.team = team;
 		}
 		
 		public String toString() {
 			return String.format("%s(%s)", getClass().getSimpleName(), date, team);
+		}
+	}
+	
+	public static class LoadStandings {
+		public final Long gameId;
+		public final String date;
+		
+		public LoadStandings(Long gameId, String date) {
+			this.gameId = gameId;
+			this.date = date;
 		}
 	}
 	
@@ -123,10 +130,52 @@ public interface ActorApi {
 		}
 	}
 	
-	public static class IncompleteOfficialException extends RuntimeException {
+	public static class AdjustOpponent {
+		public final Game game;
+		
+		public AdjustOpponent(Game game) {
+			this.game = game;
+		}
+	}
+	
+	public static class StandingException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 		
-		public IncompleteOfficialException(String msg) {
+		public final Long gameId;
+		public final String date;
+		
+		public StandingException(Long gameId, String date) {
+			this.gameId = gameId;
+			this.date = date;
+		}
+		
+		public String toString() {
+			return String.format("%s(%s)", getClass().getSimpleName(), date);
+		}
+	}
+	
+	public static class RosterException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+		
+		public final Long gameId;
+		public final String date;
+		public final String team;
+		
+		public RosterException(Long gameId, String date, String team) {
+			this.gameId = gameId;
+			this.date = date;
+			this.team = team;
+		}
+		
+		public String toString() {
+			return String.format("%s(%s)", getClass().getSimpleName(), date, team);
+		}
+	}
+	
+	public static class OfficialException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+		
+		public OfficialException(String msg) {
 			super(msg);
 		}
 	}
@@ -139,10 +188,10 @@ public interface ActorApi {
 		}			
 	}
 	
-	public static class WorkGame {
+	public static class FindGame {
 		public final Long gameId;
 		
-		public WorkGame(Long gameId) {
+		public FindGame(Long gameId) {
 			this.gameId = gameId;
 		}
 	}
@@ -155,26 +204,10 @@ public interface ActorApi {
 		}
 	}
 	
-	public static class ScheduleGame {
+	public static class RetrieveGame {
 		public final Game game;
 		
-		public ScheduleGame(Game game) {
-			this.game = game;
-		}
-	}
-	
-	public static class CompleteBoxScore {
-		public final Game game;
-		
-		public CompleteBoxScore(Game game) {
-			this.game = game;
-		}
-	}
-	
-	public static class CompleteGame {
-		public final Game game;
-		
-		public CompleteGame(Game game) {
+		public RetrieveGame(Game game) {
 			this.game = game;
 		}
 	}
@@ -187,11 +220,27 @@ public interface ActorApi {
 		}
 	}
 	
-	public static class ActiveRosterPlayers {
+	public static class ActiveRoster {
 		public final List<RosterPlayer> rosterPlayers;
 
-		public ActiveRosterPlayers(List<RosterPlayer> rosterPlayers) {
+		public ActiveRoster(List<RosterPlayer> rosterPlayers) {
 			this.rosterPlayers = rosterPlayers;
+		}
+	}
+	
+	public static class ActiveGame {
+		public final Game game;
+		
+		public ActiveGame(Game game) {
+			this.game = game;
+		}
+	}
+	
+	public static class CompleteGame {
+		public final Game game;
+		
+		public CompleteGame(Game game) {
+			this.game = game;
 		}
 	}
 }

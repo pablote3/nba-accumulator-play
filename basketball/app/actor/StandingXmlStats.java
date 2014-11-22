@@ -62,9 +62,9 @@ public class StandingXmlStats extends UntypedActor {
 			getSender().tell(InitializeComplete, getSelf());
 		}
 		else if(message instanceof RetrieveStandings) {
-			String gameDate = ((RetrieveStandings) message).date;
-			System.out.println("  Retrieving standings for " + gameDate);
-			String event = gameDate + ".json";
+			String standingsDate = ((RetrieveStandings) message).date;
+			System.out.println("  Retrieving standings for " + standingsDate);
+			String event = standingsDate + ".json";
 			InputStream inputStreamJson = null;
 			InputStreamReader baseJson = null;
 		

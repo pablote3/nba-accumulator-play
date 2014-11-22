@@ -194,9 +194,9 @@ public class TestMockHelper {
     	return boxScore;
     }
 	
-	protected static Standing getStanding(String teamKey, String date) {
+	protected static Standing getStanding(String date, Team team) {
 		Standing standing = new Standing();
-		standing.setTeam(Team.findByTeamKey(teamKey, ProcessingType.batch));
+		standing.setTeam(team);
 		standing.setDate(LocalDate.parse(date, DateTimeFormat.forPattern("yyyy-MM-dd")));
     	standing.setRank((short)2);
     	standing.setOrdinalRank("2nd");

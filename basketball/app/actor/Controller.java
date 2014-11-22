@@ -6,14 +6,17 @@ import static actor.ActorApi.WorkStart;
 
 import java.util.List;
 
-import actor.ActorApi.CompleteBoxScore;
+import actor.ActorApi.ActiveGame;
+import actor.ActorApi.AdjustOpponent;
 import actor.ActorApi.CompleteGame;
-import actor.ActorApi.RepeatGame;
-import actor.ActorApi.WorkGame;
+import actor.ActorApi.FindGame;
 import actor.ActorApi.GameIds;
-import actor.ActorApi.IncompleteRosterException;
+import actor.ActorApi.LoadRoster;
+import actor.ActorApi.LoadStandings;
+import actor.ActorApi.RepeatGame;
+import actor.ActorApi.RosterException;
 import actor.ActorApi.ServiceProps;
-import actor.ActorApi.UpdateRoster;
+import actor.ActorApi.StandingException;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
@@ -52,15 +55,15 @@ public class Controller extends UntypedActor {
 		else if (message.equals(NextGame)) {
 			if (i < ids.size()) {
 				sleep();
-				gameModel.tell(new WorkGame(ids.get(i)), getSelf());
+				gameModel.tell(new FindGame(ids.get(i)), getSelf());
 				i++;
 			}
 			else {
 				master.tell(WorkComplete, getSelf());
 			}
 		}
-		else if(message instanceof CompleteBoxScore) {
-			standingModel.tell(message, getSelf());
+		else if(message instanceof ActiveGame) {
+			standingModel.tell(new AdjustOpponent(((ActiveGame) message).game), getSelf());
 		}
 		else if(message instanceof CompleteGame) {
 			gameModel.tell(message, getSelf());
@@ -68,21 +71,27 @@ public class Controller extends UntypedActor {
 		else if (message instanceof RepeatGame) {
 			sleep();
 			Long gameId = ((RepeatGame)message).gameId;
-			gameModel.tell(new WorkGame(gameId), getSelf());
+			gameModel.tell(new FindGame(gameId), getSelf());
 		}
-		else if(message instanceof IncompleteRosterException) {
-			Long gameId = ((IncompleteRosterException) message).gameId;
-			String gameDate = ((IncompleteRosterException) message).date;
-			String gameTeam = ((IncompleteRosterException) message).team;
+		else if(message instanceof RosterException) {
+			Long gameId = ((RosterException) message).gameId;
+			String gameDate = ((RosterException) message).date;
+			String gameTeam = ((RosterException) message).team;
 		
 			if (gameId != null && gameDate != null && gameTeam != null) {
 				sleep();
-				UpdateRoster updateRoster = new UpdateRoster(gameId, gameDate, gameTeam);
-				rosterModel.tell(updateRoster, getSelf());
+				LoadRoster lr = new LoadRoster(gameId, gameDate, gameTeam);
+				rosterModel.tell(lr, getSelf());
 			}
 			else {
 				throw new NullPointerException();
 			}
+		}
+		else if (message instanceof StandingException) {
+			Long gameId = ((StandingException) message).gameId;
+			String gameDate = ((StandingException)message).date;
+			LoadStandings ls = new LoadStandings(gameId, gameDate);
+			standingModel.tell(ls, getSelf());
 		}
 		else {
 			unhandled(message);

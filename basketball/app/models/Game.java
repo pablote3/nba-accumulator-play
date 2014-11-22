@@ -251,7 +251,7 @@ public class Game extends Model {
 	    return games.get(0);
 	}
 	
-	public static Game findPreviousByDateTeamSeason(String date, String teamKey, ProcessingType processingType) {
+	public static List<Game> findCompletedByDateTeamSeason(String date, String teamKey, ProcessingType processingType) {
 		Query<Game> query = null;
 	  	if (processingType.equals(ProcessingType.batch))
 	  		query = ebeanServer.find(Game.class);
@@ -266,11 +266,7 @@ public class Game extends Model {
 	    query.where().eq("t2.team_key", teamKey);
 	    query.orderBy("t0.date desc");
 	    List<Game> games = query.findList();
-	    
-	    Game game = null;
-	    if (games.size() > 0)
-	    	game = Game.findById(games.get(0).getId(), processingType);
-	    return game;
+	    return games;
 	}
 	
 	public static List<Long> findIdsByDateTeamSize(String propDate, String propTeam, String propSize, ProcessingType processingType) {

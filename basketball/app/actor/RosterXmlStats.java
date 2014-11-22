@@ -29,9 +29,9 @@ import models.RosterPlayer;
 import org.apache.commons.io.IOUtils;
 
 import util.DateTimeUtil;
-import actor.ActorApi.ActiveRosterPlayers;
+import actor.ActorApi.ActiveRoster;
 import actor.ActorApi.ServiceProps;
-import actor.ActorApi.UpdateRoster;
+import actor.ActorApi.RetrieveRoster;
 import actor.ActorApi.XmlStatsException;
 import akka.actor.ActorRef;
 import akka.actor.UntypedActor;
@@ -67,10 +67,10 @@ public class RosterXmlStats extends UntypedActor {
 			source = Game.Source.valueOf(((ServiceProps) message).sourceRoster);
 			getSender().tell(InitializeComplete, getSelf());
 		}
-		else if(message instanceof UpdateRoster) {
-			String gameDate = ((UpdateRoster) message).date;
+		else if(message instanceof RetrieveRoster) {
+			String gameDate = ((RetrieveRoster) message).date;
 			String nakedDate = DateTimeUtil.getFindDateNaked(DateTimeUtil.createDateFromStringDate(gameDate));
-			String gameTeam = ((UpdateRoster) message).team;
+			String gameTeam = ((RetrieveRoster) message).team;
 			
 			try {
 				if (source.equals(Source.api)) {
@@ -103,8 +103,8 @@ public class RosterXmlStats extends UntypedActor {
 				    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 				    Roster xmlStatsRoster = mapper.readValue(baseJson, Roster.class);				    
 				    List<RosterPlayer> rosterPlayers = JsonHelper.getRosterPlayers(xmlStatsRoster, processingType);
-				    ActiveRosterPlayers activeRosterPlayers = new ActiveRosterPlayers(rosterPlayers);
-				    getSender().tell(activeRosterPlayers, getSelf());
+				    ActiveRoster activeRoster = new ActiveRoster(rosterPlayers);
+				    getSender().tell(activeRoster, getSelf());
 				}
 				inputStreamFile.close();
 			} 

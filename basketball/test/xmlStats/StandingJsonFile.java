@@ -40,7 +40,7 @@ public class StandingJsonFile {
         			inputStreamJson = new FileInputStream(file);
         			baseJson = new InputStreamReader(inputStreamJson, StandardCharsets.UTF_8);
         			ProcessingType processingType = ProcessingType.online;
-		        
+
         			ObjectMapper mapper = new ObjectMapper();
         			mapper.registerModule(new JodaModule());
         			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -56,20 +56,11 @@ public class StandingJsonFile {
 	  			  	Standing finderStanding = Standing.findByDateTeam(standingDate, standingTeamKey, processingType);
 	  			  	assertThat(finderStanding.getPointsAgainst()).isEqualTo((short)3232);
 	  			  	
-	  			  	List<Standing> finderStandingList;
-	  			  	finderStandingList= Standing.findByDate(standingDate, processingType);
-	  			  	assertThat(finderStandingList.size()).isEqualTo(30);
-	  			  	
-	  			  	finderStandingList = Standing.findByTeam(standingTeamKey, processingType);
-	  			  	assertThat(finderStandingList.size()).isEqualTo(1);
-	  			  	
 	  			  	for (int i = 0; i < standings.size(); i++) {
-	  			  		Standing.delete(standings.get(i).getId(), processingType);
+	  			  		Standing.delete(standings.get(i), processingType);
 	  			  	}
-	  			  	
-	  			  	finderStandingList= Standing.findByDate(standingDate, processingType);
-	  			  	assertThat(finderStandingList.size()).isEqualTo(0);
-        	  } catch (FileNotFoundException e) {
+        		}
+        		catch (FileNotFoundException e) {
       	          e.printStackTrace();
       	      } catch (IOException e) {
       	          e.printStackTrace();

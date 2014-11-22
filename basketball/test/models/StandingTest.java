@@ -12,35 +12,29 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class StandingTest {    
+public class StandingTest {
 	@Before public void initialize() {
-		Standing.create(TestMockHelper.getStanding("chicago-bulls", "2010-10-31"), ProcessingType.online);
-		Standing.create(TestMockHelper.getStanding("san-antonio-spurs", "2010-10-31"), ProcessingType.online);
-		Standing.create(TestMockHelper.getStanding("utah-jazz", "2010-10-31"), ProcessingType.online);
-		Standing.create(TestMockHelper.getStanding("san-antonio-spurs", "2010-11-03"), ProcessingType.online);
-		Standing.create(TestMockHelper.getStanding("san-antonio-spurs", "2010-11-05"), ProcessingType.online);
-	}
-	
-	@Test
-    public void findByTeam() {
-        running(fakeApplication(), new Runnable() {
-          public void run() {
-        	  List<Standing> standings = Standing.findByTeam("san-antonio-spurs", ProcessingType.online);
-        	  assertThat(standings.size()).isEqualTo(3);
+      running(fakeApplication(), new Runnable() {
+    	  public void run() {
+    		  Standing.create(TestMockHelper.getStanding("2010-10-31", Team.findByTeamKey("utah-jazz", ProcessingType.online)), ProcessingType.online);
+    		  Standing.create(TestMockHelper.getStanding("2010-10-31", Team.findByTeamKey("san-antonio-spurs", ProcessingType.online)), ProcessingType.online);
+    		  Standing.create(TestMockHelper.getStanding("2010-11-01", Team.findByTeamKey("utah-jazz", ProcessingType.online)), ProcessingType.online);
+    		  Standing.create(TestMockHelper.getStanding("2010-11-03", Team.findByTeamKey("san-antonio-spurs", ProcessingType.online)), ProcessingType.online);
+    		  Standing.create(TestMockHelper.getStanding("2010-11-05", Team.findByTeamKey("san-antonio-spurs", ProcessingType.online)), ProcessingType.online);
           }
-        });
-    }
-	
+       });
+	}
+
 	@Test
     public void findByDate() {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	  List<Standing> standings = Standing.findByDate("2010-10-31", ProcessingType.batch);
-        	  assertThat(standings.size()).isEqualTo(3);
+        	  assertThat(standings.size()).isEqualTo(2);
           }
         });
     }
-	
+
 	@Test
     public void findByDateTeam() {
         running(fakeApplication(), new Runnable() {
@@ -55,11 +49,11 @@ public class StandingTest {
     public void createStanding() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-              Standing.create(TestMockHelper.getStanding("seattle-supersonics", "2010-12-31"), ProcessingType.online);
-              Standing createStanding = Standing.findByDateTeam("2010-12-31", "seattle-supersonics", ProcessingType.online);
+              Standing.create(TestMockHelper.getStanding("2010-12-31", Team.findByTeamKey("portland-trail-blazers", ProcessingType.online)), ProcessingType.online);
+              Standing createStanding = Standing.findByDateTeam("2010-12-31", "portland-trail-blazers", ProcessingType.online);
               assertThat(createStanding.getGamesBack()).isEqualTo((float)1.5);
               assertThat(createStanding.getGamesWon()).isEqualTo((short)95);
-              Standing.delete(createStanding.getId(), ProcessingType.online);
+              Standing.delete(createStanding, ProcessingType.online);
           }
         });
     }
@@ -68,23 +62,28 @@ public class StandingTest {
     public void updateStanding() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Standing standing = Standing.findByDateTeam("chicago-bulls", "2010-10-31", ProcessingType.online);
+        	  Standing standing = Standing.findByDateTeam("2010-10-31", "utah-jazz", ProcessingType.online);
+        	  assertThat(standing.getGamesLost()).isEqualTo((short)102);
               standing.setGamesLost((short)15);
               standing.update();
               
-              Standing updateStanding = Standing.findByDateTeam("chicago-bulls", "2010-10-31", ProcessingType.online);
+              Standing updateStanding = Standing.findByDateTeam("2010-10-31", "utah-jazz", ProcessingType.online);
               assertThat(updateStanding.getGamesLost()).isEqualTo((short)15);
-              updateStanding.setGamesLost((short)95);
+              updateStanding.setGamesLost((short)102);
               updateStanding.update();
           }
         });
     }
 
 	@After public void cleanup() {
-		Standing.delete(Standing.findByDateTeam("chicago-bulls", "2010-10-31", ProcessingType.online).getId(), ProcessingType.online);
-		Standing.delete(Standing.findByDateTeam("san-antonio-spurs", "2010-10-31", ProcessingType.online).getId(), ProcessingType.online);
-		Standing.delete(Standing.findByDateTeam("utah-jazz", "2010-10-31", ProcessingType.online).getId(), ProcessingType.online);
-		Standing.delete(Standing.findByDateTeam("san-antonio-spurs", "2010-11-03", ProcessingType.online).getId(), ProcessingType.online);
-		Standing.delete(Standing.findByDateTeam("san-antonio-spurs", "2010-11-05", ProcessingType.online).getId(), ProcessingType.online);
+	  running(fakeApplication(), new Runnable() {
+	      public void run() {
+	    	  Standing.delete(Standing.findByDateTeam("2010-10-31", "utah-jazz", ProcessingType.online), ProcessingType.online);
+	    	  Standing.delete(Standing.findByDateTeam("2010-10-31", "san-antonio-spurs", ProcessingType.online), ProcessingType.online);
+	    	  Standing.delete(Standing.findByDateTeam("2010-11-01", "utah-jazz", ProcessingType.online), ProcessingType.online);
+	    	  Standing.delete(Standing.findByDateTeam("2010-11-03", "san-antonio-spurs", ProcessingType.online), ProcessingType.online);
+	    	  Standing.delete(Standing.findByDateTeam("2010-11-05", "san-antonio-spurs", ProcessingType.online), ProcessingType.online);
+          }
+       });
 	}
 }

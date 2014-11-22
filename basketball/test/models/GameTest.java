@@ -29,7 +29,7 @@ public class GameTest {
     public void findGamesDate() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  List<Game> games = Game.findByDate("2012-10-31");        
+        	  List<Game> games = Game.findByDate("2012-10-31");
               assertThat(games.size()).isEqualTo(9);
           }
         });
@@ -39,7 +39,7 @@ public class GameTest {
     public void findGameIdsDateSizeOnline_Season() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  List<Long> games = Game.findIdsByDateSize("2012-10-30", "0", ProcessingType.online);     
+        	  List<Long> games = Game.findIdsByDateSize("2012-10-30", "0", ProcessingType.online);
               assertThat(games.size()).isEqualTo(1230);
           }
         });
@@ -49,7 +49,7 @@ public class GameTest {
     public void findGameIdsDateSizeOnline_Game() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  List<Long> games = Game.findIdsByDateSize("2012-10-31", "1", ProcessingType.online);     
+        	  List<Long> games = Game.findIdsByDateSize("2012-10-31", "1", ProcessingType.online);
               assertThat(games.size()).isEqualTo(1);
           }
         });
@@ -57,13 +57,13 @@ public class GameTest {
     
     @Test
     public void findGameIdsDateSizeBatch_Season() {
-    	List<Long> games = Game.findIdsByDateSize("2012-10-30", "0", ProcessingType.batch);     
+    	List<Long> games = Game.findIdsByDateSize("2012-10-30", "0", ProcessingType.batch);
         assertThat(games.size()).isEqualTo(1230);
     }
     
     @Test
     public void findGameIdsDateSizeBatch_Game() {
-    	List<Long> games = Game.findIdsByDateSize("2012-10-30", "1", ProcessingType.batch);     
+    	List<Long> games = Game.findIdsByDateSize("2012-10-30", "1", ProcessingType.batch);
         assertThat(games.size()).isEqualTo(1);
     }
     
@@ -103,8 +103,8 @@ public class GameTest {
     public void findPreviousGameDateTeamSeason_Valid() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Game game = Game.findPreviousByDateTeamSeason("2012-12-01", "sacramento-kings", ProcessingType.online);
-        	  Game previousGame = Game.findById(game.getId(), ProcessingType.online);
+        	  List<Game> games = Game.findCompletedByDateTeamSeason("2012-12-01", "sacramento-kings", ProcessingType.online);
+        	  Game previousGame = Game.findById(games.get(0).getId(), ProcessingType.online);
         	  
         	  assertThat(previousGame.getSeasonType()).isEqualTo(SeasonType.regular);
         	  assertThat(previousGame.getBoxScores().size()).isEqualTo(2);
@@ -119,7 +119,7 @@ public class GameTest {
     public void findPreviousGameDateTeamSeason_Null() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Game game = Game.findPreviousByDateTeamSeason("2012-10-30", "washington-wizards", ProcessingType.online);
+        	  List<Game> game = Game.findCompletedByDateTeamSeason("2012-09-30", "washington-wizards", ProcessingType.online);
         	  assertThat(game).isEqualTo(null);
           }
         });
@@ -218,7 +218,7 @@ public class GameTest {
       	  			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("NO");
       	  		}
       	  	}
-            Game.delete(gameId, ProcessingType.online);		    
+            Game.delete(gameId, ProcessingType.online);
 		  }
 		});
 	}
@@ -226,7 +226,7 @@ public class GameTest {
     @Test
     public void createGameCompleted() {
         running(fakeApplication(), new Runnable() {
-          public void run() {  
+          public void run() {
         	Game game = TestMockHelper.getGameCompleted();
         	game.setGameOfficials(TestMockHelper.getGameOfficials());
 		    

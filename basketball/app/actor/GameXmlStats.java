@@ -27,10 +27,10 @@ import models.Game.Source;
 import models.Game.Status;
 import models.GameOfficial;
 import util.DateTimeUtil;
-import actor.ActorApi.CompleteBoxScore;
-import actor.ActorApi.IncompleteOfficialException;
-import actor.ActorApi.IncompleteRosterException;
-import actor.ActorApi.ScheduleGame;
+import actor.ActorApi.ActiveGame;
+import actor.ActorApi.OfficialException;
+import actor.ActorApi.RosterException;
+import actor.ActorApi.RetrieveGame;
 import actor.ActorApi.ServiceProps;
 import actor.ActorApi.XmlStatsException;
 import akka.actor.ActorRef;
@@ -67,8 +67,8 @@ public class GameXmlStats extends UntypedActor {
 			source = Game.Source.valueOf(((ServiceProps) message).sourceBoxScore);
 			getSender().tell(InitializeComplete, getSelf());
 		}
-		else if(message instanceof ScheduleGame) {
-			Game game = ((ScheduleGame)message).game;
+		else if(message instanceof RetrieveGame) {
+			Game game = ((RetrieveGame)message).game;
 			BoxScore awayBoxScore = game.getBoxScores().get(0);
 			BoxScore homeBoxScore = game.getBoxScores().get(1);
 			
@@ -117,7 +117,7 @@ public class GameXmlStats extends UntypedActor {
 		    	    if (gameOfficials != null)
 						game.setGameOfficials(gameOfficials);
 		    	    else
-		    	    	throw new IncompleteOfficialException("Official not found");
+		    	    	throw new OfficialException("Official not found");
 		    	    
 		    	    JsonHelper.getBoxScoreStats(awayBoxScore, xmlStatsBoxScore.away_totals);
 		    	    
@@ -142,7 +142,7 @@ public class GameXmlStats extends UntypedActor {
 		    	    	awayBoxScore.setBoxScorePlayers(awayBoxScorePlayers);
 		    	    }
 		    	    else
-		    	    	throw new IncompleteRosterException(game.getId(), DateTimeUtil.getFindDateShort(game.getDate()), awayBoxScore.getTeam().getKey());
+		    	    	throw new RosterException(game.getId(), DateTimeUtil.getFindDateShort(game.getDate()), awayBoxScore.getTeam().getKey());
 		    	        
 		    	    JsonHelper.getBoxScoreStats(homeBoxScore, xmlStatsBoxScore.home_totals);
 		    	    
@@ -166,7 +166,7 @@ public class GameXmlStats extends UntypedActor {
 						homeBoxScore.setBoxScorePlayers(homeBoxScorePlayers);
 		    	    }
 		    	    else
-		    	    	throw new IncompleteRosterException(game.getId(), DateTimeUtil.getFindDateShort(game.getDate()), homeBoxScore.getTeam().getKey());
+		    	    	throw new RosterException(game.getId(), DateTimeUtil.getFindDateShort(game.getDate()), homeBoxScore.getTeam().getKey());
 		    	        
 		    		if (xmlStatsBoxScore.away_totals.getPoints() > xmlStatsBoxScore.home_totals.getPoints()) {
 		    		  	homeBoxScore.setResult(Result.loss);
@@ -176,8 +176,8 @@ public class GameXmlStats extends UntypedActor {
 		    		  	homeBoxScore.setResult(Result.win);
 		    		  	awayBoxScore.setResult(Result.loss);
 		    		}
-		    		CompleteBoxScore cbs = new CompleteBoxScore(game);
-		    		getSender().tell(cbs, getSelf());
+		    		ActiveGame ag = new ActiveGame(game);
+		    		getSender().tell(ag, getSelf());
 				}
 			}
 			catch (MalformedURLException e) {
@@ -186,7 +186,7 @@ public class GameXmlStats extends UntypedActor {
 			catch (IOException e) {
 				listener.tell(new XmlStatsException("IOException"), getSelf());
 			}
-			catch (IncompleteRosterException e) {
+			catch (RosterException e) {
 				getSender().tell(e, getSelf());
 			}
 			catch (Exception e) {

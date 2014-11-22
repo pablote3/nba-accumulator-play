@@ -1,5 +1,6 @@
 package models;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -14,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 
 import models.Game.ProcessingType;
 
@@ -46,6 +48,15 @@ public class Standing extends Model {
 	private Long id;
 	public Long getId() {
 		return id;
+	}
+	
+	@Version
+	private Timestamp lastUpdate;
+	public Timestamp getLastUpdate()  {
+		return lastUpdate;
+	}
+	public void setLastUpdate(Timestamp lastUpdate) {
+		this.lastUpdate = lastUpdate;
 	}
 	
 	@ManyToOne
@@ -349,28 +360,14 @@ public class Standing extends Model {
 		return standing;
 	}
 	
-	public static List<Standing> findByTeam(String teamKey, ProcessingType processingType) {
-		List <Standing> standing;
-		Query<Standing> query = null;
-		if (processingType.equals(ProcessingType.batch)) 
-			query = ebeanServer.find(Standing.class);
-		else if (processingType.equals(ProcessingType.online))
-	  		Ebean.find(Standing.class);
-	  	query.fetch("team");
-	    query.where().eq("t1.team_key", teamKey);
-	    standing = query.findList();
-	    return standing;
-	}
-	
 	public static List<Standing> findByDate(String date, ProcessingType processingType) {
 		List <Standing> standing;
 		Query<Standing> query = null;
-		if (processingType.equals(ProcessingType.batch)) 
+		if (processingType.equals(ProcessingType.batch))
 			query = ebeanServer.find(Standing.class);
 		else if (processingType.equals(ProcessingType.online))
 	  		Ebean.find(Standing.class);
-	    query.where().le("fromDate", date);
-	    query.where().ge("toDate", date);	    
+		query.where().eq("date", date);
 	    standing = query.findList();
 	    return standing;
 	}
@@ -383,8 +380,7 @@ public class Standing extends Model {
   		else if (processingType.equals(ProcessingType.online))
   			query = Ebean.find(Standing.class);	
 	  	query.fetch("team");
-	    query.where().le("fromDate", date);
-	    query.where().ge("toDate", date);	 
+	  	query.where().eq("date", date);
 	    query.where().eq("t1.team_key", teamKey);
 	    standing = query.findUnique();
 	    return standing;
@@ -404,14 +400,16 @@ public class Standing extends Model {
 			Ebean.update(standing);
 	}
 	  
-	public static void delete(Long id, ProcessingType processingType) {
-		Standing standing = Standing.findById(id, processingType);
-	  	standing.delete();
+	public static void delete(Standing standing, ProcessingType processingType) {
+		if (processingType.equals(ProcessingType.batch))
+			ebeanServer.delete(standing);
+		else if (processingType.equals(ProcessingType.online))
+			Ebean.delete(standing);
 	}
 
 	public String toString() {
 		return new StringBuffer()
-			.append("\n" + this.team + "\n")
+			.append("\n" + this.team.getKey() + "\n")
 			.append("  date: " + this.date)
 			.append("  rank: " + this.rank)
 			.append("  ordinal rank: " + this.ordinalRank)

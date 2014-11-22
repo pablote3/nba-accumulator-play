@@ -138,7 +138,7 @@ public class JsonHelper {
 	public static List<Standing> getStandings(Standings xmlStatsStandings, ProcessingType processingType) {
 		StandingDTO[] standingDTOs = xmlStatsStandings.standing;
 		LocalDate date = DateTimeUtil.getLocalDateFromDateTime(xmlStatsStandings.standings_date);
-    	List<Standing> standings = new ArrayList<Standing>();	    
+    	List<Standing> standings = new ArrayList<Standing>();
 	    Standing standing;
 	    StandingDTO standingDTO;
         for (int i = 0; i < standingDTOs.length; i++) {
@@ -158,6 +158,8 @@ public class JsonHelper {
         	standing.setPointsAgainst(standingDTO.getPoints_against());
         	standing.setHomeWins(standingDTO.getHome_won());
         	standing.setHomeLosses(standingDTO.getHome_lost());
+        	standing.setAwayWins(standingDTO.getAway_won());
+        	standing.setAwayLosses(standingDTO.getAway_lost());
         	standing.setConferenceWins(standingDTO.getConference_won());
         	standing.setConferenceLosses(standingDTO.getConference_lost());
         	standing.setLastFive(standingDTO.getLast_five());
@@ -167,7 +169,7 @@ public class JsonHelper {
         	standing.setPointsAllowedPerGame(standingDTO.getPoints_allowed_per_game());
         	standing.setWinPercentage(standingDTO.getWin_percentage());
         	standing.setPointDifferential(standingDTO.getPoint_differential());
-        	standing.setPointDifferentialPerGame(standingDTO.getPoint_differential_per_game());       	
+        	standing.setPointDifferentialPerGame(standingDTO.getPoint_differential_per_game());
         	standings.add(standing);
         }
 	    return standings;

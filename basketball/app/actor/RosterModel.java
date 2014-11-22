@@ -11,11 +11,12 @@ import org.joda.time.LocalDate;
 
 import util.DateTimeUtil;
 import util.Utilities;
-import actor.ActorApi.ActiveRosterPlayers;
+import actor.ActorApi.ActiveRoster;
 import actor.ActorApi.ModelException;
 import actor.ActorApi.RepeatGame;
 import actor.ActorApi.ServiceProps;
-import actor.ActorApi.UpdateRoster;
+import actor.ActorApi.LoadRoster;
+import actor.ActorApi.RetrieveRoster;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
@@ -39,25 +40,24 @@ public class RosterModel extends UntypedActor {
 			processingType = Game.ProcessingType.valueOf(((ServiceProps) message).processType);
 			rosterXmlStats.tell(message, getSender());
 		}
-		else if(message instanceof UpdateRoster) {
+		else if(message instanceof LoadRoster) {
 			controller = getSender();
-			if (gameId != null && gameId.equals(((UpdateRoster)message).gameId) &&
-					rosterTeamKey != null && rosterTeamKey.equals(((UpdateRoster)message).team))  {
+			if (gameId != null && gameId.equals(((LoadRoster)message).gameId) &&
+					rosterTeamKey != null && rosterTeamKey.equals(((LoadRoster)message).team))  {
 				getContext().stop(getSelf());
 				ModelException me = new ModelException("Multiple loops of UpdateRoster");
 				listener.tell(me, getSelf());
 			}
 			else {
-				gameId = ((UpdateRoster)message).gameId;
-				rosterDate = ((UpdateRoster)message).date;
-				rosterTeamKey = ((UpdateRoster)message).team;
-			
-				rosterXmlStats.tell(message, getSelf());
+				gameId = ((LoadRoster)message).gameId;
+				rosterDate = ((LoadRoster)message).date;
+				rosterTeamKey = ((LoadRoster)message).team;
+				rosterXmlStats.tell(new RetrieveRoster(rosterDate, rosterTeamKey), getSelf());
 			}
 		}
-		else if(message instanceof ActiveRosterPlayers) {
-			ActiveRosterPlayers activeRosterPlayers = (ActiveRosterPlayers) message;
-			List<RosterPlayer> xmlStatsRosterPlayers = activeRosterPlayers.rosterPlayers;
+		else if(message instanceof ActiveRoster) {
+			ActiveRoster activeRoster = (ActiveRoster) message;
+			List<RosterPlayer> xmlStatsRosterPlayers = activeRoster.rosterPlayers;
 			LocalDate fromDate = DateTimeUtil.createDateFromStringDate(rosterDate);
 			LocalDate toDate = DateTimeUtil.getDateMaxSeason(DateTimeUtil.createDateFromStringDate(rosterDate));
 			StringBuffer output;
