@@ -157,8 +157,6 @@ create table standing (
   pointDifferentialPerGame  float not null,
   opptGamesWon              smallint,
   opptGamesPlayed           smallint,
-  opptOpptGamesWon          smallint,
-  opptOpptGamesPlayed       smallint,
   last_update               datetime not null,
   constraint ck_standing_streakType check (streakType in ('Loss','Win')),
   constraint pk_standing primary key (id))

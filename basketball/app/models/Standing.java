@@ -333,24 +333,6 @@ public class Standing extends Model {
 		this.opptGamesPlayed = opptGamesPlayed;
 	}
 	
-	@Column(name="opptOpptGamesWon", nullable=true)
-	private Short opptOpptGamesWon;
-	public Short getOpptOpptGamesWon() {
-		return opptOpptGamesWon;
-	}
-	public void setOpptOpptGamesWon(Short opptOpptGamesWon) {
-		this.opptOpptGamesWon = opptOpptGamesWon;
-	}
-	
-	@Column(name="opptOpptGamesPlayed", nullable=true)
-	private Short opptOpptGamesPlayed;
-	public Short getOpptOpptGamesPlayed() {
-		return opptOpptGamesPlayed;
-	}	
-	public void setOpptOpptGamesPlayed(Short opptOpptGamesPlayed) {
-		this.opptOpptGamesPlayed = opptOpptGamesPlayed;
-	}
-	
 	public static Standing findById(Long id, ProcessingType processingType) {
 		Standing standing = null;
 		if (processingType.equals(ProcessingType.batch))

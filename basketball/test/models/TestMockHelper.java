@@ -224,8 +224,6 @@ public class TestMockHelper {
 	    standing.setPointDifferentialPerGame((float)-0.4);
 	    standing.setOpptGamesWon((short)1);
 	    standing.setOpptGamesPlayed((short)2);
-	    standing.setOpptOpptGamesWon((short)3);
-	    standing.setOpptOpptGamesPlayed((short)4);
     	return standing;
     }
     
