@@ -113,15 +113,10 @@ public class GameModel extends UntypedActor {
 		}
 		else if(message instanceof CompleteGame) {
 			Game game = ((CompleteGame)message).game;
-//			String gameDate = DateTimeUtil.getFindDateShort(game.getDate());
-			
-			BoxScore homeBoxScore = game.getBoxScores().get(1);
-			
 			BoxScore awayBoxScore = game.getBoxScores().get(0);
-
+			BoxScore homeBoxScore = game.getBoxScores().get(1);
 		  	Game.update(game, processingType);
 		  	System.out.println("Game Complete " + awayBoxScore.getTeam().getShortName() +  " " + awayBoxScore.getPoints() + " " + homeBoxScore.getTeam().getShortName() +  " " + homeBoxScore.getPoints());
-		  	
 		  	controller.tell(NextGame, getSelf());
 		}
 		else if(message instanceof RosterException) {

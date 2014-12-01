@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import models.BoxScore;
+import models.BoxScore.Result;
 import models.Game;
 import models.Game.ProcessingType;
 import models.Standing;
@@ -87,16 +88,50 @@ public class StandingModel extends UntypedActor {
 		else if(message instanceof AdjustOpponent) {
 			Game game = ((AdjustOpponent) message).game;
 			String gameDate = DateTimeUtil.getFindDateNaked(game.getDate());
-			
+
 			BoxScore awayBoxScore = game.getBoxScores().get(0);
 			String awayTeamKey = awayBoxScore.getTeam().getKey();
-			Standing awayStanding = Standing.findByDateTeam(gameDate, awayTeamKey, processingType);
+			BoxScore opptBoxScore;
+			Short opptHeadToHead;
+			Short opptGamesWon = (short)0;
+			Short opptGamesPlayed = (short)0;
+			Short opptOpptGamesWon = (short)0;
+			Short opptOpptGamesPlayed = (short)0;
 			List<Game> awayCompleteGames = Game.findCompletedByDateTeamSeason(gameDate, awayTeamKey, processingType);
-			
+			for (int i = 0; i < awayCompleteGames.size(); i++) {
+				opptBoxScore = awayCompleteGames.get(i).getBoxScores().get(0).getTeam().getKey().equals(awayTeamKey) ? awayCompleteGames.get(i).getBoxScores().get(1) : awayCompleteGames.get(i).getBoxScores().get(0);
+				String opptTeamKey = opptBoxScore.getTeam().getKey();
+				opptHeadToHead = opptBoxScore.getResult().equals(Result.win) ? (short)1 : (short)0;
+				opptGamesWon = (short)(standingsMap.get(opptTeamKey).gamesWon - opptHeadToHead);
+				opptGamesPlayed = (short)(standingsMap.get(opptTeamKey).gamesPlayed - 1);
+				opptOpptGamesWon = (short)(opptOpptGamesWon - standingsMap.get(awayTeamKey).gamesWon);
+				opptOpptGamesPlayed = (short)(opptOpptGamesPlayed - standingsMap.get(awayTeamKey).gamesPlayed);
+			}
+			awayBoxScore.setOpptGamesWon(opptGamesWon);
+			awayBoxScore.setOpptGamesPlayed(opptGamesPlayed);
+			awayBoxScore.setOpptOpptGamesWon(opptOpptGamesWon);
+			awayBoxScore.setOpptOpptGamesPlayed(opptOpptGamesPlayed);
 			
 			BoxScore homeBoxScore = game.getBoxScores().get(1);
 			String homeTeamKey = homeBoxScore.getTeam().getKey();
-			Standing homeStanding = Standing.findByDateTeam(gameDate, homeTeamKey, processingType);
+			opptGamesWon = (short)0;
+			opptGamesPlayed = (short)0;
+			opptOpptGamesWon = (short)0;
+			opptOpptGamesPlayed = (short)0;
+			List<Game> homeCompleteGames = Game.findCompletedByDateTeamSeason(gameDate, homeTeamKey, processingType);
+			for (int i = 0; i < homeCompleteGames.size(); i++) {
+				opptBoxScore = homeCompleteGames.get(i).getBoxScores().get(0).getTeam().getKey().equals(homeTeamKey) ? homeCompleteGames.get(i).getBoxScores().get(1) : homeCompleteGames.get(i).getBoxScores().get(0);
+				String opptTeamKey = opptBoxScore.getTeam().getKey();
+				opptHeadToHead = opptBoxScore.getResult().equals(Result.win) ? (short)1 : (short)0;
+				opptGamesWon = (short)(standingsMap.get(opptTeamKey).gamesWon - opptHeadToHead);
+				opptGamesPlayed = (short)(standingsMap.get(opptTeamKey).gamesPlayed - 1);
+				opptOpptGamesWon = (short)(opptOpptGamesWon - standingsMap.get(homeTeamKey).gamesWon);
+				opptOpptGamesPlayed = (short)(opptOpptGamesPlayed - standingsMap.get(homeTeamKey).gamesPlayed);
+			}
+			homeBoxScore.setOpptGamesWon(opptGamesWon);
+			homeBoxScore.setOpptGamesPlayed(opptGamesPlayed);
+			homeBoxScore.setOpptOpptGamesWon(opptOpptGamesWon);
+			homeBoxScore.setOpptOpptGamesPlayed(opptOpptGamesPlayed);
 			
 			CompleteGame rs = new CompleteGame(game);
 			controller.tell(rs, getSelf());
