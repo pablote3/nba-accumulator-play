@@ -116,11 +116,11 @@ public class GameTest {
     }
     
     @Test
-    public void findPreviousGameDateTeamSeason_Null() {
+    public void findPreviousGameDateTeamSeason_Invalid() {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	  List<Game> game = Game.findCompletedByDateTeamSeason("2012-09-30", "washington-wizards", ProcessingType.online);
-        	  assertThat(game).isEqualTo(null);
+        	  assertThat(game.size()).isEqualTo(0);
           }
         });
     }
