@@ -307,24 +307,6 @@ public class Standing extends Model {
 		this.pointDifferentialPerGame = pointDifferentialPerGame;
 	}
 	
-	@Column(name="opptGamesWon", nullable=true)
-	private Short opptGamesWon;
-	public Short getOpptGamesWon() {
-		return opptGamesWon;
-	}
-	public void setOpptGamesWon(Short opptGamesWon) {
-		this.opptGamesWon = opptGamesWon;
-	}
-	
-	@Column(name="opptGamesPlayed", nullable=true)
-	private Short opptGamesPlayed;
-	public Short getOpptGamesPlayed() {
-		return opptGamesPlayed;
-	}
-	public void setOpptGamesPlayed(Short opptGamesPlayed) {
-		this.opptGamesPlayed = opptGamesPlayed;
-	}
-	
 	public static Standing findById(Long id, ProcessingType processingType) {
 		Standing standing = null;
 		if (processingType.equals(ProcessingType.batch))
@@ -389,8 +371,6 @@ public class Standing extends Model {
 			.append("  ordinal rank: " + this.ordinalRank)
 			.append("  games won: " + this.gamesWon)
 			.append("  games played: " + this.gamesPlayed)
-			.append("  oppt games won: " + this.opptGamesWon)
-			.append("  oppt games played: " + this.opptGamesPlayed)
 			.toString();
 	}
 }

@@ -78,14 +78,9 @@ public class StandingModel extends UntypedActor {
 					opptGamesWon = (short)(opptGamesWon + standingsMap.get(opptTeamKey).getGamesWon());
 					opptGamesPlayed = (short)(opptGamesPlayed + standingsMap.get(opptTeamKey).getGamesPlayed());
 					System.out.println("StandingsMap teamKey = " + teamKey + " opptTeam = " + opptTeamKey + " Games Won/Played: " + standingsMap.get(opptTeamKey).getGamesWon() + " - " + standingsMap.get(opptTeamKey).getGamesPlayed());
-				}
-				
+				}				
 				standingsMap.get(teamKey).setOpptGamesWon(opptGamesWon);
 				standingsMap.get(teamKey).setOpptGamesPlayed(opptGamesPlayed);
-				
-				//do I still need these fields on standings table???
-				teamStanding.setOpptGamesWon(opptGamesWon);
-				teamStanding.setOpptGamesPlayed(opptGamesPlayed);
 				Standing.create(teamStanding, processingType);
 			}
 
