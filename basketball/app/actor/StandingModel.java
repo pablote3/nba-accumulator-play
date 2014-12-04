@@ -77,7 +77,7 @@ public class StandingModel extends UntypedActor {
 					opptTeamKey = game.getBoxScores().get(0).getTeam().equals(teamStanding.getTeam()) ? game.getBoxScores().get(1).getTeam().getKey() : game.getBoxScores().get(0).getTeam().getKey();
 					opptGamesWon = (short)(opptGamesWon + standingsMap.get(opptTeamKey).getGamesWon());
 					opptGamesPlayed = (short)(opptGamesPlayed + standingsMap.get(opptTeamKey).getGamesPlayed());
-					System.out.println("StandingsMap teamKey = " + teamKey + " opptTeam = " + opptTeamKey + " Games Won/Played: " + standingsMap.get(opptTeamKey).getGamesWon() + " - " + standingsMap.get(opptTeamKey).getGamesPlayed());
+//					System.out.println("StandingsMap teamKey = " + teamKey + " opptTeam = " + opptTeamKey + " Games Won/Played: " + standingsMap.get(opptTeamKey).getGamesWon() + " - " + standingsMap.get(opptTeamKey).getGamesPlayed());
 				}				
 				standingsMap.get(teamKey).setOpptGamesWon(opptGamesWon);
 				standingsMap.get(teamKey).setOpptGamesPlayed(opptGamesPlayed);
@@ -111,13 +111,13 @@ public class StandingModel extends UntypedActor {
 				opptOpptGamesWon = (short)(opptOpptGamesWon + standingsMap.get(opptTeamKey).getOpptGamesWon() - standingsMap.get(awayTeamKey).getGamesWon());
 				opptOpptGamesPlayed = (short)(opptOpptGamesPlayed + standingsMap.get(opptTeamKey).getOpptGamesPlayed() - standingsMap.get(awayTeamKey).getGamesPlayed());
 
-				System.out.println("    OpptTeamStanding " + opptTeamKey);
-				System.out.println("      Opponent Games Won/Played Sum: " + opptGamesWon + " - " + opptGamesPlayed + " = " + 
-											standingsMap.get(opptTeamKey).getGamesWon() + " - " + standingsMap.get(opptTeamKey).getGamesPlayed() + " minus " + 
-											opptHeadToHead + " - 1");
-				System.out.println("      OpptOppt Games Won/Played Sum: " + opptOpptGamesWon + " - " + opptOpptGamesPlayed + " = " + 
-											standingsMap.get(opptTeamKey).getOpptGamesWon() + " - " + standingsMap.get(opptTeamKey).getOpptGamesPlayed() + " minus " + 
-											standingsMap.get(awayTeamKey).getGamesWon() + " - " + standingsMap.get(awayTeamKey).getGamesPlayed());
+//				System.out.println("    OpptTeamStanding " + opptTeamKey);
+//				System.out.println("      Opponent Games Won/Played Sum: " + opptGamesWon + " - " + opptGamesPlayed + " = " + 
+//											standingsMap.get(opptTeamKey).getGamesWon() + " - " + standingsMap.get(opptTeamKey).getGamesPlayed() + " minus " + 
+//											opptHeadToHead + " - 1");
+//				System.out.println("      OpptOppt Games Won/Played Sum: " + opptOpptGamesWon + " - " + opptOpptGamesPlayed + " = " + 
+//											standingsMap.get(opptTeamKey).getOpptGamesWon() + " - " + standingsMap.get(opptTeamKey).getOpptGamesPlayed() + " minus " + 
+//											standingsMap.get(awayTeamKey).getGamesWon() + " - " + standingsMap.get(awayTeamKey).getGamesPlayed());
 			}
 
 			awayBoxScore.setOpptGamesWon(opptGamesWon);
@@ -143,13 +143,13 @@ public class StandingModel extends UntypedActor {
 				opptOpptGamesWon = (short)(opptOpptGamesWon + standingsMap.get(opptTeamKey).getOpptGamesWon() - standingsMap.get(homeTeamKey).getGamesWon());
 				opptOpptGamesPlayed = (short)(opptOpptGamesPlayed + standingsMap.get(opptTeamKey).getOpptGamesPlayed() - standingsMap.get(homeTeamKey).getGamesPlayed());
 				
-				System.out.println("    OpptTeamStanding " + opptTeamKey);
-				System.out.println("      Opponent Games Won/Played Sum: " + opptGamesWon + " - " + opptGamesPlayed + " = " + 
-						standingsMap.get(opptTeamKey).getGamesWon() + " - " + standingsMap.get(opptTeamKey).getGamesPlayed() + " minus " + 
-						opptHeadToHead + " - 1");
-				System.out.println("      OpptOppt Games Won/Played Sum: " + opptOpptGamesWon + " - " + opptOpptGamesPlayed + " = " + 
-						standingsMap.get(opptTeamKey).getOpptGamesWon() + " - " + standingsMap.get(opptTeamKey).getOpptGamesPlayed() + " minus " + 
-						standingsMap.get(homeTeamKey).getGamesWon() + " - " + standingsMap.get(homeTeamKey).getGamesPlayed());
+//				System.out.println("    OpptTeamStanding " + opptTeamKey);
+//				System.out.println("      Opponent Games Won/Played Sum: " + opptGamesWon + " - " + opptGamesPlayed + " = " + 
+//						standingsMap.get(opptTeamKey).getGamesWon() + " - " + standingsMap.get(opptTeamKey).getGamesPlayed() + " minus " + 
+//						opptHeadToHead + " - 1");
+//				System.out.println("      OpptOppt Games Won/Played Sum: " + opptOpptGamesWon + " - " + opptOpptGamesPlayed + " = " + 
+//						standingsMap.get(opptTeamKey).getOpptGamesWon() + " - " + standingsMap.get(opptTeamKey).getOpptGamesPlayed() + " minus " + 
+//						standingsMap.get(homeTeamKey).getGamesWon() + " - " + standingsMap.get(homeTeamKey).getGamesPlayed());
 			}
 			
 			homeBoxScore.setOpptGamesWon(opptGamesWon);
