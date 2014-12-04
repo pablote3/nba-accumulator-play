@@ -79,7 +79,8 @@ public class GameModel extends UntypedActor {
 			String gameDate = DateTimeUtil.getFindDateNaked(game.getDate());
 			
 			if (standingsDate == null || !standingsDate.equals(gameDate)) {
-				System.out.println("Standings not loaded for " + gameDate);
+				standingsDate = gameDate;
+				System.out.println('\n' + "Standings not loaded for " + gameDate);
 				StandingException se = new StandingException(game.getId(), gameDate);
 				getSender().tell(se, getSelf());
 			}
