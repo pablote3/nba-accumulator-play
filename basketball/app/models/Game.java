@@ -228,14 +228,23 @@ public class Game extends Model {
 		return gameIds;
 	}
 	
-	public static Game findByDateTeam(String date, String teamKey) {
-	  	Query<Game> query = Ebean.find(Game.class);
+	public static Game findByDateTeam(String date, String teamKey, ProcessingType processingType) {
+		Query<Game> query = null;
+	  	if (processingType.equals(ProcessingType.batch))
+	  		query = ebeanServer.find(Game.class);
+	  	else if (processingType.equals(ProcessingType.online))
+	  		query = Ebean.find(Game.class);
+	  	
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
 	  	query.where().between("t0.date", date + " 00:00:00", date + " 23:59:59");
 	    query.where().eq("t2.team_key", teamKey);
 	
-	    Game game = query.findUnique();
+	    Game sparseGame = query.findUnique();
+	    Game game = null;
+	    if (sparseGame != null) {
+	    	game = Game.findById(sparseGame.getId(), processingType);
+	    }
 	    return game;
 	}
 	
@@ -264,8 +273,36 @@ public class Game extends Model {
 	  	query.where().gt("t0.date", DateTimeUtil.getDateMinSeason(DateTimeUtil.createDateFromStringDate(date)) + " 00:00:00");
 	  	query.where().eq("t0.status", "Completed");
 	    query.where().eq("t2.team_key", teamKey);
-	    query.orderBy("t0.date desc");
-	    List<Game> games = query.findList();
+	    query.orderBy("t0.date asc");
+	    List<Game> sparseGames = query.findList();
+	    
+	    List<Game> games = new ArrayList<Game>();
+	    for (int i = 0; i < sparseGames.size(); i++) {
+			games.add(Game.findById(sparseGames.get(i).getId(), processingType));
+		}
+	    return games;
+	}
+	
+	public static List<Game> findByDateTeamSeason(String date, String teamKey, ProcessingType processingType) {
+		Query<Game> query = null;
+	  	if (processingType.equals(ProcessingType.batch))
+	  		query = ebeanServer.find(Game.class);
+	  	else if (processingType.equals(ProcessingType.online))
+	  		query = Ebean.find(Game.class);
+
+	  	query.fetch("boxScores");
+	  	query.fetch("boxScores.team");
+	  	query.where().lt("t0.date", date + " 23:59:59");
+	  	query.where().gt("t0.date", DateTimeUtil.getDateMinSeason(DateTimeUtil.createDateFromStringDate(date)) + " 00:00:00");
+	  	query.where().in("t0.status", new Object[]{"Completed", "Scheduled"});
+	    query.where().eq("t2.team_key", teamKey);
+	    query.orderBy("t0.date asc");
+	    List<Game> sparseGames = query.findList();
+	    
+	    List<Game> games = new ArrayList<Game>();
+	    for (int i = 0; i < sparseGames.size(); i++) {
+			games.add(Game.findById(sparseGames.get(i).getId(), processingType));
+		}
 	    return games;
 	}
 	

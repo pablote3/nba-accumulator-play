@@ -14,7 +14,6 @@ import models.Official;
 import models.Player;
 import models.RosterPlayer;
 import models.Standing;
-import models.Standing.StreakType;
 import models.Team;
 import util.DateTimeUtil;
 
@@ -151,7 +150,7 @@ public class JsonHelper {
         	standing.setGamesWon(standingDTO.getWon());
         	standing.setGamesLost(standingDTO.getLost());
         	standing.setStreak(standingDTO.getStreak());
-        	standing.setStreakType(StreakType.valueOf(standingDTO.getStreak_type()));
+        	standing.setStreakType(standingDTO.getStreak_type());
         	standing.setStreakTotal(standingDTO.getStreak_total());
         	standing.setGamesBack(standingDTO.getGames_back());
         	standing.setPointsFor(standingDTO.getPoints_for());

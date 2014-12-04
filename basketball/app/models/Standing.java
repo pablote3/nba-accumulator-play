@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,7 +27,6 @@ import services.InjectorModule;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.Query;
-import com.avaje.ebean.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -126,20 +123,15 @@ public class Standing extends Model {
 		this.streak = streak;
 	}
 	
-	@Enumerated(EnumType.STRING)
-	@Column(name="streakType", length=4, nullable=false)
+	@Column(name="streakType", nullable=false)
 	@JsonProperty("streak_type")
-	private StreakType streakType;
-	public StreakType getStreakType() {
+	private String streakType;
+	public String getStreakType() {
 		return streakType;
 	}
-	public void setStreakType(StreakType streakType) {
+	public void setStreakType(String streakType) {
 		this.streakType = streakType;
 	}
-	public enum StreakType {
-        @EnumValue("Win") win,
-        @EnumValue("Loss") loss,
-    }
 	
 	@Column(name="streakTotal", nullable=false)
 	@JsonProperty("streak_total")

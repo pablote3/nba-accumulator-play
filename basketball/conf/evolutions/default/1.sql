@@ -136,7 +136,7 @@ create table standing (
   gamesWon                  smallint not null,
   gamesLost                 smallint not null,
   streak                    varchar(255) not null,
-  streakType                varchar(4) not null,
+  streakType                varchar(255) not null,
   streakTotal               smallint not null,
   gamesBack                 float not null,
   pointsFor                 smallint not null,
@@ -158,7 +158,6 @@ create table standing (
   opptGamesWon              smallint,
   opptGamesPlayed           smallint,
   last_update               datetime not null,
-  constraint ck_standing_streakType check (streakType in ('Loss','Win')),
   constraint pk_standing primary key (id))
 ;
 

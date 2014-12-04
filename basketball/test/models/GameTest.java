@@ -71,9 +71,9 @@ public class GameTest {
     public void findGameDateTeam() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Game game = Game.findByDateTeam("2012-10-31", "sacramento-kings");
+        	  Game game = Game.findByDateTeam("2012-10-31", "sacramento-kings", ProcessingType.online);
         	  assertThat(game.getSeasonType()).isEqualTo(SeasonType.regular);
-        	  assertThat(game.getBoxScores().size()).isEqualTo(1);
+        	  assertThat(game.getBoxScores().size()).isEqualTo(2);
        		  BoxScore boxScore = game.getBoxScores().get(0);
        		  assertThat(boxScore.getLocation()).isEqualTo(Location.away);
         	  assertThat(boxScore.getTeam().getAbbr()).isEqualTo("SAC");
@@ -99,27 +99,26 @@ public class GameTest {
     }
     
     @Test
-    @Ignore
-    public void findPreviousGameDateTeamSeason_Valid() {
+    public void findDateTeamSeason_Valid() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  List<Game> games = Game.findCompletedByDateTeamSeason("2012-12-01", "sacramento-kings", ProcessingType.online);
-        	  Game previousGame = Game.findById(games.get(0).getId(), ProcessingType.online);
+        	  List<Game> games = Game.findByDateTeamSeason("2014-11-11", "sacramento-kings", ProcessingType.online);
+        	  Game game = games.get(7);
         	  
-        	  assertThat(previousGame.getSeasonType()).isEqualTo(SeasonType.regular);
-        	  assertThat(previousGame.getBoxScores().size()).isEqualTo(2);
-       		  BoxScore boxScore = previousGame.getBoxScores().get(0);
-       		  assertThat(boxScore.getLocation()).isEqualTo(Location.away);
-        	  assertThat(boxScore.getTeam().getAbbr()).isEqualTo("IND");
+        	  assertThat(game.getSeasonType()).isEqualTo(SeasonType.regular);
+        	  assertThat(game.getBoxScores().size()).isEqualTo(2);
+       		  BoxScore boxScore = game.getBoxScores().get(1);
+       		  assertThat(boxScore.getLocation()).isEqualTo(Location.home);
+        	  assertThat(boxScore.getTeam().getAbbr()).isEqualTo("DAL");
           }
         });
     }
     
     @Test
-    public void findPreviousGameDateTeamSeason_Invalid() {
+    public void findDateTeamSeason_Invalid() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  List<Game> game = Game.findCompletedByDateTeamSeason("2012-09-30", "washington-wizards", ProcessingType.online);
+        	  List<Game> game = Game.findByDateTeamSeason("2012-09-30", "washington-wizards", ProcessingType.online);
         	  assertThat(game.size()).isEqualTo(0);
           }
         });

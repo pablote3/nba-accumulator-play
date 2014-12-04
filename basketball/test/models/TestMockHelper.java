@@ -9,7 +9,6 @@ import models.Game.ProcessingType;
 import models.Game.SeasonType;
 import models.Game.Status;
 import models.RosterPlayer.Position;
-import models.Standing.StreakType;
 import models.Team.Conference;
 import models.Team.Division;
 
@@ -203,7 +202,7 @@ public class TestMockHelper {
 	    standing.setGamesWon((short)95);
 	    standing.setGamesLost((short)102);
 	    standing.setStreak("W1");
-	    standing.setStreakType(StreakType.win);
+	    standing.setStreakType("Win");
 	    standing.setStreakTotal((short)1);
 	    standing.setGamesBack((float)1.5);
 	    standing.setPointsFor((short)2902);
