@@ -1,5 +1,7 @@
 package actor;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,10 +76,13 @@ public class StandingModel extends UntypedActor {
 				completeGames = Game.findByDateTeamSeason(gameDate, teamKey, processingType);
 				for (int k = 0; k < completeGames.size(); k++) {
 					game = completeGames.get(k);
-					opptTeamKey = game.getBoxScores().get(0).getTeam().equals(teamStanding.getTeam()) ? game.getBoxScores().get(1).getTeam().getKey() : game.getBoxScores().get(0).getTeam().getKey();
+					int boxScoreId = game.getBoxScores().get(0).getTeam().equals(teamStanding.getTeam()) ? 1 : 0;
+					opptTeamKey = game.getBoxScores().get(boxScoreId).getTeam().getKey();
 					opptGamesWon = (short)(opptGamesWon + standingsMap.get(opptTeamKey).getGamesWon());
 					opptGamesPlayed = (short)(opptGamesPlayed + standingsMap.get(opptTeamKey).getGamesPlayed());
-//					System.out.println("StandingsMap teamKey = " + teamKey + " opptTeam = " + opptTeamKey + " Games Won/Played: " + standingsMap.get(opptTeamKey).getGamesWon() + " - " + standingsMap.get(opptTeamKey).getGamesPlayed());
+//					String opptGameDate = DateTimeUtil.getFindDateShort(game.getDate());
+//					System.out.println("  StandingsMap " + teamKey + " " + opptGameDate + " " + opptTeamKey + 
+//										" Games Won/Played: " + standingsMap.get(opptTeamKey).getGamesWon() + " - " + standingsMap.get(opptTeamKey).getGamesPlayed());
 				}				
 				standingsMap.get(teamKey).setOpptGamesWon(opptGamesWon);
 				standingsMap.get(teamKey).setOpptGamesPlayed(opptGamesPlayed);
@@ -113,8 +118,7 @@ public class StandingModel extends UntypedActor {
 
 //				System.out.println("    OpptTeamStanding " + opptTeamKey);
 //				System.out.println("      Opponent Games Won/Played Sum: " + opptGamesWon + " - " + opptGamesPlayed + " = " + 
-//											standingsMap.get(opptTeamKey).getGamesWon() + " - " + standingsMap.get(opptTeamKey).getGamesPlayed() + " minus " + 
-//											opptHeadToHead + " - 1");
+//											standingsMap.get(opptTeamKey).getGamesWon() + " - " + standingsMap.get(opptTeamKey).getGamesPlayed() + " minus " + opptHeadToHead + " - 1");
 //				System.out.println("      OpptOppt Games Won/Played Sum: " + opptOpptGamesWon + " - " + opptOpptGamesPlayed + " = " + 
 //											standingsMap.get(opptTeamKey).getOpptGamesWon() + " - " + standingsMap.get(opptTeamKey).getOpptGamesPlayed() + " minus " + 
 //											standingsMap.get(awayTeamKey).getGamesWon() + " - " + standingsMap.get(awayTeamKey).getGamesPlayed());
@@ -128,6 +132,11 @@ public class StandingModel extends UntypedActor {
 			System.out.println("  AwayTeamStanding " + awayTeamKey);
 			System.out.println("    Opponent Games Won/Played = " + opptGamesWon + "-" + opptGamesPlayed);
 			System.out.println("    Opponent Opponent Games Won/Played = " + opptOpptGamesWon + "-" + opptOpptGamesPlayed);
+			BigDecimal opponentRecord = new BigDecimal(opptGamesWon).divide(new BigDecimal(opptGamesPlayed), 4, RoundingMode.HALF_UP);
+			BigDecimal opponentOpponentRecord = new BigDecimal(opptOpptGamesWon).divide(new BigDecimal(opptOpptGamesPlayed), 4, RoundingMode.HALF_UP);
+//			System.out.println("    OpponentRecord = " + opponentRecord);
+//			System.out.println("    OpponentOpponentRecord = " + opponentOpponentRecord);
+			System.out.println("    Strenghth Of Schedule = " + opponentRecord.multiply(new BigDecimal(2)).add(opponentOpponentRecord).divide(new BigDecimal(3), 4, RoundingMode.HALF_UP) + '\n');
 			
 			opptGamesWon = (short)0;
 			opptGamesPlayed = (short)0;
@@ -138,15 +147,14 @@ public class StandingModel extends UntypedActor {
 				opptBoxScore = homeCompleteGames.get(i).getBoxScores().get(0).getTeam().getKey().equals(homeTeamKey) ? homeCompleteGames.get(i).getBoxScores().get(1) : homeCompleteGames.get(i).getBoxScores().get(0);
 				String opptTeamKey = opptBoxScore.getTeam().getKey();
 				opptHeadToHead = opptBoxScore.getResult().equals(Result.win) ? (short)1 : (short)0;
-				opptGamesWon = (short)(standingsMap.get(opptTeamKey).getGamesWon() - opptHeadToHead);
-				opptGamesPlayed = (short)(standingsMap.get(opptTeamKey).getGamesPlayed() - 1);
+				opptGamesWon = (short)(opptGamesWon + standingsMap.get(opptTeamKey).getGamesWon() - opptHeadToHead);
+				opptGamesPlayed = (short)(opptGamesPlayed + standingsMap.get(opptTeamKey).getGamesPlayed() - 1);
 				opptOpptGamesWon = (short)(opptOpptGamesWon + standingsMap.get(opptTeamKey).getOpptGamesWon() - standingsMap.get(homeTeamKey).getGamesWon());
 				opptOpptGamesPlayed = (short)(opptOpptGamesPlayed + standingsMap.get(opptTeamKey).getOpptGamesPlayed() - standingsMap.get(homeTeamKey).getGamesPlayed());
 				
 //				System.out.println("    OpptTeamStanding " + opptTeamKey);
 //				System.out.println("      Opponent Games Won/Played Sum: " + opptGamesWon + " - " + opptGamesPlayed + " = " + 
-//						standingsMap.get(opptTeamKey).getGamesWon() + " - " + standingsMap.get(opptTeamKey).getGamesPlayed() + " minus " + 
-//						opptHeadToHead + " - 1");
+//						standingsMap.get(opptTeamKey).getGamesWon() + " - " + standingsMap.get(opptTeamKey).getGamesPlayed() + " minus " + opptHeadToHead + " - 1");
 //				System.out.println("      OpptOppt Games Won/Played Sum: " + opptOpptGamesWon + " - " + opptOpptGamesPlayed + " = " + 
 //						standingsMap.get(opptTeamKey).getOpptGamesWon() + " - " + standingsMap.get(opptTeamKey).getOpptGamesPlayed() + " minus " + 
 //						standingsMap.get(homeTeamKey).getGamesWon() + " - " + standingsMap.get(homeTeamKey).getGamesPlayed());
@@ -160,6 +168,11 @@ public class StandingModel extends UntypedActor {
 			System.out.println("  HomeTeamStanding " + homeTeamKey);
 			System.out.println("    Opponent Games Won/Played = " + opptGamesWon + "-" + opptGamesPlayed);
 			System.out.println("    Opponent Opponent Games Won/Played = " + opptOpptGamesWon + "-" + opptOpptGamesPlayed);
+			opponentRecord = new BigDecimal(opptGamesWon).divide(new BigDecimal(opptGamesPlayed), 4, RoundingMode.HALF_UP);
+			opponentOpponentRecord = new BigDecimal(opptOpptGamesWon).divide(new BigDecimal(opptOpptGamesPlayed), 4, RoundingMode.HALF_UP);
+//			System.out.println("    OpponentRecord = " + opponentRecord);
+//			System.out.println("    OpponentOpponentRecord = " + opponentOpponentRecord);
+			System.out.println("    Strenghth Of Schedule = " + opponentRecord.multiply(new BigDecimal(2)).add(opponentOpponentRecord).divide(new BigDecimal(3), 4, RoundingMode.HALF_UP) + '\n');
 
 			CompleteGame rs = new CompleteGame(game);
 			controller.tell(rs, getSelf());
