@@ -1,6 +1,6 @@
 package actor;
 
-import static actor.ActorApi.NextGame;
+import static actor.ActorApi.GameIneligible;
 import static actor.ActorApi.WorkStart;
 
 import java.util.List;
@@ -14,16 +14,15 @@ import org.joda.time.DateTime;
 
 import util.DateTimeUtil;
 import util.Utilities;
-import actor.ActorApi.ActiveGame;
-import actor.ActorApi.CompleteGame;
-import actor.ActorApi.FindGame;
+import actor.ActorApi.GameActive;
+import actor.ActorApi.GameComplete;
+import actor.ActorApi.GameFind;
 import actor.ActorApi.GameIds;
+import actor.ActorApi.GameRetrieve;
 import actor.ActorApi.ModelException;
 import actor.ActorApi.OfficialException;
-import actor.ActorApi.RetrieveGame;
 import actor.ActorApi.RosterException;
 import actor.ActorApi.ServiceProps;
-import actor.ActorApi.StandingException;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
@@ -35,7 +34,6 @@ public class GameModel extends UntypedActor {
 	private String propDate;
 	private String propTeam;
 	private String propSize;
-	private String standingsDate;
 	private Game game;
 	private ProcessingType processingType;
 	
@@ -73,52 +71,40 @@ public class GameModel extends UntypedActor {
 			GameIds ids = new GameIds(games);
 			getSender().tell(ids, getSelf());
 		}
-		else if(message instanceof FindGame) {
-			FindGame findGame = (FindGame)message;
+		else if(message instanceof GameFind) {
+			GameFind findGame = (GameFind)message;
 			game = Game.findById(findGame.gameId, processingType);
 			String gameDate = DateTimeUtil.getFindDateNaked(game.getDate());
-			
-			if (standingsDate == null || !standingsDate.equals(gameDate)) {
-				standingsDate = gameDate;
-				System.out.println('\n' + "Standings not loaded for " + gameDate);
-				StandingException se = new StandingException(game.getId(), gameDate);
-				getSender().tell(se, getSelf());
+
+			StringBuffer output;
+			if (game.getStatus().equals(Status.scheduled) || game.getStatus().equals(Status.finished)) {
+				output = new StringBuffer();
+				output.append(Utilities.padString('\n' + "Finished Game Ready for Completion -", 40));
+				output.append(" " + gameDate);
+				output.append("-" + game.getBoxScores().get(0).getTeam().getKey() + "-at");
+				output.append("-" + game.getBoxScores().get(1).getTeam().getKey());
+				System.out.println(output.toString());					
+				GameRetrieve gr = new GameRetrieve(game);
+				gameXmlStats.tell(gr, getSelf());
 			}
-			else {
-				System.out.println("Standings already loaded for " + gameDate);
-				StringBuffer output;
-				if (game.getStatus().equals(Status.scheduled) || game.getStatus().equals(Status.finished)) {
-					output = new StringBuffer();
-					output.append(Utilities.padString('\n' + "Finished Game Ready for Completion -", 40));
-					output.append(" " + gameDate);
-					output.append("-" + game.getBoxScores().get(0).getTeam().getKey() + "-at");
-					output.append("-" + game.getBoxScores().get(1).getTeam().getKey());
-					System.out.println(output.toString());
-					
-					RetrieveGame rg = new RetrieveGame(game);
-					gameXmlStats.tell(rg, getSelf());
-				}
-				else  {
-					output = new StringBuffer();
-					output.append(Utilities.padString('\n' + "" + game.getStatus() + " Not Eligible for Completion -", 40));
-					output.append(" " + gameDate);
-					output.append("-" + game.getBoxScores().get(0).getTeam().getKey() + "-at");
-					output.append("-" + game.getBoxScores().get(1).getTeam().getKey());
-					System.out.println(output.toString());
-					controller.tell(NextGame, getSelf());
-				}
+			else  {
+				output = new StringBuffer();
+				output.append(Utilities.padString('\n' + "" + game.getStatus() + " Not Eligible for Completion -", 40));
+				output.append(" " + gameDate);
+				output.append("-" + game.getBoxScores().get(0).getTeam().getKey() + "-at");
+				output.append("-" + game.getBoxScores().get(1).getTeam().getKey());
+				System.out.println(output.toString());
+				controller.tell(GameIneligible, getSelf());
 			}
 		}
-		else if(message instanceof ActiveGame) {
-			controller.tell(message, getSelf());
-		}
-		else if(message instanceof CompleteGame) {
-			Game game = ((CompleteGame)message).game;
+		else if(message instanceof GameActive) {
+			Game game = ((GameActive)message).game;
 			BoxScore awayBoxScore = game.getBoxScores().get(0);
 			BoxScore homeBoxScore = game.getBoxScores().get(1);
 		  	Game.update(game, processingType);
 		  	System.out.println("Game Complete " + awayBoxScore.getTeam().getShortName() +  " " + awayBoxScore.getPoints() + " " + homeBoxScore.getTeam().getShortName() +  " " + homeBoxScore.getPoints());
-		  	controller.tell(NextGame, getSelf());
+		  	GameComplete gc = new GameComplete(DateTimeUtil.getFindDateShort(game.getDate()));
+		  	controller.tell(gc, getSelf());
 		}
 		else if(message instanceof RosterException) {
 			controller.tell(message, getSelf());

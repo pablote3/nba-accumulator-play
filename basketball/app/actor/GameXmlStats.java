@@ -27,10 +27,10 @@ import models.Game.Source;
 import models.Game.Status;
 import models.GameOfficial;
 import util.DateTimeUtil;
-import actor.ActorApi.ActiveGame;
+import actor.ActorApi.GameActive;
 import actor.ActorApi.OfficialException;
 import actor.ActorApi.RosterException;
-import actor.ActorApi.RetrieveGame;
+import actor.ActorApi.GameRetrieve;
 import actor.ActorApi.ServiceProps;
 import actor.ActorApi.XmlStatsException;
 import akka.actor.ActorRef;
@@ -67,8 +67,8 @@ public class GameXmlStats extends UntypedActor {
 			source = Game.Source.valueOf(((ServiceProps) message).sourceBoxScore);
 			getSender().tell(InitializeComplete, getSelf());
 		}
-		else if(message instanceof RetrieveGame) {
-			Game game = ((RetrieveGame)message).game;
+		else if(message instanceof GameRetrieve) {
+			Game game = ((GameRetrieve)message).game;
 			BoxScore awayBoxScore = game.getBoxScores().get(0);
 			BoxScore homeBoxScore = game.getBoxScores().get(1);
 			
@@ -176,7 +176,7 @@ public class GameXmlStats extends UntypedActor {
 		    		  	homeBoxScore.setResult(Result.win);
 		    		  	awayBoxScore.setResult(Result.loss);
 		    		}
-		    		ActiveGame ag = new ActiveGame(game);
+		    		GameActive ag = new GameActive(game);
 		    		getSender().tell(ag, getSelf());
 				}
 			}

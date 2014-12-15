@@ -23,8 +23,8 @@ import models.Game;
 import models.Game.ProcessingType;
 import models.Game.Source;
 import models.Standing;
-import actor.ActorApi.ActiveStandings;
-import actor.ActorApi.RetrieveStandings;
+import actor.ActorApi.StandingsActive;
+import actor.ActorApi.StandingsRetrieve;
 import actor.ActorApi.ServiceProps;
 import actor.ActorApi.XmlStatsException;
 import akka.actor.ActorRef;
@@ -61,8 +61,8 @@ public class StandingXmlStats extends UntypedActor {
 			source = Game.Source.valueOf(((ServiceProps) message).sourceStanding);
 			getSender().tell(InitializeComplete, getSelf());
 		}
-		else if(message instanceof RetrieveStandings) {
-			String standingsDate = ((RetrieveStandings) message).date;
+		else if(message instanceof StandingsRetrieve) {
+			String standingsDate = ((StandingsRetrieve) message).date;
 			System.out.println("  Retrieving standings for " + standingsDate);
 			String event = standingsDate + ".json";
 			InputStream inputStreamJson = null;
@@ -94,8 +94,8 @@ public class StandingXmlStats extends UntypedActor {
 				    mapper.configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL, true);
 				    Standings xmlStatsStandings = mapper.readValue(baseJson, Standings.class);
 				    List<Standing> standings = JsonHelper.getStandings(xmlStatsStandings, processingType);
-				    ActiveStandings activeStandings = new ActiveStandings(standings);
-				    getSender().tell(activeStandings, getSender());
+				    StandingsActive sa = new StandingsActive(standings);
+				    getSender().tell(sa, getSender());
 				}
 			}
 			catch (FileNotFoundException e) {

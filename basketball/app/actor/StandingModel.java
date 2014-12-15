@@ -1,5 +1,7 @@
 package actor;
 
+import static actor.ActorApi.StandingTeamComplete;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -13,13 +15,11 @@ import models.Game;
 import models.Game.ProcessingType;
 import models.Standing;
 import util.DateTimeUtil;
-import actor.ActorApi.ActiveStandings;
-import actor.ActorApi.AdjustOpponent;
-import actor.ActorApi.CompleteGame;
-import actor.ActorApi.LoadStandings;
-import actor.ActorApi.RepeatGame;
-import actor.ActorApi.RetrieveStandings;
 import actor.ActorApi.ServiceProps;
+import actor.ActorApi.StandingTeamAdjust;
+import actor.ActorApi.StandingsActive;
+import actor.ActorApi.StandingsLoad;
+import actor.ActorApi.StandingsRetrieve;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
@@ -30,9 +30,9 @@ public class StandingModel extends UntypedActor {
 	
 	private final ActorRef standingXmlStats;
 	private ActorRef controller;
-	private Long gameId;
 	private Map<String, Record> standingsMap;
 	private ProcessingType processingType;
+	Standing teamStanding;
 	
 	public StandingModel(ActorRef listener) {
 		this.listener = listener;
@@ -44,19 +44,24 @@ public class StandingModel extends UntypedActor {
 			processingType = Game.ProcessingType.valueOf(((ServiceProps) message).processType);
 			standingXmlStats.tell(message, getSender());
 		}
-		else if(message instanceof LoadStandings) {
+		else if(message instanceof StandingsLoad) {
 			controller = getSender();
-			gameId = ((LoadStandings)message).gameId;
-			String standingsDate = ((LoadStandings)message).date;
-			RetrieveStandings rs = new RetrieveStandings(standingsDate);
-			standingXmlStats.tell(rs, getSelf());
+			String standingsDate = ((StandingsLoad)message).date;
+			List<Standing> standings = Standing.findByDate(standingsDate, processingType);
+			if (standings.size() > 0) {
+				for (int i = 0; i < standings.size(); i++) {
+					teamStanding = standings.get(i);
+					Standing.delete(teamStanding, processingType);
+				}
+			}				
+			StandingsRetrieve sr = new StandingsRetrieve(standingsDate);
+			standingXmlStats.tell(sr, getSelf());
 		}
-		else if(message instanceof ActiveStandings) {
-			ActiveStandings activeStandings = (ActiveStandings) message;
+		else if(message instanceof StandingsActive) {
+			StandingsActive activeStandings = (StandingsActive) message;
 			List<Standing> standingsList = new ArrayList<Standing>(activeStandings.standings);
 			List<Game> completeGames;
 			standingsMap = new HashMap<String, Record>();
-			Standing teamStanding;
 			String opptTeamKey;
 			Short opptGamesWon;
 			Short opptGamesPlayed;
@@ -88,24 +93,17 @@ public class StandingModel extends UntypedActor {
 				standingsMap.get(teamKey).setOpptGamesPlayed(opptGamesPlayed);
 				Standing.create(teamStanding, processingType);
 			}
-
-			RepeatGame rg = new RepeatGame(gameId);
-			controller.tell(rg, getSelf());
+			controller.tell(activeStandings, getSelf());
 		}
-		else if(message instanceof AdjustOpponent) {
-			Game game = ((AdjustOpponent) message).game;
-			String gameDate = DateTimeUtil.getFindDateShort(game.getDate());
+		else if(message instanceof StandingTeamAdjust) {
+			String standingDate = ((StandingTeamAdjust)message).date;
+			String standingTeam = ((StandingTeamAdjust)message).team;
 
-			BoxScore awayBoxScore = game.getBoxScores().get(0);
-			String awayTeamKey = awayBoxScore.getTeam().getKey();
-			BoxScore homeBoxScore = game.getBoxScores().get(1);
-			String homeTeamKey = homeBoxScore.getTeam().getKey();
-			
-			awayBoxScore = CalculateStrengthOfSchedule(gameDate, awayBoxScore, awayTeamKey);
-			homeBoxScore = CalculateStrengthOfSchedule(gameDate, homeBoxScore, homeTeamKey);		
+			teamStanding = Standing.findByDateTeam(standingDate, standingTeam, processingType);			
+			teamStanding = CalculateStrengthOfSchedule(standingDate, teamStanding, standingTeam);
+			Standing.update(teamStanding, processingType);
 
-			CompleteGame rs = new CompleteGame(game);
-			controller.tell(rs, getSelf());
+			controller.tell(StandingTeamComplete, getSelf());
 		}
 		else {
 			unhandled(message);
@@ -154,7 +152,7 @@ public class StandingModel extends UntypedActor {
 		}		
 	}
 	
-	private BoxScore CalculateStrengthOfSchedule(String gameDate, BoxScore boxScore, String teamKey) {
+	private Standing CalculateStrengthOfSchedule(String gameDate, Standing standing, String teamKey) {
 		BoxScore opptBoxScore;
 		Short opptHeadToHead;
 		Short opptGamesWon = (short)0;
@@ -203,10 +201,10 @@ public class StandingModel extends UntypedActor {
 			System.out.println("Paul - crazy opptGamesWon more than opptGamesPlayed!");
 			opptGamesWon = opptGamesPlayed;
 		
-		boxScore.setOpptGamesWon(opptGamesWon);
-		boxScore.setOpptGamesPlayed(opptGamesPlayed);
-		boxScore.setOpptOpptGamesWon(opptOpptGamesWon);
-		boxScore.setOpptOpptGamesPlayed(opptOpptGamesPlayed);
+		standing.setOpptGamesWon(opptGamesWon);
+		standing.setOpptGamesPlayed(opptGamesPlayed);
+		standing.setOpptOpptGamesWon(opptOpptGamesWon);
+		standing.setOpptOpptGamesPlayed(opptOpptGamesPlayed);
 		
 		System.out.println("  SumTeamStanding " + teamKey);
 		System.out.println("    Opponent Games Won/Played = " + opptGamesWon + "-" + opptGamesPlayed);
@@ -217,6 +215,6 @@ public class StandingModel extends UntypedActor {
 		System.out.println("    OpptOppt Record = " + opponentOpponentRecord);
 		System.out.println("    Strenghth Of Schedule = " + opponentRecord.multiply(new BigDecimal(2)).add(opponentOpponentRecord).divide(new BigDecimal(3), 4, RoundingMode.HALF_UP) + '\n');
 		
-		return boxScore;
+		return standing;
 	}
 }

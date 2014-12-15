@@ -13,6 +13,9 @@ public interface ActorApi {
 	public static final Object WorkStart = "WorkStart";
 	public static final Object WorkGame = "WorkGame";
 	public static final Object NextGame = "NextGame";
+	public static final Object NextStanding = "NextStanding";
+	public static final Object StandingTeamComplete = "StandingTeamComplete";
+	public static final Object GameIneligible = "GameIneligible";
 	public static final Object WorkComplete = "WorkComplete";
 	public static final Object Wait = "Wait";
 	public static final Object Finish = "Finish";
@@ -82,12 +85,12 @@ public interface ActorApi {
 		}
 	}
 	
-	public static class LoadRoster {
+	public static class RosterLoad {
 		public final Long gameId;
 		public final String date;
 		public final String team;
 		
-		public LoadRoster(Long gameId, String date, String team) {
+		public RosterLoad(Long gameId, String date, String team) {
 			this.gameId = gameId;
 			this.date = date;
 			this.team = team;
@@ -98,11 +101,11 @@ public interface ActorApi {
 		}
 	}
 	
-	public static class RetrieveRoster {
+	public static class RosterRetrieve {
 		public final String date;
 		public final String team;
 		
-		public RetrieveRoster(String date, String team) {
+		public RosterRetrieve(String date, String team) {
 			this.date = date;
 			this.team = team;
 		}
@@ -112,45 +115,57 @@ public interface ActorApi {
 		}
 	}
 	
-	public static class LoadStandings {
+	public static class RosterActive {
+		public final List<RosterPlayer> rosterPlayers;
+
+		public RosterActive(List<RosterPlayer> rosterPlayers) {
+			this.rosterPlayers = rosterPlayers;
+		}
+	}
+	
+	public static class RosterComplete {
 		public final Long gameId;
-		public final String date;
 		
-		public LoadStandings(Long gameId, String date) {
+		public RosterComplete(Long gameId) {
 			this.gameId = gameId;
-			this.date = date;
 		}
 	}
 	
-	public static class RetrieveStandings {
+	public static class StandingsLoad {
 		public final String date;
 		
-		public RetrieveStandings(String date) {
+		public StandingsLoad(String date) {
 			this.date = date;
 		}
 	}
 	
-	public static class AdjustOpponent {
-		public final Game game;
-		
-		public AdjustOpponent(Game game) {
-			this.game = game;
-		}
-	}
-	
-	public static class StandingException extends RuntimeException {
-		private static final long serialVersionUID = 1L;
-		
-		public final Long gameId;
+	public static class StandingsRetrieve {
 		public final String date;
 		
-		public StandingException(Long gameId, String date) {
-			this.gameId = gameId;
+		public StandingsRetrieve(String date) {
 			this.date = date;
+		}
+	}
+	
+	public static class StandingsActive {
+		public final List<Standing> standings;
+		
+		public StandingsActive(List<Standing> standings) {
+			this.standings = standings;
+		}
+	}
+	
+	public static class StandingTeamAdjust {
+		public final String date;
+		public final String team;
+		
+		public StandingTeamAdjust(String date, String team) {
+			this.date = date;
+			this.team = team;
 		}
 		
 		public String toString() {
-			return String.format("%s(%s)", getClass().getSimpleName(), date);
+			return String.format("%s(%s)", getClass().getSimpleName(), date, team);
 		}
 	}
 	
@@ -188,10 +203,10 @@ public interface ActorApi {
 		}			
 	}
 	
-	public static class FindGame {
+	public static class GameFind {
 		public final Long gameId;
 		
-		public FindGame(Long gameId) {
+		public GameFind(Long gameId) {
 			this.gameId = gameId;
 		}
 	}
@@ -204,43 +219,27 @@ public interface ActorApi {
 		}
 	}
 	
-	public static class RetrieveGame {
+	public static class GameRetrieve {
 		public final Game game;
 		
-		public RetrieveGame(Game game) {
+		public GameRetrieve(Game game) {
 			this.game = game;
 		}
 	}
 	
-	public static class ActiveStandings {
-		public final List<Standing> standings;
-		
-		public ActiveStandings(List<Standing> standings) {
-			this.standings = standings;
-		}
-	}
-	
-	public static class ActiveRoster {
-		public final List<RosterPlayer> rosterPlayers;
-
-		public ActiveRoster(List<RosterPlayer> rosterPlayers) {
-			this.rosterPlayers = rosterPlayers;
-		}
-	}
-	
-	public static class ActiveGame {
+	public static class GameActive {
 		public final Game game;
 		
-		public ActiveGame(Game game) {
+		public GameActive(Game game) {
 			this.game = game;
 		}
 	}
 	
-	public static class CompleteGame {
-		public final Game game;
+	public static class GameComplete {
+		public final String gameDate;
 		
-		public CompleteGame(Game game) {
-			this.game = game;
+		public GameComplete(String gameDate) {
+			this.gameDate = gameDate;
 		}
 	}
 }
