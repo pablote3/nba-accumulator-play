@@ -14,7 +14,7 @@ public interface ActorApi {
 	public static final Object WorkGame = "WorkGame";
 	public static final Object NextGame = "NextGame";
 	public static final Object NextStanding = "NextStanding";
-	public static final Object StandingTeamComplete = "StandingTeamComplete";
+	public static final Object StandingsComplete = "StandingsComplete";
 	public static final Object GameIneligible = "GameIneligible";
 	public static final Object WorkComplete = "WorkComplete";
 	public static final Object Wait = "Wait";
@@ -152,20 +152,6 @@ public interface ActorApi {
 		
 		public StandingsActive(List<Standing> standings) {
 			this.standings = standings;
-		}
-	}
-	
-	public static class StandingTeamAdjust {
-		public final String date;
-		public final String team;
-		
-		public StandingTeamAdjust(String date, String team) {
-			this.date = date;
-			this.team = team;
-		}
-		
-		public String toString() {
-			return String.format("%s(%s)", getClass().getSimpleName(), date, team);
 		}
 	}
 	

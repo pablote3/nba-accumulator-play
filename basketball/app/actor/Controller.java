@@ -1,28 +1,22 @@
 package actor;
 
-import static actor.ActorApi.NextGame;
-import static actor.ActorApi.NextStanding;
 import static actor.ActorApi.GameIneligible;
-import static actor.ActorApi.StandingTeamComplete;
-import static actor.ActorApi.WorkStart;
+import static actor.ActorApi.NextGame;
+import static actor.ActorApi.StandingsComplete;
 import static actor.ActorApi.WorkComplete;
+import static actor.ActorApi.WorkStart;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import util.DateTimeUtil;
-import models.Standing;
 import actor.ActorApi.GameComplete;
 import actor.ActorApi.GameFind;
 import actor.ActorApi.GameIds;
 import actor.ActorApi.RepeatGame;
-import actor.ActorApi.RosterLoad;
 import actor.ActorApi.RosterComplete;
 import actor.ActorApi.RosterException;
+import actor.ActorApi.RosterLoad;
 import actor.ActorApi.ServiceProps;
-import actor.ActorApi.StandingsActive;
 import actor.ActorApi.StandingsLoad;
-import actor.ActorApi.StandingTeamAdjust;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
@@ -34,10 +28,8 @@ public class Controller extends UntypedActor {
 	private ActorRef master;
 	private int nbrSecondsDelay;
 	private List<Long> gameIdList;
-	private List<Standing> standingsList;
 	private String standingDate;
 	private int gameIndex = 0;
-	private int standingIndex = 0;
 
 	public Controller(ActorRef listener) {
 		gameModel = getContext().actorOf(Props.create(GameModel.class, listener), "gameModel");
@@ -77,7 +69,10 @@ public class Controller extends UntypedActor {
 		}
 		else if(message instanceof GameComplete) {
 			String gameDate = ((GameComplete) message).gameDate;
-			if(!standingDate.equals(gameDate)) {
+			if(standingDate == null) {
+				standingDate = gameDate;
+			}
+			else if(!standingDate.equals(gameDate)) {
 				StandingsLoad sl = new StandingsLoad(standingDate);
 				standingDate = gameDate;
 				standingModel.tell(sl, getSelf());
@@ -107,23 +102,8 @@ public class Controller extends UntypedActor {
 			Long gameId = ((RosterComplete) message).gameId;
 			getSelf().tell(new RepeatGame(gameId), getSelf());
 		}
-		else if(message instanceof StandingsActive) {
-			StandingsActive activeStandings = (StandingsActive) message;
-			standingsList = new ArrayList<Standing>(activeStandings.standings);
-			getSelf().tell(NextStanding, getSelf());
-		}
-		else if (message.equals(NextStanding)) {
-			if (standingIndex < standingsList.size()) {
-				String standingDate = DateTimeUtil.getFindDateShort(standingsList.get(standingIndex).getDate());
-				String standingTeam = standingsList.get(standingIndex).getTeam().getKey();
-				standingModel.tell(new StandingTeamAdjust(standingDate, standingTeam), getSelf());
-			}
-			else {
-				master.tell(WorkComplete, getSelf());
-			}
-		}
-		else if(message.equals(StandingTeamComplete)) {
-			getSelf().tell(NextGame, getSelf());
+		else if(message.equals(StandingsComplete)) {
+			master.tell(WorkComplete, getSelf());
 		}
 		else {
 			unhandled(message);
