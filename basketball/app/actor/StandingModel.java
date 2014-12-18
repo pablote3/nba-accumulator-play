@@ -4,7 +4,9 @@ import static actor.ActorApi.StandingsComplete;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +18,8 @@ import models.Standing;
 import util.DateTimeUtil;
 import actor.ActorApi.ServiceProps;
 import actor.ActorApi.StandingsLoad;
+import actor.ActorApi.StandingsRetrieve;
+import actor.ActorApi.StandingsActive;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
@@ -29,6 +33,7 @@ public class StandingModel extends UntypedActor {
 	private Map<String, Record> standingsMap;
 	private ProcessingType processingType;
 	Standing teamStanding;
+	String standingsDate;
 	
 	public StandingModel(ActorRef listener) {
 		this.listener = listener;
@@ -42,30 +47,38 @@ public class StandingModel extends UntypedActor {
 		}
 		else if(message instanceof StandingsLoad) {
 			controller = getSender();
-			String standingsDate = ((StandingsLoad)message).date;
+			standingsDate = ((StandingsLoad)message).date;
 			List<Standing> standingsList = Standing.findByDate(standingsDate, processingType);
+			if (standingsList.size() > 0) {
+				System.out.println("Deleteing standings for " + standingsDate);
+				for (int i = 0; i < standingsList.size(); i++) {
+					teamStanding = standingsList.get(i);
+					Standing.delete(teamStanding, processingType);
+				}
+			}				
+			StandingsRetrieve sr = new StandingsRetrieve(standingsDate);
+			standingXmlStats.tell(sr, getSelf());
+		}
+		else if(message instanceof StandingsActive) {
+			StandingsActive activeStandings = (StandingsActive) message;
+			List<Standing> standingsActive = new ArrayList<Standing>(activeStandings.standings);
 			List<Game> completeGames;
 			standingsMap = new HashMap<String, Record>();
 			String opptTeamKey;
 			Short opptGamesWon;
 			Short opptGamesPlayed;
 			Game game;
-			
-			if (standingsList.size() > 0) {
-				for (int i = 0; i < standingsList.size(); i++) {
-					teamStanding = standingsList.get(i);
-					Standing.delete(teamStanding, processingType);
-				}
-			}		
-			
-			for (int i = 0; i < standingsList.size(); i++) {
-				teamStanding = standingsList.get(i);
+	
+			Iterator<Standing> mapIt = standingsActive.iterator();
+			while (mapIt.hasNext()) {
+				teamStanding = mapIt.next();
 				standingsMap.put(teamStanding.getTeam().getKey(), new Record(teamStanding.getGamesWon(), teamStanding.getGamesPlayed(), (short)0, (short)0));
 			}
 			
-			String standingDate = DateTimeUtil.getFindDateShort(standingsList.get(0).getDate());
-			for (int j = 0; j < standingsList.size(); j++) {
-				teamStanding = standingsList.get(j);
+			String standingDate = DateTimeUtil.getFindDateShort(standingsActive.get(0).getDate());
+			Iterator<Standing> createIt = standingsActive.iterator();
+			while (createIt.hasNext()) {
+				teamStanding = createIt.next();
 				String teamKey = teamStanding.getTeam().getKey();
 				opptGamesWon = (short)0;
 				opptGamesPlayed = (short)0;
@@ -85,8 +98,9 @@ public class StandingModel extends UntypedActor {
 				Standing.create(teamStanding, processingType);
 			}
 
-			for (int k = 0; k < standingsList.size(); k++) {
-				String standingTeam = standingsList.get(k).getTeam().getKey();
+			Iterator<Standing> updateIt = standingsActive.iterator();
+			while (updateIt.hasNext()) {
+				String standingTeam = updateIt.next().getTeam().getKey();
 				teamStanding = Standing.findByDateTeam(standingDate, standingTeam, processingType);			
 				teamStanding = CalculateStrengthOfSchedule(standingDate, teamStanding, standingTeam);
 				Standing.update(teamStanding, processingType);
@@ -141,11 +155,13 @@ public class StandingModel extends UntypedActor {
 			System.out.println("    OpptOppt Games Won/Played: " + opptOpptGamesWon + " - " + opptOpptGamesPlayed + " = " + 
 									standingsMap.get(opptTeamKey).getOpptGamesWon() + " - " + standingsMap.get(opptTeamKey).getOpptGamesPlayed() + " minus " + 
 									headToHeadMap.get(opptTeamKey).getOpptGamesWon() + " - " + headToHeadMap.get(opptTeamKey).getOpptGamesPlayed());
-		}
 		
-		if (opptGamesWon > opptGamesPlayed)	 { //head to head wins exceed opponent wins, should only occur until wins start to occur
-			System.out.println("Paul - crazy opptGamesWon more than opptGamesPlayed!");
-			opptGamesWon = opptGamesPlayed;
+			if (opptGamesWon > opptGamesPlayed)	 { 
+				//head to head wins exceed opponent wins, should only occur until wins start to occur
+				//observed occurrence when loading standings before entire day's games were loaded
+				System.out.println("Paul - crazy opptGamesWon more than opptGamesPlayed!");
+				opptGamesWon = opptGamesPlayed;
+			}
 		}
 		
 		standing.setOpptGamesWon(opptGamesWon);
