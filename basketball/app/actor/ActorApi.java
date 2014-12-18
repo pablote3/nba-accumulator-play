@@ -16,6 +16,7 @@ public interface ActorApi {
 	public static final Object NextStanding = "NextStanding";
 	public static final Object StandingsComplete = "StandingsComplete";
 	public static final Object GameIneligible = "GameIneligible";
+	public static final Object GameDayIncomplete = "GameDayIncomplete";
 	public static final Object WorkComplete = "WorkComplete";
 	public static final Object Wait = "Wait";
 	public static final Object Finish = "Finish";
@@ -135,6 +136,23 @@ public interface ActorApi {
 		public final String date;
 		
 		public StandingsLoad(String date) {
+			this.date = date;
+		}
+	}
+	
+	
+	public static class GameDayConfirmation {
+		public final String date;
+		
+		public GameDayConfirmation(String date) {
+			this.date = date;
+		}
+	}
+	
+	public static class GameDayComplete {
+		public final String date;
+		
+		public GameDayComplete(String date) {
 			this.date = date;
 		}
 	}

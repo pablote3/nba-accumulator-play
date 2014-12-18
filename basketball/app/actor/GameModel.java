@@ -1,6 +1,7 @@
 package actor;
 
 import static actor.ActorApi.GameIneligible;
+import static actor.ActorApi.GameDayIncomplete;
 import static actor.ActorApi.WorkStart;
 
 import java.util.List;
@@ -19,6 +20,8 @@ import actor.ActorApi.GameComplete;
 import actor.ActorApi.GameFind;
 import actor.ActorApi.GameIds;
 import actor.ActorApi.GameRetrieve;
+import actor.ActorApi.GameDayConfirmation;
+import actor.ActorApi.GameDayComplete;
 import actor.ActorApi.ModelException;
 import actor.ActorApi.OfficialException;
 import actor.ActorApi.RosterException;
@@ -111,6 +114,18 @@ public class GameModel extends UntypedActor {
 		  	System.out.println("Game Complete " + awayBoxScore.getTeam().getShortName() +  " " + awayBoxScore.getPoints() + " " + homeBoxScore.getTeam().getShortName() +  " " + homeBoxScore.getPoints());
 		  	GameComplete gc = new GameComplete(DateTimeUtil.getFindDateShort(game.getDate()));
 		  	controller.tell(gc, getSelf());
+		}
+		else if(message instanceof GameDayConfirmation) {
+			String gameDate = ((GameDayConfirmation) message).date;
+			int gamesScheduled = Game.findCountGamesByDateScheduled(gameDate, processingType);
+			if (gamesScheduled == 0) {
+				System.out.println("Game Day complete for " + gameDate + " load standings");
+				controller.tell(new GameDayComplete(gameDate), getSelf());
+			}
+			else {
+				System.out.println("Game Day incomplete for " + gameDate + " is " + gamesScheduled);
+				controller.tell(GameDayIncomplete, getSelf());
+			}
 		}
 		else if(message instanceof RosterException) {
 			controller.tell(message, getSelf());

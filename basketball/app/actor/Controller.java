@@ -1,7 +1,8 @@
 package actor;
 
-import static actor.ActorApi.GameIneligible;
 import static actor.ActorApi.NextGame;
+import static actor.ActorApi.GameIneligible;
+import static actor.ActorApi.GameDayIncomplete;
 import static actor.ActorApi.StandingsComplete;
 import static actor.ActorApi.WorkComplete;
 import static actor.ActorApi.WorkStart;
@@ -11,12 +12,14 @@ import java.util.List;
 import actor.ActorApi.GameComplete;
 import actor.ActorApi.GameFind;
 import actor.ActorApi.GameIds;
+import actor.ActorApi.GameDayConfirmation;
+import actor.ActorApi.GameDayComplete;
 import actor.ActorApi.RepeatGame;
 import actor.ActorApi.RosterComplete;
 import actor.ActorApi.RosterException;
 import actor.ActorApi.RosterLoad;
-import actor.ActorApi.ServiceProps;
 import actor.ActorApi.StandingsLoad;
+import actor.ActorApi.ServiceProps;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
@@ -28,7 +31,6 @@ public class Controller extends UntypedActor {
 	private ActorRef master;
 	private int nbrSecondsDelay;
 	private List<Long> gameIdList;
-	private String standingDate;
 	private int gameIndex = 0;
 
 	public Controller(ActorRef listener) {
@@ -60,8 +62,7 @@ public class Controller extends UntypedActor {
 				gameIndex++;
 			}
 			else {
-				StandingsLoad sl = new StandingsLoad(standingDate);
-				standingModel.tell(sl, getSelf());
+				master.tell(WorkComplete, getSelf());
 			}
 		}
 		else if(message.equals(GameIneligible)) {
@@ -69,15 +70,16 @@ public class Controller extends UntypedActor {
 		}
 		else if(message instanceof GameComplete) {
 			String gameDate = ((GameComplete) message).gameDate;
-			if(standingDate == null) {
-				standingDate = gameDate;
-			}
-			else if(!standingDate.equals(gameDate)) {
-				StandingsLoad sl = new StandingsLoad(standingDate);
-				standingDate = gameDate;
-				standingModel.tell(sl, getSelf());
-			}
+			GameDayConfirmation gdc = new GameDayConfirmation(gameDate);
+			gameModel.tell(gdc, getSelf());
+		}
+		else if(message.equals(GameDayIncomplete)) {
 			getSelf().tell(NextGame, getSelf());
+		}
+		else if(message instanceof GameDayComplete) {
+			String gameDate = ((GameDayComplete) message).date;
+			StandingsLoad sl = new StandingsLoad(gameDate);
+			standingModel.tell(sl, getSelf());
 		}
 		else if (message instanceof RepeatGame) {
 			sleep();
@@ -103,7 +105,7 @@ public class Controller extends UntypedActor {
 			getSelf().tell(new RepeatGame(gameId), getSelf());
 		}
 		else if(message.equals(StandingsComplete)) {
-			master.tell(WorkComplete, getSelf());
+			getSelf().tell(NextGame, getSelf());
 		}
 		else {
 			unhandled(message);

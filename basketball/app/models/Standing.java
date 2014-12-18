@@ -353,15 +353,14 @@ public class Standing extends Model {
 	}
 	
 	public static List<Standing> findByDate(String date, ProcessingType processingType) {
-		List <Standing> standing;
 		Query<Standing> query = null;
 		if (processingType.equals(ProcessingType.batch))
 			query = ebeanServer.find(Standing.class);
 		else if (processingType.equals(ProcessingType.online))
-	  		Ebean.find(Standing.class);
+	  		query = Ebean.find(Standing.class);
+		
 		query.where().eq("date", date);
-	    standing = query.findList();
-	    return standing;
+	    return query.findList();
 	}
 	
 	public static Standing findByDateTeam(String date, String teamKey, ProcessingType processingType) {

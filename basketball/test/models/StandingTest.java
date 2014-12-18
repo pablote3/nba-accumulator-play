@@ -34,6 +34,16 @@ public class StandingTest {
           }
         });
     }
+	
+	@Test
+    public void findByDate_Null() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  List<Standing> standings = Standing.findByDate("2010-10-20", ProcessingType.batch);
+        	  assertThat(standings.isEmpty());
+          }
+        });
+    }
 
 	@Test
     public void findByDateTeam() {

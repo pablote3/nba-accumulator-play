@@ -48,8 +48,9 @@ public class StandingModel extends UntypedActor {
 		else if(message instanceof StandingsLoad) {
 			controller = getSender();
 			standingsDate = ((StandingsLoad)message).date;
+//			standingsDate = DateTimeUtil.getFindDateNaked(DateTimeUtil.createDateFromStringDate(((StandingsLoad)message).date));
 			List<Standing> standingsList = Standing.findByDate(standingsDate, processingType);
-			if (standingsList.size() > 0) {
+			if (!standingsList.isEmpty() && standingsList.size() > 0) {
 				System.out.println("Deleteing standings for " + standingsDate);
 				for (int i = 0; i < standingsList.size(); i++) {
 					teamStanding = standingsList.get(i);

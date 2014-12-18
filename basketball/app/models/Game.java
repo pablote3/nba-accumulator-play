@@ -291,7 +291,7 @@ public class Game extends Model {
 	  	query.fetch("boxScores.team");
 	  	query.where().lt("t0.date", date + " 00:00:00");
 	  	query.where().gt("t0.date", DateTimeUtil.getDateMinSeason(DateTimeUtil.createDateFromStringDate(date)) + " 00:00:00");
-	  	query.where().eq("t0.status", "Completed");
+	  	query.where().eq("t0.status", "Completed");query.where().between("t0.date", date + " 00:00:00", date + " 23:59:59");
 	    query.where().eq("t2.team_key", teamKey);
 	    query.orderBy("t0.date asc");
 	    List<Game> sparseGames = query.findList();
@@ -354,6 +354,18 @@ public class Game extends Model {
 			}
 	    }
 		return gameIds;
+	}
+	
+	public static int findCountGamesByDateScheduled(String gameDate, ProcessingType processingType) {
+	  	Query<Game> query = null;
+	  	if (processingType.equals(ProcessingType.batch))
+	  		query = ebeanServer.find(Game.class);
+	  	else if (processingType.equals(ProcessingType.online))
+	  		query = Ebean.find(Game.class);
+	  	
+	  	query.where().between("t0.date", gameDate + " 00:00:00", gameDate + " 23:59:59");
+	    query.where().eq("t0.status", "Scheduled");
+	    return query.findList().size();
 	}
 
 	public static Page<Game> page(int page, int pageSize) {
