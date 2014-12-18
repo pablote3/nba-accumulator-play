@@ -55,10 +55,16 @@ public class GameModel extends UntypedActor {
 			controller = getSender();
 			try {
 				if (propTeam == null || propTeam.isEmpty()) {
-					games = Game.findIdsByDateSize(propDate, propSize, processingType);
+				  	int maxRows = Integer.parseInt(propSize);
+				  	if (maxRows > 0) {
+				  		games = Game.findIdsByDateRangeSize(propDate, propSize, processingType);
+				  	}
+				  	else if (maxRows == 0) {
+				  		games = Game.findIdsByDate(propDate, processingType);
+				  	}
 				}
 				else {
-					games = Game.findIdsByDateTeamSize(propDate, propTeam, propSize, processingType);
+					games = Game.findIdsByDateRangeTeamSize(propDate, propTeam, propSize, processingType);
 				}
 				if (games == null) {
 					throw new NullPointerException();

@@ -39,7 +39,7 @@ public class GameTest {
     public void findGameIdsDateSizeOnline_Season() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  List<Long> games = Game.findIdsByDateSize("2012-10-30", "0", ProcessingType.online);
+        	  List<Long> games = Game.findIdsByDateRangeSize("2012-10-30", "0", ProcessingType.online);
               assertThat(games.size()).isEqualTo(1230);
           }
         });
@@ -49,7 +49,7 @@ public class GameTest {
     public void findGameIdsDateSizeOnline_Game() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  List<Long> games = Game.findIdsByDateSize("2012-10-31", "1", ProcessingType.online);
+        	  List<Long> games = Game.findIdsByDateRangeSize("2012-10-31", "1", ProcessingType.online);
               assertThat(games.size()).isEqualTo(1);
           }
         });
@@ -57,14 +57,20 @@ public class GameTest {
     
     @Test
     public void findGameIdsDateSizeBatch_Season() {
-    	List<Long> games = Game.findIdsByDateSize("2012-10-30", "0", ProcessingType.batch);
+    	List<Long> games = Game.findIdsByDateRangeSize("2012-10-30", "0", ProcessingType.batch);
         assertThat(games.size()).isEqualTo(1230);
     }
     
     @Test
     public void findGameIdsDateSizeBatch_Game() {
-    	List<Long> games = Game.findIdsByDateSize("2012-10-30", "1", ProcessingType.batch);
+    	List<Long> games = Game.findIdsByDateRangeSize("2012-10-30", "1", ProcessingType.batch);
         assertThat(games.size()).isEqualTo(1);
+    }
+    
+    @Test
+    public void findGameIdsDateBatch() {
+    	List<Long> games = Game.findIdsByDate("2012-10-30", ProcessingType.batch);
+        assertThat(games.size()).isEqualTo(3);
     }
     
     @Test
@@ -128,7 +134,7 @@ public class GameTest {
     public void findGameIdByDateTeamOnline_Game() {
         running(fakeApplication(), new Runnable() {
             public void run() {
-          	  List<Long> games = Game.findIdsByDateTeamSize("2012-10-31", "sacramento-kings", "1", ProcessingType.batch);
+          	  List<Long> games = Game.findIdsByDateRangeTeamSize("2012-10-31", "sacramento-kings", "1", ProcessingType.batch);
           	  assertThat(games.size()).isEqualTo(1);
           	  Game game = Game.findById(games.get(0), ProcessingType.online);
           	  
@@ -150,7 +156,7 @@ public class GameTest {
     public void findGameIdByDateTeamOnline_Season() {
         running(fakeApplication(), new Runnable() {
             public void run() {
-          	  List<Long> games = Game.findIdsByDateTeamSize("2012-10-30", "sacramento-kings", "0", ProcessingType.online);
+          	  List<Long> games = Game.findIdsByDateRangeTeamSize("2012-10-30", "sacramento-kings", "0", ProcessingType.online);
           	  assertThat(games.size()).isEqualTo(82);
             }
         });
@@ -160,7 +166,7 @@ public class GameTest {
     public void findGameIdByDateTeamBatch_Game() {
         running(fakeApplication(), new Runnable() {
             public void run() {
-          	  List<Long> games = Game.findIdsByDateTeamSize("2012-10-31", "sacramento-kings", "1", ProcessingType.batch);
+          	  List<Long> games = Game.findIdsByDateRangeTeamSize("2012-10-31", "sacramento-kings", "1", ProcessingType.batch);
           	  assertThat(games.size()).isEqualTo(1);
           	  Game game = Game.findById(games.get(0), ProcessingType.batch);
           	  
@@ -182,7 +188,7 @@ public class GameTest {
     public void findGameIdByDateTeamBatch_Season() {
         running(fakeApplication(), new Runnable() {
             public void run() {
-          	  List<Long> games = Game.findIdsByDateTeamSize("2012-10-30", "sacramento-kings", "0", ProcessingType.batch);
+          	  List<Long> games = Game.findIdsByDateRangeTeamSize("2012-10-30", "sacramento-kings", "0", ProcessingType.batch);
           	  assertThat(games.size()).isEqualTo(82);
             }
         });

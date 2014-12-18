@@ -201,7 +201,7 @@ public class Game extends Model {
 	    return games;
 	}
 	
-	public static List<Long> findIdsByDateSize(String propDate, String propSize, ProcessingType processingType) {
+	public static List<Long> findIdsByDateRangeSize(String propDate, String propSize, ProcessingType processingType) {
 	  	Query<Game> query = null;
 	  	if (processingType.equals(ProcessingType.batch))
 	  		query = ebeanServer.find(Game.class);
@@ -216,6 +216,26 @@ public class Game extends Model {
 
 	  	query.where().between("date", propDate, maxDate);
 	  	query.orderBy("t0.date asc");
+	    List<Game> games = query.findList();
+	    
+	    List<Long> gameIds = null;
+	    if (games.size() > 0) {
+	    	gameIds = new ArrayList<Long>();
+		    for (int i = 0; i < games.size(); i++) {
+				gameIds.add(games.get(i).getId());
+			}
+	    }
+		return gameIds;
+	}
+	
+	public static List<Long> findIdsByDate(String propDate, ProcessingType processingType) {
+	  	Query<Game> query = null;
+	  	if (processingType.equals(ProcessingType.batch))
+	  		query = ebeanServer.find(Game.class);
+	  	else if (processingType.equals(ProcessingType.online))
+	  		query = Ebean.find(Game.class);
+
+	  	query.where().between("t0.date", propDate + " 00:00:00", propDate + " 23:59:59");
 	    List<Game> games = query.findList();
 	    
 	    List<Long> gameIds = null;
@@ -306,7 +326,7 @@ public class Game extends Model {
 	    return games;
 	}
 	
-	public static List<Long> findIdsByDateTeamSize(String propDate, String propTeam, String propSize, ProcessingType processingType) {
+	public static List<Long> findIdsByDateRangeTeamSize(String propDate, String propTeam, String propSize, ProcessingType processingType) {
 	  	Query<Game> query = null;
 	  	if (processingType.equals(ProcessingType.batch))
 	  		query = ebeanServer.find(Game.class);
