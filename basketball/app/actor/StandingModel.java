@@ -90,9 +90,9 @@ public class StandingModel extends UntypedActor {
 					opptTeamKey = game.getBoxScores().get(opptBoxScoreId).getTeam().getKey();
 					opptGamesWon = (short)(opptGamesWon + standingsMap.get(opptTeamKey).getGamesWon());
 					opptGamesPlayed = (short)(opptGamesPlayed + standingsMap.get(opptTeamKey).getGamesPlayed());
-					String opptGameDate = DateTimeUtil.getFindDateShort(game.getDate());
-					System.out.println("  StandingsMap " + teamKey + " " + opptGameDate + " " + opptTeamKey + 
-										" Games Won/Played: " + standingsMap.get(opptTeamKey).getGamesWon() + " - " + standingsMap.get(opptTeamKey).getGamesPlayed());
+//					String opptGameDate = DateTimeUtil.getFindDateShort(game.getDate());
+//					System.out.println("  StandingsMap " + teamKey + " " + opptGameDate + " " + opptTeamKey + 
+//										" Games Won/Played: " + standingsMap.get(opptTeamKey).getGamesWon() + " - " + standingsMap.get(opptTeamKey).getGamesPlayed());
 				}				
 				standingsMap.get(teamKey).setOpptGamesWon(opptGamesWon);
 				standingsMap.get(teamKey).setOpptGamesPlayed(opptGamesPlayed);
@@ -149,13 +149,13 @@ public class StandingModel extends UntypedActor {
 			opptOpptGamesWon = (short)(opptOpptGamesWon + standingsMap.get(opptTeamKey).getOpptGamesWon() - headToHeadMap.get(opptTeamKey).getOpptGamesWon());
 			opptOpptGamesPlayed = (short)(opptOpptGamesPlayed + standingsMap.get(opptTeamKey).getOpptGamesPlayed() - headToHeadMap.get(opptTeamKey).getOpptGamesPlayed());
 	
-			System.out.println("  SubTeamStanding " + opptTeamKey);
-			System.out.println("    Opponent Games Won/Played: " + opptGamesWon + " - " + opptGamesPlayed + " = " + 
-									standingsMap.get(opptTeamKey).getGamesWon() + " - " + standingsMap.get(opptTeamKey).getGamesPlayed() + " minus " + 
-									headToHeadMap.get(opptTeamKey).getGamesWon() + " - " + headToHeadMap.get(opptTeamKey).getGamesPlayed());
-			System.out.println("    OpptOppt Games Won/Played: " + opptOpptGamesWon + " - " + opptOpptGamesPlayed + " = " + 
-									standingsMap.get(opptTeamKey).getOpptGamesWon() + " - " + standingsMap.get(opptTeamKey).getOpptGamesPlayed() + " minus " + 
-									headToHeadMap.get(opptTeamKey).getOpptGamesWon() + " - " + headToHeadMap.get(opptTeamKey).getOpptGamesPlayed());
+//			System.out.println("  SubTeamStanding " + opptTeamKey);
+//			System.out.println("    Opponent Games Won/Played: " + opptGamesWon + " - " + opptGamesPlayed + " = " + 
+//									standingsMap.get(opptTeamKey).getGamesWon() + " - " + standingsMap.get(opptTeamKey).getGamesPlayed() + " minus " + 
+//									headToHeadMap.get(opptTeamKey).getGamesWon() + " - " + headToHeadMap.get(opptTeamKey).getGamesPlayed());
+//			System.out.println("    OpptOppt Games Won/Played: " + opptOpptGamesWon + " - " + opptOpptGamesPlayed + " = " + 
+//									standingsMap.get(opptTeamKey).getOpptGamesWon() + " - " + standingsMap.get(opptTeamKey).getOpptGamesPlayed() + " minus " + 
+//									headToHeadMap.get(opptTeamKey).getOpptGamesWon() + " - " + headToHeadMap.get(opptTeamKey).getOpptGamesPlayed());
 		
 			if (opptGamesWon > opptGamesPlayed)	 { 
 				//head to head wins exceed opponent wins, should only occur until wins start to occur
@@ -170,15 +170,13 @@ public class StandingModel extends UntypedActor {
 		standing.setOpptOpptGamesWon(opptOpptGamesWon);
 		standing.setOpptOpptGamesPlayed(opptOpptGamesPlayed);
 		
-		System.out.println("  SumTeamStanding " + teamKey);
-		System.out.println("    Opponent Games Won/Played = " + opptGamesWon + "-" + opptGamesPlayed);
-		System.out.println("    OpptOppt Games Won/Played = " + opptOpptGamesWon + "-" + opptOpptGamesPlayed);
+//		System.out.println("    Opponent Games Won/Played = " + opptGamesWon + "-" + opptGamesPlayed);
+//		System.out.println("    OpptOppt Games Won/Played = " + opptOpptGamesWon + "-" + opptOpptGamesPlayed);
 		BigDecimal opponentRecord = opptGamesPlayed == (short)0 ? new BigDecimal(0) : new BigDecimal(opptGamesWon).divide(new BigDecimal(opptGamesPlayed), 4, RoundingMode.HALF_UP);
 		BigDecimal opponentOpponentRecord = opptOpptGamesWon == (short)0 ? new BigDecimal(0) : new BigDecimal(opptOpptGamesWon).divide(new BigDecimal(opptOpptGamesPlayed), 4, RoundingMode.HALF_UP);
-		System.out.println("    Opponent Record = " + opponentRecord);
-		System.out.println("    OpptOppt Record = " + opponentOpponentRecord);
-		System.out.println("    Strenghth Of Schedule = " + opponentRecord.multiply(new BigDecimal(2)).add(opponentOpponentRecord).divide(new BigDecimal(3), 4, RoundingMode.HALF_UP) + '\n');
-		
+//		System.out.println("    Opponent Record = " + opponentRecord);
+//		System.out.println("    OpptOppt Record = " + opponentOpponentRecord);
+		System.out.println("  Strenghth Of Schedule  " + teamKey + " " + opponentRecord.multiply(new BigDecimal(2)).add(opponentOpponentRecord).divide(new BigDecimal(3), 4, RoundingMode.HALF_UP));		
 		return standing;
 	}
 	
