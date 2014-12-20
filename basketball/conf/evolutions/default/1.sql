@@ -151,10 +151,10 @@ create table standing (
   winPercentage             float not null,
   pointDifferential         smallint not null,
   pointDifferentialPerGame  float not null,
-  opptGamesWon              smallint,
-  opptGamesPlayed           smallint,
-  opptOpptGamesWon          smallint,
-  opptOpptGamesPlayed       smallint,
+  opptGamesWon              integer,
+  opptGamesPlayed           integer,
+  opptOpptGamesWon          integer,
+  opptOpptGamesPlayed       integer,
   last_update               datetime not null,
   constraint pk_standing primary key (id))
 ;

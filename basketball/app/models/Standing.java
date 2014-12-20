@@ -308,38 +308,38 @@ public class Standing extends Model {
 	}
 	
 	@Column(name="opptGamesWon", nullable=true)
-	private Short opptGamesWon;
-	public Short getOpptGamesWon() {
+	private Integer opptGamesWon;
+	public Integer getOpptGamesWon() {
 		return opptGamesWon;
 	}
-	public void setOpptGamesWon(Short opptGamesWon) {
+	public void setOpptGamesWon(Integer opptGamesWon) {
 		this.opptGamesWon = opptGamesWon;
 	}
 	
 	@Column(name="opptGamesPlayed", nullable=true)
-	private Short opptGamesPlayed;
-	public Short getOpptGamesPlayed() {
+	private Integer opptGamesPlayed;
+	public Integer getOpptGamesPlayed() {
 		return opptGamesPlayed;
 	}
-	public void setOpptGamesPlayed(Short opptGamesPlayed) {
+	public void setOpptGamesPlayed(Integer opptGamesPlayed) {
 		this.opptGamesPlayed = opptGamesPlayed;
 	}
 	
 	@Column(name="opptOpptGamesWon", nullable=true)
-	private Short opptOpptGamesWon;
-	public Short getOpptOpptGamesWon() {
+	private Integer opptOpptGamesWon;
+	public Integer getOpptOpptGamesWon() {
 		return opptOpptGamesWon;
 	}
-	public void setOpptOpptGamesWon(Short opptOpptGamesWon) {
+	public void setOpptOpptGamesWon(Integer opptOpptGamesWon) {
 		this.opptOpptGamesWon = opptOpptGamesWon;
 	}
 	
 	@Column(name="opptOpptGamesPlayed", nullable=true)
-	private Short opptOpptGamesPlayed;
-	public Short getOpptOpptGamesPlayed() {
+	private Integer opptOpptGamesPlayed;
+	public Integer getOpptOpptGamesPlayed() {
 		return opptOpptGamesPlayed;
 	}	
-	public void setOpptOpptGamesPlayed(Short opptOpptGamesPlayed) {
+	public void setOpptOpptGamesPlayed(Integer opptOpptGamesPlayed) {
 		this.opptOpptGamesPlayed = opptOpptGamesPlayed;
 	}
 	
