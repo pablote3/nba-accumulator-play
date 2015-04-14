@@ -15,6 +15,7 @@ import models.Game.ProcessingType;
 import models.Game.SeasonType;
 import models.Game.Status;
 
+import org.joda.time.DateTime;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -88,11 +89,10 @@ public class GameTest {
     }
 
     @Test
-    @Ignore
-    public void findPreviousGameDateTeam() {
+    public void findPreviousGameByDateTeam() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  Game game = Game.findPreviousByDateTeam("2012-12-01", "sacramento-kings");
+        	  Game game = Game.findPreviousGameByDateTeam("2012-12-01", "sacramento-kings");
         	  Game previousGame = Game.findById(game.getId(), ProcessingType.online);
         	  
         	  assertThat(previousGame.getSeasonType()).isEqualTo(SeasonType.regular);
@@ -100,6 +100,16 @@ public class GameTest {
        		  BoxScore boxScore = previousGame.getBoxScores().get(0);
        		  assertThat(boxScore.getLocation()).isEqualTo(Location.away);
         	  assertThat(boxScore.getTeam().getAbbr()).isEqualTo("IND");
+          }
+        });
+    }
+    
+    @Test
+    public void findPreviousGameDateByDateTeam() {
+        running(fakeApplication(), new Runnable() {
+          public void run() {
+        	  DateTime gameDate = Game.findPreviousGameDateByDateTeam("2012-12-01", "sacramento-kings");
+        	  assertThat(gameDate).isEqualTo(new DateTime(2012, 11, 30, 22, 0, 0));
           }
         });
     }

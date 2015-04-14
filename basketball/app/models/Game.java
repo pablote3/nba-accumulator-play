@@ -268,7 +268,7 @@ public class Game extends Model {
 	    return game;
 	}
 	
-	public static Game findPreviousByDateTeam(String date, String teamKey) {
+	public static Game findPreviousGameByDateTeam(String date, String teamKey) {
 	  	Query<Game> query = Ebean.find(Game.class);
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
@@ -278,6 +278,18 @@ public class Game extends Model {
 	
 	    List<Game> games = query.findList();
 	    return games.get(0);
+	}
+	
+	public static DateTime findPreviousGameDateByDateTeam(String date, String teamKey) {
+	  	Query<Game> query = Ebean.find(Game.class);
+	  	query.fetch("boxScores");
+	  	query.fetch("boxScores.team");
+	  	query.where().lt("t0.date", date + " 00:00:00");
+	    query.where().eq("t2.team_key", teamKey);
+	    query.orderBy("t0.date desc");
+	
+	    List<Game> games = query.findList();
+	    return games.get(0).getDate();
 	}
 	
 	public static List<Game> findCompletedByDateTeamSeason(String date, String teamKey, ProcessingType processingType) {
