@@ -1,6 +1,7 @@
 package util;
 
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -101,5 +102,9 @@ public class DateTimeUtil {
 	}
 	static public LocalDate getLocalDateFromDateTime(DateTime date) {
 		return new LocalDate(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth());
+	}
+	static public long getDaysBetweenTwoDateTimes(DateTime minDate, DateTime maxDate) {
+		Duration duration = new Duration(minDate.dayOfMonth().roundFloorCopy(), maxDate.dayOfMonth().roundFloorCopy());
+		return duration.getStandardDays();
 	}
 }

@@ -103,4 +103,20 @@ public class DateTimeTest {
     	LocalDate date = DateTimeUtil.getDateMinusOneDay(new LocalDate(2013, 7, 1));
         assertThat(date).isEqualTo(new LocalDate(2013, 6, 30));
     }
+    
+    @Test
+    public void calculateDateDiff_23Hours() {
+    	DateTime minDate = new DateTime(2013, 3, 31, 19, 0, 0);
+    	DateTime maxDate = new DateTime(2013, 4, 01, 18, 0, 0);
+    	long days = DateTimeUtil.getDaysBetweenTwoDateTimes(minDate, maxDate);
+        assertThat(days).isEqualTo(new Long(1));
+    }
+    
+    @Test
+    public void calculateDateDiff_25Hours() {
+    	DateTime minDate = new DateTime(2013, 3, 31, 19, 0, 0);
+    	DateTime maxDate = new DateTime(2013, 4, 01, 20, 0, 0);
+    	long days = DateTimeUtil.getDaysBetweenTwoDateTimes(minDate, maxDate);
+        assertThat(days).isEqualTo(new Long(1));
+    }
 }
