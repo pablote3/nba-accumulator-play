@@ -35,6 +35,7 @@ create table box_score (
   pointsPeriod6             smallint,
   pointsPeriod7             smallint,
   pointsPeriod8             smallint,
+  daysOff                   smallint,
   constraint ck_box_score_location check (location in ('Away','Home')),
   constraint ck_box_score_result check (result in ('Loss','Win')),
   constraint pk_box_score primary key (id))

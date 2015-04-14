@@ -338,6 +338,15 @@ public class BoxScore extends Model {
 		this.pointsPeriod8 = pointsPeriod8;
 	}
 	
+	@Column(name="daysOff", nullable=true)
+	private Short daysOff;
+	public Short getDaysOff() {
+		return daysOff;
+	}
+	public void setDaysOff(Short daysOff) {
+		this.daysOff = daysOff;
+	}
+	
 	public String toString() {
 		return new StringBuffer()
 			.append("\n" + this.team + "\n")
