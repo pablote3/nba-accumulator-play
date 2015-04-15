@@ -104,10 +104,12 @@ public class DateTimeUtil {
 		return new LocalDate(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth());
 	}
 	static public Long getDaysBetweenTwoDateTimes(DateTime minDate, DateTime maxDate) {
+		Long days = 0L;
 		if (minDate != null) {
 			Duration duration = new Duration(minDate.dayOfMonth().roundFloorCopy(), maxDate.dayOfMonth().roundFloorCopy());
-			return duration.getStandardDays();
+			if (duration.getStandardDays() < 30)
+				days = duration.getStandardDays();
 		}
-		return null;
+		return days;
 	}
 }
