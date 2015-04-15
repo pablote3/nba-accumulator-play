@@ -289,7 +289,10 @@ public class Game extends Model {
 	    query.orderBy("t0.date desc");
 	
 	    List<Game> games = query.findList();
-	    return games.get(0).getDate();
+	    if (games.size() > 0)
+	    	return games.get(0).getDate();
+	    else
+	    	return null;
 	}
 	
 	public static List<Game> findCompletedByDateTeamSeason(String date, String teamKey, ProcessingType processingType) {
