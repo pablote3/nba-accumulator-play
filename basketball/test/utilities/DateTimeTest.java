@@ -119,4 +119,20 @@ public class DateTimeTest {
     	long days = DateTimeUtil.getDaysBetweenTwoDateTimes(minDate, maxDate);
         assertThat(days).isEqualTo(new Long(1));
     }
+    
+    @Test
+    public void calculateDateDiff_Over30Days() {
+    	DateTime minDate = new DateTime(2013, 3, 31, 19, 0, 0);
+    	DateTime maxDate = new DateTime(2013, 6, 01, 20, 0, 0);
+    	long days = DateTimeUtil.getDaysBetweenTwoDateTimes(minDate, maxDate);
+        assertThat(days).isEqualTo(new Long(0));
+    }
+    
+    @Test
+    public void calculateDateDiff_NullMinDate() {
+    	DateTime minDate = null;
+    	DateTime maxDate = new DateTime(2013, 6, 01, 20, 0, 0);
+    	long days = DateTimeUtil.getDaysBetweenTwoDateTimes(minDate, maxDate);
+        assertThat(days).isEqualTo(new Long(0));
+    }
 }
