@@ -108,7 +108,7 @@ public class GameTest {
     public void findPreviousGameDateByDateTeam_Valid() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  DateTime gameDate = Game.findPreviousGameDateByDateTeam("2012-12-01", "sacramento-kings");
+        	  DateTime gameDate = Game.findPreviousGameDateByDateTeam("2012-12-01", "sacramento-kings", ProcessingType.online);
         	  assertThat(gameDate).isEqualTo(new DateTime(2012, 11, 30, 22, 0, 0));
           }
         });
@@ -118,7 +118,7 @@ public class GameTest {
     public void findPreviousGameDateByDateTeam_Invalid() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  DateTime gameDate = Game.findPreviousGameDateByDateTeam("2012-10-31", "sacramento-kings");
+        	  DateTime gameDate = Game.findPreviousGameDateByDateTeam("2012-10-31", "sacramento-kings", ProcessingType.online);
         	  assertThat(gameDate).isNull();
           }
         });
