@@ -280,8 +280,13 @@ public class Game extends Model {
 	    return games.get(0);
 	}
 	
-	public static DateTime findPreviousGameDateByDateTeam(String date, String teamKey) {
-	  	Query<Game> query = Ebean.find(Game.class);
+	public static DateTime findPreviousGameDateByDateTeam(String date, String teamKey, ProcessingType processingType) {
+	  	Query<Game> query = null;
+	  	if (processingType.equals(ProcessingType.batch))
+	  		query = ebeanServer.find(Game.class);
+	  	else if (processingType.equals(ProcessingType.online))
+	  		query = Ebean.find(Game.class);
+	  	
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
 	  	query.where().lt("t0.date", date + " 00:00:00");
