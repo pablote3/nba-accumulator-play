@@ -103,8 +103,11 @@ public class DateTimeUtil {
 	static public LocalDate getLocalDateFromDateTime(DateTime date) {
 		return new LocalDate(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth());
 	}
-	static public long getDaysBetweenTwoDateTimes(DateTime minDate, DateTime maxDate) {
-		Duration duration = new Duration(minDate.dayOfMonth().roundFloorCopy(), maxDate.dayOfMonth().roundFloorCopy());
-		return duration.getStandardDays();
+	static public Long getDaysBetweenTwoDateTimes(DateTime minDate, DateTime maxDate) {
+		if (minDate != null) {
+			Duration duration = new Duration(minDate.dayOfMonth().roundFloorCopy(), maxDate.dayOfMonth().roundFloorCopy());
+			return duration.getStandardDays();
+		}
+		return null;
 	}
 }
