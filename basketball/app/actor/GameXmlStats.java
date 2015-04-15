@@ -176,6 +176,10 @@ public class GameXmlStats extends UntypedActor {
 		    		  	homeBoxScore.setResult(Result.win);
 		    		  	awayBoxScore.setResult(Result.loss);
 		    		}
+		    		
+		    		homeBoxScore.setDaysOff(DateTimeUtil.getDaysBetweenTwoDateTimes(Game.findPreviousGameDateByDateTeam(DateTimeUtil.getFindDateShort(game.getDate()), homeBoxScore.getTeam().getKey()), game.getDate()).shortValue());
+		    		awayBoxScore.setDaysOff(DateTimeUtil.getDaysBetweenTwoDateTimes(Game.findPreviousGameDateByDateTeam(DateTimeUtil.getFindDateShort(game.getDate()), awayBoxScore.getTeam().getKey()), game.getDate()).shortValue());
+		    		
 		    		GameActive ag = new GameActive(game);
 		    		getSender().tell(ag, getSelf());
 				}
