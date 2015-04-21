@@ -7,7 +7,10 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 
-public class DateTimeTest {	
+public class DateTimeTest {
+	private static final String MIN_DATE = "2013-07-01";
+	private static final String MAX_DATE = "2014-06-30";
+	
     @Test
     public void displayTimeHalfHourAM() {
     	String s = DateTimeUtil.getDisplayTime(new DateTime(2013, 3, 30, 9, 30, 0));
@@ -58,49 +61,49 @@ public class DateTimeTest {
     
     @Test
     public void createDateMinSeason_Min() {
-    	LocalDate date = DateTimeUtil.getDateMinSeason(new LocalDate(2013, 7, 1));
-        assertThat(date).isEqualTo(new LocalDate(2013, 7, 1));
+    	LocalDate date = DateTimeUtil.getDateMinSeason(new LocalDate(MIN_DATE));
+        assertThat(date).isEqualTo(new LocalDate(MIN_DATE));
     }
     
     @Test
     public void createDateMinSeason_Max() {
-    	LocalDate date = DateTimeUtil.getDateMinSeason(new LocalDate(2013, 6, 30));
-    	assertThat(date).isEqualTo(new LocalDate(2012, 7, 1));
+    	LocalDate date = DateTimeUtil.getDateMinSeason(new LocalDate(MAX_DATE));
+    	assertThat(date).isEqualTo(new LocalDate(MIN_DATE));
     }
     
     @Test
     public void createDateMaxSeason_Min() {
-    	LocalDate date = DateTimeUtil.getDateMaxSeason(new LocalDate(2013, 7, 1));
-    	assertThat(date).isEqualTo(new LocalDate(2014, 6, 30));
+    	LocalDate date = DateTimeUtil.getDateMaxSeason(new LocalDate(MIN_DATE));
+    	assertThat(date).isEqualTo(new LocalDate(MAX_DATE));
     }
     
     @Test
     public void createDateMaxSeason_Max() {
-    	LocalDate date = DateTimeUtil.getDateMaxSeason(new LocalDate(2014, 6, 30));
-    	assertThat(date).isEqualTo(new LocalDate(2014, 6, 30));
+    	LocalDate date = DateTimeUtil.getDateMaxSeason(new LocalDate(MAX_DATE));
+    	assertThat(date).isEqualTo(new LocalDate(MAX_DATE));
     }
     
     @Test
     public void createSeasonFromDate_Max() {
-    	LocalDate date = DateTimeUtil.getDateMaxSeason(new LocalDate(2013, 6, 30));
-        assertThat(DateTimeUtil.getSeason(date)).isEqualTo("2012-13");
+    	LocalDate date = DateTimeUtil.getDateMaxSeason(new LocalDate(MAX_DATE));
+        assertThat(DateTimeUtil.getSeason(date)).isEqualTo("2013-14");
     }
     
     @Test
     public void createSeasonFromDate_Min() {
-    	LocalDate date = DateTimeUtil.getDateMaxSeason(new LocalDate(2013, 7, 1));
+    	LocalDate date = DateTimeUtil.getDateMaxSeason(new LocalDate(MIN_DATE));
         assertThat(DateTimeUtil.getSeason(date)).isEqualTo("2013-14");
     }
     
     @Test
     public void createDateMinusOneDay_EndOfMonth() {
-    	LocalDate date = DateTimeUtil.getDateMinusOneDay(new LocalDate(2013, 7, 31));
-        assertThat(date).isEqualTo(new LocalDate(2013, 7, 30));
+    	LocalDate date = DateTimeUtil.getDateMinusOneDay(new LocalDate(MIN_DATE));
+        assertThat(date).isEqualTo(new LocalDate(2013, 6, 30));
     }
     
     @Test
     public void createDateMinusOneDay_BeginingOfMonth() {
-    	LocalDate date = DateTimeUtil.getDateMinusOneDay(new LocalDate(2013, 7, 1));
+    	LocalDate date = DateTimeUtil.getDateMinusOneDay(new LocalDate(MIN_DATE));
         assertThat(date).isEqualTo(new LocalDate(2013, 6, 30));
     }
     
