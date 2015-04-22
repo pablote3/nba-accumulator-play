@@ -248,6 +248,27 @@ public class Game extends Model {
 		return gameIds;
 	}
 	
+	public static List<Long> findIdsByDateScheduled(String propDate, ProcessingType processingType) {
+	  	Query<Game> query = null;
+	  	if (processingType.equals(ProcessingType.batch))
+	  		query = ebeanServer.find(Game.class);
+	  	else if (processingType.equals(ProcessingType.online))
+	  		query = Ebean.find(Game.class);
+
+	  	query.where().between("t0.date", propDate + " 00:00:00", propDate + " 23:59:59");
+	  	query.where().eq("t0.status", "Scheduled");
+	    List<Game> games = query.findList();
+	    
+	    List<Long> gameIds = null;
+	    if (games.size() > 0) {
+	    	gameIds = new ArrayList<Long>();
+		    for (int i = 0; i < games.size(); i++) {
+				gameIds.add(games.get(i).getId());
+			}
+	    }
+		return gameIds;
+	}
+	
 	public static Game findByDateTeam(String date, String teamKey, ProcessingType processingType) {
 		Query<Game> query = null;
 	  	if (processingType.equals(ProcessingType.batch))
@@ -311,7 +332,8 @@ public class Game extends Model {
 	  	query.fetch("boxScores.team");
 	  	query.where().lt("t0.date", date + " 00:00:00");
 	  	query.where().gt("t0.date", DateTimeUtil.getDateMinSeason(DateTimeUtil.createDateFromStringDate(date)) + " 00:00:00");
-	  	query.where().eq("t0.status", "Completed");query.where().between("t0.date", date + " 00:00:00", date + " 23:59:59");
+	  	query.where().eq("t0.status", "Completed");
+	  	query.where().between("t0.date", date + " 00:00:00", date + " 23:59:59");
 	    query.where().eq("t2.team_key", teamKey);
 	    query.orderBy("t0.date asc");
 	    List<Game> sparseGames = query.findList();
@@ -346,33 +368,25 @@ public class Game extends Model {
 	    return games;
 	}
 	
-	public static List<Long> findIdsByDateRangeTeamSize(String propDate, String propTeam, String propSize, ProcessingType processingType) {
+	public static List<Long> findIdByDateTeam(String propDate, String propTeam, ProcessingType processingType) {
 	  	Query<Game> query = null;
+	  	final int maxRows = 1;
 	  	if (processingType.equals(ProcessingType.batch))
 	  		query = ebeanServer.find(Game.class);
 	  	else if (processingType.equals(ProcessingType.online))
 	  		query = Ebean.find(Game.class);
-	  	
-	  	int maxRows = Integer.parseInt(propSize);
-	  	if (maxRows > 0)
-		  	query.setMaxRows(maxRows);
-	  	
-	  	LocalDate maxDate = DateTimeUtil.getDateMaxSeason(DateTimeUtil.createDateFromStringDate(propDate));
-	  	
+
+	  	query.setMaxRows(maxRows);
 	  	query.fetch("boxScores");
 	  	query.fetch("boxScores.team");
-	  	query.where().between("t0.date", propDate, maxDate);
+	  	query.where().between("t0.date", propDate + " 00:00:00", propDate + " 23:59:59");
 	    query.where().eq("t2.team_key", propTeam);
 	    query.orderBy("t0.date asc");
-	    List<Game> games = query.findList();
+	    Game game = query.findUnique();
 	    
 	    List<Long> gameIds = null;
-	    if (games.size() > 0) {
-	    	gameIds = new ArrayList<Long>();
-		    for (int i = 0; i < games.size(); i++) {
-				gameIds.add(games.get(i).getId());
-			}
-	    }
+	    gameIds = new ArrayList<Long>();
+		gameIds.add(game.getId());
 		return gameIds;
 	}
 	

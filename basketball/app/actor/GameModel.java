@@ -5,6 +5,7 @@ import static actor.ActorApi.GameDayIncomplete;
 import static actor.ActorApi.WorkStart;
 
 import java.util.List;
+import java.util.concurrent.RejectedExecutionException;
 
 import models.BoxScore;
 import models.Game;
@@ -63,22 +64,28 @@ public class GameModel extends UntypedActor {
 				  		games = Game.findIdsByDateRangeSize(propDate, propSize, processingType);
 				  	}
 				  	else if (maxRows == 0) {
-				  		games = Game.findIdsByDate(propDate, processingType);
+				  		games = Game.findIdsByDateScheduled(propDate, processingType);
+						if (games == null) {
+							throw new NullPointerException();
+						}
 				  	}
 				}
 				else {
-					games = Game.findIdsByDateRangeTeamSize(propDate, propTeam, propSize, processingType);
+					games = Game.findIdByDateTeam(propDate, propTeam, processingType);
 				}
 				if (games == null) {
-					throw new NullPointerException();
+					throw new RejectedExecutionException();
 				}
+				GameIds ids = new GameIds(games);
+				getSender().tell(ids, getSelf());
 			} catch (NullPointerException e) {
+				System.out.println("No scheduled games remaining for date " + propDate);
+				controller.tell(new GameDayComplete(propDate), getSelf());
+			} catch (RejectedExecutionException e) {
 				getContext().stop(getSelf());
 				ModelException me = new ModelException("NoGamesFound");
 				listener.tell(me, getSelf());
 			}
-			GameIds ids = new GameIds(games);
-			getSender().tell(ids, getSelf());
 		}
 		else if(message instanceof GameFind) {
 			GameFind findGame = (GameFind)message;

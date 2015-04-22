@@ -154,7 +154,7 @@ public class GameTest {
     public void findGameIdByDateTeamOnline_Game() {
         running(fakeApplication(), new Runnable() {
             public void run() {
-          	  List<Long> games = Game.findIdsByDateRangeTeamSize("2012-10-31", "sacramento-kings", "1", ProcessingType.batch);
+          	  List<Long> games = Game.findIdByDateTeam("2012-10-31", "sacramento-kings", ProcessingType.batch);
           	  assertThat(games.size()).isEqualTo(1);
           	  Game game = Game.findById(games.get(0), ProcessingType.online);
           	  
@@ -173,20 +173,10 @@ public class GameTest {
     }
     
     @Test
-    public void findGameIdByDateTeamOnline_Season() {
-        running(fakeApplication(), new Runnable() {
-            public void run() {
-          	  List<Long> games = Game.findIdsByDateRangeTeamSize("2012-10-30", "sacramento-kings", "0", ProcessingType.online);
-          	  assertThat(games.size()).isEqualTo(82);
-            }
-        });
-    }
-    
-    @Test
     public void findGameIdByDateTeamBatch_Game() {
         running(fakeApplication(), new Runnable() {
             public void run() {
-          	  List<Long> games = Game.findIdsByDateRangeTeamSize("2012-10-31", "sacramento-kings", "1", ProcessingType.batch);
+          	  List<Long> games = Game.findIdByDateTeam("2012-10-31", "sacramento-kings", ProcessingType.batch);
           	  assertThat(games.size()).isEqualTo(1);
           	  Game game = Game.findById(games.get(0), ProcessingType.batch);
           	  
@@ -205,23 +195,13 @@ public class GameTest {
     }
     
     @Test
-    public void findGameIdByDateTeamBatch_Season() {
-        running(fakeApplication(), new Runnable() {
-            public void run() {
-          	  List<Long> games = Game.findIdsByDateRangeTeamSize("2012-10-30", "sacramento-kings", "0", ProcessingType.batch);
-          	  assertThat(games.size()).isEqualTo(82);
-            }
-        });
-    }
-    
-    @Test
     public void createGameScheduled() {
         running(fakeApplication(), new Runnable() {
           public void run() {
         	Game game = TestMockHelper.getGameScheduled();
 		    
 		    BoxScore homeBoxScore = TestMockHelper.getBoxScoreHomeScheduled();
-		    homeBoxScore.setTeam(Team.findByKey("key", "new-orleans-pelicans", ProcessingType.online));
+		    homeBoxScore.setTeam(Team.findByKey("key", "boston-celtics", ProcessingType.online));
 		    game.addBoxScore(homeBoxScore);
 		    
 		    BoxScore awayBoxScore = TestMockHelper.getBoxScoreAwayScheduled();
@@ -240,7 +220,7 @@ public class GameTest {
       	  			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("SAC");
       	  		}
       	  		else {
-      	  			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("NO");
+      	  			assertThat(boxScore.getTeam().getAbbr()).isEqualTo("BOS");
       	  		}
       	  	}
             Game.delete(gameId, ProcessingType.online);

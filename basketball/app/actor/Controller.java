@@ -56,7 +56,7 @@ public class Controller extends UntypedActor {
 			getSelf().tell(NextGame, getSelf());
 		}
 		else if (message.equals(NextGame)) {
-			if (gameIndex < gameIdList.size()) {
+			if (gameIdList != null && gameIndex < gameIdList.size()) {
 				sleep();
 				gameModel.tell(new GameFind(gameIdList.get(gameIndex)), getSelf());
 				gameIndex++;
