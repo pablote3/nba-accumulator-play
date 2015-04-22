@@ -2,4 +2,4 @@
 teams.list.title={0,choice,0#No teams|1#One team|1<{0,number,integer} teams} found
 officials.list.title={0,choice,0#No officials|1#One official|1<{0,number,integer} officials} found
 games.list.title={0,choice,0#No games|1#One game|1<{0,number,integer} games} found
-accumulator.version=1.2
+accumulator.version=1.3
