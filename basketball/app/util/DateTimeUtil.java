@@ -82,7 +82,7 @@ public class DateTimeUtil {
 		return date;
     }
 	static public LocalDate getDateMinSeason(LocalDate date) {
-		if (date.getMonthOfYear() <= 6 && date.getDayOfMonth() <= 30) {
+		if (date.getMonthOfYear() <= 6 && date.getDayOfMonth() <= 31) {
 			return new LocalDate(date.getYear() - 1, 7, 1);
 		}
 		else {
