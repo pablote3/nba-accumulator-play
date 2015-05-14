@@ -18,6 +18,7 @@ import javax.persistence.TableGenerator;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import util.Utilities;
 
 import com.avaje.ebean.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -104,7 +105,7 @@ public class BoxScore extends Model {
 		return minutes;
 	}
 	public void setMinutes(Short minutes) {
-		this.minutes = minutes;
+		this.minutes = Utilities.standardizeMinutes(minutes);
 	}
 	
 	@Column(name="points", nullable=true)

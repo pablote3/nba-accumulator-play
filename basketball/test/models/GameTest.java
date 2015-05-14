@@ -261,11 +261,13 @@ public class GameTest {
             	if (boxScore.getLocation().equals(Location.away)) {
             		assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)29);
            			assertThat(boxScore.getPointsPeriod5()).isEqualTo((short)21);
+           			assertThat(boxScore.getMinutes()).isEqualTo((short)240);
             		assertThat(boxScore.getTeam().getAbbr()).isEqualTo("DET");
             	}
             	else {
             		assertThat(boxScore.getFieldGoalMade()).isEqualTo((short)30);
             		assertThat(boxScore.getPointsPeriod5()).isEqualTo((short)20);
+            		assertThat(boxScore.getMinutes()).isEqualTo((short)240);
             		assertThat(boxScore.getTeam().getAbbr()).isEqualTo("TOR");
             	}
             }

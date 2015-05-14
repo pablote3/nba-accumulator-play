@@ -137,7 +137,7 @@ public class TestMockHelper {
     
 	protected static BoxScore getBoxScoreHomeCompleted(BoxScore boxScore, short[] periodScores) {
     	boxScore.setResult(Result.win);
-    	boxScore.setMinutes((short)180);
+    	boxScore.setMinutes((short)230);
 	    boxScore.setPoints((short)100);
 	    boxScore.setAssists((short)25);
 	    boxScore.setTurnovers((short)12);
@@ -166,7 +166,7 @@ public class TestMockHelper {
     
 	protected static BoxScore getBoxScoreAwayCompleted(BoxScore boxScore, short[] periodScores) {
     	boxScore.setResult(Result.loss);
-    	boxScore.setMinutes((short)190);
+    	boxScore.setMinutes((short)230);
 	    boxScore.setPoints((short)99);
 	    boxScore.setAssists((short)25);
 	    boxScore.setTurnovers((short)12);
