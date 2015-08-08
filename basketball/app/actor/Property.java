@@ -31,7 +31,7 @@ public class Property extends UntypedActor {
 			try {
 				String strPath = System.getProperty("config.properties");
 				if (strPath == null) {
-					strPath = "/home/pablote/pdrive/pwork/config/accumulator/properties";
+					strPath = "/home/pablote/pdrive/pwork/play/config/accumulator/properties";
 				}
         		Path path =  Paths.get(strPath).resolve("service.properties");
         		
