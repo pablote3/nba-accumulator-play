@@ -1,0 +1,9 @@
+#!/bin/bash
+# Launch Accumulator
+
+echo "Accumulator Activated"
+
+play start 
+#-Dapplication.secret=="" 
+#-Dconfig.properties="" 
+#-Dhttp.port=8080
