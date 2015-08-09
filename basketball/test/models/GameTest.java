@@ -128,14 +128,14 @@ public class GameTest {
     public void findDateTeamSeason_Valid() {
         running(fakeApplication(), new Runnable() {
           public void run() {
-        	  List<Game> games = Game.findByDateTeamSeason("2014-11-11", "sacramento-kings", ProcessingType.online);
-        	  Game game = games.get(7);
+        	  List<Game> games = Game.findByDateTeamSeason("2012-11-11", "sacramento-kings", ProcessingType.online);
+        	  Game game = games.get(6);
         	  
         	  assertThat(game.getSeasonType()).isEqualTo(SeasonType.regular);
         	  assertThat(game.getBoxScores().size()).isEqualTo(2);
        		  BoxScore boxScore = game.getBoxScores().get(1);
        		  assertThat(boxScore.getLocation()).isEqualTo(Location.home);
-        	  assertThat(boxScore.getTeam().getAbbr()).isEqualTo("DAL");
+        	  assertThat(boxScore.getTeam().getAbbr()).isEqualTo("LAL");
           }
         });
     }
