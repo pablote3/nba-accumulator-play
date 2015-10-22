@@ -12,7 +12,7 @@ object ApplicationBuild extends Build {
     javaCore,
     javaJdbc,
     javaEbean,
-    "mysql" % "mysql-connector-java" % "5.1.23",
+    "mysql" % "mysql-connector-java" % "5.1.36",
     "com.google.inject" % "guice" % "4.0-beta",
     "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % "2.4.1",
     "commons-io" % "commons-io" % "2.4"
