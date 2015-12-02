@@ -13,5 +13,5 @@
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="xmlStats.GameJsonUrl"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="basketball"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-javaagent:/home/pablote/pdrive/papps/ebean-2.7.7/ebean-2.7.7.jar &#10;-Dconfig.properties=/home/pablote/pdrive/pwork/play/config/accumulator/properties"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-javaagent:/home/pablote/pdrive/papps/ebean-2.7.7/ebean-2.7.7.jar &#10;-Dconfig.properties=/home/pablote/pdrive/pwork/play/accumulator/config/properties"/>
 </launchConfiguration>
