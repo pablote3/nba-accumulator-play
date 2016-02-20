@@ -188,12 +188,14 @@ public class GameXmlStats extends UntypedActor {
 				listener.tell(new XmlStatsException("MalformedURLException"), getSelf());
 			} 
 			catch (IOException e) {
+				e.printStackTrace();
 				listener.tell(new XmlStatsException("IOException"), getSelf());
 			}
 			catch (RosterException e) {
 				getSender().tell(e, getSelf());
 			}
 			catch (Exception e) {
+				e.printStackTrace();
 				System.out.println("Exception");
 			}
 		}
